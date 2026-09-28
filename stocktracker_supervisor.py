@@ -55,11 +55,26 @@ def load_json(path):
 def active_files():
     manifest = load_json(ACTIVE_MANIFEST)
     files = dict(manifest.get("files") or {})
-    return {
+    resolved = {
         "trader": files.get("trader") or TRADER_FALLBACK,
         "geo_feed": files.get("geo_feed") or GEO_FALLBACK,
         "dashboard": files.get("dashboard") or DASH_FALLBACK,
     }
+
+    # Seed local deployment state on the first supervisor run. This lets the
+    # first future deployment stop/replace the baseline processes cleanly.
+    if not manifest:
+        STATE_DIR.mkdir(parents=True, exist_ok=True)
+        baseline = {
+            "proposal_id": "BASELINE",
+            "commit": "",
+            "deployed_at": datetime.now().isoformat(timespec="seconds"),
+            "files": resolved,
+            "pids": {},
+        }
+        ACTIVE_MANIFEST.write_text(json.dumps(baseline, indent=2), encoding="utf-8")
+
+    return resolved
 
 def command_lines():
     ps = "Get-CimInstance Win32_Process | Where-Object {$_.CommandLine} | Select-Object -ExpandProperty CommandLine"
