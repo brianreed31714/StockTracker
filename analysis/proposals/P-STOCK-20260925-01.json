@@ -14,10 +14,17 @@
   "recommended_mode": "SHADOW",
   "approval_required": true,
   "proposal_id": "P-STOCK-20260925-01",
-  "status": "PENDING",
+  "status": "APPROVED",
   "review_date": "2026-09-25",
   "created_at": "2026-09-27T20:23:59",
-  "updated_at": "2026-09-27T20:23:59",
-  "implementation": {},
-  "deployment": {}
+  "updated_at": "2026-09-27T20:39:00-07:00",
+  "implementation": {
+    "trader_file": "momentum_trader_v1_5_decision_funnel.py",
+    "implementation_commit": "9474676c613c027363d464f655524804e2fdc591",
+    "mode": "SHADOW",
+    "notes": "Adds decision-to-order funnel telemetry without changing trading thresholds or PAPER_ONLY execution."
+  },
+  "deployment": {},
+  "approved_at": "2026-09-27T20:39:00-07:00",
+  "status_note": "Explicitly approved by the user in ChatGPT."
 }
