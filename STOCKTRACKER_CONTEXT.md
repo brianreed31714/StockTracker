@@ -4,7 +4,7 @@
 StockTracker is a PAPER-ONLY multi-asset momentum research/trading system. It must remain paper-only unless the user explicitly redesigns the project outside this agentic workflow.
 
 ## Active baseline
-- Trader: `momentum_trader_v1_7_financial_leverage_shadow.py`
+- Trader: `momentum_trader_v1_8_market_aware_premarket.py`
 - Geo/oil feed: `xom_geo_feed_v1_1_agentic.py`
 - Dashboard: `momentum_dashboard_v1_3_agentic.py`
 
@@ -72,3 +72,13 @@ A fresh ChatGPT session should use this file plus `analysis/performance/latest.*
 - Financial leverage research: XLF is the underlying financial-sector direction signal; FAS is the bullish 3x research candidate; FAZ is the bearish 3x research candidate.
 - FAS/FAZ are SHADOW only. They are not currently paper-traded.
 - Candidate signals record 5/15/30/60-minute forward outcomes before any future execution proposal.
+
+
+## Market-aware runtime
+- Full one-minute market scanning runs only during the regular session after a 20-minute opening warmup.
+- When the market is closed, the trader sleeps instead of requesting every symbol once per minute.
+- Premarket intelligence begins 30 minutes before the next regular-session open and refreshes at 30/20/10/5/1 minutes before the open.
+- Premarket inputs: SPY, QQQ, XLF, FAS, FAZ gaps/momentum, VIX, and the existing geo/headline feed.
+- Social sentiment is explicitly marked UNAVAILABLE until a real source is configured; it is never inferred or fabricated.
+- The latest premarket bias can contribute a bounded +/-5 context adjustment during the first 60 regular-session minutes.
+- No premarket orders are submitted.
