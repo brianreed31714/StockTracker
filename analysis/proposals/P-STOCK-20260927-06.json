@@ -1,0 +1,46 @@
+{
+  "title": "Add SHADOW XLF/FAS/FAZ leveraged-financial research",
+  "change_type": "CODE+CONFIG",
+  "target": "Market-regime research and high-volatility financial-sector opportunity detection",
+  "current": "StockTracker classifies broad market regime but does not separately study leveraged financial-sector bull/bear vehicles or measure their forward outcomes.",
+  "proposed": "Add XLF, FAS, and FAZ as SHADOW-only research symbols. Use XLF as the underlying financial-sector direction check, FAS as the bullish leveraged candidate, FAZ as the bearish leveraged candidate, and VIX plus the existing market regime as confirmation. Log candidate signals and 5/15/30/60-minute forward outcomes. Do not add FAS/FAZ to TRADE_SYMBOLS and do not alter paper order logic.",
+  "evidence": [
+    "The user explicitly requested that FAS/FAZ be considered for volatile/uncertain market opportunities.",
+    "FAS/FAZ are leveraged directional financial-sector instruments, so using XLF as the underlying signal avoids treating leverage itself as the volatility indicator.",
+    "StockTracker already has SPY/QQQ/VIX regime context and decision-funnel instrumentation, so the leveraged-financial layer can be tested without changing execution."
+  ],
+  "risk": "Low execution risk because the feature is SHADOW-only. Research risk remains high due to leveraged ETF path dependence, whipsaw, and small-sample overfitting; forward-outcome logging is included before any future execution proposal.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260927-06",
+  "status": "READY_TO_DEPLOY",
+  "review_date": "2026-09-27",
+  "created_at": "2026-09-27T21:15:00-07:00",
+  "updated_at": "2026-09-27T21:15:00-07:00",
+  "approved_at": "2026-09-27T21:15:00-07:00",
+  "status_note": "User explicitly authorized the SHADOW XLF/FAS/FAZ experiment in ChatGPT with 'go'.",
+  "implementation": {
+    "trader_file": "momentum_trader_v1_7_financial_leverage_shadow.py",
+    "implementation_commit": "e9bc83a60a9874c8fc4b7fb80fb45f3768d0dec4",
+    "review_bundle_commit": "0302e58a5cd6a33329e04bcb541ebed7bf78ffe4",
+    "config_commit": "149fe143b6fcb4ec99918c112e228bfa059eb89e",
+    "mode": "SHADOW",
+    "research_symbols": [
+      "XLF",
+      "FAS",
+      "FAZ"
+    ],
+    "forward_horizons_minutes": [
+      5,
+      15,
+      30,
+      60
+    ]
+  },
+  "deployment": {
+    "status": "QUEUED",
+    "trader_file": "momentum_trader_v1_7_financial_leverage_shadow.py",
+    "release_commit": "e9bc83a60a9874c8fc4b7fb80fb45f3768d0dec4"
+  }
+}
