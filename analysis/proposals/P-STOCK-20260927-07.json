@@ -1,0 +1,45 @@
+{
+  "title": "Add market-aware scheduler and 30-minute premarket intelligence",
+  "change_type": "CODE+CONFIG",
+  "target": "StockTracker runtime scheduler and opening-session context",
+  "current": "The trader scans the full intraday universe every 60 seconds even when the market is closed, producing repeated zero-bar warnings and unnecessary API traffic. It also lacks a structured premarket assessment.",
+  "proposed": "Make the trader session-aware. When the market is closed, stop full one-minute scans and sleep until the next useful event. Wake 30 minutes before the next regular-session open and assess SPY, QQQ, XLF, FAS, FAZ premarket gaps/momentum, VIX, current geo/headline context, and social-source availability at 30/20/10/5/1 minutes before the open. Apply a bounded +/-5 premarket context adjustment during the first 60 regular-session minutes. Social sentiment remains explicitly UNAVAILABLE until a real source is configured. Use a 20-minute regular-session warmup before normal 1-minute scanning.",
+  "evidence": [
+    "The user observed repeated 'Not enough bars ... 0' warnings every minute while the market was closed.",
+    "The current v1.7 run loop calls the full snapshot universe every 60 seconds even after market_is_open() is false.",
+    "The user explicitly requested waking 30 minutes before the market to assess headlines, social sentiment, and premarket movement."
+  ],
+  "risk": "Moderate model-change risk because premarket bias can contribute up to +/-5 points during the first 60 minutes after the open. The scheduler itself reduces unnecessary closed-market API traffic. Social sentiment is not fabricated and carries no weight while unavailable.",
+  "confidence": "HIGH",
+  "recommended_mode": "PAPER",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260927-07",
+  "status": "READY_TO_DEPLOY",
+  "review_date": "2026-09-27",
+  "created_at": "2026-09-27T21:39:00-07:00",
+  "updated_at": "2026-09-27T21:39:00-07:00",
+  "approved_at": "2026-09-27T21:39:00-07:00",
+  "status_note": "User explicitly authorized the market-aware premarket release in ChatGPT with 'go'.",
+  "implementation": {
+    "trader_file": "momentum_trader_v1_8_market_aware_premarket.py",
+    "implementation_commit": "154f3dc68399e5b24870a878386c8c20e909aa61",
+    "review_bundle_commit": "419962fe8c49a828b6f9ca83fb4e41474e1fb1ca",
+    "config_commit": "dbdc680f5cde337ebec4ab52af0871951409065b",
+    "mode": "PAPER",
+    "premarket_refresh_offsets_minutes": [
+      30,
+      20,
+      10,
+      5,
+      1
+    ],
+    "context_adjustment_cap": 5,
+    "context_active_minutes": 60,
+    "social_source_status": "UNAVAILABLE"
+  },
+  "deployment": {
+    "status": "QUEUED",
+    "trader_file": "momentum_trader_v1_8_market_aware_premarket.py",
+    "release_commit": "154f3dc68399e5b24870a878386c8c20e909aa61"
+  }
+}
