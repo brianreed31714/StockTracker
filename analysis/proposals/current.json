@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-27T21:45:00-07:00",
+  "generated_at": "2026-09-27T22:25:00-07:00",
   "review_date": "2026-09-25",
-  "proposal_count": 9,
+  "proposal_count": 10,
   "pending": [
     "P-STOCK-20260925-02",
     "P-STOCK-20260925-03",
@@ -68,6 +68,13 @@
     {
       "proposal_id": "P-STOCK-20260927-08",
       "title": "Deploy finalized v1.8 premarket dashboard context",
+      "confidence": "HIGH",
+      "recommended_mode": "PAPER",
+      "status": "READY_TO_DEPLOY"
+    },
+    {
+      "proposal_id": "P-STOCK-20260927-09",
+      "title": "Guarantee weekday StockTracker reports before 8 PM Pacific",
       "confidence": "HIGH",
       "recommended_mode": "PAPER",
       "status": "READY_TO_DEPLOY"
