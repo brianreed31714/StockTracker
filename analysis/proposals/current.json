@@ -1,9 +1,8 @@
 {
-  "generated_at": "2026-09-27T20:23:59",
+  "generated_at": "2026-09-27T20:42:00-07:00",
   "review_date": "2026-09-25",
   "proposal_count": 5,
   "pending": [
-    "P-STOCK-20260925-01",
     "P-STOCK-20260925-02",
     "P-STOCK-20260925-03",
     "P-STOCK-20260925-04",
@@ -15,7 +14,7 @@
       "title": "Add a decision-to-order funnel with explicit gate reasons",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
-      "status": "PENDING"
+      "status": "READY_TO_DEPLOY"
     },
     {
       "proposal_id": "P-STOCK-20260925-02",
