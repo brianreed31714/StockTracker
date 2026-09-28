@@ -4,13 +4,15 @@
 StockTracker is a PAPER-ONLY multi-asset momentum research/trading system. It must remain paper-only unless the user explicitly redesigns the project outside this agentic workflow.
 
 ## Active baseline
-- Trader: `momentum_trader_v1_4_agentic.py`
+- Trader: `momentum_trader_v1_7_financial_leverage_shadow.py`
 - Geo/oil feed: `xom_geo_feed_v1_1_agentic.py`
 - Dashboard: `momentum_dashboard_v1_3_agentic.py`
 
 ## Tradable universe
-Configured by `TRADE_SYMBOLS` in `.env.config`. Current baseline:
+Configured by `TRADE_SYMBOLS` in `.env.config`. Current tradable baseline:
 XOM, WMT, AMZN, AAPL, NVDA, TSLA, SPY, QQQ, GLD.
+
+SHADOW-only research symbols: XLF, FAS, FAZ. These are not in `TRADE_SYMBOLS`.
 
 ## Architecture
 - Alpaca paper account executes simulated orders.
@@ -62,3 +64,11 @@ Future dashboard releases must remain read-only.
 - Proposals: `analysis/proposals/`
 
 A fresh ChatGPT session should use this file plus `analysis/performance/latest.*` and `analysis/proposals/REVIEW.md` to understand the project.
+
+
+## Shadow market research
+- Broad market regime: SPY 50/200-day trend, SPY 20-day momentum, QQQ 200-day confirmation, and VIX.
+- Defensive benchmark in RISK_OFF: SGOV (simulation/research only).
+- Financial leverage research: XLF is the underlying financial-sector direction signal; FAS is the bullish 3x research candidate; FAZ is the bearish 3x research candidate.
+- FAS/FAZ are SHADOW only. They are not currently paper-traded.
+- Candidate signals record 5/15/30/60-minute forward outcomes before any future execution proposal.
