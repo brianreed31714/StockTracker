@@ -180,6 +180,43 @@ def geo_log_health():
         "last_line": lines[-1][-300:] if lines else "",
     }
 
+
+def table_exists(conn, name):
+    try:
+        row = conn.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
+            (name,),
+        ).fetchone()
+        return bool(row)
+    except Exception:
+        return False
+
+
+def summarize_market_regime(items):
+    states = Counter(str(r.get("regime_state") or "UNKNOWN") for r in items)
+    scores = [fnum(r.get("regime_score")) for r in items if r.get("regime_score") is not None]
+    latest = items[-1] if items else {}
+    return {
+        "rows": len(items),
+        "state_counts": dict(states),
+        "avg_score": round(sum(scores) / len(scores), 2) if scores else None,
+        "latest_state": latest.get("regime_state"),
+        "latest_score": latest.get("regime_score"),
+        "latest_defensive_asset": latest.get("defensive_asset"),
+    }
+
+
+def summarize_regime_decisions(items):
+    actions = Counter(str(r.get("shadow_action") or "UNKNOWN") for r in items)
+    states = Counter(str(r.get("regime_state") or "UNKNOWN") for r in items)
+    symbols = Counter(str(r.get("symbol") or "?") for r in items)
+    return {
+        "rows": len(items),
+        "by_shadow_action": dict(actions),
+        "by_regime_state": dict(states),
+        "by_symbol": dict(symbols),
+    }
+
 def build(date_text: str):
     start_utc, end_utc = day_bounds(date_text)
     decisions = orders = realized = fills = funnel = order_attempts = []
@@ -192,6 +229,14 @@ def build(date_text: str):
             orders = rows(conn, "SELECT * FROM orders WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
             realized = rows(conn, "SELECT * FROM realized WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
             fills = rows(conn, "SELECT * FROM fills WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
+            if table_exists(conn, "decision_funnel"):
+                funnel = rows(conn, "SELECT * FROM decision_funnel WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
+            if table_exists(conn, "order_attempts"):
+                order_attempts = rows(conn, "SELECT * FROM order_attempts WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
+            if table_exists(conn, "market_regime_shadow"):
+                regime_rows = rows(conn, "SELECT * FROM market_regime_shadow WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
+            if table_exists(conn, "regime_decision_shadow"):
+                regime_decisions = rows(conn, "SELECT * FROM regime_decision_shadow WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
             funnel = rows(conn, "SELECT * FROM decision_funnel WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
             order_attempts = rows(conn, "SELECT * FROM order_attempts WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
             conn.close()
@@ -235,6 +280,10 @@ def build(date_text: str):
         "orders": summarize_orders(orders),
         "realized": summarize_realized(realized),
         "fills": {"rows": len(fills)},
+        "decision_funnel_rows": len(funnel),
+        "order_attempt_rows": len(order_attempts),
+        "market_regime_shadow": summarize_market_regime(regime_rows),
+        "regime_decision_shadow": summarize_regime_decisions(regime_decisions),
         "decision_funnel": summarize_funnel(funnel),
         "order_attempts": summarize_order_attempts(order_attempts),
         "dashboard_snapshot": {
