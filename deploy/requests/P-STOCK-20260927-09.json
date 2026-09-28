@@ -1,0 +1,13 @@
+{
+  "proposal_id": "P-STOCK-20260927-09",
+  "status": "READY_TO_DEPLOY",
+  "commit": "a6791e32f5750acc5a5c6eb23bb6a8dcb80e7897",
+  "components": [
+    "trader"
+  ],
+  "files": {
+    "trader": "momentum_trader_v1_8_market_aware_premarket.py"
+  },
+  "mode": "PAPER",
+  "note": "Reporting-only deployment. Reload .env.config so EOD sends at 7:30 PM Pacific; daily self-analysis Pushover now contains the actual review. No trading logic changed."
+}
