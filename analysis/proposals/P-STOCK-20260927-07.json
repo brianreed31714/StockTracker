@@ -17,12 +17,12 @@
   "status": "READY_TO_DEPLOY",
   "review_date": "2026-09-27",
   "created_at": "2026-09-27T21:39:00-07:00",
-  "updated_at": "2026-09-27T21:39:00-07:00",
+  "updated_at": "2026-09-27T21:42:00-07:00",
   "approved_at": "2026-09-27T21:39:00-07:00",
   "status_note": "User explicitly authorized the market-aware premarket release in ChatGPT with 'go'.",
   "implementation": {
     "trader_file": "momentum_trader_v1_8_market_aware_premarket.py",
-    "implementation_commit": "154f3dc68399e5b24870a878386c8c20e909aa61",
+    "implementation_commit": "c9ca0bb6bdb24160a004323eca4d41075d9f1310",
     "review_bundle_commit": "419962fe8c49a828b6f9ca83fb4e41474e1fb1ca",
     "config_commit": "dbdc680f5cde337ebec4ab52af0871951409065b",
     "mode": "PAPER",
@@ -40,6 +40,6 @@
   "deployment": {
     "status": "QUEUED",
     "trader_file": "momentum_trader_v1_8_market_aware_premarket.py",
-    "release_commit": "154f3dc68399e5b24870a878386c8c20e909aa61"
+    "release_commit": "c9ca0bb6bdb24160a004323eca4d41075d9f1310"
   }
 }
