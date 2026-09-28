@@ -1,0 +1,36 @@
+{
+  "title": "Add SHADOW market-regime engine with defensive-asset comparison",
+  "change_type": "CODE+CONFIG",
+  "target": "Momentum trader research instrumentation",
+  "current": "StockTracker scores individual symbols and uses VIX/context, but it does not classify the broad market into risk-on, neutral, or risk-off regimes or compare equity signals with a defensive T-bill proxy.",
+  "proposed": "Add a SHADOW-only regime engine using SPY 50/200-day trend, SPY 20-day momentum, QQQ 200-day confirmation, and VIX. Log RISK_ON/NEUTRAL/RISK_OFF state plus the counterfactual action for equity BUY candidates. Use SGOV only as a simulated defensive benchmark in RISK_OFF. Do not block, resize, or submit any different orders.",
+  "evidence": [
+    "User requested evaluation of a methodology that favors stocks in favorable markets and T-bills when market conditions deteriorate.",
+    "StockTracker already consumes SPY, QQQ, and VIX, so a regime layer can be measured without changing the existing symbol-scoring model.",
+    "The newly deployed decision-funnel telemetry provides the event IDs needed to compare regime-filtered counterfactuals with the existing paper strategy."
+  ],
+  "risk": "Low execution risk because the regime engine is SHADOW-only. Main risks are extra market-data requests and premature conclusions from small samples; daily-trend data is cached and no live/paper order logic is changed.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260927-05",
+  "status": "READY_TO_DEPLOY",
+  "review_date": "2026-09-27",
+  "created_at": "2026-09-27T20:50:00-07:00",
+  "updated_at": "2026-09-27T20:50:00-07:00",
+  "approved_at": "2026-09-27T20:50:00-07:00",
+  "status_note": "User explicitly authorized this SHADOW market-regime proposal in ChatGPT with 'go'.",
+  "implementation": {
+    "trader_file": "momentum_trader_v1_6_shadow_regime.py",
+    "implementation_commit": "d1d16d551f639d828002e88fe5b275898543ca62",
+    "review_bundle_commit": "207dde5babd550b54311b11a00d0b4bad347cfc1",
+    "config_commit": "48f7291031c7102588db319eb4cbd6aeb4ba647a",
+    "mode": "SHADOW",
+    "defensive_asset_proxy": "SGOV"
+  },
+  "deployment": {
+    "status": "QUEUED",
+    "trader_file": "momentum_trader_v1_6_shadow_regime.py",
+    "release_commit": "d1d16d551f639d828002e88fe5b275898543ca62"
+  }
+}
