@@ -1,0 +1,23 @@
+{
+  "title": "Make review artifacts date-scoped and freshness-aware",
+  "change_type": "CODE",
+  "target": "Daily review data assembly and dashboard snapshot metadata",
+  "current": "The review is dated 2026-09-25, but the dashboard snapshot is from 2026-09-27 and the geo snapshot is from 2026-09-19. These artifacts are presented alongside same-day decisions without an explicit as-of eligibility status.",
+  "proposed": "Join artifacts by review date and market timezone, retain source generated_at timestamps, and label each artifact as in-window, stale, or future relative to the review cutoff. Exclude out-of-window dashboard state from same-day portfolio and VIX conclusions while preserving it in a clearly labeled diagnostics section. Keep the dashboard read-only.",
+  "evidence": [
+    "Review date is 2026-09-25.",
+    "Dashboard generated_at is 2026-09-27T05:00:08.830944+00:00.",
+    "Geo generated_at is 2026-09-19T16:41:18.944358+00:00."
+  ],
+  "risk": "Strict date filtering may temporarily reduce report coverage when snapshots are delayed, but it prevents misleading same-day attribution.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260925-05",
+  "status": "PENDING",
+  "review_date": "2026-09-25",
+  "created_at": "2026-09-27T20:23:59",
+  "updated_at": "2026-09-27T20:23:59",
+  "implementation": {},
+  "deployment": {}
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Enforce and audit paper portfolio-cap invariants before every BUY",
+  "change_type": "CODE",
+  "target": "Paper portfolio reconciliation and pre-order risk gate",
+  "current": "Configured limits are 4 open positions and $10,000 total exposure, while a later dashboard snapshot reports 5 positions and $12,575.46 exposure. The available timestamps cannot determine whether this resulted from legacy state, appreciation, reconciliation drift, or an order-gate defect.",
+  "proposed": "Before any paper BUY submission, reconcile paper positions and open orders, calculate projected position count and projected exposure, and reject the order if either configured cap would be exceeded. Emit an invariant-violation event at startup and each cycle when existing state is already above a cap. Keep the dashboard read-only and preserve all existing caps, daily-loss controls, and paper=True.",
+  "evidence": [
+    "Configured max_open_positions is 4 and max_total_exposure is $10,000.",
+    "The 2026-09-27 dashboard reports 5 positions and $12,575.46 exposure.",
+    "No same-day order records are available to identify the source of the discrepancy."
+  ],
+  "risk": "Stale or incomplete position reconciliation could conservatively block valid paper entries; the guard must fail closed without liquidating or modifying existing paper positions automatically.",
+  "confidence": "MEDIUM",
+  "recommended_mode": "PAPER",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260925-02",
+  "status": "PENDING",
+  "review_date": "2026-09-25",
+  "created_at": "2026-09-27T20:23:59",
+  "updated_at": "2026-09-27T20:23:59",
+  "implementation": {},
+  "deployment": {}
+}

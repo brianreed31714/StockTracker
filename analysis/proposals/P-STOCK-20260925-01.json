@@ -1,0 +1,23 @@
+{
+  "title": "Add a decision-to-order funnel with explicit gate reasons",
+  "change_type": "CODE",
+  "target": "Decision audit records and paper-order submission pipeline",
+  "current": "Decision rows contain final actions, but the evidence does not expose raw threshold-cross events, confirmation counters, position eligibility, cap checks, market-session checks, or reasons why a BUY did not create an order.",
+  "proposed": "For every non-HOLD candidate and every raw score crossing, log symbol, side, score, threshold, consecutive-confirmation count, current position state, projected paper exposure, open-position count, market-session state, final disposition, and a single enumerated gate reason. Record paper-order attempt and acceptance identifiers separately. Do not alter thresholds or execution behavior.",
+  "evidence": [
+    "Two TSLA BUY decisions were recorded, but orders and fills were both zero.",
+    "AMZN, NVDA, and TSLA exceeded the buy threshold by daily maximum, while only TSLA produced BUY actions.",
+    "NVDA, TSLA, and XOM fell below the sell threshold by daily minimum, while no SELL action was recorded."
+  ],
+  "risk": "Low operational risk; added logging volume and schema changes must avoid disrupting the one-minute decision loop or exposing unsanitized data.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260925-01",
+  "status": "PENDING",
+  "review_date": "2026-09-25",
+  "created_at": "2026-09-27T20:23:59",
+  "updated_at": "2026-09-27T20:23:59",
+  "implementation": {},
+  "deployment": {}
+}

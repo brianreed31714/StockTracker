@@ -1,0 +1,23 @@
+{
+  "title": "Add geo-feed freshness, deduplication, and application diagnostics",
+  "change_type": "CODE+CONFIG",
+  "target": "Geo-feed ingestion and score-adjustment audit fields",
+  "current": "The geo artifact is six days older than the review date, reports a +7.1 adjustment and 249 active events, and includes apparent duplicate stories. Decision aggregates show a 0.0 geo adjustment for every symbol without explaining whether the feed was stale, inapplicable, or unavailable.",
+  "proposed": "In SHADOW, canonicalize article URL/domain/title fingerprints, report raw versus deduplicated event counts, record feed age, and attach an enumerated geo-application status to each decision. Add a configurable freshness limit that quarantines stale geo data from scoring while still logging its counterfactual adjustment. Do not activate the supplied +7.1 adjustment or change trading thresholds.",
+  "evidence": [
+    "Geo generated_at is 2026-09-19T16:41:18.944358+00:00 for a 2026-09-25 review.",
+    "The feed reports signal 0.7105 and score adjustment 7.1, but all symbols show average geo adjustment 0.0.",
+    "Multiple top events repeat the same publication time and headline through domain or capitalization variants."
+  ],
+  "risk": "Over-aggressive deduplication could merge genuinely distinct reports; shadow comparison should precede any production scoring effect.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260925-03",
+  "status": "PENDING",
+  "review_date": "2026-09-25",
+  "created_at": "2026-09-27T20:23:59",
+  "updated_at": "2026-09-27T20:23:59",
+  "implementation": {},
+  "deployment": {}
+}

@@ -1,14 +1,14 @@
 {
   "metrics": {
-    "review_date": "2026-09-27",
-    "generated_at": "2026-09-28T03:20:40.427518+00:00",
+    "review_date": "2026-09-25",
+    "generated_at": "2026-09-28T03:23:08.241842+00:00",
     "paper_only": true,
     "coverage": {
       "db_path_exists": true,
       "db_error": null,
       "daily_csv": {
-        "folder_exists": false,
-        "decision_rows": 0,
+        "folder_exists": true,
+        "decision_rows": 4156,
         "trade_rows": 0
       },
       "dashboard_state_exists": true,
@@ -43,9 +43,139 @@
       "trailing_stop_pct": 0.0125
     },
     "decisions": {
-      "rows": 0,
-      "actions": {},
-      "by_symbol": {}
+      "rows": 4156,
+      "actions": {
+        "HOLD": 4154,
+        "BUY": 2
+      },
+      "by_symbol": {
+        "AAPL": {
+          "rows": 459,
+          "buy": 0,
+          "sell": 0,
+          "hold": 459,
+          "avg_score": 51.065,
+          "median_score": 50.371,
+          "max_score": 69.074,
+          "min_score": 36.322,
+          "avg_technical": 50.679,
+          "avg_context": 0.01,
+          "avg_vix_adjustment": 0.376,
+          "avg_geo_adjustment": 0.0
+        },
+        "AMZN": {
+          "rows": 459,
+          "buy": 0,
+          "sell": 0,
+          "hold": 459,
+          "avg_score": 47.825,
+          "median_score": 47.742,
+          "max_score": 73.123,
+          "min_score": 32.962,
+          "avg_technical": 47.414,
+          "avg_context": 0.01,
+          "avg_vix_adjustment": 0.401,
+          "avg_geo_adjustment": 0.0
+        },
+        "GLD": {
+          "rows": 460,
+          "buy": 0,
+          "sell": 0,
+          "hold": 460,
+          "avg_score": 49.458,
+          "median_score": 49.891,
+          "max_score": 68.028,
+          "min_score": 35.256,
+          "avg_technical": 49.631,
+          "avg_context": 0.003,
+          "avg_vix_adjustment": -0.176,
+          "avg_geo_adjustment": 0.0
+        },
+        "NVDA": {
+          "rows": 463,
+          "buy": 0,
+          "sell": 0,
+          "hold": 463,
+          "avg_score": 50.666,
+          "median_score": 51.844,
+          "max_score": 72.69,
+          "min_score": 29.536,
+          "avg_technical": 50.153,
+          "avg_context": 0.014,
+          "avg_vix_adjustment": 0.499,
+          "avg_geo_adjustment": 0.0
+        },
+        "QQQ": {
+          "rows": 479,
+          "buy": 0,
+          "sell": 0,
+          "hold": 479,
+          "avg_score": 50.8,
+          "median_score": 50.921,
+          "max_score": 68.327,
+          "min_score": 30.483,
+          "avg_technical": 50.376,
+          "avg_context": -0.001,
+          "avg_vix_adjustment": 0.426,
+          "avg_geo_adjustment": 0.0
+        },
+        "SPY": {
+          "rows": 462,
+          "buy": 0,
+          "sell": 0,
+          "hold": 462,
+          "avg_score": 49.806,
+          "median_score": 49.245,
+          "max_score": 66.345,
+          "min_score": 30.18,
+          "avg_technical": 49.5,
+          "avg_context": 0.005,
+          "avg_vix_adjustment": 0.301,
+          "avg_geo_adjustment": 0.0
+        },
+        "TSLA": {
+          "rows": 461,
+          "buy": 2,
+          "sell": 0,
+          "hold": 459,
+          "avg_score": 51.865,
+          "median_score": 53.201,
+          "max_score": 81.498,
+          "min_score": 24.227,
+          "avg_technical": 51.353,
+          "avg_context": 0.012,
+          "avg_vix_adjustment": 0.5,
+          "avg_geo_adjustment": 0.0
+        },
+        "WMT": {
+          "rows": 458,
+          "buy": 0,
+          "sell": 0,
+          "hold": 458,
+          "avg_score": 51.694,
+          "median_score": 53.171,
+          "max_score": 64.508,
+          "min_score": 32.287,
+          "avg_technical": 51.547,
+          "avg_context": -0.003,
+          "avg_vix_adjustment": 0.151,
+          "avg_geo_adjustment": 0.0
+        },
+        "XOM": {
+          "rows": 455,
+          "buy": 0,
+          "sell": 0,
+          "hold": 455,
+          "avg_score": 49.054,
+          "median_score": 50.255,
+          "max_score": 68.034,
+          "min_score": 22.204,
+          "avg_technical": 48.826,
+          "avg_context": 0.102,
+          "avg_vix_adjustment": 0.125,
+          "avg_geo_adjustment": 0.0
+        }
+      }
     },
     "orders": {
       "rows": 0,
@@ -242,82 +372,99 @@
     }
   },
   "review": {
-    "summary": "The review is insufficient for model calibration: there were no decision, order, fill, or realized-trade records, and the daily CSV folder was absent. No threshold, confirmation, stop, take-profit, VIX, symbol-level, or geo-weight changes are supported. The main actionable issues are observability, paper-portfolio cap reconciliation, and stale/duplicated geo-feed instrumentation.",
-    "data_quality": "INSUFFICIENT",
+    "summary": "Decision coverage is substantial, but execution and outcome evidence is absent. The model produced 4,154 HOLD and 2 BUY decisions, with both BUY actions in TSLA, yet no orders, fills, trade rows, or realized trades were recorded. Score extrema crossed configured thresholds for several symbols, but the supplied aggregates cannot show crossing frequency, confirmation persistence, position eligibility, or blocking reasons. The dashboard and geo snapshots are not aligned to the 2026-09-25 review date, limiting causal interpretation. No threshold, VIX, geo, or exit calibration is supported today.",
+    "data_quality": "LIMITED",
     "findings": [
-      "Observed: The system is configured as paper-only, and no evidence supports changing that constraint.",
-      "Observed: There were 0 decisions, 0 orders, 0 fills, and 0 realized trades. Realized paper P/L was $0, but this contains no performance information because there were no exits.",
-      "Observed: Per-symbol behavior, threshold hit rates, buy/sell balance, win rate, and VIX effects cannot be evaluated from zero decision and trade rows.",
-      "Observed: The daily CSV folder did not exist, although the database path and dashboard state existed. This prevents distinguishing a normal market-closed day from a collection or export failure using the daily artifacts alone.",
-      "Observed: The dashboard snapshot reported 5 open positions and $12,575.46 exposure, exceeding the configured caps of 4 positions and $10,000 exposure. The snapshot alone does not establish when or why the excess arose.",
-      "Observed: Position market values were approximately $2,511-$2,519 each. This does not prove violation of the $2,500 order-size cap because market appreciation can raise position value after entry.",
-      "Observed: VIX was 14.87 in the snapshot, but there are no contemporaneous decisions or outcomes with which to measure its contribution.",
-      "Observed: The geo artifact was generated on 2026-09-19, eight days before the review date, while still reporting status 'ok' and a +7.1 score adjustment.",
-      "Observed: The geo top events include duplicate syndicated headlines with matching publication times and differently cased or related domains, creating a plausible risk of repeated contribution.",
-      "Hypothesis: The cap excess may reflect pre-existing positions, configuration changes, or missing admission/reconciliation checks. The supplied evidence cannot identify the cause.",
-      "Hypothesis: The absence of activity may be expected for a market-closed session, but the missing daily export and lack of a session heartbeat prevent confirmation."
+      "Observed: 4,154 of 4,156 decisions were HOLD (99.952%); 2 were BUY (0.048%), both for TSLA. There were no SELL decisions.",
+      "Observed: TSLA's action-level BUY rate was 2 of 461 rows (0.434%). Every other symbol had zero BUY and SELL actions.",
+      "Observed: AMZN, NVDA, and TSLA had maximum scores above the 70 buy threshold. NVDA, TSLA, and XOM had minimum scores below the 30 sell threshold. Aggregate extrema do not reveal the number or duration of threshold crossings, and therefore do not establish whether the two-confirmation requirement was met.",
+      "Observed: No orders, fills, trade CSV rows, or realized-trade rows were recorded. Realized P/L of zero reflects the absence of realized records and is not evidence of flat model performance.",
+      "Observed: The two TSLA BUY decisions did not become recorded orders. Hypothesis: they may have been blocked by confirmation, portfolio, session, duplicate-order, or other eligibility controls, but no rejection-reason evidence is supplied.",
+      "Observed: Average scores varied moderately by symbol, from 47.825 for AMZN to 51.865 for TSLA. One day without executions or forward-return labels cannot support per-symbol threshold changes.",
+      "Observed: Average VIX adjustments ranged from -0.176 for GLD to +0.500 for TSLA. The only supplied VIX level, 14.87, comes from a dashboard generated after the review date, so VIX effects cannot be linked reliably to the 2026-09-25 decisions.",
+      "Observed: Average geo adjustment was 0.0 for every symbol, including XOM, while the available geo artifact reported a +7.1 adjustment. That artifact was generated on 2026-09-19, six days before the review date, and contains apparent duplicate coverage of the same headlines across domain variants.",
+      "Observed: The geo feed's average model contribution cannot be evaluated from this day because no decision row shows a nonzero geo adjustment. Hypothesis: a freshness or applicability gate may have correctly suppressed the stale artifact, but the supplied data does not identify the reason.",
+      "Observed: The dashboard snapshot was generated on 2026-09-27 rather than the 2026-09-25 review date. It showed 5 open positions and $12,575.46 exposure versus configured caps of 4 positions and $10,000. Because of the date mismatch and possible market-value appreciation, this does not prove that a same-day order breached a cap.",
+      "Observed: The later dashboard's five positions had market values slightly above $2,500 each. This alone does not prove violation of the $2,500 entry-notional limit because market values can rise after entry.",
+      "Observed: Buy/sell balance, realized profitability, stop-loss behavior, take-profit behavior, and trailing-stop behavior cannot be assessed without orders, fills, exits, and time-aligned position history."
     ],
     "proposals": [
       {
-        "title": "Enforce and log existing portfolio caps in the paper order-admission path",
+        "title": "Add a decision-to-order funnel with explicit gate reasons",
         "change_type": "CODE",
-        "target": "Paper portfolio reconciliation and opening-buy admission guard",
-        "current": "A dashboard snapshot shows 5 positions and $12,575.46 exposure despite configured caps of 4 positions and $10,000. The cause is not recorded.",
-        "proposed": "Before every paper opening buy, reconcile positions and exposure from the paper account, reject the opening order when either existing cap is met or exceeded, and emit a structured cap-breach event containing observed values, configured limits, and order intent. Continue permitting risk-reducing sells. Do not automatically liquidate existing positions from this single snapshot and do not alter any cap values.",
+        "target": "Decision audit records and paper-order submission pipeline",
+        "current": "Decision rows contain final actions, but the evidence does not expose raw threshold-cross events, confirmation counters, position eligibility, cap checks, market-session checks, or reasons why a BUY did not create an order.",
+        "proposed": "For every non-HOLD candidate and every raw score crossing, log symbol, side, score, threshold, consecutive-confirmation count, current position state, projected paper exposure, open-position count, market-session state, final disposition, and a single enumerated gate reason. Record paper-order attempt and acceptance identifiers separately. Do not alter thresholds or execution behavior.",
         "evidence": [
-          "Dashboard open_positions=5 versus max_open_positions=4.",
-          "Dashboard exposure=$12,575.46 versus max_total_exposure=$10,000.",
-          "There are no same-day orders or decisions that explain the discrepancy."
+          "Two TSLA BUY decisions were recorded, but orders and fills were both zero.",
+          "AMZN, NVDA, and TSLA exceeded the buy threshold by daily maximum, while only TSLA produced BUY actions.",
+          "NVDA, TSLA, and XOM fell below the sell threshold by daily minimum, while no SELL action was recorded."
         ],
-        "risk": "Low execution risk because this only reinforces existing paper controls, but reconciliation bugs could suppress valid paper entries; retain detailed rejection logging and test with simulated account states.",
+        "risk": "Low operational risk; added logging volume and schema changes must avoid disrupting the one-minute decision loop or exposing unsanitized data.",
         "confidence": "HIGH",
+        "recommended_mode": "SHADOW",
+        "approval_required": true
+      },
+      {
+        "title": "Enforce and audit paper portfolio-cap invariants before every BUY",
+        "change_type": "CODE",
+        "target": "Paper portfolio reconciliation and pre-order risk gate",
+        "current": "Configured limits are 4 open positions and $10,000 total exposure, while a later dashboard snapshot reports 5 positions and $12,575.46 exposure. The available timestamps cannot determine whether this resulted from legacy state, appreciation, reconciliation drift, or an order-gate defect.",
+        "proposed": "Before any paper BUY submission, reconcile paper positions and open orders, calculate projected position count and projected exposure, and reject the order if either configured cap would be exceeded. Emit an invariant-violation event at startup and each cycle when existing state is already above a cap. Keep the dashboard read-only and preserve all existing caps, daily-loss controls, and paper=True.",
+        "evidence": [
+          "Configured max_open_positions is 4 and max_total_exposure is $10,000.",
+          "The 2026-09-27 dashboard reports 5 positions and $12,575.46 exposure.",
+          "No same-day order records are available to identify the source of the discrepancy."
+        ],
+        "risk": "Stale or incomplete position reconciliation could conservatively block valid paper entries; the guard must fail closed without liquidating or modifying existing paper positions automatically.",
+        "confidence": "MEDIUM",
         "recommended_mode": "PAPER",
         "approval_required": true
       },
       {
-        "title": "Add a market-session heartbeat and empty-day data manifest",
-        "change_type": "CODE",
-        "target": "Daily evidence export and scheduler health instrumentation",
-        "current": "The daily CSV folder is absent and contains no decision or trade rows, so inactivity cannot be separated from exporter or scheduler failure.",
-        "proposed": "Generate a read-only daily manifest on every scheduled review date, including market-calendar status, collector start/end times, database read status, row counts by event type, export status, and explicit zero-row files or markers. This must not alter signals, orders, dashboard permissions, or paper-only mode.",
+        "title": "Add geo-feed freshness, deduplication, and application diagnostics",
+        "change_type": "CODE+CONFIG",
+        "target": "Geo-feed ingestion and score-adjustment audit fields",
+        "current": "The geo artifact is six days older than the review date, reports a +7.1 adjustment and 249 active events, and includes apparent duplicate stories. Decision aggregates show a 0.0 geo adjustment for every symbol without explaining whether the feed was stale, inapplicable, or unavailable.",
+        "proposed": "In SHADOW, canonicalize article URL/domain/title fingerprints, report raw versus deduplicated event counts, record feed age, and attach an enumerated geo-application status to each decision. Add a configurable freshness limit that quarantines stale geo data from scoring while still logging its counterfactual adjustment. Do not activate the supplied +7.1 adjustment or change trading thresholds.",
         "evidence": [
-          "daily_csv.folder_exists=false.",
-          "Database path exists with no reported database error.",
-          "Dashboard reported market_open=false, but there is no daily artifact confirming normal closed-session handling."
+          "Geo generated_at is 2026-09-19T16:41:18.944358+00:00 for a 2026-09-25 review.",
+          "The feed reports signal 0.7105 and score adjustment 7.1, but all symbols show average geo adjustment 0.0.",
+          "Multiple top events repeat the same publication time and headline through domain or capitalization variants."
         ],
-        "risk": "Minimal; added files require retention and monitoring but do not affect model behavior.",
+        "risk": "Over-aggressive deduplication could merge genuinely distinct reports; shadow comparison should precede any production scoring effect.",
         "confidence": "HIGH",
         "recommended_mode": "SHADOW",
         "approval_required": true
       },
       {
-        "title": "Capture decision-component telemetry before any calibration",
-        "change_type": "CODE",
-        "target": "Per-evaluation decision logging",
-        "current": "There are no decision rows, preventing analysis of symbol differences, threshold hit rates, confirmation behavior, buy/sell balance, VIX effects, or geo contribution.",
-        "proposed": "For every symbol evaluation, log timestamp, market-session state, raw and adjusted score, distance from buy and sell thresholds, confirmation counters, proposed/final action, suppression reason, position state, VIX level and short-horizon changes, raw geo adjustment, applied geo adjustment, and all portfolio-control rejection reasons. Join later paper fills and realized P/L to the originating decision ID. Keep thresholds unchanged until at least 12 eligible observations exist for any calibration slice; require at least 12 observations per symbol before symbol-specific tuning.",
+        "title": "Collect per-symbol threshold and VIX outcome cohorts before calibration",
+        "change_type": "RESEARCH",
+        "target": "Shadow signal-evaluation dataset",
+        "current": "The evidence provides score aggregates and average VIX adjustments but no crossing counts, persistence, forward returns, counterfactual exits, or time-aligned volatility regimes.",
+        "proposed": "For each raw buy or sell threshold crossing, record symbol, side, score distance from threshold, confirmation outcome, VIX level and change, geo freshness status, and forward paper returns at 5, 15, and 60 minutes and market close. Keep blocked signals as counterfactual observations. Require at least 12 eligible observations in a defined symbol-side or pooled regime cohort before considering calibration; make no threshold or VIX-weight changes now.",
         "evidence": [
-          "decisions.rows=0 and decisions.by_symbol is empty.",
-          "orders.rows=0, fills.rows=0, and realized.rows=0.",
-          "No causal attribution is possible for the configured 70/30 thresholds, two confirmations, VIX, or geo adjustment."
+          "Only two final BUY actions and zero SELL actions occurred.",
+          "There are no orders, fills, or realized outcomes.",
+          "Average VIX adjustments differ by symbol, but the available VIX snapshot is not time-aligned with the review day."
         ],
-        "risk": "Higher log volume and schema complexity; use versioned fields and avoid changing score computation while collecting the shadow sample.",
+        "risk": "Forward-return research can suffer from missing bars, overlapping observations, and selection bias; results must remain paper-only and should not be treated as causal without adequate cohorts.",
         "confidence": "HIGH",
         "recommended_mode": "SHADOW",
         "approval_required": true
       },
       {
-        "title": "Shadow-test geo freshness and headline deduplication",
+        "title": "Make review artifacts date-scoped and freshness-aware",
         "change_type": "CODE",
-        "target": "Geo-feed health and contribution instrumentation",
-        "current": "The geo artifact is eight days older than the review date, reports status 'ok', and contains apparent duplicate syndicated headlines while exposing a +7.1 adjustment.",
-        "proposed": "Without changing the applied model score, compute and log feed age, newest-event age, duplicate-group IDs based on normalized title plus publication time, raw event count, deduplicated event count, raw adjustment, and a deduplicated shadow adjustment. Mark freshness as a separate health state rather than treating status='ok' as proof of recency. Evaluate at least 12 contemporaneous decision observations before considering any production weighting or freshness cutoff.",
+        "target": "Daily review data assembly and dashboard snapshot metadata",
+        "current": "The review is dated 2026-09-25, but the dashboard snapshot is from 2026-09-27 and the geo snapshot is from 2026-09-19. These artifacts are presented alongside same-day decisions without an explicit as-of eligibility status.",
+        "proposed": "Join artifacts by review date and market timezone, retain source generated_at timestamps, and label each artifact as in-window, stale, or future relative to the review cutoff. Exclude out-of-window dashboard state from same-day portfolio and VIX conclusions while preserving it in a clearly labeled diagnostics section. Keep the dashboard read-only.",
         "evidence": [
-          "Geo generated_at=2026-09-19T16:41:18.944358+00:00 for review_date=2026-09-27.",
-          "The feed reports active_event_count=249 and score_adjustment=+7.1.",
-          "Repeated EnergyNow headlines share publication times and substantially identical content across domain variants."
+          "Review date is 2026-09-25.",
+          "Dashboard generated_at is 2026-09-27T05:00:08.830944+00:00.",
+          "Geo generated_at is 2026-09-19T16:41:18.944358+00:00."
         ],
-        "risk": "Normalization may merge legitimately distinct reports; keeping the result shadow-only avoids changing paper decisions while precision is measured.",
+        "risk": "Strict date filtering may temporarily reduce report coverage when snapshots are delayed, but it prevents misleading same-day attribution.",
         "confidence": "HIGH",
         "recommended_mode": "SHADOW",
         "approval_required": true
@@ -325,7 +472,7 @@
     ],
     "review_source": "OPENAI",
     "model": "gpt-5.6-sol",
-    "review_date": "2026-09-27",
-    "generated_at": "2026-09-27T23:21:19.674961-04:00"
+    "review_date": "2026-09-25",
+    "generated_at": "2026-09-27T23:23:57.957054-04:00"
   }
 }

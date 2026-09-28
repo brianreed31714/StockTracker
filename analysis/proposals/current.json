@@ -1,38 +1,46 @@
 {
-  "generated_at": "2026-09-27T20:21:20",
-  "review_date": "2026-09-27",
-  "proposal_count": 4,
+  "generated_at": "2026-09-27T20:23:59",
+  "review_date": "2026-09-25",
+  "proposal_count": 5,
   "pending": [
-    "P-STOCK-20260927-01",
-    "P-STOCK-20260927-02",
-    "P-STOCK-20260927-03",
-    "P-STOCK-20260927-04"
+    "P-STOCK-20260925-01",
+    "P-STOCK-20260925-02",
+    "P-STOCK-20260925-03",
+    "P-STOCK-20260925-04",
+    "P-STOCK-20260925-05"
   ],
   "proposals": [
     {
-      "proposal_id": "P-STOCK-20260927-01",
-      "title": "Enforce and log existing portfolio caps in the paper order-admission path",
+      "proposal_id": "P-STOCK-20260925-01",
+      "title": "Add a decision-to-order funnel with explicit gate reasons",
       "confidence": "HIGH",
+      "recommended_mode": "SHADOW",
+      "status": "PENDING"
+    },
+    {
+      "proposal_id": "P-STOCK-20260925-02",
+      "title": "Enforce and audit paper portfolio-cap invariants before every BUY",
+      "confidence": "MEDIUM",
       "recommended_mode": "PAPER",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20260927-02",
-      "title": "Add a market-session heartbeat and empty-day data manifest",
+      "proposal_id": "P-STOCK-20260925-03",
+      "title": "Add geo-feed freshness, deduplication, and application diagnostics",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20260927-03",
-      "title": "Capture decision-component telemetry before any calibration",
+      "proposal_id": "P-STOCK-20260925-04",
+      "title": "Collect per-symbol threshold and VIX outcome cohorts before calibration",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20260927-04",
-      "title": "Shadow-test geo freshness and headline deduplication",
+      "proposal_id": "P-STOCK-20260925-05",
+      "title": "Make review artifacts date-scoped and freshness-aware",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"

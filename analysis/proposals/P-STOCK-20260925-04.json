@@ -1,0 +1,23 @@
+{
+  "title": "Collect per-symbol threshold and VIX outcome cohorts before calibration",
+  "change_type": "RESEARCH",
+  "target": "Shadow signal-evaluation dataset",
+  "current": "The evidence provides score aggregates and average VIX adjustments but no crossing counts, persistence, forward returns, counterfactual exits, or time-aligned volatility regimes.",
+  "proposed": "For each raw buy or sell threshold crossing, record symbol, side, score distance from threshold, confirmation outcome, VIX level and change, geo freshness status, and forward paper returns at 5, 15, and 60 minutes and market close. Keep blocked signals as counterfactual observations. Require at least 12 eligible observations in a defined symbol-side or pooled regime cohort before considering calibration; make no threshold or VIX-weight changes now.",
+  "evidence": [
+    "Only two final BUY actions and zero SELL actions occurred.",
+    "There are no orders, fills, or realized outcomes.",
+    "Average VIX adjustments differ by symbol, but the available VIX snapshot is not time-aligned with the review day."
+  ],
+  "risk": "Forward-return research can suffer from missing bars, overlapping observations, and selection bias; results must remain paper-only and should not be treated as causal without adequate cohorts.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260925-04",
+  "status": "PENDING",
+  "review_date": "2026-09-25",
+  "created_at": "2026-09-27T20:23:59",
+  "updated_at": "2026-09-27T20:23:59",
+  "implementation": {},
+  "deployment": {}
+}
