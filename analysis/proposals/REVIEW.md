@@ -1,129 +1,130 @@
-# StockTracker Proposals — 2026-09-25
+# StockTracker Proposals — 2026-09-28
 
 Paper-trading model improvement proposals. Human approval is required before implementation/deployment.
 
-## P-STOCK-20260925-01 — Add a decision-to-order funnel with explicit gate reasons
+## P-STOCK-20260928-01 — Add forward-outcome cohorts for threshold and confirmation events
 
 - **Status:** PENDING
 - **Type:** CODE
-- **Target:** Decision audit records and paper-order submission pipeline
-- **Current:** Decision rows contain final actions, but the evidence does not expose raw threshold-cross events, confirmation counters, position eligibility, cap checks, market-session checks, or reasons why a BUY did not create an order.
-- **Proposed:** For every non-HOLD candidate and every raw score crossing, log symbol, side, score, threshold, consecutive-confirmation count, current position state, projected paper exposure, open-position count, market-session state, final disposition, and a single enumerated gate reason. Record paper-order attempt and acceptance identifiers separately. Do not alter thresholds or execution behavior.
+- **Target:** Decision-funnel SHADOW instrumentation and daily review export
+- **Current:** The funnel identifies raw crossings, confirmation waits, cap blocks, and submissions, but does not provide forward returns or adverse/favorable excursion for each event.
+- **Proposed:** For every raw threshold crossing, persist symbol, side, score, threshold distance, position state, confirmation count, final gate disposition, and 5/15/30/60-minute forward return plus MFE/MAE. Report cohorts by symbol and side only after at least 12 eligible observations; make no automatic threshold changes.
 - **Confidence:** HIGH
 - **Recommended mode:** SHADOW
-- **Risk:** Low operational risk; added logging volume and schema changes must avoid disrupting the one-minute decision loop or exposing unsanitized data.
+- **Risk:** Additional storage and delayed-price joins; missing future bars must be marked unavailable rather than imputed.
 - **Evidence:**
-  - Two TSLA BUY decisions were recorded, but orders and fills were both zero.
-  - AMZN, NVDA, and TSLA exceeded the buy threshold by daily maximum, while only TSLA produced BUY actions.
-  - NVDA, TSLA, and XOM fell below the sell threshold by daily minimum, while no SELL action was recorded.
+  - Only 13 raw crossings occurred today.
+  - Nine funnel events were awaiting confirmation and two were blocked by MAX_OPEN_POSITIONS.
+  - Only 3 realized exits are available, below the minimum calibration sample.
 
 **Approve in ChatGPT:**
 
-`Approve P-STOCK-20260925-01`
+`Approve P-STOCK-20260928-01`
 
 **Decline in ChatGPT:**
 
-`Decline P-STOCK-20260925-01`
+`Decline P-STOCK-20260928-01`
 
 ---
 
-## P-STOCK-20260925-02 — Enforce and audit paper portfolio-cap invariants before every BUY
+## P-STOCK-20260928-02 — Shadow-audit geo headline deduplication and marginal score impact
 
 - **Status:** PENDING
 - **Type:** CODE
-- **Target:** Paper portfolio reconciliation and pre-order risk gate
-- **Current:** Configured limits are 4 open positions and $10,000 total exposure, while a later dashboard snapshot reports 5 positions and $12,575.46 exposure. The available timestamps cannot determine whether this resulted from legacy state, appreciation, reconciliation drift, or an order-gate defect.
-- **Proposed:** Before any paper BUY submission, reconcile paper positions and open orders, calculate projected position count and projected exposure, and reject the order if either configured cap would be exceeded. Emit an invariant-violation event at startup and each cycle when existing state is already above a cap. Keep the dashboard read-only and preserve all existing caps, daily-loss controls, and paper=True.
+- **Target:** Geo-feed aggregation and score-attribution logging
+- **Current:** The feed reports 220 active events and includes several closely related or duplicated Hormuz headlines. Production geo adjustments reached an XOM daily average of +3.415, but no deduplication comparison or forward-outcome attribution is shown.
+- **Proposed:** Create a SHADOW fingerprint based on normalized title, canonical source, event time, category, and direction. Log raw versus deduplicated event counts and calculate a non-applied deduplicated geo adjustment alongside the current adjustment. Preserve the active production adjustment until sufficient outcome evidence exists.
 - **Confidence:** MEDIUM
-- **Recommended mode:** PAPER
-- **Risk:** Stale or incomplete position reconciliation could conservatively block valid paper entries; the guard must fail closed without liquidating or modifying existing paper positions automatically.
+- **Recommended mode:** SHADOW
+- **Risk:** Over-aggressive fingerprinting could merge distinct updates; keep the deduplicated value observational and retain raw records.
 - **Evidence:**
-  - Configured max_open_positions is 4 and max_total_exposure is $10,000.
-  - The 2026-09-27 dashboard reports 5 positions and $12,575.46 exposure.
-  - No same-day order records are available to identify the source of the discrepancy.
+  - Multiple CNBC/cnbc.com entries share the same Hormuz subject and timestamp.
+  - XOM received the largest average geo adjustment but placed no order.
+  - No geo-component forward outcomes were supplied.
 
 **Approve in ChatGPT:**
 
-`Approve P-STOCK-20260925-02`
+`Approve P-STOCK-20260928-02`
 
 **Decline in ChatGPT:**
 
-`Decline P-STOCK-20260925-02`
+`Decline P-STOCK-20260928-02`
 
 ---
 
-## P-STOCK-20260925-03 — Add geo-feed freshness, deduplication, and application diagnostics
+## P-STOCK-20260928-03 — Restore and validate XLF/FAS/FAZ SHADOW snapshot collection
 
 - **Status:** PENDING
 - **Type:** CODE+CONFIG
-- **Target:** Geo-feed ingestion and score-adjustment audit fields
-- **Current:** The geo artifact is six days older than the review date, reports a +7.1 adjustment and 249 active events, and includes apparent duplicate stories. Decision aggregates show a 0.0 geo adjustment for every symbol without explaining whether the feed was stale, inapplicable, or unavailable.
-- **Proposed:** In SHADOW, canonicalize article URL/domain/title fingerprints, report raw versus deduplicated event counts, record feed age, and attach an enumerated geo-application status to each decision. Add a configurable freshness limit that quarantines stale geo data from scoring while still logging its counterfactual adjustment. Do not activate the supplied +7.1 adjustment or change trading thresholds.
+- **Target:** Financial-leverage SHADOW market-data collector and health telemetry
+- **Current:** The feature is enabled, but snapshot, signal, and outcome tables all contain zero rows; XLF/FAS/FAZ premarket gaps are null and the dashboard reports FINANCIAL_SNAPSHOT_UNAVAILABLE.
+- **Proposed:** Add startup and per-refresh validation for XLF, FAS, and FAZ quotes/bars on the configured IEX feed; record explicit failure categories such as unsupported symbol, empty bars, stale timestamp, or join failure. Backfill nothing. Resume only SHADOW candidate and 5/15/30/60-minute outcome logging when all required inputs pass freshness checks.
 - **Confidence:** HIGH
 - **Recommended mode:** SHADOW
-- **Risk:** Over-aggressive deduplication could merge genuinely distinct reports; shadow comparison should precede any production scoring effect.
+- **Risk:** Feed coverage may not support every symbol consistently; the feature must fail closed to candidate NONE and must not affect paper orders.
 - **Evidence:**
-  - Geo generated_at is 2026-09-19T16:41:18.944358+00:00 for a 2026-09-25 review.
-  - The feed reports signal 0.7105 and score adjustment 7.1, but all symbols show average geo adjustment 0.0.
-  - Multiple top events repeat the same publication time and headline through domain or capitalization variants.
+  - Financial-leverage snapshot_rows, signal_rows, and outcome_rows are all zero.
+  - The configured outcome horizons already exist but generated no evidence.
+  - Premarket gaps for XLF, FAS, and FAZ are null.
 
 **Approve in ChatGPT:**
 
-`Approve P-STOCK-20260925-03`
+`Approve P-STOCK-20260928-03`
 
 **Decline in ChatGPT:**
 
-`Decline P-STOCK-20260925-03`
+`Decline P-STOCK-20260928-03`
 
 ---
 
-## P-STOCK-20260925-04 — Collect per-symbol threshold and VIX outcome cohorts before calibration
-
-- **Status:** PENDING
-- **Type:** RESEARCH
-- **Target:** Shadow signal-evaluation dataset
-- **Current:** The evidence provides score aggregates and average VIX adjustments but no crossing counts, persistence, forward returns, counterfactual exits, or time-aligned volatility regimes.
-- **Proposed:** For each raw buy or sell threshold crossing, record symbol, side, score distance from threshold, confirmation outcome, VIX level and change, geo freshness status, and forward paper returns at 5, 15, and 60 minutes and market close. Keep blocked signals as counterfactual observations. Require at least 12 eligible observations in a defined symbol-side or pooled regime cohort before considering calibration; make no threshold or VIX-weight changes now.
-- **Confidence:** HIGH
-- **Recommended mode:** SHADOW
-- **Risk:** Forward-return research can suffer from missing bars, overlapping observations, and selection bias; results must remain paper-only and should not be treated as causal without adequate cohorts.
-- **Evidence:**
-  - Only two final BUY actions and zero SELL actions occurred.
-  - There are no orders, fills, or realized outcomes.
-  - Average VIX adjustments differ by symbol, but the available VIX snapshot is not time-aligned with the review day.
-
-**Approve in ChatGPT:**
-
-`Approve P-STOCK-20260925-04`
-
-**Decline in ChatGPT:**
-
-`Decline P-STOCK-20260925-04`
-
----
-
-## P-STOCK-20260925-05 — Make review artifacts date-scoped and freshness-aware
+## P-STOCK-20260928-04 — Instrument premarket bias application and expiry
 
 - **Status:** PENDING
 - **Type:** CODE
-- **Target:** Daily review data assembly and dashboard snapshot metadata
-- **Current:** The review is dated 2026-09-25, but the dashboard snapshot is from 2026-09-27 and the geo snapshot is from 2026-09-19. These artifacts are presented alongside same-day decisions without an explicit as-of eligibility status.
-- **Proposed:** Join artifacts by review date and market timezone, retain source generated_at timestamps, and label each artifact as in-window, stale, or future relative to the review cutoff. Exclude out-of-window dashboard state from same-day portfolio and VIX conclusions while preserving it in a clearly labeled diagnostics section. Keep the dashboard read-only.
+- **Target:** Premarket-context audit trail
+- **Current:** Five bearish snapshots and negative SPY/QQQ gaps were captured, but the dashboard later showed a zero premarket adjustment. The evidence does not connect each refresh to the first-hour decisions or subsequent returns.
+- **Proposed:** For each configured premarket refresh, log gaps, bias score, geo contribution, missing-source flags, and the exact adjustment scheduled. During the first 60 regular-session minutes, log applied adjustment, age, expiry reason, counterfactual score without the adjustment, and 15/30/60-minute forward returns. Require at least 12 complete sessions or eligible event cohorts before calibration.
 - **Confidence:** HIGH
 - **Recommended mode:** SHADOW
-- **Risk:** Strict date filtering may temporarily reduce report coverage when snapshots are delayed, but it prevents misleading same-day attribution.
+- **Risk:** More logging around the market open; timestamps and session calendars must be normalized to avoid false expiry diagnoses.
 - **Evidence:**
-  - Review date is 2026-09-25.
-  - Dashboard generated_at is 2026-09-27T05:00:08.830944+00:00.
-  - Geo generated_at is 2026-09-19T16:41:18.944358+00:00.
+  - All 5 snapshots were BEARISH with latest bias score 25.0.
+  - Latest gaps were SPY -0.342% and QQQ -0.523%.
+  - Dashboard signal records showed premarket_adjustment 0.0.
+  - Social status was UNAVAILABLE and must remain explicitly missing.
 
 **Approve in ChatGPT:**
 
-`Approve P-STOCK-20260925-05`
+`Approve P-STOCK-20260928-04`
 
 **Decline in ChatGPT:**
 
-`Decline P-STOCK-20260925-05`
+`Decline P-STOCK-20260928-04`
+
+---
+
+## P-STOCK-20260928-05 — Add regime and VIX outcome-coverage reporting without gating trades
+
+- **Status:** PENDING
+- **Type:** CODE
+- **Target:** Market-regime SHADOW daily report
+- **Current:** All 79 regime snapshots were RISK_ON and all 11 linked decisions were ALLOW_EQUITY. VIX contributions are logged but lack state-conditioned outcome coverage.
+- **Proposed:** Retain the current non-enforcing regime behavior and add state duration, transition counts, stale-state flags, continuous VIX level/change, linked decision outcomes, and sample counts by regime state and symbol. Suppress comparative performance claims until each compared state has at least 12 eligible observations.
+- **Confidence:** HIGH
+- **Recommended mode:** SHADOW
+- **Risk:** Single-state periods may produce long-running incomplete comparisons; reports must label unsupported states rather than extrapolate.
+- **Evidence:**
+  - Regime state coverage was exclusively RISK_ON.
+  - Only 11 regime-linked decisions were recorded.
+  - Average VIX score adjustments were very small and have no supplied causal outcome evidence.
+
+**Approve in ChatGPT:**
+
+`Approve P-STOCK-20260928-05`
+
+**Decline in ChatGPT:**
+
+`Decline P-STOCK-20260928-05`
 
 ---
 

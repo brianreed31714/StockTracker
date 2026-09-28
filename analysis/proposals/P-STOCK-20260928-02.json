@@ -1,0 +1,23 @@
+{
+  "title": "Shadow-audit geo headline deduplication and marginal score impact",
+  "change_type": "CODE",
+  "target": "Geo-feed aggregation and score-attribution logging",
+  "current": "The feed reports 220 active events and includes several closely related or duplicated Hormuz headlines. Production geo adjustments reached an XOM daily average of +3.415, but no deduplication comparison or forward-outcome attribution is shown.",
+  "proposed": "Create a SHADOW fingerprint based on normalized title, canonical source, event time, category, and direction. Log raw versus deduplicated event counts and calculate a non-applied deduplicated geo adjustment alongside the current adjustment. Preserve the active production adjustment until sufficient outcome evidence exists.",
+  "evidence": [
+    "Multiple CNBC/cnbc.com entries share the same Hormuz subject and timestamp.",
+    "XOM received the largest average geo adjustment but placed no order.",
+    "No geo-component forward outcomes were supplied."
+  ],
+  "risk": "Over-aggressive fingerprinting could merge distinct updates; keep the deduplicated value observational and retain raw records.",
+  "confidence": "MEDIUM",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260928-02",
+  "status": "PENDING",
+  "review_date": "2026-09-28",
+  "created_at": "2026-09-28T13:30:55",
+  "updated_at": "2026-09-28T13:30:55",
+  "implementation": {},
+  "deployment": {}
+}

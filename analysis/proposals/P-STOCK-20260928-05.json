@@ -1,0 +1,23 @@
+{
+  "title": "Add regime and VIX outcome-coverage reporting without gating trades",
+  "change_type": "CODE",
+  "target": "Market-regime SHADOW daily report",
+  "current": "All 79 regime snapshots were RISK_ON and all 11 linked decisions were ALLOW_EQUITY. VIX contributions are logged but lack state-conditioned outcome coverage.",
+  "proposed": "Retain the current non-enforcing regime behavior and add state duration, transition counts, stale-state flags, continuous VIX level/change, linked decision outcomes, and sample counts by regime state and symbol. Suppress comparative performance claims until each compared state has at least 12 eligible observations.",
+  "evidence": [
+    "Regime state coverage was exclusively RISK_ON.",
+    "Only 11 regime-linked decisions were recorded.",
+    "Average VIX score adjustments were very small and have no supplied causal outcome evidence."
+  ],
+  "risk": "Single-state periods may produce long-running incomplete comparisons; reports must label unsupported states rather than extrapolate.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260928-05",
+  "status": "PENDING",
+  "review_date": "2026-09-28",
+  "created_at": "2026-09-28T13:30:55",
+  "updated_at": "2026-09-28T13:30:55",
+  "implementation": {},
+  "deployment": {}
+}

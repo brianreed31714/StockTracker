@@ -1,0 +1,23 @@
+{
+  "title": "Restore and validate XLF/FAS/FAZ SHADOW snapshot collection",
+  "change_type": "CODE+CONFIG",
+  "target": "Financial-leverage SHADOW market-data collector and health telemetry",
+  "current": "The feature is enabled, but snapshot, signal, and outcome tables all contain zero rows; XLF/FAS/FAZ premarket gaps are null and the dashboard reports FINANCIAL_SNAPSHOT_UNAVAILABLE.",
+  "proposed": "Add startup and per-refresh validation for XLF, FAS, and FAZ quotes/bars on the configured IEX feed; record explicit failure categories such as unsupported symbol, empty bars, stale timestamp, or join failure. Backfill nothing. Resume only SHADOW candidate and 5/15/30/60-minute outcome logging when all required inputs pass freshness checks.",
+  "evidence": [
+    "Financial-leverage snapshot_rows, signal_rows, and outcome_rows are all zero.",
+    "The configured outcome horizons already exist but generated no evidence.",
+    "Premarket gaps for XLF, FAS, and FAZ are null."
+  ],
+  "risk": "Feed coverage may not support every symbol consistently; the feature must fail closed to candidate NONE and must not affect paper orders.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260928-03",
+  "status": "PENDING",
+  "review_date": "2026-09-28",
+  "created_at": "2026-09-28T13:30:55",
+  "updated_at": "2026-09-28T13:30:55",
+  "implementation": {},
+  "deployment": {}
+}

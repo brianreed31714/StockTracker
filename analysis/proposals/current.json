@@ -1,83 +1,49 @@
 {
-  "generated_at": "2026-09-27T22:25:00-07:00",
-  "review_date": "2026-09-25",
-  "proposal_count": 10,
+  "generated_at": "2026-09-28T13:30:55",
+  "review_date": "2026-09-28",
+  "proposal_count": 5,
   "pending": [
-    "P-STOCK-20260925-02",
-    "P-STOCK-20260925-03",
-    "P-STOCK-20260925-04",
-    "P-STOCK-20260925-05"
+    "P-STOCK-20260928-01",
+    "P-STOCK-20260928-02",
+    "P-STOCK-20260928-03",
+    "P-STOCK-20260928-04",
+    "P-STOCK-20260928-05"
   ],
   "proposals": [
     {
-      "proposal_id": "P-STOCK-20260925-01",
-      "title": "Add a decision-to-order funnel with explicit gate reasons",
+      "proposal_id": "P-STOCK-20260928-01",
+      "title": "Add forward-outcome cohorts for threshold and confirmation events",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
-      "status": "READY_TO_DEPLOY"
+      "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20260925-02",
-      "title": "Enforce and audit paper portfolio-cap invariants before every BUY",
+      "proposal_id": "P-STOCK-20260928-02",
+      "title": "Shadow-audit geo headline deduplication and marginal score impact",
       "confidence": "MEDIUM",
-      "recommended_mode": "PAPER",
-      "status": "PENDING"
-    },
-    {
-      "proposal_id": "P-STOCK-20260925-03",
-      "title": "Add geo-feed freshness, deduplication, and application diagnostics",
-      "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20260925-04",
-      "title": "Collect per-symbol threshold and VIX outcome cohorts before calibration",
+      "proposal_id": "P-STOCK-20260928-03",
+      "title": "Restore and validate XLF/FAS/FAZ SHADOW snapshot collection",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20260925-05",
-      "title": "Make review artifacts date-scoped and freshness-aware",
+      "proposal_id": "P-STOCK-20260928-04",
+      "title": "Instrument premarket bias application and expiry",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20260927-05",
-      "title": "Add SHADOW market-regime engine with defensive-asset comparison",
+      "proposal_id": "P-STOCK-20260928-05",
+      "title": "Add regime and VIX outcome-coverage reporting without gating trades",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
-      "status": "READY_TO_DEPLOY"
-    },
-    {
-      "proposal_id": "P-STOCK-20260927-06",
-      "title": "Add SHADOW XLF/FAS/FAZ leveraged-financial research",
-      "confidence": "HIGH",
-      "recommended_mode": "SHADOW",
-      "status": "READY_TO_DEPLOY"
-    },
-    {
-      "proposal_id": "P-STOCK-20260927-07",
-      "title": "Add market-aware scheduler and 30-minute premarket intelligence",
-      "confidence": "HIGH",
-      "recommended_mode": "PAPER",
-      "status": "READY_TO_DEPLOY"
-    },
-    {
-      "proposal_id": "P-STOCK-20260927-08",
-      "title": "Deploy finalized v1.8 premarket dashboard context",
-      "confidence": "HIGH",
-      "recommended_mode": "PAPER",
-      "status": "READY_TO_DEPLOY"
-    },
-    {
-      "proposal_id": "P-STOCK-20260927-09",
-      "title": "Guarantee weekday StockTracker reports before 8 PM Pacific",
-      "confidence": "HIGH",
-      "recommended_mode": "PAPER",
-      "status": "READY_TO_DEPLOY"
+      "status": "PENDING"
     }
   ]
 }
