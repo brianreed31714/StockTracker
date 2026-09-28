@@ -1,0 +1,13 @@
+{
+  "proposal_id": "P-STOCK-20260925-01",
+  "status": "READY_TO_DEPLOY",
+  "commit": "9474676c613c027363d464f655524804e2fdc591",
+  "components": [
+    "trader"
+  ],
+  "files": {
+    "trader": "momentum_trader_v1_5_decision_funnel.py"
+  },
+  "mode": "SHADOW",
+  "note": "Approved decision-to-order funnel telemetry. No threshold changes. PAPER_ONLY remains enforced."
+}
