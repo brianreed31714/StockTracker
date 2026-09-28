@@ -9,7 +9,7 @@ Start here:
 
 Active baseline:
 
-- `momentum_trader_v1_4_agentic.py`
+- `momentum_trader_v1_7_financial_leverage_shadow.py`
 - `xom_geo_feed_v1_1_agentic.py`
 - `momentum_dashboard_v1_3_agentic.py`
 
