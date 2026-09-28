@@ -1,0 +1,13 @@
+{
+  "proposal_id": "P-STOCK-20260927-08",
+  "status": "READY_TO_DEPLOY",
+  "commit": "c9ca0bb6bdb24160a004323eca4d41075d9f1310",
+  "components": [
+    "trader"
+  ],
+  "files": {
+    "trader": "momentum_trader_v1_8_market_aware_premarket.py"
+  },
+  "mode": "PAPER",
+  "note": "Redeploy finalized v1.8 so dashboard_state.json exposes premarket_context. No trading logic or thresholds changed."
+}
