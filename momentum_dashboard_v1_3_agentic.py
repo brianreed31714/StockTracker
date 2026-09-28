@@ -1,0 +1,100 @@
+"""Compact read-only Streamlit dashboard for the agentic StockTracker release."""
+import json, os, sqlite3, time
+from pathlib import Path
+import pandas as pd
+import streamlit as st
+from dotenv import load_dotenv
+
+BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / ".env.config")
+load_dotenv(BASE_DIR / ".env", override=True)
+
+def project_path(env_name, default_name):
+    raw = os.getenv(env_name, "").strip()
+    p = Path(raw).expanduser() if raw else (BASE_DIR / default_name)
+    return p if p.is_absolute() else (BASE_DIR / p)
+
+STATE=project_path("DASHBOARD_STATE_PATH","dashboard_state.json")
+DB=project_path("MULTI_DB_PATH","momentum_trader.sqlite3")
+
+st.set_page_config(page_title="Momentum Trader",page_icon="📈",layout="wide",initial_sidebar_state="collapsed")
+st.markdown("""<style>
+.block-container{padding-top:.7rem;padding-bottom:.5rem;max-width:1500px}.app-title{font-size:1.65rem;font-weight:750;line-height:1.05}.subtle{opacity:.65;font-size:.78rem}.pill{display:inline-block;padding:.18rem .55rem;border:1px solid rgba(128,128,128,.35);border-radius:999px;font-size:.72rem}.stMetric{border:1px solid rgba(128,128,128,.18);padding:.35rem .55rem;border-radius:.55rem}div[data-testid="stMetricValue"]{font-size:1.25rem}div[data-testid="stMetricLabel"]{font-size:.72rem}.compact{font-size:.78rem}
+</style>""",unsafe_allow_html=True)
+
+with st.sidebar:
+    refresh=st.select_slider("Refresh seconds",[2,5,10,15,30,60],value=5)
+    st.caption("READ ONLY — dashboard cannot place trades.")
+
+h1,h2=st.columns([5,1])
+with h1:
+    st.markdown('<div class="app-title">Momentum Trader</div>',unsafe_allow_html=True)
+    st.markdown('<div class="subtle">XOM • WMT • AMZN • AAPL • NVDA • TSLA • SPY • QQQ • GLD &nbsp; | &nbsp; VIX + macro regime</div>',unsafe_allow_html=True)
+with h2: st.markdown('<span class="pill">PAPER ONLY</span>',unsafe_allow_html=True)
+
+try: state=json.loads(STATE.read_text(encoding="utf-8")) if STATE.exists() else {}
+except Exception: state={}
+
+age=None
+if state.get("generated_at"):
+    try: age=max(0,(pd.Timestamp.now(tz="UTC")-pd.Timestamp(state["generated_at"])).total_seconds())
+    except Exception: pass
+status="LIVE" if age is not None and age<150 else ("DELAYED" if age is not None and age<600 else "STALE / NO DATA")
+st.caption(f"● {status}" + (f" • updated {age:.0f}s ago" if age is not None else "") + f" • market {'OPEN' if state.get('market_open') else 'CLOSED'}")
+
+v=state.get("vix",{}); p=state.get("portfolio",{}); g=state.get("geo",{})
+a,b,c,d,e,f=st.columns(6)
+a.metric("VIX",f"{v.get('level'):.2f}" if isinstance(v.get('level'),(int,float)) else v.get('source','—'))
+b.metric("VIX 15m",f"{100*v.get('change_15m',0):+.2f}%")
+c.metric("Exposure",f"${p.get('exposure',0):,.0f}")
+d.metric("Positions",f"{p.get('open_positions',0)}")
+e.metric("Realized Today",f"${p.get('realized_today',0):+,.2f}")
+f.metric("Trades Today",f"{p.get('trades_today',0)}")
+
+signals=pd.DataFrame(state.get("signals",[]))
+if signals.empty:
+    st.warning(f"No signal state found at {STATE}. Start momentum_trader_v1_2.py and confirm it logs the same Dashboard state path.")
+else:
+    for col in ["price","score","technical","context","vix_adjustment","geo_adjustment","momentum_5m","momentum_15m","rsi14","volume_ratio","unrealized_pl"]:
+        if col in signals: signals[col]=pd.to_numeric(signals[col],errors="coerce")
+    signals=signals.sort_values("score",ascending=False)
+    show=signals.copy()
+    show["Price"]=show["price"].map(lambda x:f"${x:,.2f}")
+    show["Score"]=show["score"].map(lambda x:f"{x:.1f}")
+    show["5m"]=show["momentum_5m"].map(lambda x:f"{x*100:+.2f}%")
+    show["15m"]=show["momentum_15m"].map(lambda x:f"{x*100:+.2f}%")
+    show["RSI"]=show["rsi14"].map(lambda x:f"{x:.1f}")
+    show["Vol"]=show["volume_ratio"].map(lambda x:f"{x:.2f}x")
+    show["Context"]=show["context"].map(lambda x:f"{x:+.1f}")
+    show["VIX Adj"]=show["vix_adjustment"].map(lambda x:f"{x:+.1f}")
+    show["Geo Adj"]=show["geo_adjustment"].map(lambda x:f"{x:+.1f}")
+    show["P/L"]=show["unrealized_pl"].map(lambda x:f"${x:+,.2f}")
+    show["Pos"]=show["position"].map(lambda x:"YES" if x else "—")
+    st.dataframe(show[["symbol","Price","Score","decision","5m","15m","RSI","Vol","Context","VIX Adj","Geo Adj","Pos","P/L","reason"]],hide_index=True,use_container_width=True,height=355,
+                 column_config={"symbol":"Asset","decision":"Action","reason":"Reason"})
+
+    left,right=st.columns([1.2,1])
+    with left:
+        st.subheader("Scores")
+        chart=signals.set_index("symbol")[["score"]]
+        st.bar_chart(chart,height=220)
+    with right:
+        st.subheader("Open Positions")
+        pos=pd.DataFrame(state.get("positions",[]))
+        if pos.empty: st.info("No open positions")
+        else:
+            cols=[c for c in ["symbol","qty","avg_entry_price","current_price","market_value","unrealized_pl"] if c in pos]
+            st.dataframe(pos[cols],hide_index=True,use_container_width=True,height=220)
+
+st.caption(f"Geo feed: {g.get('status','—')} • active events: {g.get('active_event_count',0)} • XOM geo adjustment: {g.get('score_adjustment',0):+.1f}")
+
+st.subheader("Recent Paper Orders")
+if DB.exists():
+    try:
+        with sqlite3.connect(DB) as c: orders=pd.read_sql_query("SELECT ts,symbol,side,notional,price,reason FROM orders ORDER BY ts DESC LIMIT 12",c)
+        if orders.empty: st.caption("No orders yet.")
+        else: st.dataframe(orders,hide_index=True,use_container_width=True,height=210)
+    except Exception as ex: st.caption(f"Order history unavailable: {ex}")
+else: st.caption("Database not created yet.")
+
+time.sleep(refresh); st.rerun()
