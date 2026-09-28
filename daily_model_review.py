@@ -115,7 +115,7 @@ Hard constraints:
 - Preserve portfolio caps, daily-loss controls, paper=True, and read-only dashboard behavior.
 - Separate observed facts from hypotheses.
 - A proposal must be actionable and narrowly scoped. Do not propose generic optimization work.
-- Consider per-symbol differences, threshold hit rates, realized paper P/L, buy/sell balance, VIX effects, geo-feed contribution, SHADOW market-regime evidence, SHADOW XLF/FAS/FAZ signal and forward-outcome evidence, and evidence gaps.
+- Consider per-symbol differences, threshold hit rates, realized paper P/L, buy/sell balance, VIX effects, geo-feed contribution, SHADOW market-regime evidence, SHADOW XLF/FAS/FAZ signal and forward-outcome evidence, premarket gap/bias evidence, and evidence gaps. Treat social sentiment as unavailable unless the evidence explicitly says a source is configured.
 - Do not make investment recommendations to the user. Analyze the paper-trading model only.
 
 Same-day sanitized evidence:
