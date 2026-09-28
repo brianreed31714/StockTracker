@@ -1,7 +1,7 @@
 {
   "proposal_id": "P-STOCK-20260927-07",
   "status": "READY_TO_DEPLOY",
-  "commit": "154f3dc68399e5b24870a878386c8c20e909aa61",
+  "commit": "c9ca0bb6bdb24160a004323eca4d41075d9f1310",
   "components": [
     "trader"
   ],
