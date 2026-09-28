@@ -1511,7 +1511,7 @@ def place_sell(symbol,position,price,reason):
 
 # ---------------- Main cycle ----------------
 def write_state(rows,vix,geo,regime,financial_shadow,positions,market_open):
-    state={"generated_at":utc_now().isoformat(),"market_open":market_open,"paper_only":True,"vix":vix,"geo":geo,"market_regime_shadow":regime,"financial_leverage_shadow":financial_shadow,
+    state={"generated_at":utc_now().isoformat(),"market_open":market_open,"paper_only":True,"vix":vix,"geo":geo,"market_regime_shadow":regime,"financial_leverage_shadow":financial_shadow,"premarket_context":dict(_PREMARKET_CONTEXT),
            "portfolio":{"open_positions":len(positions),"exposure":sum(p["market_value"] for p in positions.values()),"realized_today":realized_today(),"trades_today":trades_today()},
            "signals":rows,"positions":list(positions.values())}
     tmp=STATE_PATH.with_suffix(STATE_PATH.suffix+".tmp"); tmp.write_text(json.dumps(state,indent=2),encoding="utf-8"); tmp.replace(STATE_PATH)
