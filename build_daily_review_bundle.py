@@ -104,6 +104,33 @@ def summarize_orders(items):
         "by_symbol": {k: {kk: round(vv, 2) if isinstance(vv, float) else vv for kk, vv in v.items()} for k, v in sorted(by_symbol.items())},
     }
 
+
+def summarize_funnel(items):
+    gates = Counter(str(r.get("gate_reason") or "UNKNOWN") for r in items)
+    dispositions = Counter(str(r.get("final_disposition") or "UNKNOWN") for r in items)
+    sides = Counter(str(r.get("side") or "UNKNOWN") for r in items)
+    return {
+        "rows": len(items),
+        "raw_threshold_crossings": sum(int(fnum(r.get("raw_threshold_cross")) > 0) for r in items),
+        "by_side": dict(sides),
+        "by_gate_reason": dict(gates),
+        "by_final_disposition": dict(dispositions),
+    }
+
+
+def summarize_order_attempts(items):
+    attempted = sum(int(fnum(r.get("attempted")) > 0) for r in items)
+    accepted = sum(int(fnum(r.get("accepted")) > 0) for r in items)
+    gates = Counter(str(r.get("gate_reason") or "UNKNOWN") for r in items)
+    return {
+        "rows": len(items),
+        "attempted": attempted,
+        "accepted": accepted,
+        "blocked_before_submit": len(items) - attempted,
+        "submit_failures": max(0, attempted - accepted),
+        "by_gate_reason": dict(gates),
+    }
+
 def summarize_realized(items):
     by_symbol = defaultdict(list)
     for r in items:
@@ -155,7 +182,7 @@ def geo_log_health():
 
 def build(date_text: str):
     start_utc, end_utc = day_bounds(date_text)
-    decisions = orders = realized = fills = []
+    decisions = orders = realized = fills = funnel = order_attempts = []
     db_error = None
     if DB_PATH.exists():
         try:
@@ -165,6 +192,8 @@ def build(date_text: str):
             orders = rows(conn, "SELECT * FROM orders WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
             realized = rows(conn, "SELECT * FROM realized WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
             fills = rows(conn, "SELECT * FROM fills WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
+            funnel = rows(conn, "SELECT * FROM decision_funnel WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
+            order_attempts = rows(conn, "SELECT * FROM order_attempts WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
             conn.close()
         except Exception as exc:
             db_error = str(exc)
@@ -206,6 +235,8 @@ def build(date_text: str):
         "orders": summarize_orders(orders),
         "realized": summarize_realized(realized),
         "fills": {"rows": len(fills)},
+        "decision_funnel": summarize_funnel(funnel),
+        "order_attempts": summarize_order_attempts(order_attempts),
         "dashboard_snapshot": {
             "generated_at": state.get("generated_at"),
             "market_open": state.get("market_open"),
