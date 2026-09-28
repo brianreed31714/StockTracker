@@ -88,6 +88,9 @@ PROTECTED_CAPABILITIES = {
             "MAX_DAILY_REALIZED_LOSS",
             "PUSHOVER_STOCK_EOD",
             "def geo_snapshot",
+            "CREATE TABLE IF NOT EXISTS decision_funnel",
+            "REGIME_SHADOW_ENABLED",
+            "CREATE TABLE IF NOT EXISTS market_regime_shadow",
         ),
         "forbidden": (
             "PAPER_ONLY = False",
