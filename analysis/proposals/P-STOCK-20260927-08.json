@@ -1,0 +1,34 @@
+{
+  "proposal_id": "P-STOCK-20260927-08",
+  "title": "Deploy finalized v1.8 premarket dashboard context",
+  "change_type": "CODE",
+  "target": "momentum_trader_v1_8_market_aware_premarket.py",
+  "current": "The running v1.8 deployment has the market-aware scheduler and premarket intelligence, but it was deployed from the earlier v1.8 commit before premarket_context was exposed in dashboard_state.json.",
+  "proposed": "Redeploy the finalized v1.8 file so dashboard_state.json includes the latest premarket_context while preserving all existing PAPER_ONLY, market-aware, regime, decision-funnel, and XLF/FAS/FAZ SHADOW behavior.",
+  "evidence": [
+    "The deployment agent previously deployed P-STOCK-20260927-07 from the earlier v1.8 commit.",
+    "The final v1.8 file at commit c9ca0bb6bdb24160a004323eca4d41075d9f1310 adds premarket_context to dashboard_state.json.",
+    "No trading thresholds or order-execution rules are changed by this follow-up."
+  ],
+  "risk": "Low. This is a redeploy of the finalized v1.8 trader with a dashboard-state visibility improvement only.",
+  "confidence": "HIGH",
+  "recommended_mode": "PAPER",
+  "approval_required": true,
+  "status": "READY_TO_DEPLOY",
+  "review_date": "2026-09-27",
+  "created_at": "2026-09-27T21:45:00-07:00",
+  "updated_at": "2026-09-27T21:45:00-07:00",
+  "approved_at": "2026-09-27T21:45:00-07:00",
+  "status_note": "User explicitly approved the finalized v1.8 follow-up deployment in ChatGPT with 'sure'.",
+  "implementation": {
+    "trader_file": "momentum_trader_v1_8_market_aware_premarket.py",
+    "implementation_commit": "c9ca0bb6bdb24160a004323eca4d41075d9f1310",
+    "mode": "PAPER",
+    "notes": "Finalized v1.8; adds premarket_context to dashboard_state.json only."
+  },
+  "deployment": {
+    "status": "QUEUED",
+    "trader_file": "momentum_trader_v1_8_market_aware_premarket.py",
+    "release_commit": "c9ca0bb6bdb24160a004323eca4d41075d9f1310"
+  }
+}
