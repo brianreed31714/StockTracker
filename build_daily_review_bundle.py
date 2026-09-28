@@ -217,9 +217,53 @@ def summarize_regime_decisions(items):
         "by_symbol": dict(symbols),
     }
 
+
+def summarize_financial_leverage(snapshots, signals, outcomes):
+    candidate_snapshots = Counter(str(r.get("candidate") or "NONE") for r in snapshots)
+    signal_counts = Counter(str(r.get("candidate") or "UNKNOWN") for r in signals)
+    grouped = defaultdict(list)
+    for r in outcomes:
+        key = (str(r.get("candidate") or "UNKNOWN"), int(fnum(r.get("horizon_minutes"))))
+        grouped[key].append(fnum(r.get("candidate_return")))
+
+    outcome_summary = {}
+    for (candidate, horizon), vals in sorted(grouped.items()):
+        key = f"{candidate}_{horizon}m"
+        outcome_summary[key] = {
+            "n": len(vals),
+            "avg_return_pct": round(sum(vals) / len(vals) * 100.0, 3) if vals else None,
+            "median_return_pct": round(median(vals) * 100.0, 3) if vals else None,
+            "win_rate_pct": round(sum(v > 0 for v in vals) / len(vals) * 100.0, 2) if vals else None,
+            "best_return_pct": round(max(vals) * 100.0, 3) if vals else None,
+            "worst_return_pct": round(min(vals) * 100.0, 3) if vals else None,
+        }
+
+    latest = snapshots[-1] if snapshots else {}
+    return {
+        "snapshot_rows": len(snapshots),
+        "candidate_snapshot_counts": dict(candidate_snapshots),
+        "signal_rows": len(signals),
+        "signal_counts": dict(signal_counts),
+        "outcome_rows": len(outcomes),
+        "outcomes": outcome_summary,
+        "latest_candidate": latest.get("candidate"),
+        "latest_candidate_score": latest.get("candidate_score"),
+        "latest_regime_state": latest.get("regime_state"),
+    }
+
 def build(date_text: str):
     start_utc, end_utc = day_bounds(date_text)
-    decisions = orders = realized = fills = funnel = order_attempts = []
+    decisions = []
+    orders = []
+    realized = []
+    fills = []
+    funnel = []
+    order_attempts = []
+    regime_rows = []
+    regime_decisions = []
+    fin_rows = []
+    fin_signals = []
+    fin_outcomes = []
     db_error = None
     if DB_PATH.exists():
         try:
@@ -237,8 +281,12 @@ def build(date_text: str):
                 regime_rows = rows(conn, "SELECT * FROM market_regime_shadow WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
             if table_exists(conn, "regime_decision_shadow"):
                 regime_decisions = rows(conn, "SELECT * FROM regime_decision_shadow WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
-            funnel = rows(conn, "SELECT * FROM decision_funnel WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
-            order_attempts = rows(conn, "SELECT * FROM order_attempts WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
+            if table_exists(conn, "financial_leverage_shadow"):
+                fin_rows = rows(conn, "SELECT * FROM financial_leverage_shadow WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
+            if table_exists(conn, "financial_leverage_signals"):
+                fin_signals = rows(conn, "SELECT * FROM financial_leverage_signals WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
+            if table_exists(conn, "financial_leverage_outcomes"):
+                fin_outcomes = rows(conn, "SELECT * FROM financial_leverage_outcomes WHERE observed_at>=? AND observed_at<? ORDER BY observed_at", (start_utc, end_utc))
             conn.close()
         except Exception as exc:
             db_error = str(exc)
@@ -262,6 +310,10 @@ def build(date_text: str):
         "take_profit_pct": fnum(os.getenv("TAKE_PROFIT_PCT", "0")),
         "trailing_stop_activation_pct": fnum(os.getenv("TRAILING_STOP_ACTIVATION_PCT", "0")),
         "trailing_stop_pct": fnum(os.getenv("TRAILING_STOP_PCT", "0")),
+        "regime_shadow_enabled": str(os.getenv("REGIME_SHADOW_ENABLED", "1")).strip().lower() in {"1","true","yes","on"},
+        "financial_leverage_shadow_enabled": str(os.getenv("FIN_LEVERAGE_SHADOW_ENABLED", "1")).strip().lower() in {"1","true","yes","on"},
+        "financial_leverage_min_score": fnum(os.getenv("FIN_LEVERAGE_MIN_SCORE", "70")),
+        "financial_leverage_outcome_horizons": os.getenv("FIN_LEVERAGE_OUTCOME_HORIZONS", "5,15,30,60"),
     }
 
     metrics = {
@@ -284,6 +336,7 @@ def build(date_text: str):
         "order_attempt_rows": len(order_attempts),
         "market_regime_shadow": summarize_market_regime(regime_rows),
         "regime_decision_shadow": summarize_regime_decisions(regime_decisions),
+        "financial_leverage_shadow": summarize_financial_leverage(fin_rows, fin_signals, fin_outcomes),
         "decision_funnel": summarize_funnel(funnel),
         "order_attempts": summarize_order_attempts(order_attempts),
         "dashboard_snapshot": {
@@ -293,6 +346,8 @@ def build(date_text: str):
             "positions": state.get("positions") or [],
             "top_signals": sorted(state.get("signals") or [], key=lambda x: fnum(x.get("score")), reverse=True)[:9],
             "vix": state.get("vix") or {},
+            "market_regime_shadow": state.get("market_regime_shadow") or {},
+            "financial_leverage_shadow": state.get("financial_leverage_shadow") or {},
         },
         "geo": {
             "generated_at": geo.get("generated_at"),
