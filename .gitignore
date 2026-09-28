@@ -249,3 +249,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+stock_eod_report_state.json
+geo_feed_state.json
+# Durable agentic artifacts remain tracked
+!analysis/proposals/
+!analysis/performance/
