@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-27T21:16:00-07:00",
+  "generated_at": "2026-09-27T21:39:00-07:00",
   "review_date": "2026-09-25",
-  "proposal_count": 7,
+  "proposal_count": 8,
   "pending": [
     "P-STOCK-20260925-02",
     "P-STOCK-20260925-03",
@@ -56,6 +56,13 @@
       "title": "Add SHADOW XLF/FAS/FAZ leveraged-financial research",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
+      "status": "READY_TO_DEPLOY"
+    },
+    {
+      "proposal_id": "P-STOCK-20260927-07",
+      "title": "Add market-aware scheduler and 30-minute premarket intelligence",
+      "confidence": "HIGH",
+      "recommended_mode": "PAPER",
       "status": "READY_TO_DEPLOY"
     }
   ]
