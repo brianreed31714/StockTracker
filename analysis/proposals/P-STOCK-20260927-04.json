@@ -1,0 +1,23 @@
+{
+  "title": "Shadow-test geo freshness and headline deduplication",
+  "change_type": "CODE",
+  "target": "Geo-feed health and contribution instrumentation",
+  "current": "The geo artifact is eight days older than the review date, reports status 'ok', and contains apparent duplicate syndicated headlines while exposing a +7.1 adjustment.",
+  "proposed": "Without changing the applied model score, compute and log feed age, newest-event age, duplicate-group IDs based on normalized title plus publication time, raw event count, deduplicated event count, raw adjustment, and a deduplicated shadow adjustment. Mark freshness as a separate health state rather than treating status='ok' as proof of recency. Evaluate at least 12 contemporaneous decision observations before considering any production weighting or freshness cutoff.",
+  "evidence": [
+    "Geo generated_at=2026-09-19T16:41:18.944358+00:00 for review_date=2026-09-27.",
+    "The feed reports active_event_count=249 and score_adjustment=+7.1.",
+    "Repeated EnergyNow headlines share publication times and substantially identical content across domain variants."
+  ],
+  "risk": "Normalization may merge legitimately distinct reports; keeping the result shadow-only avoids changing paper decisions while precision is measured.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260927-04",
+  "status": "PENDING",
+  "review_date": "2026-09-27",
+  "created_at": "2026-09-27T20:21:20",
+  "updated_at": "2026-09-27T20:21:20",
+  "implementation": {},
+  "deployment": {}
+}

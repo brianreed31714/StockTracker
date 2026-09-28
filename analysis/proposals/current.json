@@ -1,0 +1,41 @@
+{
+  "generated_at": "2026-09-27T20:21:20",
+  "review_date": "2026-09-27",
+  "proposal_count": 4,
+  "pending": [
+    "P-STOCK-20260927-01",
+    "P-STOCK-20260927-02",
+    "P-STOCK-20260927-03",
+    "P-STOCK-20260927-04"
+  ],
+  "proposals": [
+    {
+      "proposal_id": "P-STOCK-20260927-01",
+      "title": "Enforce and log existing portfolio caps in the paper order-admission path",
+      "confidence": "HIGH",
+      "recommended_mode": "PAPER",
+      "status": "PENDING"
+    },
+    {
+      "proposal_id": "P-STOCK-20260927-02",
+      "title": "Add a market-session heartbeat and empty-day data manifest",
+      "confidence": "HIGH",
+      "recommended_mode": "SHADOW",
+      "status": "PENDING"
+    },
+    {
+      "proposal_id": "P-STOCK-20260927-03",
+      "title": "Capture decision-component telemetry before any calibration",
+      "confidence": "HIGH",
+      "recommended_mode": "SHADOW",
+      "status": "PENDING"
+    },
+    {
+      "proposal_id": "P-STOCK-20260927-04",
+      "title": "Shadow-test geo freshness and headline deduplication",
+      "confidence": "HIGH",
+      "recommended_mode": "SHADOW",
+      "status": "PENDING"
+    }
+  ]
+}

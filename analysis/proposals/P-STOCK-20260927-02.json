@@ -1,0 +1,23 @@
+{
+  "title": "Add a market-session heartbeat and empty-day data manifest",
+  "change_type": "CODE",
+  "target": "Daily evidence export and scheduler health instrumentation",
+  "current": "The daily CSV folder is absent and contains no decision or trade rows, so inactivity cannot be separated from exporter or scheduler failure.",
+  "proposed": "Generate a read-only daily manifest on every scheduled review date, including market-calendar status, collector start/end times, database read status, row counts by event type, export status, and explicit zero-row files or markers. This must not alter signals, orders, dashboard permissions, or paper-only mode.",
+  "evidence": [
+    "daily_csv.folder_exists=false.",
+    "Database path exists with no reported database error.",
+    "Dashboard reported market_open=false, but there is no daily artifact confirming normal closed-session handling."
+  ],
+  "risk": "Minimal; added files require retention and monitoring but do not affect model behavior.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260927-02",
+  "status": "PENDING",
+  "review_date": "2026-09-27",
+  "created_at": "2026-09-27T20:21:20",
+  "updated_at": "2026-09-27T20:21:20",
+  "implementation": {},
+  "deployment": {}
+}

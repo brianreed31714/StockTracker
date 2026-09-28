@@ -1,0 +1,23 @@
+{
+  "title": "Enforce and log existing portfolio caps in the paper order-admission path",
+  "change_type": "CODE",
+  "target": "Paper portfolio reconciliation and opening-buy admission guard",
+  "current": "A dashboard snapshot shows 5 positions and $12,575.46 exposure despite configured caps of 4 positions and $10,000. The cause is not recorded.",
+  "proposed": "Before every paper opening buy, reconcile positions and exposure from the paper account, reject the opening order when either existing cap is met or exceeded, and emit a structured cap-breach event containing observed values, configured limits, and order intent. Continue permitting risk-reducing sells. Do not automatically liquidate existing positions from this single snapshot and do not alter any cap values.",
+  "evidence": [
+    "Dashboard open_positions=5 versus max_open_positions=4.",
+    "Dashboard exposure=$12,575.46 versus max_total_exposure=$10,000.",
+    "There are no same-day orders or decisions that explain the discrepancy."
+  ],
+  "risk": "Low execution risk because this only reinforces existing paper controls, but reconciliation bugs could suppress valid paper entries; retain detailed rejection logging and test with simulated account states.",
+  "confidence": "HIGH",
+  "recommended_mode": "PAPER",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260927-01",
+  "status": "PENDING",
+  "review_date": "2026-09-27",
+  "created_at": "2026-09-27T20:21:20",
+  "updated_at": "2026-09-27T20:21:20",
+  "implementation": {},
+  "deployment": {}
+}
