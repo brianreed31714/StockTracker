@@ -115,7 +115,7 @@ Hard constraints:
 - Preserve portfolio caps, daily-loss controls, paper=True, and read-only dashboard behavior.
 - Separate observed facts from hypotheses.
 - A proposal must be actionable and narrowly scoped. Do not propose generic optimization work.
-- Consider per-symbol differences, threshold hit rates, realized paper P/L, buy/sell balance, VIX effects, geo-feed contribution, and evidence gaps.
+- Consider per-symbol differences, threshold hit rates, realized paper P/L, buy/sell balance, VIX effects, geo-feed contribution, SHADOW market-regime evidence, and evidence gaps.
 - Do not make investment recommendations to the user. Analyze the paper-trading model only.
 
 Same-day sanitized evidence:
