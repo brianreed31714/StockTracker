@@ -187,17 +187,33 @@ def send_push(date_text, review):
     user = (os.getenv("PUSHOVER_STOCK_AGENTIC_GROUP_KEY") or os.getenv("PUSHOVER_USER_KEY") or "").strip()
     if not token or not user:
         return
+
+    summary = str(review.get("summary") or "").strip()
+    findings = [str(x).strip() for x in (review.get("findings") or []) if str(x).strip()]
+    proposals = review.get("proposals") or []
+    quality = str(review.get("data_quality") or "UNKNOWN")
+    source = str(review.get("review_source") or "UNKNOWN")
+
+    lines = [
+        f"{date_text} | Data: {quality} | Review: {source}",
+        summary[:420] if summary else "No summary returned.",
+    ]
+    if findings:
+        lines.append("Key findings:")
+        for item in findings[:2]:
+            lines.append(f"- {item[:220]}")
+    lines.append(f"Proposals: {len(proposals)}")
+    if proposals:
+        lines.append("ChatGPT: Review today's StockTracker proposals")
+
     try:
         requests.post(
             "https://api.pushover.net/1/messages.json",
             data={
                 "token": token,
                 "user": user,
-                "title": "StockTracker proposals ready",
-                "message": (
-                    f"{date_text}: {len(review.get('proposals') or [])} proposal(s). "
-                    "Open ChatGPT and say: Review today's StockTracker proposals."
-                ),
+                "title": "StockTracker — Daily Self-Analysis",
+                "message": "\n".join(lines)[:1024],
             },
             timeout=15,
         ).raise_for_status()
