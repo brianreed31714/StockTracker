@@ -91,6 +91,9 @@ PROTECTED_CAPABILITIES = {
             "CREATE TABLE IF NOT EXISTS decision_funnel",
             "REGIME_SHADOW_ENABLED",
             "CREATE TABLE IF NOT EXISTS market_regime_shadow",
+            "FIN_LEVERAGE_SHADOW_ENABLED",
+            "SHADOW_FINANCIAL_SYMBOLS",
+            "CREATE TABLE IF NOT EXISTS financial_leverage_shadow",
         ),
         "forbidden": (
             "PAPER_ONLY = False",
