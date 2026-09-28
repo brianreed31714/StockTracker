@@ -251,6 +251,41 @@ def summarize_financial_leverage(snapshots, signals, outcomes):
         "latest_regime_state": latest.get("regime_state"),
     }
 
+
+def summarize_premarket(rows_):
+    if not rows_:
+        return {
+            "rows": 0,
+            "latest_bias": None,
+            "latest_bias_score": None,
+            "latest_regime_state": None,
+            "latest_social_status": None,
+            "latest_geo_status": None,
+            "latest_gaps_pct": {},
+        }
+    latest = rows_[-1]
+    def pct(v):
+        return round(fnum(v) * 100.0, 3) if v is not None else None
+    return {
+        "rows": len(rows_),
+        "bias_counts": dict(Counter(str(r.get("bias") or "UNKNOWN") for r in rows_)),
+        "latest_bias": latest.get("bias"),
+        "latest_bias_score": latest.get("bias_score"),
+        "latest_regime_state": latest.get("regime_state"),
+        "latest_social_source": latest.get("social_source"),
+        "latest_social_status": latest.get("social_status"),
+        "latest_geo_status": latest.get("geo_status"),
+        "latest_geo_score": latest.get("geo_score"),
+        "latest_gaps_pct": {
+            "SPY": pct(latest.get("spy_gap")),
+            "QQQ": pct(latest.get("qqq_gap")),
+            "XLF": pct(latest.get("xlf_gap")),
+            "FAS": pct(latest.get("fas_gap")),
+            "FAZ": pct(latest.get("faz_gap")),
+        },
+    }
+
+
 def build(date_text: str):
     start_utc, end_utc = day_bounds(date_text)
     decisions = []
@@ -264,6 +299,7 @@ def build(date_text: str):
     fin_rows = []
     fin_signals = []
     fin_outcomes = []
+    premarket_rows = []
     db_error = None
     if DB_PATH.exists():
         try:
@@ -287,6 +323,8 @@ def build(date_text: str):
                 fin_signals = rows(conn, "SELECT * FROM financial_leverage_signals WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
             if table_exists(conn, "financial_leverage_outcomes"):
                 fin_outcomes = rows(conn, "SELECT * FROM financial_leverage_outcomes WHERE observed_at>=? AND observed_at<? ORDER BY observed_at", (start_utc, end_utc))
+            if table_exists(conn, "premarket_intelligence"):
+                premarket_rows = rows(conn, "SELECT * FROM premarket_intelligence WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
             conn.close()
         except Exception as exc:
             db_error = str(exc)
@@ -314,6 +352,13 @@ def build(date_text: str):
         "financial_leverage_shadow_enabled": str(os.getenv("FIN_LEVERAGE_SHADOW_ENABLED", "1")).strip().lower() in {"1","true","yes","on"},
         "financial_leverage_min_score": fnum(os.getenv("FIN_LEVERAGE_MIN_SCORE", "70")),
         "financial_leverage_outcome_horizons": os.getenv("FIN_LEVERAGE_OUTCOME_HORIZONS", "5,15,30,60"),
+        "premarket_enabled": str(os.getenv("PREMARKET_ENABLED", "1")).strip().lower() in {"1","true","yes","on"},
+        "premarket_start_minutes": int(os.getenv("PREMARKET_START_MINUTES", "30")),
+        "premarket_refresh_offsets": os.getenv("PREMARKET_REFRESH_OFFSETS", "30,20,10,5,1"),
+        "premarket_context_max_adj": fnum(os.getenv("PREMARKET_CONTEXT_MAX_ADJ", "5")),
+        "premarket_context_active_minutes": int(os.getenv("PREMARKET_CONTEXT_ACTIVE_MINUTES", "60")),
+        "market_open_warmup_minutes": int(os.getenv("MARKET_OPEN_WARMUP_MINUTES", "20")),
+        "premarket_social_source": os.getenv("PREMARKET_SOCIAL_SOURCE", "UNAVAILABLE"),
     }
 
     metrics = {
@@ -337,6 +382,7 @@ def build(date_text: str):
         "market_regime_shadow": summarize_market_regime(regime_rows),
         "regime_decision_shadow": summarize_regime_decisions(regime_decisions),
         "financial_leverage_shadow": summarize_financial_leverage(fin_rows, fin_signals, fin_outcomes),
+        "premarket_intelligence": summarize_premarket(premarket_rows),
         "decision_funnel": summarize_funnel(funnel),
         "order_attempts": summarize_order_attempts(order_attempts),
         "dashboard_snapshot": {
