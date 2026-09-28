@@ -1,0 +1,35 @@
+{
+  "proposal_id": "P-STOCK-20260927-09",
+  "title": "Guarantee weekday StockTracker reports before 8 PM Pacific",
+  "change_type": "CODE+CONFIG",
+  "target": "StockTracker EOD Pushover and daily self-analysis delivery",
+  "current": "The stock EOD report was scheduled for 4:10 PM Eastern, and the daily model-review Pushover only announced that proposals were ready rather than sending the actual analysis summary.",
+  "proposed": "Send the StockTracker EOD performance report at 7:30 PM Pacific (10:30 PM Eastern) Monday-Friday. Keep the existing weekday model-review schedule, which already runs at 1:30 PM Pacific after the market close, but upgrade its Pushover message to include the model summary, data quality, top findings, and proposal count so the user receives the actual self-analysis well before the 8 PM Pacific deadline.",
+  "evidence": [
+    "User explicitly requires StockTrader EOD reports and self-analysis by 8:00 PM Pacific Monday-Friday.",
+    "The existing Windows StockTracker Daily Review task runs weekdays at 1:30 PM local Pacific time, already within the requested deadline.",
+    "The EOD trader path is weekday-gated and can be moved to 10:30 PM Eastern, which is 7:30 PM Pacific."
+  ],
+  "risk": "Low. Scheduling and reporting changes only; PAPER_ONLY trading logic, thresholds, risk controls, regime research, and premarket behavior are unchanged.",
+  "confidence": "HIGH",
+  "recommended_mode": "PAPER",
+  "approval_required": true,
+  "status": "READY_TO_DEPLOY",
+  "review_date": "2026-09-27",
+  "created_at": "2026-09-27T22:25:00-07:00",
+  "updated_at": "2026-09-27T22:25:00-07:00",
+  "approved_at": "2026-09-27T22:25:00-07:00",
+  "status_note": "User explicitly requested weekday StockTracker EOD and self-analysis delivery by 8 PM Pacific.",
+  "implementation": {
+    "trader_file": "momentum_trader_v1_8_market_aware_premarket.py",
+    "release_commit": "a6791e32f5750acc5a5c6eb23bb6a8dcb80e7897",
+    "eod_time_pacific": "19:30",
+    "daily_review_existing_time_pacific": "13:30",
+    "self_analysis_push": "Full summary + data quality + top findings + proposal count"
+  },
+  "deployment": {
+    "status": "QUEUED",
+    "trader_file": "momentum_trader_v1_8_market_aware_premarket.py",
+    "release_commit": "a6791e32f5750acc5a5c6eb23bb6a8dcb80e7897"
+  }
+}
