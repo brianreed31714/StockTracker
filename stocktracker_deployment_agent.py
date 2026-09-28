@@ -94,6 +94,9 @@ PROTECTED_CAPABILITIES = {
             "FIN_LEVERAGE_SHADOW_ENABLED",
             "SHADOW_FINANCIAL_SYMBOLS",
             "CREATE TABLE IF NOT EXISTS financial_leverage_shadow",
+            "PREMARKET_ENABLED",
+            "CREATE TABLE IF NOT EXISTS premarket_intelligence",
+            "MARKET CLOSED — idle",
         ),
         "forbidden": (
             "PAPER_ONLY = False",
