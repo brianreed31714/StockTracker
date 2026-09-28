@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-27T20:42:00-07:00",
+  "generated_at": "2026-09-27T20:51:00-07:00",
   "review_date": "2026-09-25",
-  "proposal_count": 5,
+  "proposal_count": 6,
   "pending": [
     "P-STOCK-20260925-02",
     "P-STOCK-20260925-03",
@@ -43,6 +43,13 @@
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
+    },
+    {
+      "proposal_id": "P-STOCK-20260927-05",
+      "title": "Add SHADOW market-regime engine with defensive-asset comparison",
+      "confidence": "HIGH",
+      "recommended_mode": "SHADOW",
+      "status": "READY_TO_DEPLOY"
     }
   ]
 }
