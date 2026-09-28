@@ -1,0 +1,13 @@
+{
+  "proposal_id": "P-STOCK-20260927-07",
+  "status": "READY_TO_DEPLOY",
+  "commit": "154f3dc68399e5b24870a878386c8c20e909aa61",
+  "components": [
+    "trader"
+  ],
+  "files": {
+    "trader": "momentum_trader_v1_8_market_aware_premarket.py"
+  },
+  "mode": "PAPER",
+  "note": "Market-aware scheduler + premarket intelligence. Preserves PAPER_ONLY. No premarket orders. Social sentiment remains unavailable until a real source is configured."
+}
