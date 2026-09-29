@@ -1,0 +1,17 @@
+{
+  "proposal_id": "P-STOCK-20260929-02",
+  "status": "READY_TO_DEPLOY",
+  "commit": "440ad4409853c3c7e481ea22d58e20066099c376",
+  "components": [
+    "trader",
+    "geo_feed",
+    "dashboard"
+  ],
+  "files": {
+    "trader": "momentum_trader_v1_9_zpta_shadow.py",
+    "geo_feed": "xom_geo_feed_v1_1_agentic.py",
+    "dashboard": "momentum_dashboard_v1_3_agentic.py"
+  },
+  "mode": "SHADOW",
+  "note": "Replacement deployment for StockTracker v1.9 with integrated ZPTA OTC shadow specialist and corrected split config loading. Supersedes P-STOCK-20260929-01. ZPTA has no broker-order path; existing StockTracker remains PAPER_ONLY."
+}
