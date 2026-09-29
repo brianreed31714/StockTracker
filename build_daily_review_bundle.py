@@ -286,6 +286,37 @@ def summarize_premarket(rows_):
     }
 
 
+def summarize_zpta(observations, predictions, trades):
+    grouped = defaultdict(list)
+    for row in predictions:
+        if row.get("resolved_ts") is not None:
+            grouped[(str(row.get("model") or "UNKNOWN"), int(fnum(row.get("horizon_minutes"))))].append(row)
+    models = {}
+    for (model, horizon), group in sorted(grouped.items()):
+        returns = [fnum(x.get("forward_return")) for x in group]
+        models[f"{model}_{horizon}m"] = {
+            "samples": len(group),
+            "accuracy_pct": round(sum(int(fnum(x.get("correct"))) for x in group) / len(group) * 100.0, 2),
+            "avg_return_pct": round(sum(returns) / len(returns) * 100.0, 3),
+        }
+    closed = [x for x in trades if str(x.get("status") or "").upper() == "CLOSED"]
+    pnls = [fnum(x.get("pnl")) for x in closed]
+    latest = observations[-1] if observations else {}
+    return {
+        "observation_rows": len(observations),
+        "prediction_rows": len(predictions),
+        "resolved_predictions": sum(1 for x in predictions if x.get("resolved_ts") is not None),
+        "models": models,
+        "shadow_trades": len(trades),
+        "closed_shadow_trades": len(closed),
+        "shadow_realized_pnl": round(sum(pnls), 2),
+        "shadow_win_rate_pct": round(sum(x > 0 for x in pnls) / len(pnls) * 100.0, 2) if pnls else None,
+        "latest_price": latest.get("price"),
+        "latest_regime": latest.get("regime"),
+        "latest_provider": latest.get("provider"),
+    }
+
+
 def build(date_text: str):
     start_utc, end_utc = day_bounds(date_text)
     decisions = []
@@ -300,6 +331,9 @@ def build(date_text: str):
     fin_signals = []
     fin_outcomes = []
     premarket_rows = []
+    zpta_observations = []
+    zpta_predictions = []
+    zpta_trades = []
     db_error = None
     if DB_PATH.exists():
         try:
@@ -325,6 +359,12 @@ def build(date_text: str):
                 fin_outcomes = rows(conn, "SELECT * FROM financial_leverage_outcomes WHERE observed_at>=? AND observed_at<? ORDER BY observed_at", (start_utc, end_utc))
             if table_exists(conn, "premarket_intelligence"):
                 premarket_rows = rows(conn, "SELECT * FROM premarket_intelligence WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
+            if table_exists(conn, "zpta_observations"):
+                zpta_observations = rows(conn, "SELECT * FROM zpta_observations WHERE ts>=? AND ts<? ORDER BY ts", (start_utc, end_utc))
+            if table_exists(conn, "zpta_predictions"):
+                zpta_predictions = rows(conn, "SELECT * FROM zpta_predictions WHERE created_ts>=? AND created_ts<? ORDER BY created_ts", (start_utc, end_utc))
+            if table_exists(conn, "zpta_shadow_trades"):
+                zpta_trades = rows(conn, "SELECT * FROM zpta_shadow_trades WHERE entry_ts>=? AND entry_ts<? ORDER BY entry_ts", (start_utc, end_utc))
             conn.close()
         except Exception as exc:
             db_error = str(exc)
@@ -359,6 +399,10 @@ def build(date_text: str):
         "premarket_context_active_minutes": int(os.getenv("PREMARKET_CONTEXT_ACTIVE_MINUTES", "60")),
         "market_open_warmup_minutes": int(os.getenv("MARKET_OPEN_WARMUP_MINUTES", "20")),
         "premarket_social_source": os.getenv("PREMARKET_SOCIAL_SOURCE", "UNAVAILABLE"),
+        "zpta_shadow_enabled": str(os.getenv("ZPTA_SHADOW_ENABLED", "1")).strip().lower() in {"1","true","yes","on"},
+        "zpta_data_provider": os.getenv("ZPTA_DATA_PROVIDER", "auto"),
+        "zpta_entry_score": fnum(os.getenv("ZPTA_ENTRY_SCORE", "68")),
+        "zpta_max_position_dollars": fnum(os.getenv("ZPTA_MAX_POSITION_DOLLARS", "150")),
     }
 
     metrics = {
@@ -383,6 +427,7 @@ def build(date_text: str):
         "regime_decision_shadow": summarize_regime_decisions(regime_decisions),
         "financial_leverage_shadow": summarize_financial_leverage(fin_rows, fin_signals, fin_outcomes),
         "premarket_intelligence": summarize_premarket(premarket_rows),
+        "zpta_shadow": summarize_zpta(zpta_observations, zpta_predictions, zpta_trades),
         "decision_funnel": summarize_funnel(funnel),
         "order_attempts": summarize_order_attempts(order_attempts),
         "dashboard_snapshot": {
@@ -394,6 +439,7 @@ def build(date_text: str):
             "vix": state.get("vix") or {},
             "market_regime_shadow": state.get("market_regime_shadow") or {},
             "financial_leverage_shadow": state.get("financial_leverage_shadow") or {},
+            "zpta_shadow": state.get("zpta_shadow") or {},
         },
         "geo": {
             "generated_at": geo.get("generated_at"),
