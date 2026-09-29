@@ -32,12 +32,15 @@ from zoneinfo import ZoneInfo
 import requests
 from dotenv import load_dotenv
 
-load_dotenv()
-
 SYMBOL = "ZPTA"
 SHADOW_ONLY = True
 BASE_DIR = Path(__file__).resolve().parent
 MARKET_TZ = ZoneInfo("America/New_York")
+
+# The module is imported before the parent trader loads configuration, so it
+# must load the same split config/secret files itself.
+load_dotenv(BASE_DIR / ".env.config")
+load_dotenv(BASE_DIR / ".env", override=True)
 
 
 def env_bool(name: str, default: bool) -> bool:
