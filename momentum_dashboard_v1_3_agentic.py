@@ -29,7 +29,7 @@ with st.sidebar:
 h1,h2=st.columns([5,1])
 with h1:
     st.markdown('<div class="app-title">Momentum Trader</div>',unsafe_allow_html=True)
-    st.markdown('<div class="subtle">XOM • WMT • AMZN • AAPL • NVDA • TSLA • SPY • QQQ • GLD &nbsp; | &nbsp; VIX + macro regime</div>',unsafe_allow_html=True)
+    st.markdown('<div class="subtle">XOM • WMT • AMZN • AAPL • NVDA • TSLA • SPY • QQQ • GLD &nbsp; | &nbsp; ZPTA shadow specialist</div>',unsafe_allow_html=True)
 with h2: st.markdown('<span class="pill">PAPER ONLY</span>',unsafe_allow_html=True)
 
 try: state=json.loads(STATE.read_text(encoding="utf-8")) if STATE.exists() else {}
@@ -87,6 +87,37 @@ else:
             st.dataframe(pos[cols],hide_index=True,use_container_width=True,height=220)
 
 st.caption(f"Geo feed: {g.get('status','—')} • active events: {g.get('active_event_count',0)} • XOM geo adjustment: {g.get('score_adjustment',0):+.1f}")
+
+st.subheader("ZPTA Specialist — Shadow Only")
+z=state.get("zpta_shadow",{}) or {}
+za,zb,zc,zd,ze=st.columns(5)
+za.metric("Status",str(z.get("status","—")))
+zb.metric("Price",f"${float(z.get('price')):.4f}" if isinstance(z.get('price'),(int,float)) else "—")
+zc.metric("Ensemble",f"{float(z.get('ensemble_score')):.1f}" if isinstance(z.get('ensemble_score'),(int,float)) else "—")
+zd.metric("Action",str(z.get("action","—")))
+ze.metric("Shadow Equity",f"${float(z.get('equity')):,.2f}" if isinstance(z.get('equity'),(int,float)) else "—")
+st.caption(f"Provider: {z.get('provider','—')} • Regime: {z.get('regime','—')} • no broker orders")
+
+zsignals=pd.DataFrame(z.get("signals",[]) or [])
+if not zsignals.empty:
+    if "score" in zsignals: zsignals["score"]=pd.to_numeric(zsignals["score"],errors="coerce").round(1)
+    st.dataframe(zsignals[[c for c in ["model","direction","score","reason"] if c in zsignals]],hide_index=True,use_container_width=True,height=175)
+
+if DB.exists():
+    try:
+        with sqlite3.connect(DB) as c:
+            zstats=pd.read_sql_query("""
+                SELECT model,horizon_minutes,COUNT(*) AS samples,
+                       ROUND(AVG(correct)*100,1) AS accuracy_pct,
+                       ROUND(AVG(forward_return)*100,3) AS avg_return_pct
+                FROM zpta_predictions WHERE resolved_ts IS NOT NULL
+                GROUP BY model,horizon_minutes ORDER BY model,horizon_minutes
+            """,c)
+        if not zstats.empty:
+            st.caption("Resolved ZPTA forecast performance")
+            st.dataframe(zstats,hide_index=True,use_container_width=True,height=210)
+    except Exception:
+        st.caption("ZPTA evidence tables will appear after the first specialist cycle.")
 
 st.subheader("Recent Paper Orders")
 if DB.exists():
