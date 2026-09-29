@@ -1,0 +1,24 @@
+{
+  "title": "Instrument ZPTA bar freshness and no-trade gate reasons",
+  "change_type": "CODE",
+  "target": "ZPTA SHADOW prediction and trade lifecycle",
+  "current": "ZPTA used yahoo_delayed, ended with NO_NEW_BAR, generated 72 predictions and 56 resolutions, but produced no shadow trades. Each reported model/horizon cell has only four or five samples, and no detailed no-trade gate distribution is supplied.",
+  "proposed": "Log expected versus received bar timestamps, provider delay, duplicate/no-new-bar reason, candidate entry score, each trade gate, and the final reason no shadow trade was opened. Keep zpta_entry_score at 68 and the $150 shadow position limit unchanged. Continue reporting outcomes by model and horizon, with calibration disabled until each evaluated cell reaches at least 12 samples.",
+  "evidence": [
+    "Latest provider was yahoo_delayed and dashboard status was NO_NEW_BAR.",
+    "There were zero shadow trades and zero closed shadow trades.",
+    "Reported model/horizon samples were four or five, below the minimum calibration target of 12.",
+    "The latest ZPTA regime was LIQUIDITY_DANGER, but the supplied evidence does not show whether that state or another gate prevented trades."
+  ],
+  "risk": "Additional logs may expose provider timing noise but do not affect the main paper portfolio. Care is needed not to interpret correlated predictions as independent samples.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260929-06",
+  "status": "PENDING",
+  "review_date": "2026-09-29",
+  "created_at": "2026-09-29T13:30:58",
+  "updated_at": "2026-09-29T13:30:58",
+  "implementation": {},
+  "deployment": {}
+}

@@ -1,0 +1,24 @@
+{
+  "title": "Label premarket gap/bias outcomes and missing-symbol coverage",
+  "change_type": "CODE",
+  "target": "Premarket intelligence telemetry",
+  "current": "Five snapshots were all NEUTRAL; SPY and QQQ gaps were available, XLF/FAS/FAZ gaps were null, and no forward outcomes or per-refresh contribution records are supplied. Social sentiment is unavailable.",
+  "proposed": "For each scheduled refresh, persist gap values, data freshness, bias inputs excluding social sentiment, resulting adjustment, and 5-, 15-, 30-, and 60-minute post-open returns for SPY and QQQ. Record explicit missing reasons for XLF/FAS/FAZ. Keep the current maximum adjustment, active window, and warmup unchanged, and prohibit calibration until at least 12 eligible premarket sessions or events are collected for the evaluated bucket.",
+  "evidence": [
+    "Premarket intelligence had only five rows and all were NEUTRAL.",
+    "Latest SPY and QQQ gaps were +0.163% and +0.323%; XLF, FAS, and FAZ were null.",
+    "Premarket adjustments displayed in the dashboard were 0.0.",
+    "The social source and status were explicitly UNAVAILABLE."
+  ],
+  "risk": "Forward labels can be misleading if session boundaries or delayed quotes are misaligned. This proposal does not activate missing social data or alter paper decisions.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260929-04",
+  "status": "PENDING",
+  "review_date": "2026-09-29",
+  "created_at": "2026-09-29T13:30:58",
+  "updated_at": "2026-09-29T13:30:58",
+  "implementation": {},
+  "deployment": {}
+}

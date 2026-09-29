@@ -1,130 +1,157 @@
-# StockTracker Proposals — 2026-09-28
+# StockTracker Proposals — 2026-09-29
 
 Paper-trading model improvement proposals. Human approval is required before implementation/deployment.
 
-## P-STOCK-20260928-01 — Add forward-outcome cohorts for threshold and confirmation events
+## P-STOCK-20260929-01 — Add crossing-level IDs and counterfactual outcome labels
 
 - **Status:** PENDING
 - **Type:** CODE
-- **Target:** Decision-funnel SHADOW instrumentation and daily review export
-- **Current:** The funnel identifies raw crossings, confirmation waits, cap blocks, and submissions, but does not provide forward returns or adverse/favorable excursion for each event.
-- **Proposed:** For every raw threshold crossing, persist symbol, side, score, threshold distance, position state, confirmation count, final gate disposition, and 5/15/30/60-minute forward return plus MFE/MAE. Report cohorts by symbol and side only after at least 12 eligible observations; make no automatic threshold changes.
+- **Target:** Decision funnel and threshold-crossing telemetry
+- **Current:** The report contains three raw threshold crossings, four funnel rows, and only aggregate gate reasons. Non-executed crossings lack clearly linked forward outcomes and unique lifecycle identifiers.
+- **Proposed:** In SHADOW, assign a stable event ID to every first threshold crossing and link its symbol, side, score, prior score, confirmation count, position eligibility, gate reason, order-attempt ID, and final disposition. Record 5-, 15-, 30-, and 60-minute forward returns for both submitted and non-submitted crossings. Report raw events separately from repeated confirmation observations. Do not alter the 70/30 thresholds or two-confirmation requirements until at least 12 eligible outcomes exist for the evaluated bucket.
 - **Confidence:** HIGH
 - **Recommended mode:** SHADOW
-- **Risk:** Additional storage and delayed-price joins; missing future bars must be marked unavailable rather than imputed.
+- **Risk:** Low operational risk because this is append-only SHADOW telemetry. Main risks are excess logging volume and incorrect forward-return timestamp alignment.
 - **Evidence:**
-  - Only 13 raw crossings occurred today.
-  - Nine funnel events were awaiting confirmation and two were blocked by MAX_OPEN_POSITIONS.
-  - Only 3 realized exits are available, below the minimum calibration sample.
+  - Three raw threshold crossings were reported, while the funnel contained four rows split across two BUY and two SELL records.
+  - Two funnel records awaited confirmation and two produced submitted orders.
+  - AMZN exceeded 70 and WMT fell below 30 without corresponding decision actions in the aggregate table; supplied data does not show the complete eligibility lifecycle.
 
 **Approve in ChatGPT:**
 
-`Approve P-STOCK-20260928-01`
+`Approve P-STOCK-20260929-01`
 
 **Decline in ChatGPT:**
 
-`Decline P-STOCK-20260928-01`
+`Decline P-STOCK-20260929-01`
 
 ---
 
-## P-STOCK-20260928-02 — Shadow-audit geo headline deduplication and marginal score impact
-
-- **Status:** PENDING
-- **Type:** CODE
-- **Target:** Geo-feed aggregation and score-attribution logging
-- **Current:** The feed reports 220 active events and includes several closely related or duplicated Hormuz headlines. Production geo adjustments reached an XOM daily average of +3.415, but no deduplication comparison or forward-outcome attribution is shown.
-- **Proposed:** Create a SHADOW fingerprint based on normalized title, canonical source, event time, category, and direction. Log raw versus deduplicated event counts and calculate a non-applied deduplicated geo adjustment alongside the current adjustment. Preserve the active production adjustment until sufficient outcome evidence exists.
-- **Confidence:** MEDIUM
-- **Recommended mode:** SHADOW
-- **Risk:** Over-aggressive fingerprinting could merge distinct updates; keep the deduplicated value observational and retain raw records.
-- **Evidence:**
-  - Multiple CNBC/cnbc.com entries share the same Hormuz subject and timestamp.
-  - XOM received the largest average geo adjustment but placed no order.
-  - No geo-component forward outcomes were supplied.
-
-**Approve in ChatGPT:**
-
-`Approve P-STOCK-20260928-02`
-
-**Decline in ChatGPT:**
-
-`Decline P-STOCK-20260928-02`
-
----
-
-## P-STOCK-20260928-03 — Restore and validate XLF/FAS/FAZ SHADOW snapshot collection
+## P-STOCK-20260929-02 — Restore financial-leverage SHADOW snapshots with explicit feed-health fields
 
 - **Status:** PENDING
 - **Type:** CODE+CONFIG
-- **Target:** Financial-leverage SHADOW market-data collector and health telemetry
-- **Current:** The feature is enabled, but snapshot, signal, and outcome tables all contain zero rows; XLF/FAS/FAZ premarket gaps are null and the dashboard reports FINANCIAL_SNAPSHOT_UNAVAILABLE.
-- **Proposed:** Add startup and per-refresh validation for XLF, FAS, and FAZ quotes/bars on the configured IEX feed; record explicit failure categories such as unsupported symbol, empty bars, stale timestamp, or join failure. Backfill nothing. Resume only SHADOW candidate and 5/15/30/60-minute outcome logging when all required inputs pass freshness checks.
+- **Target:** XLF/FAS/FAZ financial_leverage_shadow data ingestion
+- **Current:** The feature is enabled with a minimum score of 70 and outcome horizons of 5,15,30,60, but it produced zero snapshots, signals, and outcomes. XLF/FAS/FAZ premarket gaps were null, and the only reason was FINANCIAL_SNAPSHOT_UNAVAILABLE.
+- **Proposed:** Repair read-only quote/bar acquisition for XLF, FAS, and FAZ and log per-symbol provider, timestamp, freshness, missing-field reason, and session status on every scheduled snapshot. Keep the feature SHADOW-only, retain the score threshold of 70, and suppress candidate scoring whenever any required input is stale or absent. Begin outcome collection only after valid snapshots are present; do not calibrate until at least 12 eligible signals are available.
 - **Confidence:** HIGH
 - **Recommended mode:** SHADOW
-- **Risk:** Feed coverage may not support every symbol consistently; the feature must fail closed to candidate NONE and must not affect paper orders.
+- **Risk:** A provider repair could introduce inconsistent timestamps or delayed ETF data. Freshness validation and SHADOW-only operation limit model risk.
 - **Evidence:**
-  - Financial-leverage snapshot_rows, signal_rows, and outcome_rows are all zero.
-  - The configured outcome horizons already exist but generated no evidence.
-  - Premarket gaps for XLF, FAS, and FAZ are null.
+  - Financial-leverage snapshot_rows, signal_rows, and outcome_rows were all zero.
+  - The latest candidate was null and the dashboard reported FINANCIAL_SNAPSHOT_UNAVAILABLE.
+  - Premarket gaps for XLF, FAS, and FAZ were null while SPY and QQQ gaps were populated.
 
 **Approve in ChatGPT:**
 
-`Approve P-STOCK-20260928-03`
+`Approve P-STOCK-20260929-02`
 
 **Decline in ChatGPT:**
 
-`Decline P-STOCK-20260928-03`
+`Decline P-STOCK-20260929-02`
 
 ---
 
-## P-STOCK-20260928-04 — Instrument premarket bias application and expiry
+## P-STOCK-20260929-03 — Audit geo deduplication and expose XOM score attribution
 
 - **Status:** PENDING
 - **Type:** CODE
-- **Target:** Premarket-context audit trail
-- **Current:** Five bearish snapshots and negative SPY/QQQ gaps were captured, but the dashboard later showed a zero premarket adjustment. The evidence does not connect each refresh to the first-hour decisions or subsequent returns.
-- **Proposed:** For each configured premarket refresh, log gaps, bias score, geo contribution, missing-source flags, and the exact adjustment scheduled. During the first 60 regular-session minutes, log applied adjustment, age, expiry reason, counterfactual score without the adjustment, and 15/30/60-minute forward returns. Require at least 12 complete sessions or eligible event cohorts before calibration.
-- **Confidence:** HIGH
+- **Target:** Geo-feed canonicalization and geo score decomposition
+- **Current:** The feed reports 278 active events and a negative aggregate signal. Apparent duplicate headlines occur in the top-event list, and XOM received negative geo adjustments despite multiple high-materiality events labeled bullish for crude and often bullish for XOM.
+- **Proposed:** Run a parallel SHADOW geo calculation that canonicalizes source domains and normalizes title text, clusters likely duplicate stories, and logs each cluster's contribution separately for crude direction, XOM-specific direction, broader risk effect, confidence, recency, and final signed adjustment. Compare existing versus deduplicated adjustments without changing production paper decisions.
+- **Confidence:** MEDIUM
 - **Recommended mode:** SHADOW
-- **Risk:** More logging around the market open; timestamps and session calendars must be normalized to avoid false expiry diagnoses.
+- **Risk:** Over-aggressive clustering could merge genuinely distinct reports. The parallel calculation must not replace the current adjustment until enough comparisons and forward outcomes are available.
 - **Evidence:**
-  - All 5 snapshots were BEARISH with latest bias score 25.0.
-  - Latest gaps were SPY -0.342% and QQQ -0.523%.
-  - Dashboard signal records showed premarket_adjustment 0.0.
-  - Social status was UNAVAILABLE and must remain explicitly missing.
+  - Two Hormuz headlines appear under energynow.com and EnergyNow.com with the same publication timestamp and substantially identical content.
+  - Two Kharg Island headlines similarly appear twice with capitalization differences.
+  - XOM average geo adjustment was -0.372 and the dashboard value was -0.51, while several top events were classified bullish for XOM.
+  - The aggregate geo signal was -0.0762 with a -0.76 score adjustment, so broader negative aggregation could legitimately differ from individual headline direction.
 
 **Approve in ChatGPT:**
 
-`Approve P-STOCK-20260928-04`
+`Approve P-STOCK-20260929-03`
 
 **Decline in ChatGPT:**
 
-`Decline P-STOCK-20260928-04`
+`Decline P-STOCK-20260929-03`
 
 ---
 
-## P-STOCK-20260928-05 — Add regime and VIX outcome-coverage reporting without gating trades
+## P-STOCK-20260929-04 — Label premarket gap/bias outcomes and missing-symbol coverage
 
 - **Status:** PENDING
 - **Type:** CODE
-- **Target:** Market-regime SHADOW daily report
-- **Current:** All 79 regime snapshots were RISK_ON and all 11 linked decisions were ALLOW_EQUITY. VIX contributions are logged but lack state-conditioned outcome coverage.
-- **Proposed:** Retain the current non-enforcing regime behavior and add state duration, transition counts, stale-state flags, continuous VIX level/change, linked decision outcomes, and sample counts by regime state and symbol. Suppress comparative performance claims until each compared state has at least 12 eligible observations.
+- **Target:** Premarket intelligence telemetry
+- **Current:** Five snapshots were all NEUTRAL; SPY and QQQ gaps were available, XLF/FAS/FAZ gaps were null, and no forward outcomes or per-refresh contribution records are supplied. Social sentiment is unavailable.
+- **Proposed:** For each scheduled refresh, persist gap values, data freshness, bias inputs excluding social sentiment, resulting adjustment, and 5-, 15-, 30-, and 60-minute post-open returns for SPY and QQQ. Record explicit missing reasons for XLF/FAS/FAZ. Keep the current maximum adjustment, active window, and warmup unchanged, and prohibit calibration until at least 12 eligible premarket sessions or events are collected for the evaluated bucket.
 - **Confidence:** HIGH
 - **Recommended mode:** SHADOW
-- **Risk:** Single-state periods may produce long-running incomplete comparisons; reports must label unsupported states rather than extrapolate.
+- **Risk:** Forward labels can be misleading if session boundaries or delayed quotes are misaligned. This proposal does not activate missing social data or alter paper decisions.
 - **Evidence:**
-  - Regime state coverage was exclusively RISK_ON.
-  - Only 11 regime-linked decisions were recorded.
-  - Average VIX score adjustments were very small and have no supplied causal outcome evidence.
+  - Premarket intelligence had only five rows and all were NEUTRAL.
+  - Latest SPY and QQQ gaps were +0.163% and +0.323%; XLF, FAS, and FAZ were null.
+  - Premarket adjustments displayed in the dashboard were 0.0.
+  - The social source and status were explicitly UNAVAILABLE.
 
 **Approve in ChatGPT:**
 
-`Approve P-STOCK-20260928-05`
+`Approve P-STOCK-20260929-04`
 
 **Decline in ChatGPT:**
 
-`Decline P-STOCK-20260928-05`
+`Decline P-STOCK-20260929-04`
+
+---
+
+## P-STOCK-20260929-05 — Add regime counterfactual outcomes before considering active gating
+
+- **Status:** PENDING
+- **Type:** CODE
+- **Target:** Market-regime SHADOW evaluator
+- **Current:** There were 75 RISK_ON observations with the same score of 85 and only two decision-shadow rows, both ALLOW_EQUITY for XOM. No state diversity or forward-outcome comparison is available.
+- **Proposed:** Log regime state transitions rather than only repeated identical snapshots, and attach state, score components, hypothetical allow/block disposition, and forward returns to each eligible threshold event. Produce per-state counts and outcomes while leaving regime logic non-binding. Require at least 12 eligible events per evaluated state before any calibration proposal.
+- **Confidence:** HIGH
+- **Recommended mode:** SHADOW
+- **Risk:** Regime states may remain highly imbalanced, delaying evaluation. No trading behavior changes because the evaluator remains SHADOW-only.
+- **Evidence:**
+  - All 75 regime observations were RISK_ON with average and latest score 85.
+  - Only two regime-decision records existed, both for XOM and both ALLOW_EQUITY.
+  - The latest regime inputs included positive long-term trend evidence but nonpositive SPY 20-day momentum, illustrating why component-level outcome attribution is useful.
+
+**Approve in ChatGPT:**
+
+`Approve P-STOCK-20260929-05`
+
+**Decline in ChatGPT:**
+
+`Decline P-STOCK-20260929-05`
+
+---
+
+## P-STOCK-20260929-06 — Instrument ZPTA bar freshness and no-trade gate reasons
+
+- **Status:** PENDING
+- **Type:** CODE
+- **Target:** ZPTA SHADOW prediction and trade lifecycle
+- **Current:** ZPTA used yahoo_delayed, ended with NO_NEW_BAR, generated 72 predictions and 56 resolutions, but produced no shadow trades. Each reported model/horizon cell has only four or five samples, and no detailed no-trade gate distribution is supplied.
+- **Proposed:** Log expected versus received bar timestamps, provider delay, duplicate/no-new-bar reason, candidate entry score, each trade gate, and the final reason no shadow trade was opened. Keep zpta_entry_score at 68 and the $150 shadow position limit unchanged. Continue reporting outcomes by model and horizon, with calibration disabled until each evaluated cell reaches at least 12 samples.
+- **Confidence:** HIGH
+- **Recommended mode:** SHADOW
+- **Risk:** Additional logs may expose provider timing noise but do not affect the main paper portfolio. Care is needed not to interpret correlated predictions as independent samples.
+- **Evidence:**
+  - Latest provider was yahoo_delayed and dashboard status was NO_NEW_BAR.
+  - There were zero shadow trades and zero closed shadow trades.
+  - Reported model/horizon samples were four or five, below the minimum calibration target of 12.
+  - The latest ZPTA regime was LIQUIDITY_DANGER, but the supplied evidence does not show whether that state or another gate prevented trades.
+
+**Approve in ChatGPT:**
+
+`Approve P-STOCK-20260929-06`
+
+**Decline in ChatGPT:**
+
+`Decline P-STOCK-20260929-06`
 
 ---
 

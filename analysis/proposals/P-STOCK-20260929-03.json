@@ -1,0 +1,24 @@
+{
+  "title": "Audit geo deduplication and expose XOM score attribution",
+  "change_type": "CODE",
+  "target": "Geo-feed canonicalization and geo score decomposition",
+  "current": "The feed reports 278 active events and a negative aggregate signal. Apparent duplicate headlines occur in the top-event list, and XOM received negative geo adjustments despite multiple high-materiality events labeled bullish for crude and often bullish for XOM.",
+  "proposed": "Run a parallel SHADOW geo calculation that canonicalizes source domains and normalizes title text, clusters likely duplicate stories, and logs each cluster's contribution separately for crude direction, XOM-specific direction, broader risk effect, confidence, recency, and final signed adjustment. Compare existing versus deduplicated adjustments without changing production paper decisions.",
+  "evidence": [
+    "Two Hormuz headlines appear under energynow.com and EnergyNow.com with the same publication timestamp and substantially identical content.",
+    "Two Kharg Island headlines similarly appear twice with capitalization differences.",
+    "XOM average geo adjustment was -0.372 and the dashboard value was -0.51, while several top events were classified bullish for XOM.",
+    "The aggregate geo signal was -0.0762 with a -0.76 score adjustment, so broader negative aggregation could legitimately differ from individual headline direction."
+  ],
+  "risk": "Over-aggressive clustering could merge genuinely distinct reports. The parallel calculation must not replace the current adjustment until enough comparisons and forward outcomes are available.",
+  "confidence": "MEDIUM",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260929-03",
+  "status": "PENDING",
+  "review_date": "2026-09-29",
+  "created_at": "2026-09-29T13:30:58",
+  "updated_at": "2026-09-29T13:30:58",
+  "implementation": {},
+  "deployment": {}
+}

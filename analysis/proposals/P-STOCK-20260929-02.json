@@ -1,0 +1,23 @@
+{
+  "title": "Restore financial-leverage SHADOW snapshots with explicit feed-health fields",
+  "change_type": "CODE+CONFIG",
+  "target": "XLF/FAS/FAZ financial_leverage_shadow data ingestion",
+  "current": "The feature is enabled with a minimum score of 70 and outcome horizons of 5,15,30,60, but it produced zero snapshots, signals, and outcomes. XLF/FAS/FAZ premarket gaps were null, and the only reason was FINANCIAL_SNAPSHOT_UNAVAILABLE.",
+  "proposed": "Repair read-only quote/bar acquisition for XLF, FAS, and FAZ and log per-symbol provider, timestamp, freshness, missing-field reason, and session status on every scheduled snapshot. Keep the feature SHADOW-only, retain the score threshold of 70, and suppress candidate scoring whenever any required input is stale or absent. Begin outcome collection only after valid snapshots are present; do not calibrate until at least 12 eligible signals are available.",
+  "evidence": [
+    "Financial-leverage snapshot_rows, signal_rows, and outcome_rows were all zero.",
+    "The latest candidate was null and the dashboard reported FINANCIAL_SNAPSHOT_UNAVAILABLE.",
+    "Premarket gaps for XLF, FAS, and FAZ were null while SPY and QQQ gaps were populated."
+  ],
+  "risk": "A provider repair could introduce inconsistent timestamps or delayed ETF data. Freshness validation and SHADOW-only operation limit model risk.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260929-02",
+  "status": "PENDING",
+  "review_date": "2026-09-29",
+  "created_at": "2026-09-29T13:30:58",
+  "updated_at": "2026-09-29T13:30:58",
+  "implementation": {},
+  "deployment": {}
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Add regime counterfactual outcomes before considering active gating",
+  "change_type": "CODE",
+  "target": "Market-regime SHADOW evaluator",
+  "current": "There were 75 RISK_ON observations with the same score of 85 and only two decision-shadow rows, both ALLOW_EQUITY for XOM. No state diversity or forward-outcome comparison is available.",
+  "proposed": "Log regime state transitions rather than only repeated identical snapshots, and attach state, score components, hypothetical allow/block disposition, and forward returns to each eligible threshold event. Produce per-state counts and outcomes while leaving regime logic non-binding. Require at least 12 eligible events per evaluated state before any calibration proposal.",
+  "evidence": [
+    "All 75 regime observations were RISK_ON with average and latest score 85.",
+    "Only two regime-decision records existed, both for XOM and both ALLOW_EQUITY.",
+    "The latest regime inputs included positive long-term trend evidence but nonpositive SPY 20-day momentum, illustrating why component-level outcome attribution is useful."
+  ],
+  "risk": "Regime states may remain highly imbalanced, delaying evaluation. No trading behavior changes because the evaluator remains SHADOW-only.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260929-05",
+  "status": "PENDING",
+  "review_date": "2026-09-29",
+  "created_at": "2026-09-29T13:30:58",
+  "updated_at": "2026-09-29T13:30:58",
+  "implementation": {},
+  "deployment": {}
+}
