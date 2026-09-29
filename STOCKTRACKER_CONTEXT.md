@@ -4,7 +4,7 @@
 StockTracker is a PAPER-ONLY multi-asset momentum research/trading system. It must remain paper-only unless the user explicitly redesigns the project outside this agentic workflow.
 
 ## Active baseline
-- Trader: `momentum_trader_v1_8_market_aware_premarket.py`
+- Trader: `momentum_trader_v1_9_zpta_shadow.py`
 - Geo/oil feed: `xom_geo_feed_v1_1_agentic.py`
 - Dashboard: `momentum_dashboard_v1_3_agentic.py`
 
@@ -13,6 +13,8 @@ Configured by `TRADE_SYMBOLS` in `.env.config`. Current tradable baseline:
 XOM, WMT, AMZN, AAPL, NVDA, TSLA, SPY, QQQ, GLD.
 
 SHADOW-only research symbols: XLF, FAS, FAZ. These are not in `TRADE_SYMBOLS`.
+
+ZPTA is an integrated SHADOW-only OTC specialist. It is not in `TRADE_SYMBOLS`, never reaches the Alpaca order-submission path, and uses an isolated virtual sleeve while writing evidence into the StockTracker database and daily review.
 
 ## Architecture
 - Alpaca paper account executes simulated orders.
@@ -39,6 +41,15 @@ SHADOW-only research symbols: XLF, FAS, FAZ. These are not in `TRADE_SYMBOLS`.
 7. Approved implementation changes are committed to GitHub and a request is written to `deploy/requests/`.
 8. `stocktracker_deployment_agent.py` validates protected capabilities, updates the local repo, restarts approved components, and records local deployment state.
 9. `stocktracker_supervisor.py` watches the deployment agent, trader, geo feed, and dashboard and restarts missing processes.
+
+## ZPTA integrated shadow sleeve
+- `zpta_specialist_v0_1.py` is imported and invoked by the active StockTracker trader during regular-session cycles.
+- Competing models: breakout continuation, momentum pullback, VWAP reclaim, and exhaustion/exit risk.
+- Every forecast is resolved at 5, 15, and 60 minutes and stored in `zpta_predictions`.
+- Virtual entries/exits are stored in `zpta_shadow_trades`; no broker order function exists in the specialist.
+- OTC sparsity is handled with clock-time lookbacks rather than assuming each observed print represents one minute.
+- Alpaca OTC data is attempted first; delayed Yahoo chart data is permitted only for shadow research fallback.
+- Promotion requires at least 20 sessions and 300 resolved forecasts plus positive post-slippage expectancy, profit factor >=1.25, drawdown <=8%, and explicit approval before any live redesign.
 
 ## Protected deployment invariants
 Future trader releases must preserve:
