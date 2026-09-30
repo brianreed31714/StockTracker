@@ -1,0 +1,23 @@
+{
+  "title": "Reconcile funnel counts and attach forward outcomes to every threshold event",
+  "change_type": "CODE",
+  "target": "Decision-funnel audit and outcome instrumentation",
+  "current": "The funnel reports 22 raw threshold crossings, but BUY/SELL side counts total 23. Records show gate dispositions but no matched 5/15/30/60-minute forward returns for accepted, confirmation-filtered, or position-cap-blocked events.",
+  "proposed": "Add a stable event ID linking decision, threshold crossing, confirmation state, gate result, order attempt, and fill. Enforce and report count invariants, including raw crossings by side. In SHADOW, record 5/15/30/60-minute forward returns and score components for every crossing, including blocked candidates. Do not alter thresholds, confirmations, portfolio caps, or order behavior until at least 12 resolved observations exist for the evaluated segment.",
+  "evidence": [
+    "The reported raw-crossing count is 22 while funnel side counts sum to 23.",
+    "Fourteen records awaited confirmation, six were blocked by MAX_OPEN_POSITIONS, and three produced submitted orders.",
+    "Only one realized trade exists, so accepted-order P/L cannot evaluate the larger candidate set."
+  ],
+  "risk": "Low implementation risk if logging is asynchronous. Incorrect event joins could misattribute outcomes, so invariant failures should be surfaced without affecting paper orders.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260930-01",
+  "status": "PENDING",
+  "review_date": "2026-09-30",
+  "created_at": "2026-09-30T13:31:02",
+  "updated_at": "2026-09-30T13:31:02",
+  "implementation": {},
+  "deployment": {}
+}

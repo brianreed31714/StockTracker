@@ -1,0 +1,23 @@
+{
+  "title": "Run a deduplicated geo-adjustment counterfactual alongside the active score",
+  "change_type": "CODE",
+  "target": "Geo-feed event aggregation for XOM and GLD",
+  "current": "The geo feed had 301 active events and a +3.97 current adjustment. XOM averaged +3.221 and GLD +0.804. The top-event list contains repeated or near-duplicate reports of the same incidents, but deduplication details and component outcomes are unavailable.",
+  "proposed": "Cluster geo headlines by normalized incident, publication time, category, and source lineage. Log raw-event count, unique-cluster count, source concentration, active adjustment, and a deduplicated SHADOW adjustment side by side. Capture XOM and GLD forward returns at 5/15/30/60 minutes after material cluster changes. Do not replace the active adjustment or tune its cap from this one-day sample.",
+  "evidence": [
+    "Multiple top entries repeat the TradeWinds Hormuz attack report and the EnergyNow Saudi output report.",
+    "XOM's average geo contribution was substantially larger than all non-energy symbols.",
+    "No geo-conditioned forward outcomes were supplied."
+  ],
+  "risk": "Over-aggressive clustering could merge distinct developments. The initial implementation should be observational and preserve the existing paper score.",
+  "confidence": "MEDIUM",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260930-03",
+  "status": "PENDING",
+  "review_date": "2026-09-30",
+  "created_at": "2026-09-30T13:31:02",
+  "updated_at": "2026-09-30T13:31:02",
+  "implementation": {},
+  "deployment": {}
+}

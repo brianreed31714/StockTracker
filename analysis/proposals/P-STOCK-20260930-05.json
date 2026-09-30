@@ -1,0 +1,23 @@
+{
+  "title": "Add ZPTA bar-freshness qualification and defer calibration",
+  "change_type": "CODE",
+  "target": "ZPTA SHADOW prediction quality controls",
+  "current": "Each reported model/horizon cell has only 7 or 8 samples, no shadow trades closed, and the latest state was NO_NEW_BAR using yahoo_delayed data. Existing metrics do not state whether stale bars were included in evaluated predictions.",
+  "proposed": "Record bar age, expected interval, provider latency, and freshness status for every ZPTA prediction. Mark stale or NO_NEW_BAR predictions as data-quality-ineligible for calibration while retaining them in an audit stream. Continue collecting fresh resolved predictions until each model/horizon under review has at least 12 eligible samples; leave the entry score of 68 and $150 shadow position limit unchanged.",
+  "evidence": [
+    "Reported model sample sizes are below the minimum calibration target of 12.",
+    "Latest provider was yahoo_delayed and latest status was NO_NEW_BAR.",
+    "There were zero shadow trades and zero closed shadow trades, so no strategy-level P/L evidence exists."
+  ],
+  "risk": "A strict freshness rule could reduce sample accumulation. It should therefore label and separate observations rather than stop the SHADOW collector.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260930-05",
+  "status": "PENDING",
+  "review_date": "2026-09-30",
+  "created_at": "2026-09-30T13:31:02",
+  "updated_at": "2026-09-30T13:31:02",
+  "implementation": {},
+  "deployment": {}
+}

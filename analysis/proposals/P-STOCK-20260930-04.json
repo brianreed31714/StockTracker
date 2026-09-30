@@ -1,0 +1,24 @@
+{
+  "title": "Measure premarket bias, gaps, regime, and VIX against opening-window outcomes",
+  "change_type": "CODE",
+  "target": "Premarket context attribution ledger",
+  "current": "Five premarket snapshots were all BULLISH with score 75 and small positive SPY/QQQ gaps. Social data were unavailable, XLF/FAS/FAZ gaps were missing, and later dashboard records showed zero premarket adjustment. No matched opening-window outcomes were provided.",
+  "proposed": "For each scheduled premarket refresh, persist available gaps, missing-gap reasons, bias inputs, regime state, VIX level, geo score, social-source status, calculated adjustment, and actual application/expiry timestamps. Resolve SPY, QQQ, and trade-symbol returns at market open plus 5/15/30/60 minutes. Keep the current maximum adjustment, 60-minute active window, and 20-minute warmup unchanged until at least 12 resolved sessions or otherwise appropriate independent observations are available.",
+  "evidence": [
+    "Premarket rows totaled only five and all had the same BULLISH classification.",
+    "SPY and QQQ gaps were +0.272% and +0.386%; financial ETF gaps were null.",
+    "Social source and status were UNAVAILABLE.",
+    "Regime observations were exclusively RISK_ON and VIX was 16.17, preventing separation of their effects without matched outcomes."
+  ],
+  "risk": "Intraday observations from one session are correlated and must not be treated as independent daily samples. Instrumentation should distinguish sessions from refresh records.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20260930-04",
+  "status": "PENDING",
+  "review_date": "2026-09-30",
+  "created_at": "2026-09-30T13:31:02",
+  "updated_at": "2026-09-30T13:31:02",
+  "implementation": {},
+  "deployment": {}
+}
