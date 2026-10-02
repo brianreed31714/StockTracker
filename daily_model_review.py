@@ -116,7 +116,7 @@ Hard constraints:
 - Separate observed facts from hypotheses.
 - A proposal must be actionable and narrowly scoped. Do not propose generic optimization work.
 - Consider per-symbol differences, threshold hit rates, realized paper P/L, buy/sell balance, VIX effects, geo-feed contribution, SHADOW market-regime evidence, SHADOW XLF/FAS/FAZ signal and forward-outcome evidence, premarket gap/bias evidence, and evidence gaps. Treat social sentiment as unavailable unless the evidence explicitly says a source is configured.
-- Do not make investment recommendations to the user. Analyze the paper-trading model only.
+- The supporting_log_analysis block is computed across every published row. Explicitly evaluate its integrity issues, empty tables, gate counts, and total analyzed-row coverage.\n- Distinguish requested order notional, accepted orders, fills, realized P/L, and dashboard snapshots; do not treat them as interchangeable.\n- Do not make investment recommendations to the user. Analyze the paper-trading model only.
 
 Same-day sanitized evidence:
 {json.dumps(metrics, indent=2)[:60000]}
@@ -139,6 +139,8 @@ def performance_markdown(metrics, review):
     r = metrics.get("realized") or {}
     o = metrics.get("orders") or {}
     d = metrics.get("decisions") or {}
+    supporting = metrics.get("supporting_logs") or {}
+    integrity = metrics.get("supporting_log_analysis") or {}
     lines = [
         "# StockTracker Performance — Latest",
         "",
@@ -159,6 +161,13 @@ def performance_markdown(metrics, review):
         review.get("summary", ""),
         "",
         f"Data quality: **{review.get('data_quality', 'UNKNOWN')}**",
+        "",
+        "### Supporting evidence",
+        "",
+        f"- Published files: **{supporting.get('published_file_count', 0)}**",
+        f"- Published rows analyzed: **{supporting.get('published_row_count', 0)}**",
+        f"- Integrity status: **{integrity.get('status', 'UNKNOWN')}**",
+        f"- Integrity issues: **{', '.join(integrity.get('issues') or []) or 'none'}**",
         "",
         "### Findings",
     ]
