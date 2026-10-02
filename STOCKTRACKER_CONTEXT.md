@@ -25,22 +25,25 @@ ZPTA is an integrated SHADOW-only OTC specialist. It is not in `TRADE_SYMBOLS`, 
 - Dashboard is read-only.
 - Geo feed classifies recent oil/geopolitical RSS items with OpenAI and never places orders.
 - EOD reporting uses Pushover.
-- Runtime databases, logs, state, secrets, and raw daily analysis stay local/ignored.
-- Durable proposals and sanitized performance summaries are committed to GitHub.
+- Runtime databases, mutable state, secrets, and unsanitized logs stay local/ignored.
+- Five minutes after the actual Alpaca session close, including early closes, the trader starts the idempotent review pipeline.
+- Every review publishes sanitized row-level supporting tables, state/feed snapshots, a 500-line geo-log tail, SHA-256 hashes, and integrity checks under `analysis/evidence/YYYY-MM-DD/`.
+- Durable proposals, sanitized evidence, and performance summaries are committed to GitHub.
 
 ## Agentic workflow
 1. Runtime processes accumulate paper-trading evidence.
-2. `run_daily_model_review.bat` builds a sanitized daily evidence bundle.
-3. `daily_model_review.py` analyzes the evidence and drafts proposals.
-4. `proposal_registry.py` assigns stable IDs such as `P-STOCK-20260927-01`.
-5. `sync_proposals_to_git.py` pushes proposals and performance summaries to GitHub.
-6. In ChatGPT, the user can say:
+2. At actual market close + 5 minutes, `run_daily_model_review.bat` builds the daily metrics bundle.
+3. `publish_supporting_evidence.py` exports every supporting table and injects full-row integrity results into the review input.
+4. `daily_model_review.py` analyzes the full-table summaries, integrity results, and model metrics and drafts proposals.
+5. `proposal_registry.py` assigns stable IDs such as `P-STOCK-20260927-01`.
+6. `sync_proposals_to_git.py` pushes sanitized evidence, proposals, and performance summaries to GitHub.
+7. In ChatGPT, the user can say:
    - "Review today's StockTracker proposals"
    - "Approve P-STOCK-YYYYMMDD-NN"
    - "Decline P-STOCK-YYYYMMDD-NN"
-7. Approved implementation changes are committed to GitHub and a request is written to `deploy/requests/`.
-8. `stocktracker_deployment_agent.py` validates protected capabilities, updates the local repo, restarts approved components, and records local deployment state.
-9. `stocktracker_supervisor.py` watches the deployment agent, trader, geo feed, and dashboard and restarts missing processes.
+8. Approved implementation changes are committed to GitHub and a request is written to `deploy/requests/`.
+9. `stocktracker_deployment_agent.py` validates protected capabilities, updates the local repo, restarts approved components, and records local deployment state.
+10. `stocktracker_supervisor.py` watches the deployment agent, trader, geo feed, and dashboard and restarts missing processes.
 
 ## ZPTA integrated shadow sleeve
 - `zpta_specialist_v0_1.py` is imported and invoked by the active StockTracker trader during regular-session cycles.
@@ -60,6 +63,7 @@ Future trader releases must preserve:
 - portfolio/trade/daily-loss limits
 - XOM geo integration
 - stock EOD reporting
+- actual-session-close + five-minute daily evidence publication and analysis
 
 Future geo-feed releases must preserve:
 - no order submission/trading client
@@ -71,7 +75,8 @@ Future dashboard releases must remain read-only.
 
 ## Performance artifacts
 - Local/raw: `analysis/daily/YYYY-MM-DD/` (ignored)
-- Durable/sanitized: `analysis/performance/latest.json`, `analysis/performance/latest.md`
+- Durable/sanitized row-level evidence: `analysis/evidence/YYYY-MM-DD/`
+- Durable/sanitized summary: `analysis/performance/latest.json`, `analysis/performance/latest.md`
 - Proposals: `analysis/proposals/`
 
 A fresh ChatGPT session should use this file plus `analysis/performance/latest.*` and `analysis/proposals/REVIEW.md` to understand the project.
