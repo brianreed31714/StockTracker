@@ -103,6 +103,10 @@ def deterministic_review(metrics):
     }
 
 def prompt_for(metrics):
+    supporting = {
+        "supporting_logs": metrics.get("supporting_logs") or {},
+        "supporting_log_analysis": metrics.get("supporting_log_analysis") or {},
+    }
     return f"""You are the daily model-review analyst for StockTracker, a PAPER-ONLY multi-asset momentum research system.
 
 Your job is to study the supplied same-day evidence and propose cautious, testable improvements to the model and its instrumentation.
@@ -117,6 +121,9 @@ Hard constraints:
 - A proposal must be actionable and narrowly scoped. Do not propose generic optimization work.
 - Consider per-symbol differences, threshold hit rates, realized paper P/L, buy/sell balance, VIX effects, geo-feed contribution, SHADOW market-regime evidence, SHADOW XLF/FAS/FAZ signal and forward-outcome evidence, premarket gap/bias evidence, and evidence gaps. Treat social sentiment as unavailable unless the evidence explicitly says a source is configured.
 - The supporting_log_analysis block is computed across every published row. Explicitly evaluate its integrity issues, empty tables, gate counts, and total analyzed-row coverage.\n- Distinguish requested order notional, accepted orders, fills, realized P/L, and dashboard snapshots; do not treat them as interchangeable.\n- Do not make investment recommendations to the user. Analyze the paper-trading model only.
+
+Published supporting-log coverage and integrity (always inspect this block):
+{json.dumps(supporting, indent=2)[:16000]}
 
 Same-day sanitized evidence:
 {json.dumps(metrics, indent=2)[:60000]}
