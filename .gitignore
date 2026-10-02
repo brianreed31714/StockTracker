@@ -255,3 +255,7 @@ geo_feed_state.json
 # Durable agentic artifacts remain tracked
 !analysis/proposals/
 !analysis/performance/
+
+# Sanitized row-level review evidence
+!analysis/evidence/
+!analysis/evidence/**
