@@ -6,7 +6,7 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-ALLOWED_PREFIXES = ("analysis/proposals/", "analysis/performance/")
+ALLOWED_PREFIXES = ("analysis/proposals/", "analysis/performance/", "analysis/evidence/")
 
 def run(*args, check=True):
     return subprocess.run(args, cwd=ROOT, text=True, capture_output=True, check=check)
@@ -35,7 +35,7 @@ def main():
             print("  " + x)
         raise SystemExit(2)
 
-    run("git", "add", "analysis/proposals", "analysis/performance", check=False)
+    run("git", "add", "analysis/proposals", "analysis/performance", "analysis/evidence", check=False)
 
     diff = run("git", "diff", "--cached", "--quiet", check=False)
     if diff.returncode == 0:
@@ -59,7 +59,7 @@ def main():
         print(push.stderr)
         raise SystemExit(push.returncode)
 
-    print("StockTracker proposals/performance pushed to GitHub.")
+    print("StockTracker evidence, proposals, and performance pushed to GitHub.")
 
 if __name__ == "__main__":
     main()
