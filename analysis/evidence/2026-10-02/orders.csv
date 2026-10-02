@@ -1,0 +1,2 @@
+alpaca_order_id,id,notional,price,qty,reason,side,symbol,ts
+sha256:d2c01b925c9b2202,e41d57b4-7f56-4ac5-928d-d770ad2ce5b4,2591.6081901668,371.35,6.978882968,take profit 4.70%,sell,TSLA,2026-10-02T18:48:55.589940+00:00

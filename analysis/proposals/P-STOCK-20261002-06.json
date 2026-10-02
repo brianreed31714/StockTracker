@@ -1,0 +1,25 @@
+{
+  "title": "Record ZPTA shadow-entry gate outcomes",
+  "change_type": "CODE",
+  "target": "ZPTA prediction-to-shadow-trade funnel",
+  "current": "ZPTA generated 48 predictions and resolved 24, but created zero shadow trades and supplies no exit-reason counts or entry-gate records.",
+  "proposed": "For every prediction eligible for evaluation, write a gate record with model, horizon, score, entry threshold, bar freshness, provider delay, liquidity/regime status, position-size eligibility, final shadow disposition, and rejection reason. Continue collecting forward returns and do not alter zpta_entry_score=68 or zpta_max_position_dollars=$150 until each calibration cohort reaches at least 12 independent samples.",
+  "evidence": [
+    "prediction_rows=48 and resolved_predictions=24",
+    "shadow_trades=0 and closed_shadow_trades=0",
+    "zpta_exit_reason_counts is empty",
+    "Per-model sample sizes range from 1 to 3",
+    "Latest provider=yahoo_delayed and latest status=NO_NEW_BAR"
+  ],
+  "risk": "Predictions from the same three observations may be correlated; instrumentation must identify observation IDs so they are not treated as independent samples.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261002-06",
+  "status": "PENDING",
+  "review_date": "2026-10-02",
+  "created_at": "2026-10-02T13:05:59",
+  "updated_at": "2026-10-02T13:05:59",
+  "implementation": {},
+  "deployment": {}
+}

@@ -1,0 +1,25 @@
+{
+  "title": "Measure duplicate-aware geo adjustments in parallel",
+  "change_type": "CODE+CONFIG",
+  "target": "Geo-feed normalization and XOM/GLD context instrumentation",
+  "current": "The geo feed has 303 active events and applied approximately +5.36 to XOM, while top events contain several near-duplicate versions of the same tanker-loading story. Only the production paper score adjustment is logged.",
+  "proposed": "Add a SHADOW-only duplicate cluster ID based on normalized headline, event time, canonical source/domain, and semantic similarity. Log raw event count, unique cluster count, current adjustment, duplicate-aware counterfactual adjustment, and subsequent XOM/GLD returns at fixed horizons. Do not change the active geo weight or cap until at least 12 independent event clusters with outcomes are available.",
+  "evidence": [
+    "XOM average geo adjustment=5.362 versus average technical score=51.639",
+    "GLD average geo adjustment=1.341",
+    "Geo active_event_count=303 and score_adjustment=+5.36",
+    "Multiple top events repeat the Iranian tanker-loading headline across timestamps and source labels",
+    "No causal geo outcome table is supplied"
+  ],
+  "risk": "Over-aggressive clustering could merge distinct updates. Parallel scoring and retained cluster membership make the test reversible without affecting paper decisions.",
+  "confidence": "MEDIUM",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261002-04",
+  "status": "PENDING",
+  "review_date": "2026-10-02",
+  "created_at": "2026-10-02T13:05:59",
+  "updated_at": "2026-10-02T13:05:59",
+  "implementation": {},
+  "deployment": {}
+}

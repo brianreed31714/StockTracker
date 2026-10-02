@@ -1,0 +1,25 @@
+{
+  "title": "Emit scheduled-run diagnostics for premarket and financial-leverage shadows",
+  "change_type": "CODE",
+  "target": "premarket_intelligence and financial-leverage XLF/FAS/FAZ collectors",
+  "current": "Both features are enabled, but premarket intelligence and all financial-leverage snapshot/signal/outcome tables are empty. The dashboard only exposes FINANCIAL_SNAPSHOT_UNAVAILABLE.",
+  "proposed": "Write one diagnostic row for every scheduled refresh attempt, including scheduled timestamp, actual timestamp, process/session status, provider, symbol-level data availability, gap calculation status, geo status, social status=UNAVAILABLE, regime linkage, and terminal reason code. For XLF/FAS/FAZ, continue writing candidate snapshots and forward outcomes even when the candidate is NONE; do not generate paper orders.",
+  "evidence": [
+    "premarket_enabled=true but premarket_intelligence rows=0",
+    "financial_leverage_shadow_enabled=true but snapshot_rows=0, signal_rows=0, outcome_rows=0",
+    "Dashboard reason is FINANCIAL_SNAPSHOT_UNAVAILABLE",
+    "premarket_social_source=UNAVAILABLE",
+    "No premarket gap/bias or XLF/FAS/FAZ forward-outcome evidence is available"
+  ],
+  "risk": "Additional rows and provider calls could increase storage or rate-limit pressure; diagnostics should reuse scheduled fetches and record skipped calls rather than force retries.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261002-03",
+  "status": "PENDING",
+  "review_date": "2026-10-02",
+  "created_at": "2026-10-02T13:05:59",
+  "updated_at": "2026-10-02T13:05:59",
+  "implementation": {},
+  "deployment": {}
+}

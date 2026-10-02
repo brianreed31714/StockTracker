@@ -1,0 +1,2 @@
+accepted,alpaca_order_id,attempt_id,attempted,decision_event_id,gate_reason,side,symbol,ts
+1,sha256:d2c01b925c9b2202,895507b2-d19a-43a1-b8d3-09ff264c5542,1,9d410590-ce2c-4ffa-8dbe-9ab149967358,ORDER_ACCEPTED,SELL,TSLA,2026-10-02T18:48:56.739087+00:00

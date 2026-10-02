@@ -1,54 +1,54 @@
 {
-  "generated_at": "2026-10-01T17:48:43",
-  "review_date": "2026-10-01",
+  "generated_at": "2026-10-02T13:05:59",
+  "review_date": "2026-10-02",
   "proposal_count": 6,
   "pending": [
-    "P-STOCK-20261001-01",
-    "P-STOCK-20261001-02",
-    "P-STOCK-20261001-03",
-    "P-STOCK-20261001-04",
-    "P-STOCK-20261001-05",
-    "P-STOCK-20261001-06"
+    "P-STOCK-20261002-01",
+    "P-STOCK-20261002-02",
+    "P-STOCK-20261002-03",
+    "P-STOCK-20261002-04",
+    "P-STOCK-20261002-05",
+    "P-STOCK-20261002-06"
   ],
   "proposals": [
     {
-      "proposal_id": "P-STOCK-20261001-01",
-      "title": "Restore XLF/FAS/FAZ SHADOW coverage with explicit availability rows",
+      "proposal_id": "P-STOCK-20261002-01",
+      "title": "Add manifest file-count self-consistency validation",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261001-02",
-      "title": "Make funnel crossings and order lifecycle stages explicitly reconcilable",
+      "proposal_id": "P-STOCK-20261002-02",
+      "title": "Restore regime-to-decision shadow records",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261001-03",
-      "title": "Add component-level forward attribution for geo, VIX, and premarket context",
+      "proposal_id": "P-STOCK-20261002-03",
+      "title": "Emit scheduled-run diagnostics for premarket and financial-leverage shadows",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261001-04",
-      "title": "Instrument ZPTA trigger-conditioned outcomes and no-trade reasons",
+      "proposal_id": "P-STOCK-20261002-04",
+      "title": "Measure duplicate-aware geo adjustments in parallel",
+      "confidence": "MEDIUM",
+      "recommended_mode": "SHADOW",
+      "status": "PENDING"
+    },
+    {
+      "proposal_id": "P-STOCK-20261002-05",
+      "title": "Log exit trigger and notional lifecycle fields",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261001-05",
-      "title": "Log cap headroom separately for cost basis and mark-to-market exposure",
-      "confidence": "HIGH",
-      "recommended_mode": "PAPER",
-      "status": "PENDING"
-    },
-    {
-      "proposal_id": "P-STOCK-20261001-06",
-      "title": "Continue regime evidence collection without activating a regime gate",
+      "proposal_id": "P-STOCK-20261002-06",
+      "title": "Record ZPTA shadow-entry gate outcomes",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"

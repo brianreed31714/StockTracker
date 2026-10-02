@@ -1,156 +1,164 @@
-# StockTracker Proposals — 2026-10-01
+# StockTracker Proposals — 2026-10-02
 
 Paper-trading model improvement proposals. Human approval is required before implementation/deployment.
 
-## P-STOCK-20261001-01 — Restore XLF/FAS/FAZ SHADOW coverage with explicit availability rows
+## P-STOCK-20261002-01 — Add manifest file-count self-consistency validation
+
+- **Status:** PENDING
+- **Type:** CODE
+- **Target:** Evidence publisher and integrity_analysis.json
+- **Current:** The manifest reports 20 published files while the supplied files array contains 19 entries; integrity status remains PASS with no issue recorded.
+- **Proposed:** At publication, compare published_file_count with the number of manifest file entries, require every entry to have path/bytes/SHA-256 metadata, and emit a named integrity issue on mismatch. Keep row-coverage checks separate so the valid 719-row analysis remains visible.
+- **Confidence:** HIGH
+- **Recommended mode:** SHADOW
+- **Risk:** Low operational risk; a stricter check may mark otherwise usable evidence bundles LIMITED until the metadata discrepancy is corrected.
+- **Evidence:**
+  - published_file_count=20
+  - The supplied files array enumerates 19 paths
+  - all_published_rows_analyzed=719 and table_count=15
+  - supporting_log_analysis.status=PASS with issues=[]
+
+**Approve in ChatGPT:**
+
+`Approve P-STOCK-20261002-01`
+
+**Decline in ChatGPT:**
+
+`Decline P-STOCK-20261002-01`
+
+---
+
+## P-STOCK-20261002-02 — Restore regime-to-decision shadow records
+
+- **Status:** PENDING
+- **Type:** CODE
+- **Target:** regime_decision_shadow emitter
+- **Current:** There are 15 market_regime_shadow snapshots and 648 decisions, but regime_decision_shadow has zero rows.
+- **Proposed:** For every published decision, write a non-executing shadow record containing decision_event_id, symbol, timestamp, nearest regime snapshot ID/age, regime state/score, actual action, counterfactual regime-aware action, and explicit unavailable/stale reason. Do not let the counterfactual alter paper orders until multi-state forward-outcome evidence is accumulated.
+- **Confidence:** HIGH
+- **Recommended mode:** SHADOW
+- **Risk:** Timestamp joins could be misleading if stale snapshots are silently attached; require snapshot age and an explicit staleness status.
+- **Evidence:**
+  - market_regime_shadow rows=15, all RISK_ON
+  - decisions rows=648
+  - regime_decision_shadow rows=0
+  - No regime-conditioned symbol or action evidence exists
+
+**Approve in ChatGPT:**
+
+`Approve P-STOCK-20261002-02`
+
+**Decline in ChatGPT:**
+
+`Decline P-STOCK-20261002-02`
+
+---
+
+## P-STOCK-20261002-03 — Emit scheduled-run diagnostics for premarket and financial-leverage shadows
+
+- **Status:** PENDING
+- **Type:** CODE
+- **Target:** premarket_intelligence and financial-leverage XLF/FAS/FAZ collectors
+- **Current:** Both features are enabled, but premarket intelligence and all financial-leverage snapshot/signal/outcome tables are empty. The dashboard only exposes FINANCIAL_SNAPSHOT_UNAVAILABLE.
+- **Proposed:** Write one diagnostic row for every scheduled refresh attempt, including scheduled timestamp, actual timestamp, process/session status, provider, symbol-level data availability, gap calculation status, geo status, social status=UNAVAILABLE, regime linkage, and terminal reason code. For XLF/FAS/FAZ, continue writing candidate snapshots and forward outcomes even when the candidate is NONE; do not generate paper orders.
+- **Confidence:** HIGH
+- **Recommended mode:** SHADOW
+- **Risk:** Additional rows and provider calls could increase storage or rate-limit pressure; diagnostics should reuse scheduled fetches and record skipped calls rather than force retries.
+- **Evidence:**
+  - premarket_enabled=true but premarket_intelligence rows=0
+  - financial_leverage_shadow_enabled=true but snapshot_rows=0, signal_rows=0, outcome_rows=0
+  - Dashboard reason is FINANCIAL_SNAPSHOT_UNAVAILABLE
+  - premarket_social_source=UNAVAILABLE
+  - No premarket gap/bias or XLF/FAS/FAZ forward-outcome evidence is available
+
+**Approve in ChatGPT:**
+
+`Approve P-STOCK-20261002-03`
+
+**Decline in ChatGPT:**
+
+`Decline P-STOCK-20261002-03`
+
+---
+
+## P-STOCK-20261002-04 — Measure duplicate-aware geo adjustments in parallel
 
 - **Status:** PENDING
 - **Type:** CODE+CONFIG
-- **Target:** financial-leverage SHADOW collector and XLF/FAS/FAZ premarket preflight
-- **Current:** Financial-leverage snapshot, signal, and outcome tables contain zero rows; premarket gaps for XLF, FAS, and FAZ are null despite financial_leverage_shadow_enabled=true.
-- **Proposed:** On every scheduled SHADOW cycle, write one status row per XLF/FAS/FAZ containing provider, quote/bar timestamp, availability, stale age, and failure reason. Emit candidate snapshots only from valid inputs and attach 5/15/30/60-minute outcomes when due. Keep all financial-leverage actions non-ordering and SHADOW-only.
-- **Confidence:** HIGH
+- **Target:** Geo-feed normalization and XOM/GLD context instrumentation
+- **Current:** The geo feed has 303 active events and applied approximately +5.36 to XOM, while top events contain several near-duplicate versions of the same tanker-loading story. Only the production paper score adjustment is logged.
+- **Proposed:** Add a SHADOW-only duplicate cluster ID based on normalized headline, event time, canonical source/domain, and semantic similarity. Log raw event count, unique cluster count, current adjustment, duplicate-aware counterfactual adjustment, and subsequent XOM/GLD returns at fixed horizons. Do not change the active geo weight or cap until at least 12 independent event clusters with outcomes are available.
+- **Confidence:** MEDIUM
 - **Recommended mode:** SHADOW
-- **Risk:** Low operational risk; may increase log volume. It must not synthesize signals from stale or missing prices.
+- **Risk:** Over-aggressive clustering could merge distinct updates. Parallel scoring and retained cluster membership make the test reversible without affecting paper decisions.
 - **Evidence:**
-  - All three financial-leverage tables are empty.
-  - Premarket XLF/FAS/FAZ gap values are null.
-  - The dashboard reports FINANCIAL_SNAPSHOT_UNAVAILABLE.
+  - XOM average geo adjustment=5.362 versus average technical score=51.639
+  - GLD average geo adjustment=1.341
+  - Geo active_event_count=303 and score_adjustment=+5.36
+  - Multiple top events repeat the Iranian tanker-loading headline across timestamps and source labels
+  - No causal geo outcome table is supplied
 
 **Approve in ChatGPT:**
 
-`Approve P-STOCK-20261001-01`
+`Approve P-STOCK-20261002-04`
 
 **Decline in ChatGPT:**
 
-`Decline P-STOCK-20261001-01`
+`Decline P-STOCK-20261002-04`
 
 ---
 
-## P-STOCK-20261001-02 — Make funnel crossings and order lifecycle stages explicitly reconcilable
+## P-STOCK-20261002-05 — Log exit trigger and notional lifecycle fields
 
 - **Status:** PENDING
 - **Type:** CODE
-- **Target:** decision_funnel and order_attempt instrumentation
-- **Current:** The funnel reports 13 raw crossings but 14 side-classified rows. Aggregate records distinguish blocked and accepted attempts, but the supplied review cannot identify the extra non-crossing event or fully join requested notional, acceptance, fill, and realization stages.
-- **Proposed:** Add immutable fields for raw_threshold_crossed, confirmation_sequence_id, confirmation_count, gate_evaluated, requested_notional, projected_pretrade_exposure, projected_position_count, attempt_status, order_id, fill_id, and realized_lot_id. Add daily reconciliation assertions that report rather than alter trading behavior.
+- **Target:** Decision funnel, order attempts, orders, and fills
+- **Current:** One TSLA SELL was accepted and filled, but raw_threshold_crossings=0 and the trigger class is absent. The order shows $2,591.61 sell notional without separate requested, accepted, and filled notionals or an explicit statement that the $2,500 cap is entry-only.
+- **Proposed:** Attach a shared lifecycle ID and log trigger_class (score confirmation, stop, take profit, trailing stop, manual/system liquidation, or other), position quantity before exit, requested quantity/notional, cap type and applicability, accepted quantity/notional, filled quantity/notional, fill price, and realized-P/L linkage. Add consistency checks without changing exit behavior or any cap.
 - **Confidence:** HIGH
 - **Recommended mode:** SHADOW
-- **Risk:** Schema migration and downstream-report compatibility risk; no model behavior should change.
+- **Risk:** Schema changes require coordinated updates across log writers and readers; fields should initially be additive and nullable.
 - **Evidence:**
-  - Funnel rows=14 and side totals=14, while raw_threshold_crossings=13.
-  - Gate counts reconcile to 2 ORDER_ACCEPTED and 2 MAX_OPEN_POSITIONS.
-  - There were 2 orders, 2 fills, and only 1 realized record, which are valid distinct lifecycle counts.
+  - decision_funnel: SELL=1, ORDER_ACCEPTED=1, ORDER_SUBMITTED=1
+  - raw_threshold_crossings=0
+  - orders: TSLA sell_notional=$2,591.61
+  - max_trade_dollars=$2,500
+  - One attempt, one accepted order, one fill, and one realized row exist
 
 **Approve in ChatGPT:**
 
-`Approve P-STOCK-20261001-02`
+`Approve P-STOCK-20261002-05`
 
 **Decline in ChatGPT:**
 
-`Decline P-STOCK-20261001-02`
+`Decline P-STOCK-20261002-05`
 
 ---
 
-## P-STOCK-20261001-03 — Add component-level forward attribution for geo, VIX, and premarket context
+## P-STOCK-20261002-06 — Record ZPTA shadow-entry gate outcomes
 
 - **Status:** PENDING
 - **Type:** CODE
-- **Target:** decision SHADOW outcome instrumentation
-- **Current:** Decision rows record component adjustments, but evidence does not provide component-tagged forward outcomes or counterfactual scores without each adjustment.
-- **Proposed:** For each decision snapshot, log the technical-only score, score with each context component added separately, final score, threshold-crossing counterfactuals, and 5/15/30/60-minute symbol returns. Deduplicate highly correlated minute observations into independent event episodes and require at least 12 completed episodes per symbol/component before considering calibration.
+- **Target:** ZPTA prediction-to-shadow-trade funnel
+- **Current:** ZPTA generated 48 predictions and resolved 24, but created zero shadow trades and supplies no exit-reason counts or entry-gate records.
+- **Proposed:** For every prediction eligible for evaluation, write a gate record with model, horizon, score, entry threshold, bar freshness, provider delay, liquidity/regime status, position-size eligibility, final shadow disposition, and rejection reason. Continue collecting forward returns and do not alter zpta_entry_score=68 or zpta_max_position_dollars=$150 until each calibration cohort reaches at least 12 independent samples.
 - **Confidence:** HIGH
 - **Recommended mode:** SHADOW
-- **Risk:** Counterfactuals may still be confounded and must not be interpreted as causal without sufficient independent episodes.
+- **Risk:** Predictions from the same three observations may be correlated; instrumentation must identify observation IDs so they are not treated as independent samples.
 - **Evidence:**
-  - XOM average geo adjustment was 2.932 and its score reached 79.632 without a final action.
-  - GLD average geo adjustment was 0.733.
-  - Average VIX adjustments were near zero.
-  - Five premarket snapshots were BULLISH, but no tagged outcomes were supplied.
+  - prediction_rows=48 and resolved_predictions=24
+  - shadow_trades=0 and closed_shadow_trades=0
+  - zpta_exit_reason_counts is empty
+  - Per-model sample sizes range from 1 to 3
+  - Latest provider=yahoo_delayed and latest status=NO_NEW_BAR
 
 **Approve in ChatGPT:**
 
-`Approve P-STOCK-20261001-03`
+`Approve P-STOCK-20261002-06`
 
 **Decline in ChatGPT:**
 
-`Decline P-STOCK-20261001-03`
-
----
-
-## P-STOCK-20261001-04 — Instrument ZPTA trigger-conditioned outcomes and no-trade reasons
-
-- **Status:** PENDING
-- **Type:** CODE
-- **Target:** ZPTA SHADOW prediction and shadow-trade pipeline
-- **Current:** There are 300 predictions and 272 resolved predictions, but zero shadow trades and no exit reasons. Models at the same horizon share identical sample counts and average returns, obscuring model-specific trigger performance.
-- **Proposed:** Record per-model eligibility, trigger timestamp, score-threshold result, ensemble contribution, entry suppression reason, hypothetical entry price, horizon return, and hypothetical exit reason. Generate shadow-trade rows only for valid trigger-conditioned cases; preserve zpta_shadow_enabled=true and prohibit order routing because the asset is non-tradable in preflight.
-- **Confidence:** HIGH
-- **Recommended mode:** SHADOW
-- **Risk:** Hypothetical fills could overstate executable performance, especially with delayed OTC data; label them explicitly as non-executable SHADOW results.
-- **Evidence:**
-  - zpta_shadow_trades is empty and zpta_exit_reason_counts is empty.
-  - Asset preflight says tradable=false.
-  - All model families at each horizon show identical sample counts and average returns despite differing stated logic.
-  - Latest ensemble action was FLAT at 47.8 versus a configured entry score of 68.
-
-**Approve in ChatGPT:**
-
-`Approve P-STOCK-20261001-04`
-
-**Decline in ChatGPT:**
-
-`Decline P-STOCK-20261001-04`
-
----
-
-## P-STOCK-20261001-05 — Log cap headroom separately for cost basis and mark-to-market exposure
-
-- **Status:** PENDING
-- **Type:** CODE
-- **Target:** portfolio-risk telemetry and read-only dashboard
-- **Current:** The dashboard snapshot shows $10,006.84 exposure against a $10,000 cap, while two attempts were blocked by position count. The evidence does not show whether the exposure excess was market drift or an order-sizing breach.
-- **Proposed:** Expose read-only fields for accepted-order cost basis, current market-value exposure, pre-order headroom, projected post-fill exposure, and cap-block reason. Retain max_total_exposure=$10,000, max_open_positions=4, max_daily_realized_loss=$300, and all existing enforcement behavior.
-- **Confidence:** HIGH
-- **Recommended mode:** PAPER
-- **Risk:** Low; ensure dashboard calculations do not become an alternate source of truth for order enforcement.
-- **Evidence:**
-  - Dashboard market-value exposure was $10,006.84 with four open positions.
-  - Two attempts were blocked by MAX_OPEN_POSITIONS.
-  - Only one new buy order was accepted, with $2,500 requested notional.
-
-**Approve in ChatGPT:**
-
-`Approve P-STOCK-20261001-05`
-
-**Decline in ChatGPT:**
-
-`Decline P-STOCK-20261001-05`
-
----
-
-## P-STOCK-20261001-06 — Continue regime evidence collection without activating a regime gate
-
-- **Status:** PENDING
-- **Type:** RESEARCH
-- **Target:** market-regime SHADOW evaluation
-- **Current:** All 66 regime snapshots were RISK_ON and all 11 mapped actions were ALLOW_EQUITY, providing no contrasting-state evidence.
-- **Proposed:** Continue SHADOW logging and report decision/outcome cohorts by regime only after multiple states occur, including the number of independent decision episodes and 5/15/30/60-minute outcomes. Do not alter order eligibility until at least 12 independent mapped outcomes exist in each regime being compared.
-- **Confidence:** HIGH
-- **Recommended mode:** SHADOW
-- **Risk:** Regime labels may remain imbalanced for extended periods; no paper-order behavior should be changed from this proposal.
-- **Evidence:**
-  - RISK_ON accounted for 66/66 snapshots.
-  - ALLOW_EQUITY accounted for 11/11 mapped decisions.
-  - Latest regime score was 85 with VIX below stress.
-
-**Approve in ChatGPT:**
-
-`Approve P-STOCK-20261001-06`
-
-**Decline in ChatGPT:**
-
-`Decline P-STOCK-20261001-06`
+`Decline P-STOCK-20261002-06`
 
 ---
 

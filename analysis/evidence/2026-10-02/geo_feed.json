@@ -1,0 +1,250 @@
+{
+  "generated_at": "2026-10-02T20:02:03.218265+00:00",
+  "status": "ok",
+  "signal": 0.536,
+  "score_adjustment": 5.36,
+  "max_materiality": 0.9,
+  "active_event_count": 303,
+  "events": [
+    {
+      "id": "17071f39a3a441672bb4b4b7",
+      "title": "Iran tanker loadings plunge to zero for first time in war as US blockade strangles Kharg Island exports - TradeWinds News",
+      "source": "TradeWinds News",
+      "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxPSUE0T2hudGlRMlZpMGNyNENKTGRMMHVZTWxTOVNmb2NjdTVhSThYTU01eDg1eExOM3ZPelVBWGhCMUJ0ZVBUUzBzeTRsay05VmJaal8xdUNvX0hEaFBaYzMwbzQ4VHBPV01HRzJ4ckRZczlMV2ktTnRWVVJVM2FkYWF5RVhsLV85VUczS1RHMkg4dldxRWJYUjhYcnpOTHF4MTQyMzRKc184bVpCRVk2NWZQUUQ3VTduZ2hEQnVZWGZKWG1CbjZyWFZ0TWhHRXFCMHI5akJOeVd4cy0wNE1sOWlfUUhaZ3o2MXc?oc=5",
+      "published_at": "2026-10-02T07:31:07+00:00",
+      "description": "Iran tanker loadings plunge to zero for first time in war as US blockade strangles Kharg Island exports \u00a0\u00a0 TradeWinds News",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.88,
+        "confidence": 0.84,
+        "category": "supply",
+        "supply_impact": "tighter",
+        "summary": "TradeWinds reports Iranian tanker loadings from Kharg Island fell to zero, implying a major interruption to Iran\u2019s crude exports and a tighter global oil supply outlook.",
+        "why_xom": "A potentially significant crude-export disruption could support oil prices, which is generally favorable for Exxon Mobil\u2019s upstream earnings; broader geopolitical risks create some uncertainty."
+      },
+      "analyzed_at": "2026-10-02T10:53:54.870544+00:00"
+    },
+    {
+      "id": "6e64c935aa9d397b29f1949f",
+      "title": "Iran tanker loadings plunge to zero for first time in war as US blockade strangles Kharg Island exports - tradewindsnews.com",
+      "source": "tradewindsnews.com",
+      "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxPSUE0T2hudGlRMlZpMGNyNENKTGRMMHVZTWxTOVNmb2NjdTVhSThYTU01eDg1eExOM3ZPelVBWGhCMUJ0ZVBUUzBzeTRsay05VmJaal8xdUNvX0hEaFBaYzMwbzQ4VHBPV01HRzJ4ckRZczlMV2ktTnRWVVJVM2FkYWF5RVhsLV85VUczS1RHMkg4dldxRWJYUjhYcnpOTHF4MTQyMzRKc184bVpCRVk2NWZQUUQ3VTduZ2hEQnVZWGZKWG1CbjZyWFZ0TWhHRXFCMHI5akJOeVd4cy0wNE1sOWlfUUhaZ3o2MXc?oc=5",
+      "published_at": "2026-10-02T07:29:17+00:00",
+      "description": "Iran tanker loadings plunge to zero for first time in war as US blockade strangles Kharg Island exports \u00a0\u00a0 tradewindsnews.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.9,
+        "confidence": 0.82,
+        "category": "supply",
+        "supply_impact": "tighter",
+        "summary": "The headline reports Iranian tanker loadings from Kharg Island falling to zero, implying a potentially significant interruption to Iranian crude exports and tighter global supply. The reported US blockade also raises geopolitical and shipping-risk concerns.",
+        "why_xom": "Reduced Iranian exports could support crude prices, which may benefit Exxon Mobil's upstream earnings. The effect is partly offset by uncertainty around the duration and scope of the reported blockade and possible geopolitical escalation."
+      },
+      "analyzed_at": "2026-10-02T07:49:34.667971+00:00"
+    },
+    {
+      "id": "5a9d1b7454af552596808693",
+      "title": "Shipping Slows After Iran Says it Has Again Shut the Strait of Hormuz - energynow.com",
+      "source": "energynow.com",
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxONTF5MXhpYXJ5YldtMW1FSDhMX0VjWkZjNVVPN1ZsMGdieUlCSlB2cnFhUS1TVHR2SzRHamZROFZLQmhZSVkwSUxBTjJMakVYNS1xXzJMaVZwYU9hZ0NOX0NwQWllbTZ6aXhoRUk2SHhody1GLThuMF9acGtsTFVENXZmWFZhQlhMNnowVjkxYmhEUUVCV1Q1OHE3OVJLQUc5SUE?oc=5",
+      "published_at": "2026-10-01T22:29:00+00:00",
+      "description": "Shipping Slows After Iran Says it Has Again Shut the Strait of Hormuz \u00a0\u00a0 energynow.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.9,
+        "confidence": 0.82,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "Iran says it has again shut the Strait of Hormuz, and shipping has slowed. This indicates elevated disruption risk for a major crude-transit route, which could support oil prices, although the headline does not confirm the duration or full operational scope of the closure.",
+        "why_xom": "Higher crude prices and tighter global oil supply could benefit Exxon Mobil's upstream earnings, though any prolonged shipping disruption could also raise logistics and market-volatility risks."
+      },
+      "analyzed_at": "2026-10-02T17:05:30.888978+00:00"
+    },
+    {
+      "id": "a10b62fb0eca0105c375f24b",
+      "title": "Iran tanker loadings plunge to zero for first time in war as US blockade strangles Kharg Island exports - TradeWinds News",
+      "source": "TradeWinds News",
+      "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxPSUE0T2hudGlRMlZpMGNyNENKTGRMMHVZTWxTOVNmb2NjdTVhSThYTU01eDg1eExOM3ZPelVBWGhCMUJ0ZVBUUzBzeTRsay05VmJaal8xdUNvX0hEaFBaYzMwbzQ4VHBPV01HRzJ4ckRZczlMV2ktTnRWVVJVM2FkYWF5RVhsLV85VUczS1RHMkg4dldxRWJYUjhYcnpOTHF4MTQyMzRKc184bVpCRVk2NWZQUUQ3VTduZ2hEQnVZWGZKWG1CbjZyWFZ0TWhHRXFCMHI5akJOeVd4cy0wNE1sOWlfUUhaZ3o2MXc?oc=5",
+      "published_at": "2026-10-02T07:30:00+00:00",
+      "description": "Iran tanker loadings plunge to zero for first time in war as US blockade strangles Kharg Island exports \u00a0\u00a0 TradeWinds News",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.88,
+        "confidence": 0.8,
+        "category": "supply",
+        "supply_impact": "tighter",
+        "summary": "TradeWinds reports that Iranian tanker loadings from Kharg Island fell to zero, indicating a potentially material interruption to Iranian crude exports during the war. The headline provides no quantified duration or broader market response.",
+        "why_xom": "A sustained reduction in Iranian exports could tighten global crude supply and support realized prices for Exxon Mobil's upstream production. War-related shipping and operational risks could partly offset benefits, particularly for downstream operations."
+      },
+      "analyzed_at": "2026-10-02T09:08:33.035517+00:00"
+    },
+    {
+      "id": "f3d3ff3b3daaf6e85057ac4e",
+      "title": "Oil Tanker Traffic Through Hormuz at Near Standstill as Attacks Strain Iran Truce - energynow.com",
+      "source": "energynow.com",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPSUpxaG5ETU12d1BLVHVRRWp0dUczREEzR2JpU01zS1ItdTNpQjJtRDNvYUg0aDhvVk80dF9rMXlyVVlRcEZOZEJhWlhhZEdqZ2czTVhHYjl1RVYyZmZYcEpMLXhwMFp4b1FUd05SeG5TeUFyQ2h4Ny1vby1nVDFIMGJkRjNSZmt3X1lGOHlYU1ZqUlMwcHFwdlltUVRCX1BPMGVVRUJhYTF5cnBUVUJrODNn?oc=5",
+      "published_at": "2026-10-01T22:45:01+00:00",
+      "description": "Oil Tanker Traffic Through Hormuz at Near Standstill as Attacks Strain Iran Truce \u00a0\u00a0 energynow.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.9,
+        "confidence": 0.78,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "The headline reports that oil tanker traffic through the Strait of Hormuz is near a standstill amid attacks and a strained truce. If accurate, reduced passage could disrupt a major crude-export route and support oil prices.",
+        "why_xom": "Higher crude prices can support Exxon Mobil\u2019s upstream earnings, though disruption could also create regional operational and logistics risks. The report provides no confirmed duration, shipment volume, or direct XOM impact."
+      },
+      "analyzed_at": "2026-10-02T17:06:07.066933+00:00"
+    },
+    {
+      "id": "6571c9c58f21a46bd0c77c17",
+      "title": "Iran tanker loadings plunge to zero for first time in war as US blockade strangles Kharg Island exports - TradeWinds News",
+      "source": "TradeWinds News",
+      "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxPSUE0T2hudGlRMlZpMGNyNENKTGRMMHVZTWxTOVNmb2NjdTVhSThYTU01eDg1eExOM3ZPelVBWGhCMUJ0ZVBUUzBzeTRsay05VmJaal8xdUNvX0hEaFBaYzMwbzQ4VHBPV01HRzJ4ckRZczlMV2ktTnRWVVJVM2FkYWF5RVhsLV85VUczS1RHMkg4dldxRWJYUjhYcnpOTHF4MTQyMzRKc184bVpCRVk2NWZQUUQ3VTduZ2hEQnVZWGZKWG1CbjZyWFZ0TWhHRXFCMHI5akJOeVd4cy0wNE1sOWlfUUhaZ3o2MXc?oc=5",
+      "published_at": "2026-10-02T07:29:17+00:00",
+      "description": "Iran tanker loadings plunge to zero for first time in war as US blockade strangles Kharg Island exports \u00a0\u00a0 TradeWinds News",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.86,
+        "confidence": 0.8,
+        "category": "supply",
+        "supply_impact": "tighter",
+        "summary": "TradeWinds reports that Iranian tanker loadings from Kharg Island fell to zero for the first time during the war, citing a US blockade. If accurate, this indicates a potentially significant interruption to Iranian crude exports and tighter global supply.",
+        "why_xom": "Reduced Iranian crude availability could support oil prices, benefiting Exxon Mobil's upstream realized prices and cash flows. The effect on XOM is indirect and depends on the duration and scale of the disruption."
+      },
+      "analyzed_at": "2026-10-02T07:33:32.824579+00:00"
+    },
+    {
+      "id": "b124ecb94f64113c09df8414",
+      "title": "Attacks Cut Saudi Oil Output and East-West Pipeline Flow, State News Agency Says - energynow.com",
+      "source": "energynow.com",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPZVc4TmVyYlFMNUNfM0FiaXgyREtWcUtCQnNmWlVYMEJUYWZoVXBGMVMxS2lkZmNnN2d3NUp4VW9HUlZTTmlKUmpacFZmNzE3YmFqV21aeEtPQVVocTMxZGtQdnlJOEowZjdKQVFlTHdxckJHM3FZenRUTXN0Q0p0ZG1fR2N2eTAtN0pWTk0zbnhCeHAzZjhVWGQxd0hUWDBwaTlWaVQxRVlSRm9jY0RV?oc=5",
+      "published_at": "2026-10-01T23:00:07+00:00",
+      "description": "Attacks Cut Saudi Oil Output and East-West Pipeline Flow, State News Agency Says \u00a0\u00a0 energynow.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.85,
+        "confidence": 0.8,
+        "category": "supply",
+        "supply_impact": "tighter",
+        "summary": "A reported attack has cut Saudi oil output and reduced flow through the East-West Pipeline, indicating a potentially material crude supply disruption.",
+        "why_xom": "Higher crude prices could benefit Exxon Mobil's upstream earnings, though effects may be partly offset if regional disruption affects refining, logistics, or broader operations."
+      },
+      "analyzed_at": "2026-10-02T17:07:07.715290+00:00"
+    },
+    {
+      "id": "d01e95a4b353008b3fb46189",
+      "title": "Oil Tanker Traffic Through Hormuz at Near Standstill as Attacks Strain Iran Truce - EnergyNow.com",
+      "source": "EnergyNow.com",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPSUpxaG5ETU12d1BLVHVRRWp0dUczREEzR2JpU01zS1ItdTNpQjJtRDNvYUg0aDhvVk80dF9rMXlyVVlRcEZOZEJhWlhhZEdqZ2czTVhHYjl1RVYyZmZYcEpMLXhwMFp4b1FUd05SeG5TeUFyQ2h4Ny1vby1nVDFIMGJkRjNSZmt3X1lGOHlYU1ZqUlMwcHFwdlltUVRCX1BPMGVVRUJhYTF5cnBUVUJrODNn?oc=5",
+      "published_at": "2026-10-01T22:45:01+00:00",
+      "description": "Oil Tanker Traffic Through Hormuz at Near Standstill as Attacks Strain Iran Truce \u00a0\u00a0 EnergyNow.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.9,
+        "confidence": 0.75,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "The headline reports oil tanker traffic through the Strait of Hormuz is near a standstill amid attacks and a strained Iran truce. If accurate, this implies a major disruption risk to seaborne crude flows and could support higher oil prices.",
+        "why_xom": "Higher crude prices and heightened geopolitical supply risk could support Exxon Mobil's upstream earnings, although the disruption could also increase shipping, feedstock, and operational risks.{"
+      },
+      "analyzed_at": "2026-10-02T15:19:47.190833+00:00"
+    },
+    {
+      "id": "3a76d19c315d3c225d2b4a2b",
+      "title": "One Indian killed, six injured as Iranian missiles hit UAE tankers in Strait of Hormuz - DD News",
+      "source": "DD News",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQQkUtRVBQMWZyZl9jQWZ4anNDUUpjbmU5MW83UzktUExQZXJLYkc1b2NyX3VaM3piUjZQSERFQVdXOW5icE9yNm1GUzFTVkxlbkRFdmhLU19VcGhrWXVJWFQzekhBRzBWREs5WWFEeWg1TDJZSlpFZEd6QWtZVld4bUhDNm51NWl1bE1iNjVMXzVyS0gtZ1JWVzRiMTFyTEFOcGxibzFHQ253QjdXMHVtNw?oc=5",
+      "published_at": "2026-10-02T08:10:50+00:00",
+      "description": "One Indian killed, six injured as Iranian missiles hit UAE tankers in Strait of Hormuz \u00a0\u00a0 DD News",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.78,
+        "confidence": 0.86,
+        "category": "hormuz",
+        "supply_impact": "uncertain",
+        "summary": "The reported Iranian missile strike on UAE tankers in the Strait of Hormuz, causing fatalities and injuries, raises immediate risks to tanker traffic, insurance costs, and potential crude-flow disruption. The supplied report does not confirm a closure or actual supply outage.",
+        "why_xom": "Higher geopolitical and Hormuz disruption risk can support crude prices, which is generally favorable for Exxon Mobil's upstream earnings. The benefit is uncertain because no confirmed supply interruption is reported and prolonged disruption could also raise operating and shipping risks."
+      },
+      "analyzed_at": "2026-10-02T17:12:42.643764+00:00"
+    },
+    {
+      "id": "e9b95f19d826bd8e9f0c8909",
+      "title": "Iran tanker loadings plunge to zero for first time in war as US blockade strangles Kharg Island exports - tradewindsnews.com",
+      "source": "tradewindsnews.com",
+      "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxPSUE0T2hudGlRMlZpMGNyNENKTGRMMHVZTWxTOVNmb2NjdTVhSThYTU01eDg1eExOM3ZPelVBWGhCMUJ0ZVBUUzBzeTRsay05VmJaal8xdUNvX0hEaFBaYzMwbzQ4VHBPV01HRzJ4ckRZczlMV2ktTnRWVVJVM2FkYWF5RVhsLV85VUczS1RHMkg4dldxRWJYUjhYcnpOTHF4MTQyMzRKc184bVpCRVk2NWZQUUQ3VTduZ2hEQnVZWGZKWG1CbjZyWFZ0TWhHRXFCMHI5akJOeVd4cy0wNE1sOWlfUUhaZ3o2MXc?oc=5",
+      "published_at": "2026-10-02T07:31:07+00:00",
+      "description": "Iran tanker loadings plunge to zero for first time in war as US blockade strangles Kharg Island exports \u00a0\u00a0 tradewindsnews.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.86,
+        "confidence": 0.78,
+        "category": "sanctions",
+        "supply_impact": "tighter",
+        "summary": "The headline reports that Iranian tanker loadings from Kharg Island fell to zero, attributing the disruption to a U.S. blockade. If accurate, the loss of Iranian exports would tighten seaborne crude supply and support oil prices.",
+        "why_xom": "Higher crude prices could benefit Exxon Mobil's upstream production and earnings, although effects on its refining and downstream businesses may be mixed."
+      },
+      "analyzed_at": "2026-10-02T15:30:21.570806+00:00"
+    },
+    {
+      "id": "77a3a270de51268bb543b2cb",
+      "title": "Three Oil Tankers Attacked in Strait of Hormuz; U.S. Rushes Third Carrier Strike Group to Middle East - finance.biggo.com",
+      "source": "finance.biggo.com",
+      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBDTTBYVmdGZ0xMWmduY2ozaURqc3E2cHFHVlktdl9QSllqZWVjQ2J2UVlDWjRMcVlzM1pHbGI5Q294cUV5eURuTlZxWEhHRWVVbFZBaTV0dkNjNTVYaWh4bEFkMkh1VWd0ZFVneVJhemNfM29OekE?oc=5",
+      "published_at": "2026-10-02T00:05:00+00:00",
+      "description": "Three Oil Tankers Attacked in Strait of Hormuz; U.S. Rushes Third Carrier Strike Group to Middle East \u00a0\u00a0 finance.biggo.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.88,
+        "confidence": 0.76,
+        "category": "hormuz",
+        "supply_impact": "uncertain",
+        "summary": "The headline reports attacks on three oil tankers in the Strait of Hormuz and a U.S. military buildup in the Middle East. This raises the risk of shipping disruption and an oil-risk premium, but the supplied text does not confirm a closure, cargo outage, or lasting reduction in exports.",
+        "why_xom": "Higher crude prices could support Exxon Mobil's upstream earnings and cash flow. However, the headline also signals elevated geopolitical and shipping risk, so the effect on XOM is not risk-free."
+      },
+      "analyzed_at": "2026-10-02T00:36:33.562068+00:00"
+    },
+    {
+      "id": "decb37cb080a18d400fc4663",
+      "title": "Hormuz at Near Standstill as Iran Warns Ships to Keep to its Waters - EnergyNow.com",
+      "source": "EnergyNow.com",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxObWh0LVlzOWU4Z3k5eFc5VVg1MldvSTB5TnpoQjBGNXVySjVOLXE4Zk9ETmFwZVByZ3Y4NUJEREE3c2RYeHVKSS1TWkZqeG9VYWZUXzZuV2JZLWJzYVhYUTRLVTkxU1YyRVhkcTRhQXROTUF4RGwzaXY0TWJxekJ2OWxnNUprbF9IVHgtM3Rzd0F2ekg2VzAtSFBUUmxhWEk5TURYeA?oc=5",
+      "published_at": "2026-10-01T22:51:05+00:00",
+      "description": "Hormuz at Near Standstill as Iran Warns Ships to Keep to its Waters \u00a0\u00a0 EnergyNow.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.85,
+        "confidence": 0.78,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "The headline reports the Strait of Hormuz is near a standstill after Iran warned ships to remain in its waters. If operationally accurate, this could disrupt crude and energy-product flows through a major chokepoint, supporting higher oil prices.",
+        "why_xom": "Higher crude prices can support Exxon Mobil\u2019s upstream earnings and cash flow, although shipping disruption could also create logistics and downstream risks."
+      },
+      "analyzed_at": "2026-10-02T06:51:01.646594+00:00"
+    }
+  ]
+}

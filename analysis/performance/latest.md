@@ -1,49 +1,50 @@
 # StockTracker Performance — Latest
 
-Review date: **2026-10-01**
-Generated: 2026-10-02T00:47:56.346531+00:00
+Review date: **2026-10-02**
+Generated: 2026-10-02T20:05:03.632260+00:00
 
 ## Paper-trading results
 
-- Decisions: **2935**
-- Orders: **2** (buys 1 / sells 1)
+- Decisions: **648**
+- Orders: **1** (buys 0 / sells 1)
 - Completed paper trades: **1**
-- Realized paper P/L: **$+0.91**
+- Realized paper P/L: **$+117.47**
 - Win/loss: **1/0**
 - Win rate: **100.0%**
 
 ## Review
 
-Supporting-log integrity passed across all 3,362 published rows, but model-performance evidence is limited: only 2 accepted paper orders, 2 fills, and 1 realized close occurred. No threshold, confirmation, risk-cap, or exit-rule changes are justified. Keep the system PAPER ONLY and prioritize SHADOW attribution and missing-pipeline instrumentation.
+The paper system was operational but the evidence window was short and sparse for causal review. Across 648 decisions, 647 were HOLD and one TSLA SELL produced one accepted order, one fill, and $117.47 realized paper profit. This single realization is not sufficient for calibration. No threshold, confirmation, portfolio-cap, loss-control, or execution-policy changes are supported. Recommended work is limited to SHADOW instrumentation and evidence-pipeline repairs while preserving paper=True, all portfolio/risk caps, and the read-only dashboard.
 
 Data quality: **LIMITED**
 
 ### Supporting evidence
 
 - Published files: **20**
-- Published rows analyzed: **3362**
+- Published rows analyzed: **719**
 - Integrity status: **PASS**
 - Integrity issues: **none**
 
 ### Findings
-- Observed: integrity analysis covered all 3,362 published rows across 15 analyzed tables and reported no duplicate decision IDs, orphan attempts, accepted attempts lacking order IDs, duplicate fill order IDs, unresolved ZPTA returns, or database errors.
-- Observed: four tables were empty: financial_leverage_shadow, financial_leverage_signals, financial_leverage_outcomes, and zpta_shadow_trades. Therefore there is no XLF/FAS/FAZ signal or forward-outcome evidence and no ZPTA shadow-trade P/L evidence.
-- Observed: 2,935 decisions produced 3 BUY, 1 SELL, and 2,931 HOLD actions. The funnel recorded 13 raw threshold crossings, while its side counts total 14 events (11 BUY and 3 SELL); this likely reflects one non-crossing funnel event, but the supplied aggregates do not identify it.
-- Observed: funnel dispositions were 2 submitted, 10 awaiting confirmation, and 2 rejected by MAX_OPEN_POSITIONS. Order-attempt logs show 2 accepted submissions and 2 blocks before submission, with no submit failures. These gate counts agree with supporting-log analysis.
-- Observed: accepted-order activity was balanced at one paper buy and one paper sell. The AAPL buy requested $2,500; the AMZN sell shows $2,500.85 notional. Both accepted orders filled. Only the AMZN close generated realized P/L: +$0.91. This single realization is insufficient for performance or threshold calibration.
-- Observed: the dashboard's $10,006.84 exposure is a mark-to-market snapshot across four open positions, not requested order notional. It is $6.84 above the configured $10,000 cap, plausibly due to price movement; the evidence does not establish that a new order breached the pre-trade cap. The four-position cap did block two later attempts.
-- Observed: symbol threshold behavior differed. XOM had the highest average score (54.683), maximum 79.632, and average geo adjustment 2.932 but no final BUY/SELL action. TSLA reached 78.849 without a final action. AAPL, AMZN, and NVDA generated BUY actions; AMZN generated the only SELL. Confirmation and position gates prevent interpreting score maxima as orders.
-- Observed: VIX adjustments were negligible on average by symbol, approximately -0.005 to +0.011. VIX was 16.38 at the dashboard snapshot. No evidence supports changing VIX sensitivity.
-- Observed: geo context materially affected XOM and, to a lesser degree, GLD. The geo feed had 239 active events, no logged errors, 43 warnings, and conflicting bullish and bearish oil headlines. No component-level forward outcomes isolate geo contribution, so its causal value is unknown.
-- Observed: premarket produced five BULLISH snapshots, with SPY +0.328% and QQQ +0.573% gaps, but XLF/FAS/FAZ gaps were null. The end-of-day dashboard showed premarket adjustment 0.0, consistent with the configured 60-minute active window, but no tagged forward outcomes establish whether the early bias helped.
-- Observed: social sentiment was explicitly unavailable. It must not be treated as a model input for this review.
-- Observed: market-regime SHADOW recorded 66 of 66 snapshots as RISK_ON and all 11 mapped decisions as ALLOW_EQUITY. This confirms operation in one regime only, not effectiveness across regimes or of a regime gate.
-- Observed: ZPTA remained SHADOW-only, used delayed Yahoo data, and its asset preflight was active but non-tradable. It generated 300 predictions and 272 resolved predictions but zero shadow trades. Each model at a given horizon has identical sample count and average return, suggesting shared underlying forward-return labels rather than model-trigger-specific trade outcomes; this is a hypothesis requiring instrumentation review.
-- Observed: ZPTA continuation/pullback/reclaim accuracy was 29.17%-35% with negative average forward returns, while exhaustion accuracy was 60%-70.83% under the same negative returns. These samples exceed 12 per reported model/horizon, but one day, shared observations, no shadow trades, and unclear trigger conditioning make threshold calibration unsafe.
+- Observed: Supporting-log integrity reports PASS, no database error, and analysis of all 719 published tabular rows. It found zero duplicate decision IDs, orphan attempts, accepted attempts lacking order IDs, duplicate fill order IDs, or resolved ZPTA predictions lacking returns. The only order-gate count was ORDER_ACCEPTED=1.
+- Observed integrity limitation: published_file_count is 20, but the supplied files array enumerates 19 paths. The 719-row total is internally reproducible across the 15 tabular files, but file-manifest coverage cannot be considered fully self-consistent without explaining the missing twentieth entry.
+- Observed: Six tables are empty: regime_decision_shadow, financial_leverage_shadow, financial_leverage_signals, financial_leverage_outcomes, premarket_intelligence, and zpta_shadow_trades. Thus there is no regime-to-decision counterfactual evidence, no XLF/FAS/FAZ signal or forward-outcome evidence, no premarket gap/bias evidence, and no ZPTA shadow-trade P/L evidence.
+- Observed: Decision balance was 647 HOLD, zero BUY, and one SELL. Every symbol had 72 evaluations. Maximum scores remained below the 70 buy threshold: TSLA 69.162, XOM 68.573, AMZN 67.981, and all others lower. This same-day window therefore supplies no buy-side accepted-order evidence and only one sell-side event.
+- Observed: The TSLA lifecycle contains one SELL decision, one accepted attempt, one submitted order, one fill, and one realized row. Realized paper P/L was +$117.47. The 100% win rate is based on one realization and must not be generalized. Separately, the dashboard snapshot showed three open positions, $7,571.06 exposure, and approximately $71.09 unrealized profit; these snapshot values are not realized results or new orders.
+- Observed instrumentation ambiguity: the decision funnel reports one SELL submitted and accepted but raw_threshold_crossings=0. The evidence does not identify whether the SELL came from score confirmation, stop loss, take profit, trailing stop, or another position-exit rule.
+- Observed notional distinction: the recorded TSLA sell order notional was $2,591.61, above max_trade_dollars=$2,500. This may simply be a full-position exit for which the entry-size cap is not applicable; the logs do not expose requested notional, cap applicability, accepted quantity/notional, and filled notional separately enough to verify that interpretation.
+- Observed per-symbol context: XOM had the highest average score, 57.124, with average technical score 51.639 and average geo adjustment 5.362. GLD's average geo adjustment was 1.341; other symbols had zero. XOM's geo component was therefore material relative to its final score, but no same-day counterfactual outcome evidence establishes that it improved decisions.
+- Observed geo-feed issue: the feed was healthy at generation time with no tail errors, but 30 warnings were present. Several top events are duplicate or near-duplicate versions of the same Iranian tanker-loading headline. With 303 active events and a +5.36 adjustment, duplicate concentration could amplify context; this is a hypothesis, not a demonstrated scoring error.
+- Observed: VIX was approximately 15.42 and the regime shadow labeled all 15 snapshots RISK_ON with score 85. VIX adjustments in symbol averages were very small, roughly +0.022 to +0.087 except GLD at -0.030. Since only one regime state occurred and regime_decision_shadow is empty, no VIX or regime calibration is supported.
+- Observed: Premarket was enabled but produced zero rows and all displayed premarket adjustments were 0.0. The evidence begins late in the session, so it cannot distinguish a scheduling failure from a process that was not running during the premarket window. Social sentiment is unavailable because premarket_social_source is explicitly UNAVAILABLE.
+- Observed: Financial-leverage shadow was enabled, but the dashboard reported FINANCIAL_SNAPSHOT_UNAVAILABLE and all XLF/FAS/FAZ snapshot, signal, and outcome tables were empty. No leveraged-financial threshold or selection change is supportable.
+- Observed: ZPTA produced 3 observations, 48 predictions, and 24 resolved prediction rows, but each model/horizon summary has only 1-3 samples and there were zero shadow trades. Every model is below the minimum calibration target of 12 samples, so entry score 68 and other ZPTA thresholds should remain unchanged.
+- Hypothesis: Zero ZPTA trades despite 48 predictions could reflect valid entry gating rather than a defect. Gate-level records are absent, so causal attribution is not possible.
+- Conclusion: The evidence supports instrumentation repairs, not model tuning. In particular, buy/sell thresholds, confirmations, VIX/geo weights, ZPTA entry score, stops, profit targets, and exposure limits should not be changed from this sample.
 
 ### Per-symbol paper P/L
 
-- AMZN: 1 completed, $+0.91
+- TSLA: 1 completed, $+117.47
 
 ### Current proposal count
 

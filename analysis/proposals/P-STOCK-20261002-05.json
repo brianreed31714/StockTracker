@@ -1,0 +1,25 @@
+{
+  "title": "Log exit trigger and notional lifecycle fields",
+  "change_type": "CODE",
+  "target": "Decision funnel, order attempts, orders, and fills",
+  "current": "One TSLA SELL was accepted and filled, but raw_threshold_crossings=0 and the trigger class is absent. The order shows $2,591.61 sell notional without separate requested, accepted, and filled notionals or an explicit statement that the $2,500 cap is entry-only.",
+  "proposed": "Attach a shared lifecycle ID and log trigger_class (score confirmation, stop, take profit, trailing stop, manual/system liquidation, or other), position quantity before exit, requested quantity/notional, cap type and applicability, accepted quantity/notional, filled quantity/notional, fill price, and realized-P/L linkage. Add consistency checks without changing exit behavior or any cap.",
+  "evidence": [
+    "decision_funnel: SELL=1, ORDER_ACCEPTED=1, ORDER_SUBMITTED=1",
+    "raw_threshold_crossings=0",
+    "orders: TSLA sell_notional=$2,591.61",
+    "max_trade_dollars=$2,500",
+    "One attempt, one accepted order, one fill, and one realized row exist"
+  ],
+  "risk": "Schema changes require coordinated updates across log writers and readers; fields should initially be additive and nullable.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261002-05",
+  "status": "PENDING",
+  "review_date": "2026-10-02",
+  "created_at": "2026-10-02T13:05:59",
+  "updated_at": "2026-10-02T13:05:59",
+  "implementation": {},
+  "deployment": {}
+}

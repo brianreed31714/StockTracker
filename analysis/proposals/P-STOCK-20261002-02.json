@@ -1,0 +1,24 @@
+{
+  "title": "Restore regime-to-decision shadow records",
+  "change_type": "CODE",
+  "target": "regime_decision_shadow emitter",
+  "current": "There are 15 market_regime_shadow snapshots and 648 decisions, but regime_decision_shadow has zero rows.",
+  "proposed": "For every published decision, write a non-executing shadow record containing decision_event_id, symbol, timestamp, nearest regime snapshot ID/age, regime state/score, actual action, counterfactual regime-aware action, and explicit unavailable/stale reason. Do not let the counterfactual alter paper orders until multi-state forward-outcome evidence is accumulated.",
+  "evidence": [
+    "market_regime_shadow rows=15, all RISK_ON",
+    "decisions rows=648",
+    "regime_decision_shadow rows=0",
+    "No regime-conditioned symbol or action evidence exists"
+  ],
+  "risk": "Timestamp joins could be misleading if stale snapshots are silently attached; require snapshot age and an explicit staleness status.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261002-02",
+  "status": "PENDING",
+  "review_date": "2026-10-02",
+  "created_at": "2026-10-02T13:05:59",
+  "updated_at": "2026-10-02T13:05:59",
+  "implementation": {},
+  "deployment": {}
+}

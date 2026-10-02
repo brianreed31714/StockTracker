@@ -1,0 +1,2 @@
+confirmation_count,confirmation_required,decision_reason,event_id,final_disposition,gate_reason,market_open,model_decision,open_position_count,position_state,projected_exposure,raw_threshold_cross,score,side,symbol,threshold,ts
+0,2,take profit 4.70%,9d410590-ce2c-4ffa-8dbe-9ab149967358,ORDER_SUBMITTED,ORDER_ACCEPTED,1,SELL,4,HAS_POSITION,7574.010617,0,54.30783657970621,SELL,TSLA,30.0,2026-10-02T18:48:56.752181+00:00

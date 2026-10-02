@@ -1,0 +1,24 @@
+{
+  "title": "Add manifest file-count self-consistency validation",
+  "change_type": "CODE",
+  "target": "Evidence publisher and integrity_analysis.json",
+  "current": "The manifest reports 20 published files while the supplied files array contains 19 entries; integrity status remains PASS with no issue recorded.",
+  "proposed": "At publication, compare published_file_count with the number of manifest file entries, require every entry to have path/bytes/SHA-256 metadata, and emit a named integrity issue on mismatch. Keep row-coverage checks separate so the valid 719-row analysis remains visible.",
+  "evidence": [
+    "published_file_count=20",
+    "The supplied files array enumerates 19 paths",
+    "all_published_rows_analyzed=719 and table_count=15",
+    "supporting_log_analysis.status=PASS with issues=[]"
+  ],
+  "risk": "Low operational risk; a stricter check may mark otherwise usable evidence bundles LIMITED until the metadata discrepancy is corrected.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261002-01",
+  "status": "PENDING",
+  "review_date": "2026-10-02",
+  "created_at": "2026-10-02T13:05:59",
+  "updated_at": "2026-10-02T13:05:59",
+  "implementation": {},
+  "deployment": {}
+}

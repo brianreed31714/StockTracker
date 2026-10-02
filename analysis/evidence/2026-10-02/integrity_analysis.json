@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "issues": [],
+  "all_published_rows_analyzed": 719,
+  "table_count": 15,
+  "duplicate_decision_event_ids": 0,
+  "orphan_order_attempts": 0,
+  "accepted_attempts_without_order_id": 0,
+  "duplicate_fill_order_ids": 0,
+  "resolved_zpta_predictions_without_return": 0,
+  "order_gate_counts": {
+    "ORDER_ACCEPTED": 1
+  },
+  "zpta_exit_reason_counts": {},
+  "database_error": null,
+  "empty_tables": [
+    "regime_decision_shadow",
+    "financial_leverage_shadow",
+    "financial_leverage_signals",
+    "financial_leverage_outcomes",
+    "premarket_intelligence",
+    "zpta_shadow_trades"
+  ]
+}
