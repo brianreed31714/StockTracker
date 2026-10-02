@@ -96,6 +96,9 @@ PROTECTED_CAPABILITIES = {
             "CREATE TABLE IF NOT EXISTS financial_leverage_shadow",
             "PREMARKET_ENABLED",
             "CREATE TABLE IF NOT EXISTS premarket_intelligence",
+            "POST_CLOSE_REVIEW_ENABLED",
+            "def maybe_run_post_close_review",
+            "GetCalendarRequest",
             "MARKET CLOSED — idle",
         ),
         "forbidden": (
