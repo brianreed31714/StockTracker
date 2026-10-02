@@ -18,7 +18,7 @@ This is experimental software, not a validated profitable strategy.
 """
 from __future__ import annotations
 
-import csv, json, logging, math, os, sqlite3, time, uuid
+import csv, json, logging, math, os, sqlite3, subprocess, time, uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -35,7 +35,7 @@ from alpaca.data.timeframe import TimeFrame
 from alpaca.data.enums import DataFeed
 from alpaca.trading.client import TradingClient
 from alpaca.trading.enums import OrderSide, TimeInForce
-from alpaca.trading.requests import MarketOrderRequest, GetOrdersRequest
+from alpaca.trading.requests import MarketOrderRequest, GetOrdersRequest, GetCalendarRequest
 
 BASE_DIR = Path(__file__).resolve().parent
 CONFIG_FILE = BASE_DIR / ".env.config"
@@ -134,6 +134,11 @@ PUSHOVER_STOCK_EOD_HOUR = int(os.getenv("PUSHOVER_STOCK_EOD_HOUR", "16"))
 PUSHOVER_STOCK_EOD_MINUTE = int(os.getenv("PUSHOVER_STOCK_EOD_MINUTE", "10"))
 STOCK_EOD_STATE_PATH = project_path("STOCK_EOD_STATE_PATH", "stock_eod_report_state.json")
 PREMARKET_STATE_PATH = project_path("PREMARKET_STATE_PATH", "premarket_state.json")
+POST_CLOSE_REVIEW_ENABLED = str(os.getenv("POST_CLOSE_REVIEW_ENABLED", "1")).strip().lower() in {"1","true","yes","y","on"}
+POST_CLOSE_REVIEW_DELAY_MINUTES = int(os.getenv("POST_CLOSE_REVIEW_DELAY_MINUTES", "5"))
+POST_CLOSE_REVIEW_RUNNER = project_path("POST_CLOSE_REVIEW_RUNNER", "run_daily_model_review.bat")
+POST_CLOSE_REVIEW_TIMEOUT_SECONDS = int(os.getenv("POST_CLOSE_REVIEW_TIMEOUT_SECONDS", "1800"))
+POST_CLOSE_REVIEW_STATE_PATH = project_path("POST_CLOSE_REVIEW_STATE_PATH", "post_close_review_state.json")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
 log = logging.getLogger("momentum_trader")
@@ -1197,6 +1202,92 @@ def next_premarket_due(clock):
     return min(candidates)
 
 
+
+def load_post_close_review_state():
+    if not POST_CLOSE_REVIEW_STATE_PATH.exists():
+        return {}
+    try:
+        state = json.loads(POST_CLOSE_REVIEW_STATE_PATH.read_text(encoding="utf-8"))
+        return state if isinstance(state, dict) else {}
+    except Exception:
+        return {}
+
+
+def market_session_close_utc(session_date):
+    """Return Alpaca's actual close for a trading session, including early closes."""
+    try:
+        sessions = trading.get_calendar(
+            filters=GetCalendarRequest(start=session_date, end=session_date)
+        )
+        if not sessions:
+            return None
+        close_at = sessions[0].close
+        if isinstance(close_at, datetime):
+            close_dt = close_at
+        else:
+            close_dt = datetime.combine(session_date, close_at)
+        if close_dt.tzinfo is None:
+            close_dt = close_dt.replace(tzinfo=MARKET_TZ)
+        return close_dt.astimezone(timezone.utc)
+    except Exception:
+        log.exception("Could not resolve Alpaca session close for %s", session_date)
+        return None
+
+
+def post_close_review_due_target(now_et):
+    if not POST_CLOSE_REVIEW_ENABLED:
+        return None
+    review_date = now_et.date().isoformat()
+    state = load_post_close_review_state()
+    if state.get("review_date") == review_date and state.get("status") in {"RUNNING", "COMPLETED"}:
+        return None
+    close_utc = market_session_close_utc(now_et.date())
+    if close_utc is None:
+        return None
+    return (close_utc + timedelta(minutes=POST_CLOSE_REVIEW_DELAY_MINUTES)).astimezone(MARKET_TZ)
+
+
+def maybe_run_post_close_review(now_et):
+    """Publish sanitized evidence and run the full daily review once per session."""
+    review_date = now_et.date().isoformat()
+    target = post_close_review_due_target(now_et)
+    if target is None or now_et < target:
+        return True
+    if not POST_CLOSE_REVIEW_RUNNER.exists():
+        log.error("Post-close review runner missing: %s", POST_CLOSE_REVIEW_RUNNER)
+        send_pushover("StockTracker Review FAILED", f"{review_date}: review runner missing")
+        return False
+
+    try:
+        # Reconcile broker fills immediately before evidence is snapshotted.
+        sync_fills()
+        if os.name == "nt":
+            cmd = ["cmd.exe", "/d", "/c", str(POST_CLOSE_REVIEW_RUNNER), review_date]
+        else:
+            cmd = [str(POST_CLOSE_REVIEW_RUNNER), review_date]
+        log.info("POST-CLOSE REVIEW | starting %s at actual close + %dm",
+                 review_date, POST_CLOSE_REVIEW_DELAY_MINUTES)
+        completed = subprocess.run(
+            cmd,
+            cwd=BASE_DIR,
+            text=True,
+            capture_output=True,
+            timeout=POST_CLOSE_REVIEW_TIMEOUT_SECONDS,
+            check=False,
+        )
+        output = "\n".join(x for x in (completed.stdout, completed.stderr) if x).strip()
+        if output:
+            log.info("POST-CLOSE REVIEW OUTPUT | %s", output[-4000:])
+        if completed.returncode != 0:
+            raise RuntimeError(f"review runner exited {completed.returncode}")
+        log.info("POST-CLOSE REVIEW | complete for %s", review_date)
+        return True
+    except Exception as exc:
+        log.exception("POST-CLOSE REVIEW failed for %s", review_date)
+        send_pushover("StockTracker Review FAILED", f"{review_date}: {exc}")
+        return False
+
+
 def eod_due_target(now_et):
     if now_et.weekday() >= 5:
         return None
@@ -1637,6 +1728,9 @@ def main():
              ",".join(str(x) for x in PREMARKET_REFRESH_OFFSETS),
              PREMARKET_SOCIAL_SOURCE)
     log.info("Stock EOD Pushover: %s @ %02d:%02d ET", "ENABLED" if (PUSHOVER_STOCK_EOD_ENABLED and PUSHOVER_STOCK_EOD_TOKEN and PUSHOVER_STOCK_EOD_USER_KEY) else "NOT CONFIGURED", PUSHOVER_STOCK_EOD_HOUR, PUSHOVER_STOCK_EOD_MINUTE)
+    log.info("Post-close evidence + AI review: %s | Alpaca actual close + %dm",
+             "ENABLED" if POST_CLOSE_REVIEW_ENABLED else "DISABLED",
+             POST_CLOSE_REVIEW_DELAY_MINUTES)
     log.info("Limits: $%.0f/trade | $%.0f exposure | %d positions | %d trades/day | $%.0f daily loss",MAX_TRADE_DOLLARS,MAX_TOTAL_EXPOSURE,MAX_OPEN_POSITIONS,MAX_TRADES_PER_DAY,MAX_DAILY_REALIZED_LOSS)
 
     while True:
@@ -1661,8 +1755,18 @@ def main():
                 time.sleep(max(1,CHECK_INTERVAL_SECONDS-(time.monotonic()-started)))
                 continue
 
-            # Market closed: never request the full one-minute snapshot universe.
+            # Market closed: publish/review at Alpaca's actual close + delay. This
+            # is calendar-aware, so half days automatically run after the early close.
             now_et = market_now()
+            review_target = post_close_review_due_target(now_et)
+            if review_target is not None:
+                if review_target > now_et:
+                    sleep_until(review_target.astimezone(timezone.utc), "MARKET CLOSED — waiting for post-close review")
+                    continue
+                if not maybe_run_post_close_review(now_et):
+                    sleep_until(utc_now() + timedelta(minutes=5), "POST-CLOSE REVIEW — retry")
+                    continue
+
             eod_target = eod_due_target(now_et)
             if eod_target is not None:
                 if eod_target <= now_et:
