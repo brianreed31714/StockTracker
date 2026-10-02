@@ -1,0 +1,23 @@
+{
+  "title": "Continue regime evidence collection without activating a regime gate",
+  "change_type": "RESEARCH",
+  "target": "market-regime SHADOW evaluation",
+  "current": "All 66 regime snapshots were RISK_ON and all 11 mapped actions were ALLOW_EQUITY, providing no contrasting-state evidence.",
+  "proposed": "Continue SHADOW logging and report decision/outcome cohorts by regime only after multiple states occur, including the number of independent decision episodes and 5/15/30/60-minute outcomes. Do not alter order eligibility until at least 12 independent mapped outcomes exist in each regime being compared.",
+  "evidence": [
+    "RISK_ON accounted for 66/66 snapshots.",
+    "ALLOW_EQUITY accounted for 11/11 mapped decisions.",
+    "Latest regime score was 85 with VIX below stress."
+  ],
+  "risk": "Regime labels may remain imbalanced for extended periods; no paper-order behavior should be changed from this proposal.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": false,
+  "proposal_id": "P-STOCK-20261001-06",
+  "status": "PENDING",
+  "review_date": "2026-10-01",
+  "created_at": "2026-10-01T17:48:43",
+  "updated_at": "2026-10-01T17:48:43",
+  "implementation": {},
+  "deployment": {}
+}

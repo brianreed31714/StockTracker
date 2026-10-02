@@ -1,0 +1,24 @@
+{
+  "title": "Add component-level forward attribution for geo, VIX, and premarket context",
+  "change_type": "CODE",
+  "target": "decision SHADOW outcome instrumentation",
+  "current": "Decision rows record component adjustments, but evidence does not provide component-tagged forward outcomes or counterfactual scores without each adjustment.",
+  "proposed": "For each decision snapshot, log the technical-only score, score with each context component added separately, final score, threshold-crossing counterfactuals, and 5/15/30/60-minute symbol returns. Deduplicate highly correlated minute observations into independent event episodes and require at least 12 completed episodes per symbol/component before considering calibration.",
+  "evidence": [
+    "XOM average geo adjustment was 2.932 and its score reached 79.632 without a final action.",
+    "GLD average geo adjustment was 0.733.",
+    "Average VIX adjustments were near zero.",
+    "Five premarket snapshots were BULLISH, but no tagged outcomes were supplied."
+  ],
+  "risk": "Counterfactuals may still be confounded and must not be interpreted as causal without sufficient independent episodes.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261001-03",
+  "status": "PENDING",
+  "review_date": "2026-10-01",
+  "created_at": "2026-10-01T17:48:43",
+  "updated_at": "2026-10-01T17:48:43",
+  "implementation": {},
+  "deployment": {}
+}

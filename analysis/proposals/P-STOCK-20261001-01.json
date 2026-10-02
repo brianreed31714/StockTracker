@@ -1,0 +1,23 @@
+{
+  "title": "Restore XLF/FAS/FAZ SHADOW coverage with explicit availability rows",
+  "change_type": "CODE+CONFIG",
+  "target": "financial-leverage SHADOW collector and XLF/FAS/FAZ premarket preflight",
+  "current": "Financial-leverage snapshot, signal, and outcome tables contain zero rows; premarket gaps for XLF, FAS, and FAZ are null despite financial_leverage_shadow_enabled=true.",
+  "proposed": "On every scheduled SHADOW cycle, write one status row per XLF/FAS/FAZ containing provider, quote/bar timestamp, availability, stale age, and failure reason. Emit candidate snapshots only from valid inputs and attach 5/15/30/60-minute outcomes when due. Keep all financial-leverage actions non-ordering and SHADOW-only.",
+  "evidence": [
+    "All three financial-leverage tables are empty.",
+    "Premarket XLF/FAS/FAZ gap values are null.",
+    "The dashboard reports FINANCIAL_SNAPSHOT_UNAVAILABLE."
+  ],
+  "risk": "Low operational risk; may increase log volume. It must not synthesize signals from stale or missing prices.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261001-01",
+  "status": "PENDING",
+  "review_date": "2026-10-01",
+  "created_at": "2026-10-01T17:48:43",
+  "updated_at": "2026-10-01T17:48:43",
+  "implementation": {},
+  "deployment": {}
+}

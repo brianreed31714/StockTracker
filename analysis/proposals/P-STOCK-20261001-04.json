@@ -1,0 +1,24 @@
+{
+  "title": "Instrument ZPTA trigger-conditioned outcomes and no-trade reasons",
+  "change_type": "CODE",
+  "target": "ZPTA SHADOW prediction and shadow-trade pipeline",
+  "current": "There are 300 predictions and 272 resolved predictions, but zero shadow trades and no exit reasons. Models at the same horizon share identical sample counts and average returns, obscuring model-specific trigger performance.",
+  "proposed": "Record per-model eligibility, trigger timestamp, score-threshold result, ensemble contribution, entry suppression reason, hypothetical entry price, horizon return, and hypothetical exit reason. Generate shadow-trade rows only for valid trigger-conditioned cases; preserve zpta_shadow_enabled=true and prohibit order routing because the asset is non-tradable in preflight.",
+  "evidence": [
+    "zpta_shadow_trades is empty and zpta_exit_reason_counts is empty.",
+    "Asset preflight says tradable=false.",
+    "All model families at each horizon show identical sample counts and average returns despite differing stated logic.",
+    "Latest ensemble action was FLAT at 47.8 versus a configured entry score of 68."
+  ],
+  "risk": "Hypothetical fills could overstate executable performance, especially with delayed OTC data; label them explicitly as non-executable SHADOW results.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261001-04",
+  "status": "PENDING",
+  "review_date": "2026-10-01",
+  "created_at": "2026-10-01T17:48:43",
+  "updated_at": "2026-10-01T17:48:43",
+  "implementation": {},
+  "deployment": {}
+}

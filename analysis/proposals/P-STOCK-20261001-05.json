@@ -1,0 +1,23 @@
+{
+  "title": "Log cap headroom separately for cost basis and mark-to-market exposure",
+  "change_type": "CODE",
+  "target": "portfolio-risk telemetry and read-only dashboard",
+  "current": "The dashboard snapshot shows $10,006.84 exposure against a $10,000 cap, while two attempts were blocked by position count. The evidence does not show whether the exposure excess was market drift or an order-sizing breach.",
+  "proposed": "Expose read-only fields for accepted-order cost basis, current market-value exposure, pre-order headroom, projected post-fill exposure, and cap-block reason. Retain max_total_exposure=$10,000, max_open_positions=4, max_daily_realized_loss=$300, and all existing enforcement behavior.",
+  "evidence": [
+    "Dashboard market-value exposure was $10,006.84 with four open positions.",
+    "Two attempts were blocked by MAX_OPEN_POSITIONS.",
+    "Only one new buy order was accepted, with $2,500 requested notional."
+  ],
+  "risk": "Low; ensure dashboard calculations do not become an alternate source of truth for order enforcement.",
+  "confidence": "HIGH",
+  "recommended_mode": "PAPER",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261001-05",
+  "status": "PENDING",
+  "review_date": "2026-10-01",
+  "created_at": "2026-10-01T17:48:43",
+  "updated_at": "2026-10-01T17:48:43",
+  "implementation": {},
+  "deployment": {}
+}

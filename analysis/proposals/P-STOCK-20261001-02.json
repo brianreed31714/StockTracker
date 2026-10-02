@@ -1,0 +1,23 @@
+{
+  "title": "Make funnel crossings and order lifecycle stages explicitly reconcilable",
+  "change_type": "CODE",
+  "target": "decision_funnel and order_attempt instrumentation",
+  "current": "The funnel reports 13 raw crossings but 14 side-classified rows. Aggregate records distinguish blocked and accepted attempts, but the supplied review cannot identify the extra non-crossing event or fully join requested notional, acceptance, fill, and realization stages.",
+  "proposed": "Add immutable fields for raw_threshold_crossed, confirmation_sequence_id, confirmation_count, gate_evaluated, requested_notional, projected_pretrade_exposure, projected_position_count, attempt_status, order_id, fill_id, and realized_lot_id. Add daily reconciliation assertions that report rather than alter trading behavior.",
+  "evidence": [
+    "Funnel rows=14 and side totals=14, while raw_threshold_crossings=13.",
+    "Gate counts reconcile to 2 ORDER_ACCEPTED and 2 MAX_OPEN_POSITIONS.",
+    "There were 2 orders, 2 fills, and only 1 realized record, which are valid distinct lifecycle counts."
+  ],
+  "risk": "Schema migration and downstream-report compatibility risk; no model behavior should change.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261001-02",
+  "status": "PENDING",
+  "review_date": "2026-10-01",
+  "created_at": "2026-10-01T17:48:43",
+  "updated_at": "2026-10-01T17:48:43",
+  "implementation": {},
+  "deployment": {}
+}

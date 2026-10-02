@@ -1,46 +1,54 @@
 {
-  "generated_at": "2026-09-30T13:31:02",
-  "review_date": "2026-09-30",
-  "proposal_count": 5,
+  "generated_at": "2026-10-01T17:48:43",
+  "review_date": "2026-10-01",
+  "proposal_count": 6,
   "pending": [
-    "P-STOCK-20260930-01",
-    "P-STOCK-20260930-02",
-    "P-STOCK-20260930-03",
-    "P-STOCK-20260930-04",
-    "P-STOCK-20260930-05"
+    "P-STOCK-20261001-01",
+    "P-STOCK-20261001-02",
+    "P-STOCK-20261001-03",
+    "P-STOCK-20261001-04",
+    "P-STOCK-20261001-05",
+    "P-STOCK-20261001-06"
   ],
   "proposals": [
     {
-      "proposal_id": "P-STOCK-20260930-01",
-      "title": "Reconcile funnel counts and attach forward outcomes to every threshold event",
+      "proposal_id": "P-STOCK-20261001-01",
+      "title": "Restore XLF/FAS/FAZ SHADOW coverage with explicit availability rows",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20260930-02",
-      "title": "Restore XLF/FAS/FAZ financial-leverage SHADOW data capture",
+      "proposal_id": "P-STOCK-20261001-02",
+      "title": "Make funnel crossings and order lifecycle stages explicitly reconcilable",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20260930-03",
-      "title": "Run a deduplicated geo-adjustment counterfactual alongside the active score",
-      "confidence": "MEDIUM",
-      "recommended_mode": "SHADOW",
-      "status": "PENDING"
-    },
-    {
-      "proposal_id": "P-STOCK-20260930-04",
-      "title": "Measure premarket bias, gaps, regime, and VIX against opening-window outcomes",
+      "proposal_id": "P-STOCK-20261001-03",
+      "title": "Add component-level forward attribution for geo, VIX, and premarket context",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20260930-05",
-      "title": "Add ZPTA bar-freshness qualification and defer calibration",
+      "proposal_id": "P-STOCK-20261001-04",
+      "title": "Instrument ZPTA trigger-conditioned outcomes and no-trade reasons",
+      "confidence": "HIGH",
+      "recommended_mode": "SHADOW",
+      "status": "PENDING"
+    },
+    {
+      "proposal_id": "P-STOCK-20261001-05",
+      "title": "Log cap headroom separately for cost basis and mark-to-market exposure",
+      "confidence": "HIGH",
+      "recommended_mode": "PAPER",
+      "status": "PENDING"
+    },
+    {
+      "proposal_id": "P-STOCK-20261001-06",
+      "title": "Continue regime evidence collection without activating a regime gate",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"

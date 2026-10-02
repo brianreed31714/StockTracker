@@ -1,0 +1,314 @@
+{
+  "generated_at": "2026-10-01T19:16:34.969096+00:00",
+  "market_open": true,
+  "paper_only": true,
+  "vix": {
+    "level": 16.3799991607666,
+    "change_5m": 0.0006107709847662512,
+    "change_15m": -0.00667074662694811,
+    "source": "^VIX"
+  },
+  "geo": {
+    "score_adjustment": 3.14,
+    "status": "live",
+    "active_event_count": 219
+  },
+  "market_regime_shadow": {
+    "state": "RISK_ON",
+    "score": 85.0,
+    "spy_close": 764.47,
+    "spy_sma50": 763.0467,
+    "spy_sma200": 719.9975,
+    "spy_mom20": -0.000862598512671009,
+    "qqq_close": 742.84,
+    "qqq_sma200": 667.875175,
+    "vix_level": 16.3799991607666,
+    "defensive_asset": "SGOV",
+    "reasons": [
+      "SPY_ABOVE_200_BUFFER",
+      "SPY_ABOVE_50",
+      "SPY_50_ABOVE_200",
+      "QQQ_ABOVE_200_BUFFER",
+      "SPY_MOM20_NONPOSITIVE",
+      "VIX_BELOW_STRESS"
+    ]
+  },
+  "financial_leverage_shadow": {
+    "candidate": "NONE",
+    "score": 0.0,
+    "reasons": [
+      "FINANCIAL_SNAPSHOT_UNAVAILABLE"
+    ]
+  },
+  "zpta_shadow": {
+    "status": "OK",
+    "shadow_only": true,
+    "provider": "yahoo_delayed",
+    "bar_ts": "2026-10-01T19:01:04+00:00",
+    "price": 0.6200000047683716,
+    "regime": "LIQUIDITY_DANGER",
+    "ensemble_score": 47.8,
+    "action": "FLAT",
+    "resolved_predictions": 24,
+    "equity": 1000.0,
+    "signals": [
+      {
+        "model": "breakout_continuation",
+        "score": 45,
+        "direction": "UP",
+        "reason": "20m/opening-range breakout with volume"
+      },
+      {
+        "model": "momentum_pullback",
+        "score": 26.876372994785847,
+        "direction": "UP",
+        "reason": "intraday uptrend pullback and lower-wick recovery"
+      },
+      {
+        "model": "vwap_reclaim",
+        "score": 36,
+        "direction": "UP",
+        "reason": "VWAP reclaim with short-term acceleration"
+      },
+      {
+        "model": "exhaustion_exit",
+        "score": 21.7688003681346,
+        "direction": "DOWN",
+        "reason": "overextension and upper-wick reversal risk"
+      }
+    ],
+    "asset_preflight": {
+      "available": true,
+      "symbol": "ZPTA",
+      "exchange": "OTC",
+      "status": "active",
+      "tradable": false,
+      "fractionable": false,
+      "marginable": false,
+      "shortable": false
+    }
+  },
+  "premarket_context": {
+    "session_date": "2026-10-01",
+    "bias": "BULLISH",
+    "bias_score": 75.0,
+    "generated_at": "2026-10-01T13:29:03.428886+00:00",
+    "status": "AVAILABLE",
+    "regime_state": "RISK_ON",
+    "geo_status": "live",
+    "social_status": "UNAVAILABLE"
+  },
+  "portfolio": {
+    "open_positions": 4,
+    "exposure": 10006.844561,
+    "realized_today": 0.906632953199748,
+    "trades_today": 2
+  },
+  "signals": [
+    {
+      "symbol": "WMT",
+      "price": 104.755,
+      "sma20": 104.68699999999998,
+      "momentum_5m": 0.00023870906139578096,
+      "momentum_15m": 0.0014818355640535685,
+      "rsi14": 66.66666666666666,
+      "volume_ratio": 1.6879407821880281,
+      "score": 58.63007217184563,
+      "technical": 58.64805372412739,
+      "context": -0.05067678022624422,
+      "premarket_adjustment": 0.0,
+      "vix_adjustment": 0.03269522794449364,
+      "geo_adjustment": 0.0,
+      "decision": "HOLD",
+      "reason": "no position; score 58.6; buy confirm 0/2",
+      "position": false,
+      "unrealized_pl": 0.0
+    },
+    {
+      "symbol": "XOM",
+      "price": 163.7,
+      "sma20": 163.66299999999998,
+      "momentum_5m": 0.0001832956558929233,
+      "momentum_15m": 3.054461040341572e-05,
+      "rsi14": 58.88888888888847,
+      "volume_ratio": 0.45405982905982906,
+      "score": 55.887414841421844,
+      "technical": 52.61325982441573,
+      "context": 0.10690899371903484,
+      "premarket_adjustment": 0.0,
+      "vix_adjustment": 0.027246023287078036,
+      "geo_adjustment": 3.14,
+      "decision": "HOLD",
+      "reason": "position open; score 55.9; pnl 1.59%",
+      "position": true,
+      "unrealized_pl": 38.479645
+    },
+    {
+      "symbol": "GLD",
+      "price": 382.815,
+      "sma20": 382.76125,
+      "momentum_5m": 0.0004050593215909615,
+      "momentum_15m": 0.0002482232441469723,
+      "rsi14": 55.99999999999964,
+      "volume_ratio": 0.6818181818181818,
+      "score": 52.900805358623145,
+      "technical": 52.113408367044066,
+      "context": 0.04054142418099538,
+      "premarket_adjustment": 0.0,
+      "vix_adjustment": -0.03814443260190925,
+      "geo_adjustment": 0.785,
+      "decision": "HOLD",
+      "reason": "no position; score 52.9; buy confirm 0/2",
+      "position": false,
+      "unrealized_pl": 0.0
+    },
+    {
+      "symbol": "TSLA",
+      "price": 357.205,
+      "sma20": 357.044,
+      "momentum_5m": 0.0007143857683149513,
+      "momentum_15m": -1.399736849472255e-05,
+      "rsi14": 51.80722891566101,
+      "volume_ratio": 0.7000238644499245,
+      "score": 51.249749938655334,
+      "technical": 51.46584223845934,
+      "context": -0.32507639295231705,
+      "premarket_adjustment": 0.0,
+      "vix_adjustment": 0.10898409314831214,
+      "geo_adjustment": 0.0,
+      "decision": "HOLD",
+      "reason": "position open; score 51.2; pnl 0.71%",
+      "position": true,
+      "unrealized_pl": 16.804452
+    },
+    {
+      "symbol": "SPY",
+      "price": 764.495,
+      "sma20": 764.524,
+      "momentum_5m": -0.00035958523477641613,
+      "momentum_15m": -0.0002027071209049769,
+      "rsi14": 54.37262357414465,
+      "volume_ratio": 0.6287230905337658,
+      "score": 50.58129123295322,
+      "technical": 50.645931334245155,
+      "context": -0.13003055718092682,
+      "premarket_adjustment": 0.0,
+      "vix_adjustment": 0.06539045588898729,
+      "geo_adjustment": 0.0,
+      "decision": "HOLD",
+      "reason": "position open; score 50.6; pnl -0.44%",
+      "position": true,
+      "unrealized_pl": -10.972008
+    },
+    {
+      "symbol": "AAPL",
+      "price": 329.43,
+      "sma20": 329.711,
+      "momentum_5m": -0.0005764213336569846,
+      "momentum_15m": -0.0008492311425191135,
+      "rsi14": 38.63636363636217,
+      "volume_ratio": 1.4488571958533418,
+      "score": 43.29738652414599,
+      "technical": 43.54072484723708,
+      "context": -0.32507639295231705,
+      "premarket_adjustment": 0.0,
+      "vix_adjustment": 0.08173806986123411,
+      "geo_adjustment": 0.0,
+      "decision": "HOLD",
+      "reason": "position open; score 43.3; pnl -0.51%",
+      "position": true,
+      "unrealized_pl": -12.777526
+    },
+    {
+      "symbol": "QQQ",
+      "price": 742.69,
+      "sma20": 743.038,
+      "momentum_5m": -0.00047776379627062493,
+      "momentum_15m": -0.0009752291788569512,
+      "rsi14": 26.225490196078795,
+      "volume_ratio": 1.1791714494417198,
+      "score": 42.913227007102584,
+      "technical": 42.84761814404718,
+      "context": -0.027027616120663588,
+      "premarket_adjustment": 0.0,
+      "vix_adjustment": 0.09263647917606532,
+      "geo_adjustment": 0.0,
+      "decision": "HOLD",
+      "reason": "no position; score 42.9; buy confirm 0/2",
+      "position": false,
+      "unrealized_pl": 0.0
+    },
+    {
+      "symbol": "AMZN",
+      "price": 249.0,
+      "sma20": 249.22224999999997,
+      "momentum_5m": -0.0007624704041092611,
+      "momentum_15m": -0.001763951250801754,
+      "rsi14": 30.769230769230347,
+      "volume_ratio": 0.44785010289180116,
+      "score": 42.39429719022749,
+      "technical": 42.63218630866116,
+      "context": -0.32507639295231705,
+      "premarket_adjustment": 0.0,
+      "vix_adjustment": 0.08718727451864972,
+      "geo_adjustment": 0.0,
+      "decision": "HOLD",
+      "reason": "no position; score 42.4; buy confirm 0/2",
+      "position": false,
+      "unrealized_pl": 0.0
+    },
+    {
+      "symbol": "NVDA",
+      "price": 231.58,
+      "sma20": 231.873,
+      "momentum_5m": -0.0011214630779847745,
+      "momentum_15m": -0.0025412413317826843,
+      "rsi14": 23.497267759565062,
+      "volume_ratio": 0.9931960766987717,
+      "score": 41.09836967972831,
+      "technical": 41.31446197953231,
+      "context": -0.32507639295231705,
+      "premarket_adjustment": 0.0,
+      "vix_adjustment": 0.10898409314831214,
+      "geo_adjustment": 0.0,
+      "decision": "HOLD",
+      "reason": "no position; score 41.1; buy confirm 0/2",
+      "position": false,
+      "unrealized_pl": 0.0
+    }
+  ],
+  "positions": [
+    {
+      "symbol": "AAPL",
+      "qty": 7.550163082,
+      "avg_entry_price": 331.117351,
+      "market_value": 2487.212473,
+      "unrealized_pl": -12.777526,
+      "current_price": 329.425
+    },
+    {
+      "symbol": "SPY",
+      "qty": 3.255788815,
+      "avg_entry_price": 767.86,
+      "market_value": 2489.017991,
+      "unrealized_pl": -10.972008,
+      "current_price": 764.49
+    },
+    {
+      "symbol": "TSLA",
+      "qty": 6.978882968,
+      "avg_entry_price": 354.69,
+      "market_value": 2492.144452,
+      "unrealized_pl": 16.804452,
+      "current_price": 357.0979
+    },
+    {
+      "symbol": "XOM",
+      "qty": 15.515360268,
+      "avg_entry_price": 161.13,
+      "market_value": 2538.469645,
+      "unrealized_pl": 38.479645,
+      "current_price": 163.6101
+    }
+  ]
+}
