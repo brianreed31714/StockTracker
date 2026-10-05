@@ -1,0 +1,23 @@
+{
+  "title": "Restore auditable XLF/FAS/FAZ SHADOW snapshots and outcomes",
+  "change_type": "CODE",
+  "target": "financial_leverage_shadow, financial_leverage_signals, and financial_leverage_outcomes",
+  "current": "Financial-leverage SHADOW is enabled, but all related tables are empty and the dashboard reports FINANCIAL_SNAPSHOT_UNAVAILABLE.",
+  "proposed": "Emit one status or snapshot row per evaluation containing XLF, FAS, and FAZ quote timestamps, freshness, provider, score components, regime state, candidate or NONE, and failure reason. For eligible signals, record hypothetical entry price and strictly forward 5/15/30/60-minute outcomes. Do not create paper orders or change the score threshold until each candidate class has at least 12 resolved outcomes.",
+  "evidence": [
+    "Zero financial-leverage snapshot, signal, and outcome rows",
+    "Latest dashboard candidate is NONE with FINANCIAL_SNAPSHOT_UNAVAILABLE",
+    "Configured outcome horizons are 5,15,30,60 minutes"
+  ],
+  "risk": "Leveraged and inverse ETF data can be stale or asynchronous; freshness checks are required before evaluating signals.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261005-04",
+  "status": "PENDING",
+  "review_date": "2026-10-05",
+  "created_at": "2026-10-05T13:06:21",
+  "updated_at": "2026-10-05T13:06:21",
+  "implementation": {},
+  "deployment": {}
+}

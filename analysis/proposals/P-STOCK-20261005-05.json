@@ -1,0 +1,24 @@
+{
+  "title": "Instrument geo-feed deduplication and marginal score attribution",
+  "change_type": "CODE",
+  "target": "geo feed normalization and decision evidence",
+  "current": "The feed had 410 active events and materially adjusted XOM and GLD scores, while top events included duplicate or near-duplicate reporting of the same Hormuz export story. No forward-outcome attribution exists.",
+  "proposed": "Assign normalized event-cluster IDs using canonical URL, title similarity, event time, and underlying incident. Log raw adjustment, deduplicated adjustment, capped adjustment, contributing cluster count, and score/action counterfactual with geo set to zero. Collect forward returns in SHADOW; do not change the current adjustment cap from this one-day sample.",
+  "evidence": [
+    "XOM average geo adjustment was +2.561 and GLD was +0.640",
+    "Latest feed adjustment was +2.92 with 410 active events",
+    "Two top headlines describe the same 60% export-drop story at the same publication time",
+    "No orders or realized outcomes permit causal assessment"
+  ],
+  "risk": "Over-aggressive clustering could merge genuinely independent reports; preserve raw events and cluster confidence for audit.",
+  "confidence": "MEDIUM",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261005-05",
+  "status": "PENDING",
+  "review_date": "2026-10-05",
+  "created_at": "2026-10-05T13:06:21",
+  "updated_at": "2026-10-05T13:06:21",
+  "implementation": {},
+  "deployment": {}
+}

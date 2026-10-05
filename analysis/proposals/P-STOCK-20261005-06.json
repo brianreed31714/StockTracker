@@ -1,0 +1,25 @@
+{
+  "title": "Add ZPTA prediction-independence and shadow-trade diagnostics",
+  "change_type": "CODE",
+  "target": "ZPTA model evaluation and zpta_shadow_trades.csv",
+  "current": "ZPTA resolved 128 predictions without missing returns, but model families share identical average returns within horizons and no shadow trades or exit reasons were emitted.",
+  "proposed": "Report unique observation count, overlapping-window count, prediction correlation across model families, class balance, and confidence-bucket outcomes. Emit a diagnostic reason whenever a prediction does not become a shadow trade, such as score below 68, stale delayed data, no new bar, liquidity block, or duplicate signal. If a shadow trade is opened, record hypothetical notional capped at $150, entry/exit timestamps, exit reason, and paper-only P/L. Make no calibration change until at least 12 resolved, non-overlapping examples per model/horizon are available.",
+  "evidence": [
+    "12 observations, 156 predictions, and 128 resolved predictions",
+    "5-minute summaries have 12 samples; 15- and 60-minute summaries have 10",
+    "Average returns are identical across model families within each horizon",
+    "Zero zpta_shadow_trades and empty exit-reason counts",
+    "Latest provider was yahoo_delayed and status was NO_NEW_BAR"
+  ],
+  "risk": "Non-overlap filtering will reduce sample counts but will produce more defensible evaluation; shadow trades must remain isolated from the portfolio engine.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261005-06",
+  "status": "PENDING",
+  "review_date": "2026-10-05",
+  "created_at": "2026-10-05T13:06:21",
+  "updated_at": "2026-10-05T13:06:21",
+  "implementation": {},
+  "deployment": {}
+}

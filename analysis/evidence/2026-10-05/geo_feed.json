@@ -1,0 +1,250 @@
+{
+  "generated_at": "2026-10-05T20:03:27.355587+00:00",
+  "status": "ok",
+  "signal": 0.2918,
+  "score_adjustment": 2.92,
+  "max_materiality": 0.95,
+  "active_event_count": 410,
+  "events": [
+    {
+      "id": "cce51d7b8b49e2a236a26a96",
+      "title": "Middle East Oil Exports Drop at Least 60% as Hormuz Stays Mostly Closed, Data Shows - EnergyNow",
+      "source": "EnergyNow",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQNFBCN2VwMjZkSk9RcTN2bHp4N0VJOGxHeFg2ak5HQmpKWVYxODVYR2trbHNSeGNGSXZrUkFUT2o5dFJWT252V2U4YVZxR19QSTJFQ2k3NUZ1OW5hREcxejBYNGVGVEpLTnRTX0xncG1WQ1pQWU11UTI3TUhHMmlBZjRvNUt2RGg1WThwYjFXWVNOSEVoR1BZdFpLRVJLZFNLRTdmVzZleE9pRnpOak01NA?oc=5",
+      "published_at": "2026-10-04T22:51:35+00:00",
+      "description": "Middle East Oil Exports Drop at Least 60% as Hormuz Stays Mostly Closed, Data Shows \u00a0\u00a0 EnergyNow",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.95,
+        "confidence": 0.82,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "The headline reports that Middle East oil exports have fallen at least 60% while the Strait of Hormuz remains mostly closed, indicating a major disruption to seaborne crude supply and likely upward pressure on oil prices.",
+        "why_xom": "Higher crude prices could support Exxon Mobil\u2019s upstream earnings and cash flow, although the headline alone does not quantify XOM-specific exposure or downstream effects."
+      },
+      "analyzed_at": "2026-10-05T03:51:27.554613+00:00"
+    },
+    {
+      "id": "d6d93eeb426af35d6a444521",
+      "title": "Middle East Oil Exports Drop at Least 60% as Hormuz Stays Mostly Closed, Data Shows - energynow.ca",
+      "source": "energynow.ca",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQNFBCN2VwMjZkSk9RcTN2bHp4N0VJOGxHeFg2ak5HQmpKWVYxODVYR2trbHNSeGNGSXZrUkFUT2o5dFJWT252V2U4YVZxR19QSTJFQ2k3NUZ1OW5hREcxejBYNGVGVEpLTnRTX0xncG1WQ1pQWU11UTI3TUhHMmlBZjRvNUt2RGg1WThwYjFXWVNOSEVoR1BZdFpLRVJLZFNLRTdmVzZleE9pRnpOak01NA?oc=5",
+      "published_at": "2026-10-04T22:51:35+00:00",
+      "description": "Middle East Oil Exports Drop at Least 60% as Hormuz Stays Mostly Closed, Data Shows \u00a0\u00a0 energynow.ca",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.95,
+        "confidence": 0.82,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "The headline reports that Middle East oil exports have fallen at least 60% while the Strait of Hormuz remains mostly closed, indicating a major crude-supply disruption and likely upward pressure on oil prices.",
+        "why_xom": "Higher crude prices could support Exxon Mobil's upstream earnings and cash flow, although downstream/refining effects may be mixed.\u3011\u3010\u3002"
+      },
+      "analyzed_at": "2026-10-05T05:00:15.148205+00:00"
+    },
+    {
+      "id": "4e87bb04b3d64a2158256db8",
+      "title": "Attacks Cut Saudi Oil Output and East-West Pipeline Flow, State News Agency Says - EnergyNow.com",
+      "source": "EnergyNow.com",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPZVc4TmVyYlFMNUNfM0FiaXgyREtWcUtCQnNmWlVYMEJUYWZoVXBGMVMxS2lkZmNnN2d3NUp4VW9HUlZTTmlKUmpacFZmNzE3YmFqV21aeEtPQVVocTMxZGtQdnlJOEowZjdKQVFlTHdxckJHM3FZenRUTXN0Q0p0ZG1fR2N2eTAtN0pWTk0zbnhCeHAzZjhVWGQxd0hUWDBwaTlWaVQxRVlSRm9jY0RV?oc=5",
+      "published_at": "2026-10-05T10:50:29+00:00",
+      "description": "Attacks Cut Saudi Oil Output and East-West Pipeline Flow, State News Agency Says \u00a0\u00a0 EnergyNow.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.86,
+        "confidence": 0.84,
+        "category": "supply",
+        "supply_impact": "tighter",
+        "summary": "A state news agency reports that attacks reduced Saudi oil output and disrupted flow through the East-West Pipeline, indicating a potentially material crude-supply and transportation outage.",
+        "why_xom": "Reduced Saudi supply could support global crude prices, generally benefiting Exxon Mobil's upstream earnings, although the headline provides no outage duration or volume estimate."
+      },
+      "analyzed_at": "2026-10-05T13:54:45.445928+00:00"
+    },
+    {
+      "id": "7389955aa28ce31845659501",
+      "title": "More Tankers Hit in Hormuz as IRGC Orders Ship to Turn Back - gCaptain",
+      "source": "gCaptain",
+      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNWE5oUngweTVVZ00tRkFLMWdZMzVwc1VHQUswVzZJb1F1LWRXeDJraUU0Qkd1VDlLMF8wZkdZTEphY1A3aFVMZkdyMUxGOUhXdWsxVmR6UkNFMkI5eG13SmltUWg0VVBkNDFDS1hKYlNyUVdqMU1waWtCakNKQ1Y0MjkyREhLTmQ3?oc=5",
+      "published_at": "2026-10-05T15:02:18+00:00",
+      "description": "More Tankers Hit in Hormuz as IRGC Orders Ship to Turn Back \u00a0\u00a0 gCaptain",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.86,
+        "confidence": 0.82,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "The headline reports additional tanker attacks in the Strait of Hormuz and an IRGC order for a ship to turn back, indicating elevated risk of shipping disruption through a critical oil chokepoint. This could support crude prices, though the scale and duration of any supply impact are not provided.",
+        "why_xom": "Higher crude prices could support Exxon Mobil\u2019s upstream earnings, while shipping and feedstock disruptions create offsetting downstream risks."
+      },
+      "analyzed_at": "2026-10-05T17:31:20.689934+00:00"
+    },
+    {
+      "id": "9a754da8af3781293f4a77ee",
+      "title": "Saudi Arabia's East-West oil pipeline halted again after fresh attack - tbsnews.net",
+      "source": "tbsnews.net",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNVkYtVlAxWGV0NXVJc3l0WkEtR2lHdUVIMFZ5QlJqTUNDcVN6dkdUMUFCMDNONFhma0hXOW5qbWxDR2NSR3J4Qm5aSDNJWWhZa20waW01RzZWMTdtLTMxb1hBSVZkdHo1R1VTRHExZDhMb1hwb2VPUTFKT1AwRmk2WjA1N1h5LXdOZDlld29Ybk1iQ2gxYUlVLWxmYU9yRC01aEptdm5yZ3lJdl8tbHdEVC01ZmxLWXdlZmVDV1VR?oc=5",
+      "published_at": "2026-10-05T12:17:49+00:00",
+      "description": "Saudi Arabia's East-West oil pipeline halted again after fresh attack \u00a0\u00a0 tbsnews.net",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.82,
+        "confidence": 0.86,
+        "category": "supply",
+        "supply_impact": "tighter",
+        "summary": "Saudi Arabia\u2019s East-West oil pipeline was reportedly halted again following a fresh attack, indicating a potential disruption to crude transportation and tighter effective supply. The duration, scale, and restoration timeline are not provided.",
+        "why_xom": "A sustained Saudi pipeline disruption could support crude prices, generally benefiting Exxon Mobil\u2019s upstream earnings, though the impact is uncertain without details on throughput and duration."
+      },
+      "analyzed_at": "2026-10-05T19:26:02.755106+00:00"
+    },
+    {
+      "id": "287002b21e5147fbaef37b46",
+      "title": "Iran ramps up Strait of Hormuz attacks with 11 ships hit in a week - TradeWinds News",
+      "source": "TradeWinds News",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOS0NjSWNxaFV1ZF9aSUk0bmdwTU9VTWZrQWlJYkd1a1kyTDdQNzFqT2Nxbjh1d0ZvT2Q5YlVlWkp1c1BhQ2NFcDVZSlA4d0I1cDhCNWxMcFZ3blYwdXRWY01PSEo3RlhrQzNUaWQ1U2NFcVlFWGY1VmtabW1NSHpGSUxDQUVQZnRpeE9vcm40bkRoR3RTZlEtdWc4Y2tEbjlya0lvV2ZPSnRvdzBkZDFzeE9YNjNKdkZWblFNYw?oc=5",
+      "published_at": "2026-10-05T16:06:13+00:00",
+      "description": "Iran ramps up Strait of Hormuz attacks with 11 ships hit in a week \u00a0\u00a0 TradeWinds News",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "mixed",
+        "materiality": 0.84,
+        "confidence": 0.82,
+        "category": "hormuz",
+        "supply_impact": "uncertain",
+        "summary": "TradeWinds reports that Iran attacked 11 ships in the Strait of Hormuz over one week. This materially raises the risk of tanker disruption and potential crude-supply constraints, but the supplied text does not confirm a closure or actual production/export loss.",
+        "why_xom": "Potential disruption through Hormuz could support crude prices and Exxon Mobil's upstream realizations, while heightened shipping and geopolitical risk could offset some benefit. No confirmed XOM operational impact is provided."
+      },
+      "analyzed_at": "2026-10-05T16:10:56.771814+00:00"
+    },
+    {
+      "id": "e89bb90b76d7e0e3bde1cd8d",
+      "title": "Dynacom newbuild among at least four tankers attacked in Hormuz - seatrade-maritime.com",
+      "source": "seatrade-maritime.com",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOZXdQcDY3bkZoNlk5c0Ntbmx1ek95bG9JVDZKbkZIRnoybHd4elFUTTktVWhUeGI1ZXFkdW90QmJVWHhVZVJwNGluX3YtdlNYRXA3ZmMzWHM2OVZLcDhWWG1veW9XVDNtaUVTMDN2dGF3QTl5TzlmVUtISlgtNEpYdGhjQkYycUNFekszYXZXTXF1YnBHaU1TLW1jdGZ2cjh1THZuYVI3N0hwUQ?oc=5",
+      "published_at": "2026-10-05T04:22:08+00:00",
+      "description": "Dynacom newbuild among at least four tankers attacked in Hormuz \u00a0\u00a0 seatrade-maritime.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "mixed",
+        "materiality": 0.85,
+        "confidence": 0.8,
+        "category": "hormuz",
+        "supply_impact": "uncertain",
+        "summary": "The headline reports attacks on at least four tankers in the Strait of Hormuz. This raises a significant risk premium for crude and maritime insurance, but the supplied text does not confirm a shutdown or physical loss of oil supply.",
+        "why_xom": "Higher crude prices could support Exxon\u2019s upstream earnings, while Hormuz shipping disruption and higher freight or insurance costs could pressure its downstream and trading operations."
+      },
+      "analyzed_at": "2026-10-05T19:20:19.050098+00:00"
+    },
+    {
+      "id": "704f2f8abfd0812f64cd5097",
+      "title": "Iran ramps up Strait of Hormuz attacks with 11 ships hit in a week - tradewindsnews.com",
+      "source": "tradewindsnews.com",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOS0NjSWNxaFV1ZF9aSUk0bmdwTU9VTWZrQWlJYkd1a1kyTDdQNzFqT2Nxbjh1d0ZvT2Q5YlVlWkp1c1BhQ2NFcDVZSlA4d0I1cDhCNWxMcFZ3blYwdXRWY01PSEo3RlhrQzNUaWQ1U2NFcVlFWGY1VmtabW1NSHpGSUxDQUVQZnRpeE9vcm40bkRoR3RTZlEtdWc4Y2tEbjlya0lvV2ZPSnRvdzBkZDFzeE9YNjNKdkZWblFNYw?oc=5",
+      "published_at": "2026-10-05T16:06:13+00:00",
+      "description": "Iran ramps up Strait of Hormuz attacks with 11 ships hit in a week \u00a0\u00a0 tradewindsnews.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "mixed",
+        "materiality": 0.86,
+        "confidence": 0.78,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "The supplied headline reports that Iran attacked 11 ships in the Strait of Hormuz over one week. Such attacks could disrupt or materially raise the risk and cost of crude and energy shipments, supporting oil prices, although no closure or confirmed supply loss is stated.",
+        "why_xom": "Higher crude prices could benefit Exxon Mobil's upstream earnings, while shipping disruption and elevated transport or operational risk could weigh on parts of its integrated business. The net XOM effect is therefore mixed without evidence of a direct company impact."
+      },
+      "analyzed_at": "2026-10-05T17:53:33.334342+00:00"
+    },
+    {
+      "id": "63bae738231b484318782f6f",
+      "title": "Iran ramps up Strait of Hormuz attacks with 11 ships hit in a week - TradeWinds News",
+      "source": "TradeWinds News",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOS0NjSWNxaFV1ZF9aSUk0bmdwTU9VTWZrQWlJYkd1a1kyTDdQNzFqT2Nxbjh1d0ZvT2Q5YlVlWkp1c1BhQ2NFcDVZSlA4d0I1cDhCNWxMcFZ3blYwdXRWY01PSEo3RlhrQzNUaWQ1U2NFcVlFWGY1VmtabW1NSHpGSUxDQUVQZnRpeE9vcm40bkRoR3RTZlEtdWc4Y2tEbjlya0lvV2ZPSnRvdzBkZDFzeE9YNjNKdkZWblFNYw?oc=5",
+      "published_at": "2026-10-05T18:33:46+00:00",
+      "description": "Iran ramps up Strait of Hormuz attacks with 11 ships hit in a week \u00a0\u00a0 TradeWinds News",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.85,
+        "confidence": 0.78,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "TradeWinds reports that Iran attacked 11 ships in the Strait of Hormuz over one week, indicating elevated disruption and transit-risk for a major crude shipping chokepoint.",
+        "why_xom": "Higher Hormuz-related shipping and supply-risk premiums could support crude prices and benefit XOM through stronger upstream realizations, although the headline does not confirm an actual supply outage."
+      },
+      "analyzed_at": "2026-10-05T19:31:38.126922+00:00"
+    },
+    {
+      "id": "c813502d6fe3f05bc08eae9d",
+      "title": "Attacks Cut Saudi Oil Output and East-West Pipeline Flow, State News Agency Says - energynow.com",
+      "source": "energynow.com",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPZVc4TmVyYlFMNUNfM0FiaXgyREtWcUtCQnNmWlVYMEJUYWZoVXBGMVMxS2lkZmNnN2d3NUp4VW9HUlZTTmlKUmpacFZmNzE3YmFqV21aeEtPQVVocTMxZGtQdnlJOEowZjdKQVFlTHdxckJHM3FZenRUTXN0Q0p0ZG1fR2N2eTAtN0pWTk0zbnhCeHAzZjhVWGQxd0hUWDBwaTlWaVQxRVlSRm9jY0RV?oc=5",
+      "published_at": "2026-10-05T10:50:29+00:00",
+      "description": "Attacks Cut Saudi Oil Output and East-West Pipeline Flow, State News Agency Says \u00a0\u00a0 energynow.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.85,
+        "confidence": 0.78,
+        "category": "supply",
+        "supply_impact": "tighter",
+        "summary": "A state news agency reports that attacks reduced Saudi oil output and disrupted flow through the East-West Pipeline. The headline indicates a potential near-term tightening of crude supply and export logistics, although it provides no quantities, duration, or confirmation of damage details.",
+        "why_xom": "Reduced Saudi production and pipeline flows could support crude prices, which may benefit Exxon Mobil's upstream earnings exposure. The effect is uncertain because the scale and persistence of the disruption are not provided."
+      },
+      "analyzed_at": "2026-10-05T14:01:01.818057+00:00"
+    },
+    {
+      "id": "37586b60f91af3f54809fa08",
+      "title": "Aramco CEO Amin Nasser says inventories are helping meet customer demand even as physical crude commands huge premiums over Brent amid Hormuz disruption - Business Upturn",
+      "source": "Business Upturn",
+      "url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxQUEdWTDJHWFhBQ3ppcWdCd2FnUldZZUlSQUJxYWg2VGlmYlB1amVhMDA3S1JHT1FmckdLN3VVUjN5SklNcjVtckE3MlRDWkQ3bHg5SUo0cG5BSFRvUU1MZU9DSjJDblZ3SFloR2paXzZIWUNvckkzLVJzVmw4YnBKb1VsUEgwZlZLNVBNUlRvQUItTmNNX1dGTWJsUUZjUG1WMmRndmpVOF85VEVhekF4dDE5TkFxWlNCT1BHLVU4dTMtNlVSZlFYWFc3bUU4dklnbktVRnQxUmFOLV9kd3Q2VDBvLVZNeWFGVms1NV85cnl2N0dQMnc?oc=5",
+      "published_at": "2026-10-05T15:33:45+00:00",
+      "description": "Aramco CEO Amin Nasser says inventories are helping meet customer demand even as physical crude commands huge premiums over Brent amid Hormuz disruption \u00a0\u00a0 Business Upturn",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.78,
+        "confidence": 0.84,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "Aramco says inventories are helping satisfy customers, but the reported Hormuz disruption and large physical-crude premiums over Brent indicate significant near-term supply tightness and elevated crude pricing pressure.",
+        "why_xom": "Higher crude prices are generally supportive of Exxon Mobil\u2019s upstream earnings, although inventory availability may partially cushion the disruption and the headline provides no specific XOM operational impact."
+      },
+      "analyzed_at": "2026-10-05T15:38:12.750967+00:00"
+    },
+    {
+      "id": "406a504bb8df2dab50a5b316",
+      "title": "Oil Tanker Traffic Through Hormuz at Near Standstill as Attacks Strain Iran Truce - EnergyNow.com",
+      "source": "EnergyNow.com",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPSUpxaG5ETU12d1BLVHVRRWp0dUczREEzR2JpU01zS1ItdTNpQjJtRDNvYUg0aDhvVk80dF9rMXlyVVlRcEZOZEJhWlhhZEdqZ2czTVhHYjl1RVYyZmZYcEpMLXhwMFp4b1FUd05SeG5TeUFyQ2h4Ny1vby1nVDFIMGJkRjNSZmt3X1lGOHlYU1ZqUlMwcHFwdlltUVRCX1BPMGVVRUJhYTF5cnBUVUJrODNn?oc=5",
+      "published_at": "2026-10-05T14:01:58+00:00",
+      "description": "Oil Tanker Traffic Through Hormuz at Near Standstill as Attacks Strain Iran Truce \u00a0\u00a0 EnergyNow.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.9,
+        "confidence": 0.72,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "The headline reports oil tanker traffic through the Strait of Hormuz is near a standstill amid attacks and a strained truce. If confirmed and sustained, this would materially disrupt crude flows and support higher oil prices. The supplied item provides no operational detail or independent confirmation, so confidence is moderated.",
+        "why_xom": "A sustained Hormuz shipping disruption could raise global crude prices, generally benefiting Exxon Mobil's upstream production revenue and margins. Effects could be offset by higher logistics costs, supply-chain disruption, or downstream/refining pressure."
+      },
+      "analyzed_at": "2026-10-05T17:20:39.710218+00:00"
+    }
+  ]
+}

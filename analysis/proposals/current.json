@@ -1,54 +1,54 @@
 {
-  "generated_at": "2026-10-02T13:05:59",
-  "review_date": "2026-10-02",
+  "generated_at": "2026-10-05T13:06:21",
+  "review_date": "2026-10-05",
   "proposal_count": 6,
   "pending": [
-    "P-STOCK-20261002-01",
-    "P-STOCK-20261002-02",
-    "P-STOCK-20261002-03",
-    "P-STOCK-20261002-04",
-    "P-STOCK-20261002-05",
-    "P-STOCK-20261002-06"
+    "P-STOCK-20261005-01",
+    "P-STOCK-20261005-02",
+    "P-STOCK-20261005-03",
+    "P-STOCK-20261005-04",
+    "P-STOCK-20261005-05",
+    "P-STOCK-20261005-06"
   ],
   "proposals": [
     {
-      "proposal_id": "P-STOCK-20261002-01",
-      "title": "Add manifest file-count self-consistency validation",
+      "proposal_id": "P-STOCK-20261005-01",
+      "title": "Emit a complete decision-funnel row for every scored decision",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261002-02",
-      "title": "Restore regime-to-decision shadow records",
+      "proposal_id": "P-STOCK-20261005-02",
+      "title": "Join regime SHADOW states to decisions and forward outcomes",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261002-03",
-      "title": "Emit scheduled-run diagnostics for premarket and financial-leverage shadows",
+      "proposal_id": "P-STOCK-20261005-03",
+      "title": "Add explicit premarket collector run-status and gap evidence",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261002-04",
-      "title": "Measure duplicate-aware geo adjustments in parallel",
+      "proposal_id": "P-STOCK-20261005-04",
+      "title": "Restore auditable XLF/FAS/FAZ SHADOW snapshots and outcomes",
+      "confidence": "HIGH",
+      "recommended_mode": "SHADOW",
+      "status": "PENDING"
+    },
+    {
+      "proposal_id": "P-STOCK-20261005-05",
+      "title": "Instrument geo-feed deduplication and marginal score attribution",
       "confidence": "MEDIUM",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261002-05",
-      "title": "Log exit trigger and notional lifecycle fields",
-      "confidence": "HIGH",
-      "recommended_mode": "SHADOW",
-      "status": "PENDING"
-    },
-    {
-      "proposal_id": "P-STOCK-20261002-06",
-      "title": "Record ZPTA shadow-entry gate outcomes",
+      "proposal_id": "P-STOCK-20261005-06",
+      "title": "Add ZPTA prediction-independence and shadow-trade diagnostics",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"

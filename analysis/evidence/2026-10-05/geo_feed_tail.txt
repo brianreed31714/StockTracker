@@ -1,0 +1,500 @@
+2026-10-05 08:20:55,452 | WARNING | MATERIAL GEO EVENT | 0.68 | bullish | New wave of attacks on Hormuz threatens oil recovery - theaustralian.com.au
+2026-10-05 08:21:01,434 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:21:01,471 | INFO | geo event | 0.35 | neutral | OPEC+ decides to keep oil output targets steady in November - bastillepost.com
+2026-10-05 08:21:05,613 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:21:05,649 | WARNING | MATERIAL GEO EVENT | 0.65 | bullish | Global Market: OPEC+ keeps November oil output steady as Brent tops $100 - The Economic Times
+2026-10-05 08:21:10,228 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:21:10,264 | INFO | geo event | 0.25 | bullish | Crude oil prices and refinery margins generally increased throughout the third quarter - eia.gov
+2026-10-05 08:21:10,315 | INFO | feed updated | new=5 active=392 signal=+0.246 adjustment=+2.46
+2026-10-05 08:26:21,142 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:26:21,179 | INFO | geo event | 0.35 | neutral | OPEC+ Cartel Agrees To Keep Oil Production Steady In November - Ommcom News
+2026-10-05 08:26:25,891 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:26:25,953 | INFO | geo event | 0.30 | bullish | Yemeni government forces launch an attack on Houthi positions in the Dhubab district overlooking Bab al-Mandab, sources say - newsquawk.com
+2026-10-05 08:26:29,608 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:26:29,650 | WARNING | MATERIAL GEO EVENT | 0.72 | mixed | Oil pares gains as Hormuz flows recover, shipping risks persist - sana.sy
+2026-10-05 08:26:33,638 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:26:33,680 | INFO | geo event | 0.35 | neutral | OPEC+: Algeria and Six Other Countries Maintain Production Levels Unchanged in November - أفريكا نيوز
+2026-10-05 08:26:37,548 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:26:37,602 | INFO | geo event | 0.25 | neutral | PIF Energy plans US$2 billion crude tanker fleet - hydrocarbonengineering.com
+2026-10-05 08:26:41,427 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:26:41,453 | INFO | geo event | 0.20 | neutral | US-Iran war: Is Tehran losing Strait of Hormuz ‘psychological leverage’? Expert decodes where Tehran stays strong - livemint.com
+2026-10-05 08:26:52,138 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:26:52,209 | INFO | geo event | 0.32 | bullish | Explosions reported near tanker as Yemen conflict escalates - TradeWinds News
+2026-10-05 08:26:56,602 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:26:56,661 | INFO | geo event | 0.45 | bullish | Reports of a "massive explosion" at a oil refinery in Jeddah, Saudi, Naya reports - newsquawk.com
+2026-10-05 08:27:00,141 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:27:00,201 | WARNING | MATERIAL GEO EVENT | 0.65 | bearish | ExxonMobil (XOM) exec says oil production in Guyana will exceed 1 mln BPD by year-end and will continue to grow - newsquawk.com
+2026-10-05 08:27:04,070 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:27:04,107 | INFO | geo event | 0.20 | neutral | KPC CEO says Co. will work with global partners to expand Kuwait’s tanker fleet through ownership or leasing options for crude and product tankers - newsquawk.com
+2026-10-05 08:27:08,776 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:27:08,816 | INFO | geo event | 0.45 | bullish | Yemeni sources report an attack on an oil refinery in Jeddah, Saudi Arabia, Tasnim reports - newsquawk.com
+2026-10-05 08:27:14,005 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:27:14,042 | INFO | geo event | 0.45 | bearish | Mideast oil exports surpass prewar levels despite pipeline, ship attacks - Al-Monitor
+2026-10-05 08:27:14,083 | INFO | feed updated | new=12 active=391 signal=+0.224 adjustment=+2.24
+2026-10-05 08:32:24,715 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:32:24,742 | INFO | geo event | 0.45 | bullish | OPEC+ Decides To Keep Its Oil Supply Frozen in November - teleSUR English
+2026-10-05 08:32:28,907 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:32:28,975 | INFO | geo event | 0.55 | bearish | Middle East oil exports recover to pre-Iran war levels - The Business Standard
+2026-10-05 08:32:32,783 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:32:32,805 | INFO | geo event | 0.35 | neutral | OPEC+ Keeps November Oil Production Targets Unchanged - Fineko/abc.az
+2026-10-05 08:32:37,452 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:32:37,483 | INFO | geo event | 0.35 | neutral | Iran oil minister resigns amid fuel shortages and crude export pressure - thenationalnews.com
+2026-10-05 08:32:37,530 | INFO | feed updated | new=4 active=395 signal=+0.220 adjustment=+2.20
+2026-10-05 08:37:48,702 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:37:48,746 | WARNING | MATERIAL GEO EVENT | 0.72 | bullish | New wave of attacks on Hormuz threatens oil recovery - The Australian
+2026-10-05 08:37:52,615 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:37:52,671 | INFO | geo event | 0.25 | bearish | More Oil, Same War: Why Increased Exports Aren’t a Sign of Iran’s Imminent Defeat - Council on Foreign Relations (CFR)
+2026-10-05 08:37:56,162 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:37:56,195 | INFO | geo event | 0.58 | bullish | US-Israel-Iran War Latest Live News: Tanker Turns Back in Strait of Hormuz After IRGC Warning as US Senator Blames ‘Trump’s Economy’ for Squeezed Budgets Ahead of Midterms - The Sunday Guardian
+2026-10-05 08:38:02,103 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:38:02,165 | INFO | geo event | 0.25 | neutral | LNG Trade Through Hormuz Extends Rebound Despite Shipping Risks - gCaptain
+2026-10-05 08:38:05,974 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:38:05,995 | INFO | geo event | 0.56 | bullish | Iranian Oil Offers to Chinese Buyers Fall as US Blockade Bites, Sources Say - energynow.com
+2026-10-05 08:38:08,966 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:38:09,005 | INFO | geo event | 0.15 | neutral | ICE launches Oman-China, W Africa-China VLCC freight futures - Quantum Commodity Intelligence
+2026-10-05 08:38:12,700 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:38:12,751 | WARNING | MATERIAL GEO EVENT | 0.78 | bullish | Aramco CEO Amin Nasser says inventories are helping meet customer demand even as physical crude commands huge premiums over Brent amid Hormuz disruption - Business Upturn
+2026-10-05 08:38:12,797 | INFO | feed updated | new=7 active=396 signal=+0.234 adjustment=+2.34
+2026-10-05 08:43:23,838 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:43:23,877 | INFO | geo event | 0.30 | neutral | OPEC+ decides to keep oil output targets steady in November - 巴士的報
+2026-10-05 08:43:29,009 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:43:29,062 | INFO | geo event | 0.20 | bearish | More Oil, Same War: Why Increased Exports Aren’t a Sign of Iran’s Imminent Defeat - cfr.org
+2026-10-05 08:43:32,346 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:43:32,389 | WARNING | MATERIAL GEO EVENT | 0.70 | mixed | Middle East Oil Exports Top Pre-War Levels for Part of September But Tanker Attacks Increase - gCaptain
+2026-10-05 08:43:35,998 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:43:36,040 | INFO | geo event | 0.55 | bullish | Iranian Oil Offers to Chinese Buyers Fall as US Blockade Bites, Sources Say - EnergyNow.com
+2026-10-05 08:43:41,484 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:43:41,544 | WARNING | MATERIAL GEO EVENT | 0.82 | bullish | UAE Says Iranian Missiles Struck Oil Tankers in Strait of Hormuz, One Sailor Killed - EnergyNow.com
+2026-10-05 08:43:45,270 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:43:45,322 | INFO | geo event | 0.45 | bullish | Houthis Claim Aramco Strike as Yemen Fighting Puts Yanbu Shipments at Risk - tokenpost.com
+2026-10-05 08:43:45,374 | INFO | feed updated | new=6 active=400 signal=+0.244 adjustment=+2.44
+2026-10-05 08:48:52,243 | INFO | feed updated | new=0 active=397 signal=+0.249 adjustment=+2.49
+2026-10-05 08:54:05,490 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:54:05,550 | WARNING | MATERIAL GEO EVENT | 0.65 | bullish | Brent Crude Oil Price Jumps After Attack on Iran’s South Pars Field - EnergyNow.com
+2026-10-05 08:54:09,244 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:54:12,177 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:54:12,216 | INFO | geo event | 0.35 | neutral | OPEC+ keeps November oil output targets unchanged - Profit by Pakistan Today
+2026-10-05 08:54:16,344 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:54:16,389 | INFO | geo event | 0.20 | bullish | The Daily View: Thin inventories, thicker risks - Lloyd's List
+2026-10-05 08:54:16,431 | INFO | feed updated | new=3 active=399 signal=+0.252 adjustment=+2.52
+2026-10-05 08:59:26,954 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:59:26,957 | INFO | geo event | 0.45 | bullish | Iran-US war widens to Yemen as Houthi attacks threaten oil supplies - thevibes.com
+2026-10-05 08:59:32,655 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:59:32,695 | WARNING | MATERIAL GEO EVENT | 0.65 | bullish | OPEC+ Freezes Oil Output Targets for November as Brent Crude Crosses $100 Amid Escalating Middle East Crisis - GujaratSamachar English
+2026-10-05 08:59:36,953 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:59:36,955 | INFO | geo event | 0.55 | bullish | OPEC+ keeps oil production unchanged in November / Brent crude remains above 100 dollars per barrel - informat.ro
+2026-10-05 08:59:40,055 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:59:40,089 | INFO | geo event | 0.25 | neutral | OPEC+: Algeria and Six Other Countries Maintain Production Levels Unchanged in November - africanews.dz
+2026-10-05 08:59:43,961 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:59:44,048 | INFO | geo event | 0.25 | neutral | Is Iran charging a toll to allow oil traffic through Hormuz? - Al Jazeera
+2026-10-05 08:59:47,551 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:59:47,577 | INFO | geo event | 0.45 | neutral | OPEC+ Agrees to Keep Oil Production Steady - astanatimes.com
+2026-10-05 08:59:52,852 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 08:59:52,890 | INFO | geo event | 0.15 | neutral | Is Iran losing control of the Strait of Hormuz? - The New Arab
+2026-10-05 08:59:52,942 | INFO | feed updated | new=7 active=403 signal=+0.256 adjustment=+2.56
+2026-10-05 09:05:03,980 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:05:04,028 | INFO | geo event | 0.25 | bullish | Oil Heads for Weekly Gains as Middle East Supply Risks Persist - EnergyNow.com
+2026-10-05 09:05:07,495 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:05:07,547 | INFO | geo event | 0.35 | neutral | Kazakhstan, OPEC+ partners agree to maintain November oil production levels - Daryo
+2026-10-05 09:05:07,587 | INFO | feed updated | new=2 active=404 signal=+0.256 adjustment=+2.56
+2026-10-05 09:10:19,582 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:10:19,599 | WARNING | MATERIAL GEO EVENT | 0.86 | bullish | Hormuz Traffic at Standstill as US Vessel Seizure Widens Risk - gcaptain.com
+2026-10-05 09:10:23,104 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:10:23,145 | INFO | geo event | 0.35 | neutral | OPEC+ to keep oil output unchanged for second straight month in November - unb.com.bd
+2026-10-05 09:10:29,076 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:10:29,110 | INFO | geo event | 0.20 | neutral | Saudi East-West Oil Pipeline Is Said to Be Flowing as Normal - bloomberg.com
+2026-10-05 09:10:33,700 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:10:33,737 | INFO | geo event | 0.30 | bearish | Iraq ships 2 million barrels of crude oil through Strait of Hormuz - international.astroawani.com
+2026-10-05 09:10:37,464 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:10:37,474 | INFO | geo event | 0.55 | bullish | OPEC+ keeps oil taps in check as Persian Gulf exports decline - english.nv.ua
+2026-10-05 09:10:42,032 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:10:42,092 | INFO | geo event | 0.30 | neutral | LNG Trade Through Hormuz Extends Rebound Despite Shipping Risks - gcaptain.com
+2026-10-05 09:10:46,288 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:10:46,332 | INFO | geo event | 0.55 | mixed | Middle East Oil Exports Top Pre-War Levels for Part of September But Tanker Attacks Increase - gcaptain.com
+2026-10-05 09:10:51,254 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:10:51,328 | WARNING | MATERIAL GEO EVENT | 0.82 | bullish | US Naval Blockade Squeezes Iran’s Oil Exports, Forces Crude Onto Floating Storage - EnergyNow.com
+2026-10-05 09:10:56,713 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:10:56,771 | WARNING | MATERIAL GEO EVENT | 0.84 | bullish | Iran ramps up Strait of Hormuz attacks with 11 ships hit in a week - TradeWinds News
+2026-10-05 09:10:56,825 | INFO | feed updated | new=9 active=410 signal=+0.271 adjustment=+2.71
+2026-10-05 09:16:07,927 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:16:07,972 | INFO | geo event | 0.25 | neutral | Is Iran charging a toll to allow oil traffic through Hormuz? - aljazeera.com
+2026-10-05 09:16:11,530 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:16:11,573 | INFO | geo event | 0.30 | neutral | OPEC+ keeps November oil output targets unchanged - profit.pakistantoday.com.pk
+2026-10-05 09:16:15,196 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:16:15,211 | INFO | geo event | 0.55 | bearish | Global Physical Crude Markets Mired in Discounts as Middle East Ramps Up Supply - EnergyNow.com
+2026-10-05 09:16:27,071 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:16:27,093 | INFO | geo event | 0.45 | bearish | Mideast oil exports surpass prewar levels despite pipeline, ship attacks - al-monitor.com
+2026-10-05 09:16:27,150 | INFO | feed updated | new=4 active=411 signal=+0.259 adjustment=+2.59
+2026-10-05 09:21:38,654 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:21:38,697 | INFO | geo event | 0.25 | bearish | Azim Novruzov, the Shadow Fleet’s own money mixologist, evades the sanctions imposed on Petrichor and Wellbred - trinitybugle.com
+2026-10-05 09:21:38,738 | INFO | feed updated | new=1 active=409 signal=+0.256 adjustment=+2.56
+2026-10-05 09:26:50,540 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:26:50,579 | WARNING | MATERIAL GEO EVENT | 0.75 | bullish | Dynacom newbuild among at least four tankers attacked in Hormuz - Seatrade Maritime News
+2026-10-05 09:26:54,011 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:26:54,072 | INFO | geo event | 0.35 | neutral | Kazakhstan and OPEC+ Allies Keep November Oil Output Unchanged - caspianpost.com
+2026-10-05 09:27:01,289 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:27:01,325 | INFO | geo event | 0.42 | bearish | Fuel relief? India’s major crude supplier unexpectedly cuts oil prices to Asia - financialexpress.com
+2026-10-05 09:27:04,509 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:27:04,539 | INFO | geo event | 0.20 | neutral | OPEC+ subgroup will meet to review conditions in the oil market - abcmedia.am
+2026-10-05 09:27:08,892 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:27:08,927 | INFO | geo event | 0.55 | neutral | KPC CEO says crude supplies are ample but refined products are tight, Co. must prioritise shipping refined products out of the Gulf to relieve regional refinery bottlenecks - newsquawk.com
+2026-10-05 09:27:12,581 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:27:12,673 | INFO | feed updated | new=5 active=411 signal=+0.253 adjustment=+2.53
+2026-10-05 09:32:23,271 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:32:23,318 | INFO | geo event | 0.35 | neutral | Saudi Aramco eyes new oil routes to bypass Strait of Hormuz - The New Arab
+2026-10-05 09:32:26,408 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:32:26,458 | INFO | geo event | 0.52 | bullish | Burst of Attacks in Gulf Heightens Fears Over Fragile Energy Trade - nytimes.com
+2026-10-05 09:32:30,286 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:32:30,323 | INFO | geo event | 0.25 | bullish | Crude oil prices and refinery margins generally increased throughout the third quarter - eia.gov
+2026-10-05 09:32:33,578 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:32:33,614 | INFO | geo event | 0.20 | neutral | Is Iran charging a toll to allow oil traffic through Hormuz? - Al Jazeera
+2026-10-05 09:32:33,669 | INFO | feed updated | new=4 active=410 signal=+0.252 adjustment=+2.52
+2026-10-05 09:37:42,850 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:37:42,894 | INFO | geo event | 0.35 | neutral | OPEC+ 7 Reveal Production Plan for November - Rigzone
+2026-10-05 09:37:47,604 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:37:47,636 | INFO | geo event | 0.35 | bullish | Saudi-Backed Forces Claim Control of Bab el-Mandeb Strait - gcaptain.com
+2026-10-05 09:37:51,948 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:37:52,021 | INFO | geo event | 0.15 | neutral | Opinion: Oil’s New Problem Isn’t Supply. It’s Logistics - gcaptain.com
+2026-10-05 09:37:52,064 | INFO | feed updated | new=3 active=410 signal=+0.252 adjustment=+2.52
+2026-10-05 09:43:03,573 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:43:03,626 | WARNING | MATERIAL GEO EVENT | 0.65 | bearish | Kuwait restores oil production to 2 MMbpd as Hormuz traffic increases - World Oil
+2026-10-05 09:43:03,666 | INFO | feed updated | new=1 active=411 signal=+0.243 adjustment=+2.43
+2026-10-05 09:48:14,189 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:48:14,244 | INFO | geo event | 0.25 | neutral | OPEC+ agrees to keep Nov oil output targets steady - Investify
+2026-10-05 09:48:14,285 | INFO | feed updated | new=1 active=409 signal=+0.246 adjustment=+2.46
+2026-10-05 09:53:25,379 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:53:25,427 | INFO | geo event | 0.62 | bullish | Tanker costs soar 43-fold as Hormuz tensions reshape global oil trade - gulfnews.com
+2026-10-05 09:53:29,709 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:53:29,752 | INFO | geo event | 0.55 | bearish | Tankers keep moving as Gulf oil exports clear pre-war mark: Kpler - gulfnews.com
+2026-10-05 09:53:33,676 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:53:33,725 | INFO | geo event | 0.12 | neutral | Trump squeezes Iran on two fronts: Salaries lose their worth, workers quit jobs - gulfnews.com
+2026-10-05 09:53:33,776 | INFO | feed updated | new=3 active=407 signal=+0.245 adjustment=+2.45
+2026-10-05 09:58:43,368 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:58:43,412 | INFO | geo event | 0.55 | mixed | Oil supplies through Hormuz resume, but war in Yemen keeps Brent above $100/barrel - електронна зернова біржа України
+2026-10-05 09:58:47,691 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 09:58:47,751 | INFO | geo event | 0.45 | bullish | Burst of Attacks in Gulf Heightens Fears Over Fragile Energy Trade - The New York Times
+2026-10-05 09:58:47,794 | INFO | feed updated | new=2 active=397 signal=+0.243 adjustment=+2.43
+2026-10-05 10:03:58,310 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:03:58,334 | INFO | geo event | 0.35 | neutral | OPEC+ agrees to keep November oil output targets steady - DD India
+2026-10-05 10:04:02,734 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:04:02,777 | WARNING | MATERIAL GEO EVENT | 0.75 | bearish | Kuwait restores oil production to 2 MMbpd as Hormuz traffic increases - worldoil.com
+2026-10-05 10:04:05,967 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:04:06,022 | INFO | feed updated | new=2 active=399 signal=+0.234 adjustment=+2.34
+2026-10-05 10:09:17,286 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:09:17,352 | INFO | geo event | 0.55 | bearish | Middle East crude exports rebound past pre-war levels: Kpler - Roya News
+2026-10-05 10:09:21,246 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:09:21,288 | INFO | geo event | 0.35 | neutral | More Ships Change Course in the Red Sea After Houthi Threats, Shipping Data Shows - EnergyNow.com
+2026-10-05 10:09:25,364 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:09:25,415 | INFO | geo event | 0.15 | neutral | US-Iran war: What UAE residents need to know today (Oct 5, 2026) - Gulf News
+2026-10-05 10:09:30,772 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:09:30,824 | INFO | geo event | 0.25 | bullish | Saudi Aramco CEO Warns Oil Stock Replenishment Takes Two Years - SuaraGarut.ID
+2026-10-05 10:09:30,868 | INFO | feed updated | new=4 active=387 signal=+0.214 adjustment=+2.14
+2026-10-05 10:14:41,737 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:14:41,756 | INFO | geo event | 0.15 | neutral | What can Iran’s new oil chief change under the US blockade? - iranintl.com
+2026-10-05 10:14:45,979 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:14:46,027 | WARNING | MATERIAL GEO EVENT | 0.70 | bullish | OPEC+ Holds November Oil Output Targets Steady as Iran War Keeps Supply Tight - tekedia.com
+2026-10-05 10:14:50,482 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:14:50,530 | WARNING | MATERIAL GEO EVENT | 0.65 | mixed | Iran's Oil Minister Resigns; Hormuz Risks Persist, Tanker Attacks Rise, Saudi Cuts Asia Prices - timesnownews.com
+2026-10-05 10:14:53,895 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:14:53,963 | INFO | geo event | 0.20 | neutral | OPEC+ subgroup will meet to review conditions in the oil market - ABC media
+2026-10-05 10:14:58,148 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:14:58,202 | INFO | geo event | 0.25 | bullish | Why Iranian, Houthi Threats to Red Sea Shipping Matter More For Oil Now - EnergyNow.com
+2026-10-05 10:15:01,279 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:15:01,329 | INFO | geo event | 0.30 | bullish | Tanker Costs and Refinery Losses Keep Oil Prices Above $100 - Межа. Новини України.
+2026-10-05 10:15:04,407 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:15:08,367 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:15:08,456 | INFO | geo event | 0.35 | mixed | Saudi-Backed Forces Claim Control of Bab el-Mandeb Strait - gCaptain
+2026-10-05 10:15:12,569 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:15:12,619 | INFO | geo event | 0.30 | bullish | Crude oil prices and refinery margins generally increased throughout the third quarter - U.S. Energy Information Administration (EIA) (.gov)
+2026-10-05 10:15:16,957 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:15:17,013 | INFO | geo event | 0.20 | neutral | Is Iran charging a toll to allow oil traffic through Hormuz? - aljazeera.com
+2026-10-05 10:15:20,310 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:15:20,335 | INFO | geo event | 0.12 | neutral | Opinion: Oil’s New Problem Isn’t Supply. It’s Logistics - gCaptain
+2026-10-05 10:15:20,375 | INFO | feed updated | new=10 active=376 signal=+0.218 adjustment=+2.18
+2026-10-05 10:20:30,650 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:20:30,697 | INFO | geo event | 0.35 | neutral | OPEC+ to keep November oil output targets steady - The Nation Newspaper
+2026-10-05 10:20:35,220 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:20:35,272 | INFO | geo event | 0.48 | bullish | Tanker turns back in Hormuz after IRGC warning - siasat.com
+2026-10-05 10:20:39,669 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:20:39,710 | WARNING | MATERIAL GEO EVENT | 0.90 | bullish | Oil Tanker Traffic Through Hormuz at Near Standstill as Attacks Strain Iran Truce - EnergyNow.com
+2026-10-05 10:20:43,496 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:20:43,540 | INFO | geo event | 0.15 | neutral | ICE launches Oman-China, W Africa-China VLCC freight futures - qcintel.com
+2026-10-05 10:20:47,726 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:20:47,774 | INFO | geo event | 0.35 | neutral | OPEC+ Hold Oil Output Steady in November Amid Middle East Tensions | - Business Post Nigeria
+2026-10-05 10:20:47,821 | INFO | feed updated | new=5 active=371 signal=+0.224 adjustment=+2.24
+2026-10-05 10:25:58,114 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:25:58,173 | WARNING | MATERIAL GEO EVENT | 0.82 | bullish | Saudi Arabia's East-West oil pipeline halted again after fresh attack - The Business Standard
+2026-10-05 10:25:58,230 | INFO | feed updated | new=1 active=372 signal=+0.230 adjustment=+2.30
+2026-10-05 10:31:10,314 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:31:10,380 | INFO | geo event | 0.55 | bullish | Iran oil minister Mohsen Paknejad resigns as US blockade squeezes petroleum exports - energy.economictimes.indiatimes.com
+2026-10-05 10:31:15,262 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:31:15,313 | INFO | geo event | 0.28 | bullish | Looming US Sanctions on Iran Put China Oil Buying in Spotlight - EnergyNow.com
+2026-10-05 10:31:20,673 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:31:20,689 | WARNING | MATERIAL GEO EVENT | 0.86 | bullish | More Tankers Hit in Hormuz as IRGC Orders Ship to Turn Back - gCaptain
+2026-10-05 10:31:24,834 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:31:24,885 | WARNING | MATERIAL GEO EVENT | 0.72 | bearish | Kuwait restores oil production to 2 MMbpd as Hormuz traffic increases - worldoil.com
+2026-10-05 10:31:27,304 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:31:27,402 | INFO | feed updated | new=4 active=366 signal=+0.228 adjustment=+2.28
+2026-10-05 10:36:37,566 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:36:37,613 | WARNING | MATERIAL GEO EVENT | 0.72 | bullish | Weekend: OPEC+ holds November output steady with core members 5 million bpd below prewar levels - investingLive
+2026-10-05 10:36:41,201 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:36:41,268 | INFO | geo event | 0.18 | neutral | Senior Trump administration officials met to discuss Iran war at Camp David - cbsnews.com
+2026-10-05 10:36:45,142 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:36:45,188 | INFO | geo event | 0.15 | neutral | 68th Meeting of the Joint Ministerial Monitoring Committee - euro petrole
+2026-10-05 10:36:50,044 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:36:50,091 | WARNING | MATERIAL GEO EVENT | 0.68 | bullish | IRAN’S “CROWN JEWEL” – Kharg Island, Struck by US, is Key Hub for Iran Oil Exports - EnergyNow.com
+2026-10-05 10:36:54,675 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:36:54,727 | WARNING | MATERIAL GEO EVENT | 0.65 | bearish | Kuwait restores oil production to 2 MMbpd as Hormuz traffic increases - World Oil
+2026-10-05 10:36:54,783 | INFO | feed updated | new=5 active=366 signal=+0.224 adjustment=+2.24
+2026-10-05 10:42:06,778 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:42:06,830 | INFO | geo event | 0.35 | mixed | Iran Oil Minister Resigns, Replaced By Top Executive Amid US Blockade On Tehran’s Exports - Republic World
+2026-10-05 10:42:10,189 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:42:10,217 | INFO | geo event | 0.35 | neutral | OPEC+ alliance maintains oil production quotas for November amid market review - streamlinefeed.co.ke
+2026-10-05 10:42:15,764 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:42:15,801 | INFO | geo event | 0.55 | bullish | US Vows ‘Economic D-Day’ as Iran Threatens to Halt All Oil Exports - EnergyNow.com
+2026-10-05 10:42:20,598 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:42:20,655 | INFO | geo event | 0.25 | neutral | Saudi-backed forces say they retook key Red Sea port in anti-Houthi offensive - Iran International
+2026-10-05 10:42:24,505 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:42:24,523 | WARNING | MATERIAL GEO EVENT | 0.72 | mixed | Oil futures: Brent rebounds after Saudi attacks, G7 stock release - qcintel.com
+2026-10-05 10:42:28,154 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:42:28,245 | INFO | feed updated | new=5 active=367 signal=+0.222 adjustment=+2.22
+2026-10-05 10:47:40,173 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:47:40,225 | INFO | geo event | 0.55 | bearish | OPEC+ Likely to Again Raise Oil Output Targets From September, Sources Say - EnergyNow.com
+2026-10-05 10:47:44,851 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:47:44,944 | INFO | geo event | 0.28 | bearish | Saudi-backed forces say they retook key Red Sea port in anti-Houthi offensive - iranintl.com
+2026-10-05 10:47:50,217 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:47:50,284 | INFO | geo event | 0.40 | neutral | OPEC+ Hold Oil Output Steady in November Amid Middle East Tensions | - businesspost.ng
+2026-10-05 10:47:50,327 | INFO | feed updated | new=3 active=369 signal=+0.217 adjustment=+2.17
+2026-10-05 10:53:00,797 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:53:00,844 | INFO | geo event | 0.35 | mixed | War or Talks? The U.S. and Iran Enter a "Critical Week" as Oil Prices Remain Above the $100 Mark - news.futunn.com
+2026-10-05 10:53:05,059 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:53:05,107 | INFO | geo event | 0.45 | bullish | Saudi Arabia 'Big Winner' Of Iran War, With Kingdom's Oil Revenues Soaring To $210 Billion, As Trump Ponders Escalating Conflict After Midterms - 247wallst.com
+2026-10-05 10:53:09,541 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:53:09,601 | INFO | geo event | 0.35 | bullish | Explosions reported near tanker as Yemen conflict escalates - tradewindsnews.com
+2026-10-05 10:53:14,127 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:53:14,175 | INFO | geo event | 0.15 | neutral | How a Houthi Blockade in the Red Sea Tightens Iran’s Grip on Global Energy Supplies - EnergyNow.com
+2026-10-05 10:53:19,048 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:53:19,098 | INFO | geo event | 0.35 | mixed | The Cost to Ship Oil Just Exploded 3,900% — and Americans Could End Up Paying for It - 247wallst.com
+2026-10-05 10:53:24,145 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:53:24,178 | INFO | geo event | 0.55 | mixed | Yemeni Houthis hit Saudi Arabia's Ras Tanura refinery (550k BPD) with missiles, Sabereen reports - Newsquawk
+2026-10-05 10:53:28,468 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:53:28,509 | WARNING | MATERIAL GEO EVENT | 0.78 | bullish | More Tankers Hit in Hormuz as IRGC Orders Ship to Turn Back - gcaptain.com
+2026-10-05 10:53:33,303 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:53:33,334 | WARNING | MATERIAL GEO EVENT | 0.86 | bullish | Iran ramps up Strait of Hormuz attacks with 11 ships hit in a week - tradewindsnews.com
+2026-10-05 10:53:37,983 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:53:38,066 | INFO | geo event | 0.12 | neutral | China’s Crude Calculus in Iran War - Energy News, Top Headlines, Commentaries, Features & Events - EnergyNow.com
+2026-10-05 10:53:41,372 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:53:41,399 | WARNING | MATERIAL GEO EVENT | 0.72 | mixed | Oil futures: Brent rebounds after Saudi attacks, G7 stock release - Quantum Commodity Intelligence
+2026-10-05 10:53:45,350 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 10:53:45,402 | WARNING | MATERIAL GEO EVENT | 0.72 | bullish | Iran's Oil Minister Resigns as U.S. Blockade Chokes Crude Exports - Crude Oil Prices Today | OilPrice.com
+2026-10-05 10:53:45,454 | INFO | feed updated | new=11 active=378 signal=+0.233 adjustment=+2.33
+2026-10-05 10:58:51,859 | INFO | feed updated | new=0 active=378 signal=+0.234 adjustment=+2.34
+2026-10-05 11:04:02,590 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:04:02,644 | INFO | geo event | 0.15 | neutral | The Daily View: Thin inventories, thicker risks - lloydslist.com
+2026-10-05 11:04:07,596 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:04:07,648 | INFO | geo event | 0.55 | bullish | Burst of Attacks in Gulf Heightens Fears Over Fragile Energy Trade - The New York Times
+2026-10-05 11:04:12,498 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:04:12,535 | INFO | geo event | 0.15 | bullish | ConocoPhillips' chairman sees oil price floor rising towards $70/bbl - Oil & Gas Journal
+2026-10-05 11:04:16,099 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:04:16,148 | INFO | geo event | 0.35 | bullish | Oil market faces years of supply deficits as shipping bottlenecks bite - Baird Maritime
+2026-10-05 11:04:16,192 | INFO | feed updated | new=4 active=379 signal=+0.238 adjustment=+2.38
+2026-10-05 11:09:27,045 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:09:27,091 | INFO | geo event | 0.55 | bearish | Middle East oil exports recover to pre-Iran war levels despite Hormuz attacks - dw.com
+2026-10-05 11:09:27,142 | INFO | feed updated | new=1 active=380 signal=+0.236 adjustment=+2.36
+2026-10-05 11:14:38,547 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:14:38,603 | INFO | geo event | 0.35 | bullish | Burst of Attacks in Gulf Heightens Fears Over Fragile Energy Trade - nytimes.com
+2026-10-05 11:14:42,933 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:14:42,973 | INFO | geo event | 0.35 | bullish | US-Israel-Iran War Latest Live News: US Approves $1 Billion UAE Arms Deal, $400 Million Kuwait Patriot Support; Tanker Turns Back in Hormuz, Saudi-Backed Forces Push Houthis - The Sunday Guardian
+2026-10-05 11:14:43,026 | INFO | feed updated | new=2 active=381 signal=+0.239 adjustment=+2.39
+2026-10-05 11:19:55,841 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:19:55,873 | INFO | geo event | 0.62 | bullish | OPEC+ Delays Oil Capacity Review After Iran War Disrupts Expansion Plans, Sources Say - EnergyNow.com
+2026-10-05 11:19:59,144 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:19:59,202 | INFO | geo event | 0.28 | bullish | Oil Prices Extend Gains on Escalating Middle East Hostilities - EnergyNow
+2026-10-05 11:20:03,264 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:20:03,267 | WARNING | MATERIAL GEO EVENT | 0.72 | bullish | Iran's Oil Minister Resigns as U.S. Blockade Chokes Crude Exports - oilprice.com
+2026-10-05 11:20:06,499 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:20:06,550 | INFO | geo event | 0.25 | bullish | ConocoPhillips' chairman sees oil price floor rising towards $70/bbl - ogj.com
+2026-10-05 11:20:10,103 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:20:10,185 | INFO | geo event | 0.35 | bullish | Oil market faces years of supply deficits as shipping bottlenecks bite - bairdmaritime.com
+2026-10-05 11:20:13,913 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:20:13,929 | INFO | geo event | 0.35 | bullish | Oil shipments near Strait of Hormuz turn costlier as sailors risk attacks for $25,000 - The American Bazaar
+2026-10-05 11:20:13,981 | INFO | feed updated | new=6 active=382 signal=+0.251 adjustment=+2.51
+2026-10-05 11:25:24,461 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:25:24,515 | INFO | geo event | 0.45 | bearish | Saudi June Crude Exports Climb From Record May Low, Data Shows - EnergyNow.com
+2026-10-05 11:25:30,117 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:25:30,172 | INFO | geo event | 0.35 | bearish | ADNOC LNG Tanker Crosses Strait of Hormuz for First Time Since Iran War, Ship-Tracking Data Shows - EnergyNow.com
+2026-10-05 11:25:33,976 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:25:34,025 | INFO | geo event | 0.10 | neutral | Iran-Houthi escalation could backfire. Here is how - Al Majalla
+2026-10-05 11:25:34,071 | INFO | feed updated | new=3 active=384 signal=+0.242 adjustment=+2.42
+2026-10-05 11:30:41,684 | INFO | feed updated | new=0 active=384 signal=+0.242 adjustment=+2.42
+2026-10-05 11:35:53,888 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:35:53,947 | INFO | geo event | 0.30 | neutral | Iran Oil Minister Mohsen Paknejad resigns amid US war; Hamid Bovard named acting minister - news9live.com
+2026-10-05 11:35:57,268 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:35:57,275 | INFO | geo event | 0.10 | neutral | US-Iran war: What UAE residents need to know today (Oct 5, 2026) - gulfnews.com
+2026-10-05 11:36:02,288 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:36:02,305 | INFO | geo event | 0.45 | bullish | Iran oil minister resigns amid fuel shortages and crude export pressure - thenationalnews.com
+2026-10-05 11:36:02,348 | INFO | feed updated | new=3 active=385 signal=+0.245 adjustment=+2.46
+2026-10-05 11:41:15,348 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:41:15,388 | INFO | geo event | 0.35 | neutral | OPEC+ to keep November oil output targets steady - Forex Factory
+2026-10-05 11:41:20,333 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:41:20,380 | INFO | geo event | 0.55 | bearish | Middle East oil exports exceed pre-war levels despite Hormuz attacks - Business Upturn
+2026-10-05 11:41:20,421 | INFO | feed updated | new=2 active=383 signal=+0.238 adjustment=+2.39
+2026-10-05 11:46:30,191 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:46:30,241 | INFO | geo event | 0.25 | neutral | Seven OPEC+ countries, including Kazakhstan, to maintain current oil production levels in November - TengriNews
+2026-10-05 11:46:30,290 | INFO | feed updated | new=1 active=381 signal=+0.240 adjustment=+2.40
+2026-10-05 11:51:41,555 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:51:41,597 | INFO | geo event | 0.25 | neutral | Shafaq News..Iran’s oil minister resigns, no reason given - شفق نيوز
+2026-10-05 11:51:46,282 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:51:46,381 | INFO | geo event | 0.55 | bullish | OPEC+ Decides To Keep Its Oil Supply Frozen in November - telesurenglish.net
+2026-10-05 11:51:50,570 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:51:50,622 | INFO | geo event | 0.58 | mixed | Middle East crude exports top pre-war levels as tanker attacks raise shipping risk - tradersunion.com
+2026-10-05 11:51:53,782 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:51:53,817 | WARNING | MATERIAL GEO EVENT | 0.65 | bearish | Oil prices slip as West Asia crude exports rise, G7 to release stocks - business-standard.com
+2026-10-05 11:51:58,353 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:51:58,404 | WARNING | MATERIAL GEO EVENT | 0.65 | bullish | OPEC+ Keeps November Oil Output Targets Unchanged as War Limits Supply - egyptoil-gas.com
+2026-10-05 11:52:01,359 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:52:05,715 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:52:05,767 | INFO | geo event | 0.40 | bearish | Middle East oil exports exceed pre-war levels despite Hormuz attacks - businessupturn.com
+2026-10-05 11:52:10,255 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:52:10,308 | INFO | geo event | 0.12 | neutral | Saudi Arabia provides SAR224m funding boost to Yemen state budget - gulfbusiness.com
+2026-10-05 11:52:14,572 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:52:14,631 | INFO | geo event | 0.58 | mixed | Middle East crude oil exports exceed pre-war levels but tanker attacks increase - gulfbusiness.com
+2026-10-05 11:52:17,420 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:52:17,518 | INFO | geo event | 0.35 | bullish | Oil Prices Extend Gains on Escalating Middle East Hostilities - EnergyNow.com
+2026-10-05 11:52:22,085 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:52:22,123 | WARNING | MATERIAL GEO EVENT | 0.78 | bullish | Aramco CEO Amin Nasser says inventories are helping meet customer demand even as physical crude commands huge premiums over Brent amid Hormuz disruption - businessupturn.com
+2026-10-05 11:52:25,859 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:52:25,949 | INFO | geo event | 0.25 | neutral | Iran Can Go Up to Two Months Without Oil Exports Before Cutting Output, Analysts Say - EnergyNow.com
+2026-10-05 11:52:30,009 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:52:30,038 | INFO | geo event | 0.10 | neutral | OPINION | Why logistics, not supply, is now oil's biggest headache - Baird Maritime
+2026-10-05 11:52:32,673 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:52:32,785 | INFO | feed updated | new=12 active=389 signal=+0.243 adjustment=+2.43
+2026-10-05 11:57:43,284 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:57:43,332 | WARNING | MATERIAL GEO EVENT | 0.68 | mixed | Persian Gulf oil flows return to prewar levels, but Iran could resort to a ‘scorched earth campaign’ - Fortune
+2026-10-05 11:57:47,899 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:57:47,950 | WARNING | MATERIAL GEO EVENT | 0.65 | bullish | Yemeni Houthis hit Saudi Arabia's Ras Tanura refinery (550k BPD) with missiles, Sabereen reports - newsquawk.com
+2026-10-05 11:57:51,846 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:57:51,869 | INFO | geo event | 0.38 | bullish | Missiles Targeting Saudi Oil Refineries Shot Down, Sources Say - EnergyNow.com
+2026-10-05 11:57:54,465 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 11:57:54,560 | INFO | feed updated | new=3 active=391 signal=+0.247 adjustment=+2.47
+2026-10-05 12:03:06,817 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:03:06,868 | INFO | geo event | 0.25 | bullish | Iran Currency Collapse: U.S. Sanctions, Naval Blockade, and International Law - Diplomacy and Law
+2026-10-05 12:03:10,366 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:03:10,425 | INFO | geo event | 0.15 | neutral | Yemen’s Houthis continue advance towards key city of Taiz - Morning Star | The People’s Daily
+2026-10-05 12:03:14,508 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:03:14,553 | INFO | geo event | 0.15 | neutral | Crude oil prices and refinery margins generally increased throughout the third quarter - eia.gov
+2026-10-05 12:03:14,595 | INFO | feed updated | new=3 active=391 signal=+0.248 adjustment=+2.48
+2026-10-05 12:08:25,633 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:08:30,972 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:08:31,028 | WARNING | MATERIAL GEO EVENT | 0.72 | bullish | Brent Crude Oil Price Jumps After Attack on Iran’s South Pars Field - energynow.com
+2026-10-05 12:08:35,126 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:08:35,171 | INFO | geo event | 0.45 | bullish | US Vows ‘Economic D-Day’ as Iran Threatens to Halt All Oil Exports - energynow.com
+2026-10-05 12:08:38,234 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:08:38,277 | INFO | geo event | 0.25 | bullish | Oil Heads for Weekly Gains as Middle East Supply Risks Persist - energynow.com
+2026-10-05 12:08:42,692 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:08:42,732 | INFO | geo event | 0.45 | bullish | Looming US Sanctions on Iran Put China Oil Buying in Spotlight - energynow.com
+2026-10-05 12:08:47,038 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:08:47,128 | INFO | geo event | 0.45 | bearish | OPEC+ Likely to Again Raise Oil Output Targets From September, Sources Say - energynow.com
+2026-10-05 12:08:50,632 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:08:50,686 | INFO | geo event | 0.25 | neutral | Why Iranian, Houthi Threats to Red Sea Shipping Matter More For Oil Now - energynow.com
+2026-10-05 12:08:54,732 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:08:54,772 | WARNING | MATERIAL GEO EVENT | 0.85 | bullish | Oil Tanker Traffic Through Hormuz at Near Standstill as Attacks Strain Iran Truce - energynow.com
+2026-10-05 12:08:57,817 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:08:57,864 | INFO | geo event | 0.35 | bullish | Oil Prices Extend Gains on Escalating Middle East Hostilities - energynow.com
+2026-10-05 12:09:02,307 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:09:02,358 | INFO | geo event | 0.55 | bearish | Global Physical Crude Markets Mired in Discounts as Middle East Ramps Up Supply - energynow.com
+2026-10-05 12:09:06,652 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:09:06,694 | WARNING | MATERIAL GEO EVENT | 0.65 | bullish | US Naval Blockade Squeezes Iran’s Oil Exports, Forces Crude Onto Floating Storage - energynow.com
+2026-10-05 12:09:13,378 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:09:13,394 | INFO | geo event | 0.35 | bullish | How a Houthi Blockade in the Red Sea Tightens Iran’s Grip on Global Energy Supplies - energynow.com
+2026-10-05 12:09:19,646 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:09:19,688 | INFO | geo event | 0.55 | bullish | Tanker Costs and Refinery Losses Keep Oil Prices Above $100 - mezha.net
+2026-10-05 12:09:22,387 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:09:26,795 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:09:26,850 | INFO | geo event | 0.30 | bullish | More Ships Change Course in the Red Sea After Houthi Threats, Shipping Data Shows - energynow.com
+2026-10-05 12:09:30,253 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:09:30,287 | INFO | geo event | 0.35 | bearish | Saudi June Crude Exports Climb From Record May Low, Data Shows - energynow.com
+2026-10-05 12:09:35,497 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:09:35,499 | INFO | geo event | 0.55 | bullish | OPEC+ Delays Oil Capacity Review After Iran War Disrupts Expansion Plans, Sources Say - energynow.com
+2026-10-05 12:09:40,128 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:09:40,174 | INFO | geo event | 0.35 | bearish | ADNOC LNG Tanker Crosses Strait of Hormuz for First Time Since Iran War, Ship-Tracking Data Shows - energynow.com
+2026-10-05 12:09:42,788 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:09:42,818 | INFO | geo event | 0.58 | bullish | Missiles Targeting Saudi Oil Refineries Shot Down, Sources Say - energynow.com
+2026-10-05 12:09:46,721 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:09:46,744 | INFO | geo event | 0.15 | neutral | China’s Crude Calculus in Iran War - Energy News, Top Headlines, Commentaries, Features & Events - energynow.com
+2026-10-05 12:09:51,665 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:09:51,726 | WARNING | MATERIAL GEO EVENT | 0.80 | bullish | IRAN’S “CROWN JEWEL” – Kharg Island, Struck by US, is Key Hub for Iran Oil Exports - energynow.com
+2026-10-05 12:09:51,781 | INFO | feed updated | new=19 active=406 signal=+0.264 adjustment=+2.64
+2026-10-05 12:15:03,196 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:15:03,265 | INFO | geo event | 0.25 | neutral | Iran’s Oil Minister Resigns in Surprise Announcement - Defensemirror.com
+2026-10-05 12:15:07,948 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:15:07,998 | WARNING | MATERIAL GEO EVENT | 0.72 | bearish | Gulf oil exports top pre-war levels as Saudi-backed Yemen retakes Bab el-Mandeb Strait from Houthis - New York Post
+2026-10-05 12:15:08,039 | INFO | feed updated | new=2 active=405 signal=+0.256 adjustment=+2.56
+2026-10-05 12:20:19,028 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:20:19,050 | WARNING | MATERIAL GEO EVENT | 0.85 | bullish | Dynacom newbuild among at least four tankers attacked in Hormuz - seatrade-maritime.com
+2026-10-05 12:20:22,889 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:20:22,946 | INFO | geo event | 0.58 | bearish | Mideast Oil Exports Exceeded Pre-Iran War Levels despite Hormuz Disruptions - ASHARQ AL-AWSAT English
+2026-10-05 12:20:26,306 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:20:26,356 | INFO | geo event | 0.35 | neutral | South Korea's Crude Oil Imports Shift Dramatically: Saudi Share Falls Below 30%, U.S. Fills the Gap - finance.biggo.com
+2026-10-05 12:20:28,795 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:20:32,888 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:20:32,935 | INFO | geo event | 0.55 | bullish | Product tanker attacked in Red Sea as hostilities escalate - seatrade-maritime.com
+2026-10-05 12:20:32,987 | INFO | feed updated | new=4 active=407 signal=+0.261 adjustment=+2.61
+2026-10-05 12:25:46,352 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:25:46,406 | INFO | geo event | 0.55 | mixed | Persian Gulf oil flows return to prewar levels, but Iran could resort to a ‘scorched earth campaign’ - fortune.com
+2026-10-05 12:25:50,783 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:25:50,829 | INFO | geo event | 0.55 | bearish | Middle East oil exports recover to pre-Iran war levels - tbsnews.net
+2026-10-05 12:25:55,170 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:25:59,662 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:25:59,712 | INFO | geo event | 0.45 | bullish | Saudi Aramco eyes new oil routes to bypass Strait of Hormuz - newarab.com
+2026-10-05 12:26:02,703 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:26:02,755 | WARNING | MATERIAL GEO EVENT | 0.82 | bullish | Saudi Arabia's East-West oil pipeline halted again after fresh attack - tbsnews.net
+2026-10-05 12:26:07,673 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:26:07,723 | INFO | geo event | 0.15 | neutral | Is Iran losing control of the Strait of Hormuz? - newarab.com
+2026-10-05 12:26:13,167 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:26:13,223 | INFO | geo event | 0.55 | bullish | Product tanker attacked in Red Sea as hostilities escalate - Seatrade Maritime News
+2026-10-05 12:26:17,588 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:26:17,622 | INFO | geo event | 0.35 | bullish | Oil shipments near Strait of Hormuz turn costlier as sailors risk attacks for $25,000 - americanbazaaronline.com
+2026-10-05 12:26:22,503 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:26:22,556 | INFO | geo event | 0.20 | bullish | Crude oil prices and refinery margins generally increased throughout the third quarter - U.S. Energy Information Administration (EIA) (.gov)
+2026-10-05 12:26:22,603 | INFO | feed updated | new=8 active=413 signal=+0.271 adjustment=+2.71
+2026-10-05 12:31:34,526 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:31:34,591 | INFO | geo event | 0.55 | bullish | Hormuz Tanker Crossings Slip to Lowest in More Than Two Months, Data Shows - gCaptain
+2026-10-05 12:31:38,093 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:31:38,126 | WARNING | MATERIAL GEO EVENT | 0.85 | bullish | Iran ramps up Strait of Hormuz attacks with 11 ships hit in a week - TradeWinds News
+2026-10-05 12:31:41,581 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:31:41,636 | INFO | geo event | 0.20 | neutral | Is Iran charging a toll to allow oil traffic through Hormuz? - Al Jazeera
+2026-10-05 12:31:45,520 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:31:45,562 | INFO | geo event | 0.35 | bullish | Burst of Attacks in Gulf Heightens Fears Over Fragile Energy Trade - The New York Times
+2026-10-05 12:31:45,605 | INFO | feed updated | new=4 active=416 signal=+0.282 adjustment=+2.82
+2026-10-05 12:36:56,293 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:36:56,354 | INFO | geo event | 0.35 | neutral | OPEC+ Cartel Agrees To Keep Oil Production Steady In November - ommcomnews.com
+2026-10-05 12:36:59,939 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:37:00,003 | INFO | geo event | 0.35 | bullish | Saudi Aramco CEO Warns Oil Stock Replenishment Takes Two Years - suaragarut.id
+2026-10-05 12:37:03,463 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:37:08,275 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:37:08,328 | INFO | geo event | 0.55 | bullish | Saudi-Backed Forces Launch Fight to Free Bab al-Mandeb from Houthis - WSJ
+2026-10-05 12:37:08,381 | INFO | feed updated | new=3 active=419 signal=+0.287 adjustment=+2.87
+2026-10-05 12:42:19,802 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:42:19,852 | WARNING | MATERIAL GEO EVENT | 0.65 | bullish | UKMTO reports fresh attacks in Red Sea, Strait of Hormuz - Quantum Commodity Intelligence
+2026-10-05 12:42:24,557 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:42:24,599 | INFO | geo event | 0.35 | neutral | Qatar Brings LNG Tankers Into Hormuz Despite Shipping Slowdown - energynow.com
+2026-10-05 12:42:24,647 | INFO | feed updated | new=2 active=418 signal=+0.291 adjustment=+2.91
+2026-10-05 12:47:35,539 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:47:35,589 | INFO | geo event | 0.28 | bullish | Western Powers Were Unable to Secure Shipping in the Red Sea. Hormuz Will Be Harder - energynow.com
+2026-10-05 12:47:39,380 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:47:39,412 | INFO | geo event | 0.35 | mixed | US-Israel-Iran War Latest Live News: US Approves $1 Billion UAE Arms Deal, $400 Million Kuwait Patriot Support; Tanker Turns Back in Hormuz, Saudi-Backed Forces Push Houthis - The Sunday Guardian
+2026-10-05 12:47:39,457 | INFO | feed updated | new=2 active=418 signal=+0.290 adjustment=+2.90
+2026-10-05 12:52:52,301 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:52:52,340 | INFO | geo event | 0.45 | bullish | Saudi-Backed Forces Launch Fight to Free Bab al-Mandeb from Houthis - wsj.com
+2026-10-05 12:52:52,387 | INFO | feed updated | new=1 active=419 signal=+0.293 adjustment=+2.93
+2026-10-05 12:58:04,480 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:58:04,543 | INFO | geo event | 0.40 | neutral | OPEC+ agrees in principle to keep November oil output targets steady, sources say - wsau.com
+2026-10-05 12:58:08,807 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:58:08,856 | INFO | geo event | 0.30 | neutral | Iran Can Go Up to Two Months Without Oil Exports Before Cutting Output, Analysts Say - energynow.com
+2026-10-05 12:58:14,532 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 12:58:14,591 | INFO | geo event | 0.45 | bullish | Burst of Attacks in Gulf Heightens Fears Over Fragile Energy Trade - nytimes.com
+2026-10-05 12:58:14,640 | INFO | feed updated | new=3 active=421 signal=+0.296 adjustment=+2.96
+2026-10-05 13:03:27,303 | INFO | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-10-05 13:03:27,351 | INFO | geo event | 0.45 | neutral | OPEC+ Agrees to Keep Oil Production Steady - The Astana Times
+2026-10-05 13:03:27,395 | INFO | feed updated | new=1 active=410 signal=+0.292 adjustment=+2.92

@@ -1,0 +1,24 @@
+{
+  "title": "Add explicit premarket collector run-status and gap evidence",
+  "change_type": "CODE",
+  "target": "premarket_intelligence collector and daily evidence export",
+  "current": "Premarket is enabled with five refresh offsets, but the table is empty and no latest gap, bias, geo status, or run reason is available. Social source is explicitly unavailable.",
+  "proposed": "At each configured offset, emit either a premarket snapshot or a status row with scheduled time, process start time, market calendar status, provider status, per-symbol previous close and premarket price, gap percentage, computed bias, geo status, and skip/error reason. Record social_status=UNAVAILABLE without fabricating sentiment. Keep any context adjustment in SHADOW until at least 12 eligible sessions are collected.",
+  "evidence": [
+    "premarket_intelligence has zero rows",
+    "premarket_enabled is true",
+    "premarket refresh offsets are 30,20,10,5,1 minutes",
+    "premarket_social_source is UNAVAILABLE"
+  ],
+  "risk": "Provider limitations may leave gaps; status rows must distinguish missing quotes from true zero gaps.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261005-03",
+  "status": "PENDING",
+  "review_date": "2026-10-05",
+  "created_at": "2026-10-05T13:06:21",
+  "updated_at": "2026-10-05T13:06:21",
+  "implementation": {},
+  "deployment": {}
+}

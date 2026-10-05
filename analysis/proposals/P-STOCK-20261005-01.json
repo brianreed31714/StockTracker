@@ -1,0 +1,24 @@
+{
+  "title": "Emit a complete decision-funnel row for every scored decision",
+  "change_type": "CODE",
+  "target": "decision_funnel and order_attempt instrumentation",
+  "current": "The system published 1,116 decisions but zero decision-funnel and order-attempt rows; gate counts are empty. At least one AMZN score was below the configured sell threshold, yet raw crossing and position eligibility cannot be audited.",
+  "proposed": "For every decision_event_id, emit a funnel row containing symbol, score, side-specific raw threshold crossing, position eligibility, confirmation count, portfolio-cap result, daily-loss result, final disposition, and explicit gate reason. Emit an order-attempt row only when submission is actually requested, including requested quantity/notional, accepted status, order ID, or failure reason. Add a daily reconciliation check between decisions, crossings, attempts, accepted orders, orders, and fills. Do not alter thresholds or controls.",
+  "evidence": [
+    "1,116 decision rows versus zero decision_funnel rows",
+    "order_gate_counts is empty",
+    "AMZN minimum score was 24.685 versus sell threshold 30",
+    "No requested notional, accepted-order, or gate evidence exists"
+  ],
+  "risk": "Low implementation risk if logging is asynchronous; validate that instrumentation cannot submit orders or affect decision timing.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261005-01",
+  "status": "PENDING",
+  "review_date": "2026-10-05",
+  "created_at": "2026-10-05T13:06:21",
+  "updated_at": "2026-10-05T13:06:21",
+  "implementation": {},
+  "deployment": {}
+}
