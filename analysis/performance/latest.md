@@ -1,11 +1,11 @@
 # StockTracker Performance — Latest
 
-Review date: **2026-10-05**
-Generated: 2026-10-05T20:05:03.791607+00:00
+Review date: **2026-10-06**
+Generated: 2026-10-06T20:05:04.142858+00:00
 
 ## Paper-trading results
 
-- Decisions: **1116**
+- Decisions: **3150**
 - Orders: **0** (buys 0 / sells 0)
 - Completed paper trades: **0**
 - Realized paper P/L: **$+0.00**
@@ -14,33 +14,33 @@ Generated: 2026-10-05T20:05:03.791607+00:00
 
 ## Review
 
-The paper model generated 1,116 decisions across nine symbols, all HOLD, with no same-day order, fill, or realized-trade records. Therefore, realized performance, execution quality, requested notional, accepted-order rates, and buy/sell effectiveness cannot be evaluated. Score distributions explain the lack of buys because every symbol remained below the 70 buy threshold; AMZN did fall below the 30 sell threshold, but no AMZN position was shown and the empty decision funnel prevents evaluating raw crossing and eligibility logic. The dashboard's three positions and approximately $78.91 combined unrealized gain are a point-in-time snapshot, not same-day fills or realized P/L. Evidence supports instrumentation repairs and continued SHADOW collection, not threshold calibration.
+The 2026-10-06 run remained PAPER ONLY and produced 3,150 decisions, all HOLD, with no same-day order attempts, accepted orders, fills, or realized trades. The evidence does not support threshold, confirmation, VIX, geo-weight, regime, premarket, or XLF/FAS/FAZ calibration. Instrumentation gaps prevent causal attribution: the decision funnel, order-attempt lineage, regime-decision linkage, financial-leverage evidence, premarket evidence, and shadow-trade tables are empty. Keep all model thresholds and risk controls unchanged while repairing SHADOW observability.
 
 Data quality: **LIMITED**
 
 ### Supporting evidence
 
 - Published files: **20**
-- Published rows analyzed: **1309**
+- Published rows analyzed: **3361**
 - Integrity status: **PASS**
 - Integrity issues: **none**
 
 ### Findings
-- Observed: Supporting-log analysis reports PASS with no listed integrity issues, no database error, and coverage of all 1,309 published rows. Those rows reconcile as 1,116 decisions, 25 regime snapshots, 12 ZPTA observations, and 156 ZPTA predictions.
-- Observed integrity caveat: the manifest declares 20 published files, but the supplied files array contains 19 entries. This does not alter the reconciled 1,309 row count, but the file-count discrepancy should be validated.
-- Observed: Eleven tables are empty, including orders, fills, realized, decision_funnel, order_attempts, regime_decision_shadow, all three financial-leverage tables, premarket_intelligence, and zpta_shadow_trades. Empty order_gate_counts and exit-reason counts reflect absent rows and do not demonstrate that gates or exits operated correctly.
-- Observed: All 1,116 decisions were HOLD. Each symbol had 124 observations. No symbol reached the 70 buy threshold; maximum scores ranged from 60.313 for AAPL to 67.960 for XOM. AMZN reached 24.685, below the 30 sell threshold, but there was no displayed AMZN position and no funnel record to distinguish a raw crossing from an ineligible sell.
-- Observed: There were no recorded order attempts, requested notionals, accepted orders, order IDs, fills, or realized trades. The reported realized P/L of $0 corresponds to an empty realized table and must not be interpreted as evidence of flat strategy performance.
-- Observed: The dashboard snapshot showed three existing positions—AAPL, SPY, and XOM—with exposure of $7,578.88 and combined unrealized P/L of about $78.91. Their acquisition date and order provenance are unavailable, so they cannot be attributed to today's decisions.
-- Observed: Buy/sell balance cannot be assessed beyond zero recorded actions on both sides. Likewise, per-symbol realized outcomes and hit rates are unavailable.
-- Observed: VIX adjustments were very small on average by symbol, approximately -0.007 to +0.002, while the latest VIX was 15.54. No counterfactual or realized evidence supports changing VIX sensitivity.
-- Observed: Geo contribution was concentrated in XOM and GLD. XOM averaged +2.561 geo points and GLD +0.640; the latest geo feed showed a +2.92 adjustment. XOM still remained below the buy threshold. Duplicate or near-duplicate Hormuz headlines appear among top events, so contribution independence is uncertain. No outcome evidence establishes causal value.
-- Observed: Market-regime SHADOW produced 25 of 25 RISK_ON states, all scored 100, but regime_decision_shadow has zero rows. Thus state stability was observed only during the roughly two-hour decision-log window; its effect on decisions or forward outcomes is unknown.
-- Observed: Financial-leverage SHADOW was enabled but produced no XLF/FAS/FAZ snapshots, signals, or 5/15/30/60-minute outcomes. The dashboard explicitly reported FINANCIAL_SNAPSHOT_UNAVAILABLE, so no leveraged-financial conclusion is supported.
-- Observed: Premarket intelligence was enabled but produced zero rows and no gap or bias evidence. The available evidence does not establish whether the process was running during the configured premarket window. Social sentiment is unavailable because premarket_social_source is explicitly UNAVAILABLE.
-- Observed: ZPTA had 12 observations, 156 predictions, and 128 resolved predictions with no missing resolved returns. Only 5-minute model summaries reached the minimum calibration sample of 12; 15- and 60-minute summaries had 10. The single-day samples are highly limited, model families report identical average returns within each horizon, and there were no shadow trades, so no threshold or model-weight change is justified.
-- Hypothesis: Missing funnel, premarket, financial-leverage, and shadow-trade rows may reflect process start time, unavailable upstream data, or incomplete emit paths. The evidence does not identify which cause applies.
-- Conclusion: Do not change the 70/30 thresholds, confirmation counts, stops, exposure caps, daily-loss control, or other trading parameters from this evidence. Keep paper=True and the dashboard read-only.
+- Observed — Supporting-log integrity analysis passed and covered all 3,361 published rows across 15 analyzed tables. It found no duplicate decision event IDs, orphan order attempts, accepted attempts without order IDs, duplicate fill order IDs, unresolved ZPTA returns, or database error.
+- Observed — Eleven analyzed tables were empty: orders, fills, realized, decision_funnel, order_attempts, regime_decision_shadow, all three financial-leverage tables, premarket_intelligence, and zpta_shadow_trades. Empty order-related tables make order_gate_counts empty; this is absence of events/evidence, not proof that every gate operated correctly.
+- Observed — All 3,150 decisions were HOLD: 350 observations for each of nine symbols. There were zero BUY and zero SELL actions, so same-day buy/sell balance is 0/0 rather than a directional imbalance.
+- Observed — XOM reached a maximum score of 70.274, above the configured buy threshold of 70, but no BUY occurred. The empty decision funnel means the evidence cannot determine whether this was an isolated raw crossing, failed two-cycle confirmation, portfolio-cap block, or another disposition. No symbol reached the sell threshold: the lowest observed score was WMT at 30.435, still above 30.
+- Observed — No requested order notional, order attempt, accepted order, fill, or realized trade was recorded. Same-day realized P/L is therefore $0 from zero realized rows; this is not evidence of strategy profitability or loss avoidance.
+- Observed — The dashboard snapshot separately shows three open positions (AAPL, SPY, XOM), $7,608.47 market exposure, and approximately $108.50 aggregate unrealized gain. Their opening provenance is absent from the same-day order/fill files, so they must not be treated as 2026-10-06 fills or realized performance.
+- Observed — Per-symbol scores differed: XOM had the highest average score at 55.629 and NVDA the lowest at 47.896. Nevertheless, every symbol remained HOLD, and there are no realized outcomes for assessing symbol-specific efficacy.
+- Observed — VIX was about 15.04 and its average score adjustments were small, ranging from -0.017 for GLD to +0.047 for NVDA and TSLA. There is no trade or forward-outcome evidence with which to estimate the VIX adjustment's effect.
+- Observed — Geo contribution was concentrated in XOM (average +3.64 score) and GLD (average +0.91); other symbols averaged zero. The feed was healthy at generation time, but the top-event list contains repeated variants of the same WSJ and TradeWinds stories. No evidence isolates whether deduplication occurred before scoring or whether the geo uplift improved forward outcomes.
+- Hypothesis — Duplicate or syndicated geo headlines may overstate event persistence or confidence, but the supplied data cannot establish that they were independently counted in the score.
+- Observed — Market-regime SHADOW produced 70 rows, all RISK_ON with score 100, but regime_decision_shadow had zero rows. This one-state, one-day sample cannot validate regime gating or permit calibration.
+- Observed — Financial-leverage SHADOW was enabled, but XLF/FAS/FAZ snapshots, signals, and outcomes were all absent; the dashboard reported FINANCIAL_SNAPSHOT_UNAVAILABLE. There is no leverage-signal or forward-outcome evidence to review.
+- Observed — Premarket intelligence was enabled but logged zero rows, so there is no gap, bias, scheduled-refresh, or post-open outcome evidence. Social sentiment is explicitly unavailable and must not be inferred.
+- Observed — ZPTA logged 9 observations, 132 prediction rows, and 108 resolved predictions with no missing resolved returns. Each model/horizon reports only 9 samples, below the minimum calibration target of 12. No ZPTA shadow trades occurred, and the delayed provider ended with NO_NEW_BAR.
+- Observed — ZPTA breakout, pullback, and VWAP-reclaim variants reported 11.11% accuracy in their nine-sample sets, while exhaustion variants reported 55.56% to 77.78%; average underlying returns were negative. These tiny, potentially overlapping samples support continued observation only, not threshold or model tuning.
 
 ### Per-symbol paper P/L
 

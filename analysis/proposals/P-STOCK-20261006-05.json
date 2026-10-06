@@ -1,0 +1,24 @@
+{
+  "title": "Add premarket schedule heartbeats, gap provenance, and bias-outcome logging",
+  "change_type": "CODE",
+  "target": "premarket_intelligence.csv",
+  "current": "Premarket collection is enabled for five refresh offsets, but the table contains zero rows and all latest gap/bias fields are absent.",
+  "proposed": "At every configured offset, emit a SHADOW heartbeat even on failure. Record expected and actual run time, symbol-level prior close and premarket price timestamps, gap percentage, computed bias components, geo status, explicit social_source=UNAVAILABLE, failure reason, and post-open forward returns. Keep premarket adjustment behavior unchanged pending at least 12 valid independent samples.",
+  "evidence": [
+    "premarket_enabled is true with offsets 30,20,10,5,1 minutes.",
+    "premarket_intelligence has zero rows and latest_gaps_pct is empty.",
+    "All dashboard premarket adjustments are 0.0.",
+    "Social source is explicitly UNAVAILABLE."
+  ],
+  "risk": "Low model risk because this only records SHADOW evidence. Timestamp handling must avoid stale quotes and look-ahead; social data must not be fabricated.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261006-05",
+  "status": "PENDING",
+  "review_date": "2026-10-06",
+  "created_at": "2026-10-06T13:06:00",
+  "updated_at": "2026-10-06T13:06:00",
+  "implementation": {},
+  "deployment": {}
+}

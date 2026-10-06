@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-10-06",
+  "generated_at": "2026-10-06T20:05:04.950532+00:00",
+  "sanitized": true,
+  "paper_only": true,
+  "market_timezone": "America/New_York",
+  "date_window_utc": {
+    "start": "2026-10-06T04:00:00+00:00",
+    "end": "2026-10-07T04:00:00+00:00"
+  },
+  "source_database_present": true,
+  "database_error": null,
+  "files": [
+    {
+      "path": "analysis/evidence/2026-10-06/decisions.csv",
+      "bytes": 1100085,
+      "sha256": "85560819e02fce098af66e2515d27472aad6993a535d61e92e6602840d5179ac",
+      "rows": 3150,
+      "first_ts": "2026-10-06T14:10:08.983879+00:00",
+      "last_ts": "2026-10-06T19:59:44.991166+00:00"
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/orders.csv",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0,
+      "first_ts": null,
+      "last_ts": null
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/fills.csv",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0,
+      "first_ts": null,
+      "last_ts": null
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/realized.csv",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0,
+      "first_ts": null,
+      "last_ts": null
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/decision_funnel.csv",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0,
+      "first_ts": null,
+      "last_ts": null
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/order_attempts.csv",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0,
+      "first_ts": null,
+      "last_ts": null
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/market_regime_shadow.csv",
+      "bytes": 22610,
+      "sha256": "f29245ff7f0f4f7819c83069946e589a67177dd9ea107862e93d2e269520efff",
+      "rows": 70,
+      "first_ts": "2026-10-06T14:10:04.584140+00:00",
+      "last_ts": "2026-10-06T19:57:38.183454+00:00"
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/regime_decision_shadow.csv",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0,
+      "first_ts": null,
+      "last_ts": null
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/financial_leverage_shadow.csv",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0,
+      "first_ts": null,
+      "last_ts": null
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/financial_leverage_signals.csv",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0,
+      "first_ts": null,
+      "last_ts": null
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/financial_leverage_outcomes.csv",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0,
+      "first_ts": null,
+      "last_ts": null
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/premarket_intelligence.csv",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0,
+      "first_ts": null,
+      "last_ts": null
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/zpta_observations.csv",
+      "bytes": 6358,
+      "sha256": "3defa91b8995414b61b070f9ed7cf589e3b6dc2cbb12039d3bf18442e6ea61db",
+      "rows": 9,
+      "first_ts": "2026-10-06T14:24:37+00:00",
+      "last_ts": "2026-10-06T19:03:34+00:00"
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/zpta_predictions.csv",
+      "bytes": 36289,
+      "sha256": "6c9b2a17c2ec7fd09563be8010b4d779525ecb9bad5df6cd437cbd5fb9cf9f4e",
+      "rows": 132,
+      "first_ts": "2026-10-06T14:40:08.369935+00:00",
+      "last_ts": "2026-10-06T19:19:33.624178+00:00"
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/zpta_shadow_trades.csv",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0,
+      "first_ts": null,
+      "last_ts": null
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/dashboard_state.json",
+      "bytes": 7773,
+      "sha256": "dc505bc8355d294f4f50d291d46db00fe85e41e9357a1d83cd28b9fe9934f90c"
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/geo_feed.json",
+      "bytes": 18544,
+      "sha256": "80535f1d3483be5421bbd4d884e43dc2921e6a2ea9c6a56afe52b482f5db5bdf"
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/geo_feed_tail.txt",
+      "bytes": 61692,
+      "sha256": "cc5b9abe6cec16dd97ade537ecbfa56a4be29e65e06152c736cbd7e388b4ba74"
+    },
+    {
+      "path": "analysis/evidence/2026-10-06/integrity_analysis.json",
+      "bytes": 702,
+      "sha256": "d520e1ab5aa4ee8f7d1ffb52a3d4ec29b12d6fb9beb92743a29e6f5296d71119"
+    }
+  ],
+  "integrity_analysis": {
+    "status": "PASS",
+    "issues": [],
+    "all_published_rows_analyzed": 3361,
+    "table_count": 15,
+    "duplicate_decision_event_ids": 0,
+    "orphan_order_attempts": 0,
+    "accepted_attempts_without_order_id": 0,
+    "duplicate_fill_order_ids": 0,
+    "resolved_zpta_predictions_without_return": 0,
+    "order_gate_counts": {},
+    "zpta_exit_reason_counts": {},
+    "database_error": null,
+    "empty_tables": [
+      "orders",
+      "fills",
+      "realized",
+      "decision_funnel",
+      "order_attempts",
+      "regime_decision_shadow",
+      "financial_leverage_shadow",
+      "financial_leverage_signals",
+      "financial_leverage_outcomes",
+      "premarket_intelligence",
+      "zpta_shadow_trades"
+    ]
+  }
+}

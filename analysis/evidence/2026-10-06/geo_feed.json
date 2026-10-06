@@ -1,0 +1,250 @@
+{
+  "generated_at": "2026-10-06T20:00:17.343151+00:00",
+  "status": "ok",
+  "signal": 0.3721,
+  "score_adjustment": 3.72,
+  "max_materiality": 0.85,
+  "active_event_count": 241,
+  "events": [
+    {
+      "id": "83afb5b5ad3eefc6db8476ad",
+      "title": "Oil Prices Fall as G-7 Plans Crude, Diesel Release But Hormuz Shipping Risks Persist - wsj.com",
+      "source": "wsj.com",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPOFA5UUZFdndtdnBodnFleklOcmpCZmdBUzlROTlFSkFiWkZsNG5sMHU4M0VoR2ZLNFVNYlhKbmpjYlc4Q0NObmdDdFNLenRmU0VQdVZfWXU1YU44NWFUcnlWeUNtQkhBMlAyZGpDemdPY3VkY3NzdDRpNWlOcTlabURzNE1udEdkOVVYeW5qcmhndjM3VHVHYVFSZy0yQzYyR1VnSnJGWVdZdEZTUV9IeF84OXpEaFcyNUxzNFIwaFAybGplVHN3cTM1THc?oc=5",
+      "published_at": "2026-10-06T02:10:51+00:00",
+      "description": "Oil Prices Fall as G-7 Plans Crude, Diesel Release But Hormuz Shipping Risks Persist \u00a0\u00a0 wsj.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "mixed",
+        "xom_direction": "mixed",
+        "materiality": 0.78,
+        "confidence": 0.9,
+        "category": "hormuz",
+        "supply_impact": "uncertain",
+        "summary": "The planned G-7 release of crude and diesel is bearish for oil by adding near-term supply, while persistent Strait of Hormuz shipping risks are supportive by threatening physical flows. The headline reports oil prices are falling, but the net forward impact is mixed.",
+        "why_xom": "XOM is exposed to crude prices and refining margins: lower crude prices may pressure upstream earnings, while diesel tightness or elevated shipping risk could support refining economics. The opposing effects make the XOM impact mixed."
+      },
+      "analyzed_at": "2026-10-06T16:08:59.116985+00:00"
+    },
+    {
+      "id": "646948cd29c4af446e4d4e67",
+      "title": "Oil Prices Fall as G-7 Plans Crude, Diesel Release But Hormuz Shipping Risks Persist - WSJ",
+      "source": "WSJ",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPOFA5UUZFdndtdnBodnFleklOcmpCZmdBUzlROTlFSkFiWkZsNG5sMHU4M0VoR2ZLNFVNYlhKbmpjYlc4Q0NObmdDdFNLenRmU0VQdVZfWXU1YU44NWFUcnlWeUNtQkhBMlAyZGpDemdPY3VkY3NzdDRpNWlOcTlabURzNE1udEdkOVVYeW5qcmhndjM3VHVHYVFSZy0yQzYyR1VnSnJGWVdZdEZTUV9IeF84OXpEaFcyNUxzNFIwaFAybGplVHN3cTM1THc?oc=5",
+      "published_at": "2026-10-05T20:10:00+00:00",
+      "description": "Oil Prices Fall as G-7 Plans Crude, Diesel Release But Hormuz Shipping Risks Persist \u00a0\u00a0 WSJ",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "mixed",
+        "xom_direction": "mixed",
+        "materiality": 0.78,
+        "confidence": 0.9,
+        "category": "hormuz",
+        "supply_impact": "uncertain",
+        "summary": "The planned G-7 crude and diesel release is bearish for near-term oil prices, while continuing Strait of Hormuz shipping risks provide a bullish supply-risk offset. The reported price decline indicates the release plan is currently the dominant market factor.",
+        "why_xom": "Lower crude prices can pressure Exxon Mobil's upstream earnings, while persistent Hormuz disruption could raise crude and refined-product prices and create logistics or feedstock risks. The headline therefore has material but directionally mixed implications for XOM."
+      },
+      "analyzed_at": "2026-10-06T06:52:21.069876+00:00"
+    },
+    {
+      "id": "45ee2de14df88e6154813e9b",
+      "title": "Iran ramps up Strait of Hormuz attacks with 11 ships hit in a week - TradeWinds News",
+      "source": "TradeWinds News",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOS0NjSWNxaFV1ZF9aSUk0bmdwTU9VTWZrQWlJYkd1a1kyTDdQNzFqT2Nxbjh1d0ZvT2Q5YlVlWkp1c1BhQ2NFcDVZSlA4d0I1cDhCNWxMcFZ3blYwdXRWY01PSEo3RlhrQzNUaWQ1U2NFcVlFWGY1VmtabW1NSHpGSUxDQUVQZnRpeE9vcm40bkRoR3RTZlEtdWc4Y2tEbjlya0lvV2ZPSnRvdzBkZDFzeE9YNjNKdkZWblFNYw?oc=5",
+      "published_at": "2026-10-05T20:13:40+00:00",
+      "description": "Iran ramps up Strait of Hormuz attacks with 11 ships hit in a week \u00a0\u00a0 TradeWinds News",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.78,
+        "confidence": 0.84,
+        "category": "hormuz",
+        "supply_impact": "uncertain",
+        "summary": "The reported attacks on 11 ships in a week materially increase Strait of Hormuz shipping and disruption risk, which could support crude prices. The supplied text does not confirm a closure or actual loss of oil supply.",
+        "why_xom": "Higher geopolitical risk and potentially tighter crude markets could support XOM's upstream earnings, although shipping disruption could also raise logistics and downstream risks."
+      },
+      "analyzed_at": "2026-10-05T22:10:55.604671+00:00"
+    },
+    {
+      "id": "611a189730d431b2edaeb05d",
+      "title": "Iran ramps up Strait of Hormuz attacks with 11 ships hit in a week - tradewindsnews.com",
+      "source": "tradewindsnews.com",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOS0NjSWNxaFV1ZF9aSUk0bmdwTU9VTWZrQWlJYkd1a1kyTDdQNzFqT2Nxbjh1d0ZvT2Q5YlVlWkp1c1BhQ2NFcDVZSlA4d0I1cDhCNWxMcFZ3blYwdXRWY01PSEo3RlhrQzNUaWQ1U2NFcVlFWGY1VmtabW1NSHpGSUxDQUVQZnRpeE9vcm40bkRoR3RTZlEtdWc4Y2tEbjlya0lvV2ZPSnRvdzBkZDFzeE9YNjNKdkZWblFNYw?oc=5",
+      "published_at": "2026-10-06T02:18:58+00:00",
+      "description": "Iran ramps up Strait of Hormuz attacks with 11 ships hit in a week \u00a0\u00a0 tradewindsnews.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.82,
+        "confidence": 0.78,
+        "category": "hormuz",
+        "supply_impact": "uncertain",
+        "summary": "The headline reports that 11 ships were hit in the Strait of Hormuz over one week, indicating a significant escalation in tanker and chokepoint security risk. It does not confirm a closure of the strait or a quantified loss of crude supply.",
+        "why_xom": "Higher perceived disruption risk in the Strait of Hormuz could support crude prices, which may benefit Exxon Mobil's upstream earnings. The direct operational impact on XOM is not specified, so the effect remains uncertain."
+      },
+      "analyzed_at": "2026-10-06T09:05:48.414788+00:00"
+    },
+    {
+      "id": "54309c32febc44a9f4e9477c",
+      "title": "Iran ramps up Strait of Hormuz attacks with 11 ships hit in a week - TradeWinds News",
+      "source": "TradeWinds News",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOS0NjSWNxaFV1ZF9aSUk0bmdwTU9VTWZrQWlJYkd1a1kyTDdQNzFqT2Nxbjh1d0ZvT2Q5YlVlWkp1c1BhQ2NFcDVZSlA4d0I1cDhCNWxMcFZ3blYwdXRWY01PSEo3RlhrQzNUaWQ1U2NFcVlFWGY1VmtabW1NSHpGSUxDQUVQZnRpeE9vcm40bkRoR3RTZlEtdWc4Y2tEbjlya0lvV2ZPSnRvdzBkZDFzeE9YNjNKdkZWblFNYw?oc=5",
+      "published_at": "2026-10-05T22:28:36+00:00",
+      "description": "Iran ramps up Strait of Hormuz attacks with 11 ships hit in a week \u00a0\u00a0 TradeWinds News",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.82,
+        "confidence": 0.78,
+        "category": "hormuz",
+        "supply_impact": "uncertain",
+        "summary": "TradeWinds reports that Iran attacked 11 ships in the Strait of Hormuz over the past week. The headline indicates a significant escalation in shipping-security risk, but does not confirm a closure of the strait or a specific crude-supply outage.",
+        "why_xom": "A higher Strait of Hormuz risk premium could support upstream crude realizations for Exxon Mobil, although shipping disruption could also create logistics and downstream operating risks."
+      },
+      "analyzed_at": "2026-10-05T22:37:13.694252+00:00"
+    },
+    {
+      "id": "9cc7bf05b2dd38548a8d513d",
+      "title": "Oil Prices Fall as G-7 Plans Crude, Diesel Release But Hormuz Shipping Risks Persist - WSJ",
+      "source": "WSJ",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPOFA5UUZFdndtdnBodnFleklOcmpCZmdBUzlROTlFSkFiWkZsNG5sMHU4M0VoR2ZLNFVNYlhKbmpjYlc4Q0NObmdDdFNLenRmU0VQdVZfWXU1YU44NWFUcnlWeUNtQkhBMlAyZGpDemdPY3VkY3NzdDRpNWlOcTlabURzNE1udEdkOVVYeW5qcmhndjM3VHVHYVFSZy0yQzYyR1VnSnJGWVdZdEZTUV9IeF84OXpEaFcyNUxzNFIwaFAybGplVHN3cTM1THc?oc=5",
+      "published_at": "2026-10-06T02:10:51+00:00",
+      "description": "Oil Prices Fall as G-7 Plans Crude, Diesel Release But Hormuz Shipping Risks Persist \u00a0\u00a0 WSJ",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "mixed",
+        "xom_direction": "mixed",
+        "materiality": 0.7,
+        "confidence": 0.88,
+        "category": "hormuz",
+        "supply_impact": "uncertain",
+        "summary": "The G-7 plans to release crude and diesel, weighing on oil prices, while persistent Strait of Hormuz shipping risks provide an offsetting supply-risk signal. The headline does not confirm that releases have occurred or that shipping has been disrupted.",
+        "why_xom": "XOM is exposed to crude prices through its upstream business: a planned release could pressure prices, while ongoing Hormuz shipping risk could support them. Refining exposure may also be affected by diesel-market conditions, but the net impact is uncertain."
+      },
+      "analyzed_at": "2026-10-06T07:40:22.079895+00:00"
+    },
+    {
+      "id": "c967b4858359fcea69f39128",
+      "title": "Kuwait Oil Output at 75% of Prewar as Hormuz Transits Rise - gcaptain.com",
+      "source": "gcaptain.com",
+      "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxQWVpPWmR5aldBS3JvMlhEUjBZYnczd0t5Tl9RbzdUT0FIQjEyOUpURmYyYU8wRnFyc0dMOVpyU3MxUVVCQjNNNkpKZnJ0Rlh1UDF5dEFPRGFBbTBCTGxKS0l5MVdseUxXWWFMb3R4NllVUzQzMlVTWHNlVmhSLUdlUzU4SHlBdw?oc=5",
+      "published_at": "2026-10-05T20:02:21+00:00",
+      "description": "Kuwait Oil Output at 75% of Prewar as Hormuz Transits Rise \u00a0\u00a0 gcaptain.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "mixed",
+        "xom_direction": "mixed",
+        "materiality": 0.75,
+        "confidence": 0.82,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "Kuwait oil output is reported at 75% of prewar levels, implying a material supply reduction, while increased Strait of Hormuz transits suggest improving export-flow conditions. The crude-price effect is therefore mixed.",
+        "why_xom": "Lower regional output could support crude prices and benefit Exxon Mobil's upstream business, while increased Hormuz transits reduce disruption risk. Effects on XOM are mixed because higher crude prices can pressure refining and fuel margins."
+      },
+      "analyzed_at": "2026-10-05T22:00:20.496117+00:00"
+    },
+    {
+      "id": "575c3b2f452f6b9bb0c0b21a",
+      "title": "Iran Resumes Tanker Attacks in Hormuz, Threatening Oil Recovery - Seoul Economic Daily",
+      "source": "Seoul Economic Daily",
+      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxPYnFEOWFONnFJZmNfcXZhUDVZamo2VFRkUFQxcEF2a1JlUmttLXRDbDZ4QXd5T3dwLUZaRmRyZ0xMYTA3aHg1YlBieUpkdERyWXlYdVlkalFub0NRZ29FSURPTW5hRElSTzNtOUViTmJ4TmN1bjN3THJrdFFidmhhbUFHLVI1LUhnTTZtc3pwMjEwNlRxXzlRc0RNV19DTE1UZjhJ?oc=5",
+      "published_at": "2026-10-05T20:30:05+00:00",
+      "description": "Iran Resumes Tanker Attacks in Hormuz, Threatening Oil Recovery \u00a0\u00a0 Seoul Economic Daily",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.85,
+        "confidence": 0.72,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "The headline reports renewed Iranian tanker attacks in the Strait of Hormuz, implying increased risk to crude shipments and potentially tighter effective oil supply. The event could support crude prices, although the supplied summary provides no details on scale, duration, or confirmed disruption.",
+        "why_xom": "Higher crude prices could support Exxon Mobil\u2019s upstream earnings and cash flows. However, elevated tanker and regional security risks could also increase transportation costs and create operational uncertainty, limiting the net benefit."
+      },
+      "analyzed_at": "2026-10-06T05:26:52.849816+00:00"
+    },
+    {
+      "id": "3b3b4b08df16299205bee5a3",
+      "title": "Shipping Slows After Iran Says it Has Again Shut the Strait of Hormuz - energynow.com",
+      "source": "energynow.com",
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxONTF5MXhpYXJ5YldtMW1FSDhMX0VjWkZjNVVPN1ZsMGdieUlCSlB2cnFhUS1TVHR2SzRHamZROFZLQmhZSVkwSUxBTjJMakVYNS1xXzJMaVZwYU9hZ0NOX0NwQWllbTZ6aXhoRUk2SHhody1GLThuMF9acGtsTFVENXZmWFZhQlhMNnowVjkxYmhEUUVCV1Q1OHE3OVJLQUc5SUE?oc=5",
+      "published_at": "2026-10-05T20:15:32+00:00",
+      "description": "Shipping Slows After Iran Says it Has Again Shut the Strait of Hormuz \u00a0\u00a0 energynow.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.82,
+        "confidence": 0.73,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "Iran reportedly says it has again shut the Strait of Hormuz, while shipping has slowed. If sustained and operationally effective, this could restrict a major crude- and energy-shipping route and support oil prices. The supplied text does not independently confirm a full closure.",
+        "why_xom": "Higher crude prices would generally support Exxon Mobil\u2019s upstream earnings, though prolonged shipping disruption could also create logistics and downstream risks."
+      },
+      "analyzed_at": "2026-10-06T08:01:45.854081+00:00"
+    },
+    {
+      "id": "834461fcc4da193ee1cdb916",
+      "title": "Shipping Slows After Iran Says it Has Again Shut the Strait of Hormuz - EnergyNow.com",
+      "source": "EnergyNow.com",
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxONTF5MXhpYXJ5YldtMW1FSDhMX0VjWkZjNVVPN1ZsMGdieUlCSlB2cnFhUS1TVHR2SzRHamZROFZLQmhZSVkwSUxBTjJMakVYNS1xXzJMaVZwYU9hZ0NOX0NwQWllbTZ6aXhoRUk2SHhody1GLThuMF9acGtsTFVENXZmWFZhQlhMNnowVjkxYmhEUUVCV1Q1OHE3OVJLQUc5SUE?oc=5",
+      "published_at": "2026-10-05T20:15:32+00:00",
+      "description": "Shipping Slows After Iran Says it Has Again Shut the Strait of Hormuz \u00a0\u00a0 EnergyNow.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.82,
+        "confidence": 0.72,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "Iran says it has again shut the Strait of Hormuz, and shipping has slowed. If sustained, disruption to a major oil transit route could tighten global crude availability and support prices. The headline does not provide independent confirmation, duration, or quantified flow losses.",
+        "why_xom": "Higher crude prices could benefit Exxon Mobil\u2019s upstream earnings, although any prolonged disruption could also raise transportation and feedstock costs for downstream operations."
+      },
+      "analyzed_at": "2026-10-06T04:38:38.176471+00:00"
+    },
+    {
+      "id": "c7aaa6956e8ae1c498335440",
+      "title": "Gulf Crude Exports Recover to 91% of Pre-War Levels as Saudi Shipments Surge - investorsking.com",
+      "source": "investorsking.com",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNTEdKUy1OeW1NQnU3U3k4THU4blVhVjNOdWsya0FsZndFRWF6am05SW1hY3ZTejVYVU5WSmRGakdTbWFfX3JBcnB3REd6d0M3VEdUYXpKTDF2MzVtTHdmQmpsVU1nYzU0WktvMUI4NmFoZ3ZmUWdNaEM5MXY1N3JndXphSVlMQVRMOUg2WkRFSEpwOHVaVjczdFdVWFJwS0s2UFh2cE8zNUVoWVlzV21ycERQLWhtai1x0gG4AUFVX3lxTE1MR0pTLU55bU1CdTdTeThMdThuVWFWM051azJrQWxmd0VFYXpqbTlJbWFjdlN6NVhVTlZKZEZqR1NtYV9fckFycHdER3p3QzdUR1RhekpMMXYzNW1Md2ZCamxVTWdjNTRaS28xQjg2YWhndmZRZ01oQzkxdjU3cmd1emFJWUxBVEw5SDZaREVISnA4dVpWNzN0V1VYUnBLSzZQWHZwTzM1RWhZWXNXbXJwRFAtaG1qLXE?oc=5",
+      "published_at": "2026-10-06T09:16:28+00:00",
+      "description": "Gulf Crude Exports Recover to 91% of Pre-War Levels as Saudi Shipments Surge \u00a0\u00a0 investorsking.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bearish",
+        "xom_direction": "bearish",
+        "materiality": 0.72,
+        "confidence": 0.8,
+        "category": "supply",
+        "supply_impact": "looser",
+        "summary": "Gulf crude exports are reported at 91% of pre-war levels, with Saudi shipments surging, indicating a substantial recovery in regional oil supply available to global markets.",
+        "why_xom": "Higher Gulf exports could ease crude-supply concerns and pressure oil prices, creating a bearish effect on Exxon Mobil's upstream earnings; downstream benefits could partly offset this."
+      },
+      "analyzed_at": "2026-10-06T15:37:10.411301+00:00"
+    },
+    {
+      "id": "1e5b847d5762f984f0b420c8",
+      "title": "Brent Crude Oil Price Jumps After Attack on Iran\u2019s South Pars Field - energynow.com",
+      "source": "energynow.com",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxON1BJTnRPVzRvWThVQmxiYVA5SDRZc1lJVXhCeENHMGVpaThRRTVJN0hvbGtXaWsxZmc2VEctOE1SRjhhR0lRcUVWeVdtdGJZbzVIWUpNelVha0M2aFctTEZzYUxKOHpiVkpvMlp6LVotLXF1MVlrWTNFemRsVjlmcE1Rd2hoT2FTUElLLUVCUEN1ZUhXTjRjdDNoZw?oc=5",
+      "published_at": "2026-10-05T20:24:19+00:00",
+      "description": "Brent Crude Oil Price Jumps After Attack on Iran\u2019s South Pars Field \u00a0\u00a0 energynow.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.8,
+        "confidence": 0.72,
+        "category": "geopolitical",
+        "supply_impact": "tighter",
+        "summary": "The headline reports an attack on Iran\u2019s South Pars field and an associated jump in Brent crude prices. It signals potential disruption or escalation involving a major Iranian energy asset, but provides no operational details or confirmed production loss.",
+        "why_xom": "Higher crude prices can support Exxon Mobil\u2019s upstream earnings and cash flow. However, the headline alone does not establish the scale or duration of any supply disruption, and broader geopolitical risk could offset some benefit."
+      },
+      "analyzed_at": "2026-10-06T14:31:38.688390+00:00"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "title": "Measure geo deduplication and marginal score contribution without changing weights",
+  "change_type": "CODE",
+  "target": "geo-feed scoring audit and decision evidence",
+  "current": "Geo adjustments materially lift XOM and GLD scores, while the displayed top events contain multiple variants of the same underlying headlines. The evidence does not expose deduplication clusters or counterfactual scores.",
+  "proposed": "Log a stable story-cluster ID, canonical URL/title hash, source count, deduplication decision, event-level contribution, total capped contribution, and counterfactual score_without_geo for each affected decision. Record whether geo alone changed a raw threshold-crossing state and attach fixed-horizon forward returns. Do not change the geo cap or weight.",
+  "evidence": [
+    "XOM average geo adjustment was +3.64 and GLD was +0.91; other symbols averaged zero.",
+    "The top-event list repeats WSJ and TradeWinds stories across source/title variants.",
+    "XOM's maximum total score exceeded the buy threshold, but the marginal role of geo at that timestamp is not supplied.",
+    "Geo log tail had zero errors and 25 warnings, but warning categories are not summarized."
+  ],
+  "risk": "Low trading risk in SHADOW mode; clustering errors may merge distinct updates, so retain raw event IDs and make the audit reversible.",
+  "confidence": "MEDIUM",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261006-06",
+  "status": "PENDING",
+  "review_date": "2026-10-06",
+  "created_at": "2026-10-06T13:06:00",
+  "updated_at": "2026-10-06T13:06:00",
+  "implementation": {},
+  "deployment": {}
+}

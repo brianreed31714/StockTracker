@@ -1,0 +1,23 @@
+{
+  "title": "Link regime snapshots to contemporaneous decisions and forward outcomes",
+  "change_type": "CODE",
+  "target": "regime_decision_shadow.csv",
+  "current": "Seventy market-regime snapshots were recorded, all RISK_ON at score 100, but no regime-decision linkage rows were published.",
+  "proposed": "For each decision, write a SHADOW linkage to the latest nonfuture regime snapshot, including snapshot age, state, score, hypothetical regime-adjusted action, unchanged baseline action, and forward returns at fixed horizons when available. Do not let the regime shadow alter paper orders until multiple states and adequate outcome samples exist.",
+  "evidence": [
+    "market_regime_shadow has 70 rows spanning 14:10\u201319:57 UTC.",
+    "All 70 observations are RISK_ON with score 100.",
+    "regime_decision_shadow has zero rows, preventing assessment of incremental contribution."
+  ],
+  "risk": "Low instrumentation risk; timestamp joins must prohibit look-ahead. A single-state day could otherwise produce misleading apparent performance.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261006-03",
+  "status": "PENDING",
+  "review_date": "2026-10-06",
+  "created_at": "2026-10-06T13:06:00",
+  "updated_at": "2026-10-06T13:06:00",
+  "implementation": {},
+  "deployment": {}
+}

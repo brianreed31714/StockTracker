@@ -1,0 +1,23 @@
+{
+  "title": "Add position-to-fill provenance and daily reconciliation fields",
+  "change_type": "CODE",
+  "target": "dashboard position snapshot and evidence publisher",
+  "current": "The dashboard shows three open positions, but same-day orders and fills are empty, leaving their opening date and fill lineage unknown in the review evidence.",
+  "proposed": "Add read-only fields for position_origin_date, opening_order_id, opening_fill_id, carried_from_prior_day, and reconciled_quantity. Publish a reconciliation summary that separately totals requested notional, accepted orders, fills, realized P/L, and dashboard-only positions. Flag mismatches without changing positions or submitting orders.",
+  "evidence": [
+    "Dashboard snapshot reports AAPL, SPY, and XOM positions with $7,608.47 exposure.",
+    "Same-day orders, fills, and realized tables each contain zero rows.",
+    "Dashboard unrealized P/L cannot be treated as realized P/L or same-day execution evidence."
+  ],
+  "risk": "Low if implemented as read-only instrumentation. Brokerage/order identifiers should remain sanitized. Dashboard behavior must remain read-only.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261006-02",
+  "status": "PENDING",
+  "review_date": "2026-10-06",
+  "created_at": "2026-10-06T13:06:00",
+  "updated_at": "2026-10-06T13:06:00",
+  "implementation": {},
+  "deployment": {}
+}
