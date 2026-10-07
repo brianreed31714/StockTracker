@@ -10,7 +10,7 @@ StockTracker is a PAPER-ONLY multi-asset momentum research/trading system. It mu
 
 ## Tradable universe
 Configured by `TRADE_SYMBOLS` in `.env.config`. Current tradable baseline:
-XOM, WMT, AMZN, AAPL, NVDA, TSLA, SPY, QQQ, GLD.
+XOM, WMT, AMZN, AAPL, NVDA, TSLA, NBIS, SPY, QQQ, GLD.
 
 SHADOW-only research symbols: XLF, FAS, FAZ. These are not in `TRADE_SYMBOLS`.
 
