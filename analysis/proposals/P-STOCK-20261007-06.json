@@ -1,0 +1,24 @@
+{
+  "title": "Diagnose why ZPTA creates predictions but no shadow trades",
+  "change_type": "CODE",
+  "target": "ZPTA shadow entry/exit funnel",
+  "current": "ZPTA produced 300 predictions and 264 resolved predictions but zero shadow trades and zero exit reasons. Several model families report identical horizon metrics.",
+  "proposed": "Publish a ZPTA funnel row for each evaluated bar with provider freshness, model score, 68-point entry comparison, liquidity gate, regime gate, duplicate-signal gate, final disposition, and model-specific label/outcome identifiers. Add a validation warning when distinct models have identical predictions or metrics across a session. Do not change the entry score until at least 12 closed shadow trades exist.",
+  "evidence": [
+    "ZPTA shadow trades: 0 despite 300 predictions.",
+    "Latest status was NO_NEW_BAR using yahoo_delayed.",
+    "Latest regime was LIQUIDITY_DANGER.",
+    "zpta_exit_reason_counts was empty and multiple model families had identical reported statistics."
+  ],
+  "risk": "Diagnostic logging may reveal that delayed data cannot support timely shadow entries; it must not be used to bypass freshness or liquidity controls.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261007-06",
+  "status": "PENDING",
+  "review_date": "2026-10-07",
+  "created_at": "2026-10-07T13:05:58",
+  "updated_at": "2026-10-07T13:05:58",
+  "implementation": {},
+  "deployment": {}
+}

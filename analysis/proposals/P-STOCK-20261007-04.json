@@ -1,0 +1,23 @@
+{
+  "title": "Evaluate volatility-normalized exits in parallel",
+  "change_type": "CODE+CONFIG",
+  "target": "Paper position exit research",
+  "current": "Paper execution uses fixed 2% stop-loss, 3% take-profit, 1% trailing activation, and 1.25% trailing distance without published ATR or entry-volatility context.",
+  "proposed": "Run a SHADOW exit simulator beside each paper position using frozen-at-entry ATR or realized-volatility multiples. Log baseline versus shadow exit timestamp, reason, return, MFE, MAE, and holding time by symbol. Preserve all current execution exits and risk caps; require at least 12 closed comparable positions before considering any configuration change.",
+  "evidence": [
+    "TSLA and NVDA displayed elevated volume and are plausible high-volatility cases.",
+    "Only one realized XOM trade exists.",
+    "No ATR, range-normalized stop distance, or stop/target exit attribution was supplied."
+  ],
+  "risk": "ATR definitions and lookback choices can introduce research degrees of freedom; freeze the specification before collecting outcomes.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261007-04",
+  "status": "PENDING",
+  "review_date": "2026-10-07",
+  "created_at": "2026-10-07T13:05:58",
+  "updated_at": "2026-10-07T13:05:58",
+  "implementation": {},
+  "deployment": {}
+}

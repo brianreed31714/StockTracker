@@ -1,0 +1,3 @@
+alpaca_order_id,id,notional,price,qty,reason,side,symbol,ts
+sha256:3785f374433c1ac3,d2095324-01fa-459d-8db3-3a56e5873102,2540.32993667964,163.73,15.515360268,trailing stop; high $165.94,sell,XOM,2026-10-07T15:01:12.331938+00:00
+sha256:d41acb721732be17,5a9fd06c-debe-4dcb-8c7f-069ea7ef5170,2500.0,164.67,0.0,score 75.1 >= 70.0 confirmed,buy,XOM,2026-10-07T19:05:34.898326+00:00

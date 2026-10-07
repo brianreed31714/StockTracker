@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-10-07",
+  "generated_at": "2026-10-07T20:05:04.591252+00:00",
+  "sanitized": true,
+  "paper_only": true,
+  "market_timezone": "America/New_York",
+  "date_window_utc": {
+    "start": "2026-10-07T04:00:00+00:00",
+    "end": "2026-10-08T04:00:00+00:00"
+  },
+  "source_database_present": true,
+  "database_error": null,
+  "files": [
+    {
+      "path": "analysis/evidence/2026-10-07/decisions.csv",
+      "bytes": 1097168,
+      "sha256": "7114e1848d6e7805060532c84f5dde853077eecad5f28cd636bb7de83b3a2596",
+      "rows": 3150,
+      "first_ts": "2026-10-07T14:10:08.393445+00:00",
+      "last_ts": "2026-10-07T19:59:39.310047+00:00"
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/orders.csv",
+      "bytes": 380,
+      "sha256": "51d0e0c1cafed445712e80480ca5544a7e4694c62e1bd2ca234f671bb418f7ac",
+      "rows": 2,
+      "first_ts": "2026-10-07T15:01:12.331938+00:00",
+      "last_ts": "2026-10-07T19:05:34.898326+00:00"
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/fills.csv",
+      "bytes": 215,
+      "sha256": "5c7c80f5f40e345df1b69e925fab85b4594ac45aa78dc0f7256afebd8980242d",
+      "rows": 2,
+      "first_ts": "2026-10-07T15:01:12.752617+00:00",
+      "last_ts": "2026-10-07T19:05:35.278751+00:00"
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/realized.csv",
+      "bytes": 78,
+      "sha256": "dd67544b6204aaf364a6bdb9ece93d3578d6fc9eb711fd85afb95e60db8eee74",
+      "rows": 1,
+      "first_ts": "2026-10-07T15:01:12.752617+00:00",
+      "last_ts": "2026-10-07T15:01:12.752617+00:00"
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/decision_funnel.csv",
+      "bytes": 1082,
+      "sha256": "cb2ed30b97a041853c28f04fdc73b60aca14784dd52e7baabfc404cdadb26b08",
+      "rows": 4,
+      "first_ts": "2026-10-07T15:01:13.216576+00:00",
+      "last_ts": "2026-10-07T19:05:36.384353+00:00"
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/order_attempts.csv",
+      "bytes": 411,
+      "sha256": "1609cc0f40a8e645c5c511274ab9a71c98a656f4dbf99cfe48b016054c949f6b",
+      "rows": 2,
+      "first_ts": "2026-10-07T15:01:13.204185+00:00",
+      "last_ts": "2026-10-07T19:05:36.368330+00:00"
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/market_regime_shadow.csv",
+      "bytes": 22445,
+      "sha256": "75f5ce2c6327935d4ea0f724ef555fe3b6d360a4b9da68601996a82f250e3752",
+      "rows": 70,
+      "first_ts": "2026-10-07T14:10:04.807490+00:00",
+      "last_ts": "2026-10-07T19:58:35.539368+00:00"
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/regime_decision_shadow.csv",
+      "bytes": 610,
+      "sha256": "1562700921c8d3a99168e8db9252426a4ac5587adaf2c1311512a897bd1634d1",
+      "rows": 3,
+      "first_ts": "2026-10-07T15:46:16.779335+00:00",
+      "last_ts": "2026-10-07T19:05:34.706421+00:00"
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/financial_leverage_shadow.csv",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0,
+      "first_ts": null,
+      "last_ts": null
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/financial_leverage_signals.csv",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0,
+      "first_ts": null,
+      "last_ts": null
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/financial_leverage_outcomes.csv",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0,
+      "first_ts": null,
+      "last_ts": null
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/premarket_intelligence.csv",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0,
+      "first_ts": null,
+      "last_ts": null
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/zpta_observations.csv",
+      "bytes": 16852,
+      "sha256": "ec531d649c0c439a05ed28942207795f5e80964ec2bb8e41d83eb67198edec67",
+      "rows": 24,
+      "first_ts": "2026-10-07T14:31:31+00:00",
+      "last_ts": "2026-10-07T19:42:40+00:00"
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/zpta_predictions.csv",
+      "bytes": 82804,
+      "sha256": "d99216a622b9584d995c2b0ec624ddb3bccb29a54883169a1f7fa2321d781bcd",
+      "rows": 300,
+      "first_ts": "2026-10-07T14:47:08.071598+00:00",
+      "last_ts": "2026-10-07T19:58:37.248228+00:00"
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/zpta_shadow_trades.csv",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0,
+      "first_ts": null,
+      "last_ts": null
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/dashboard_state.json",
+      "bytes": 7797,
+      "sha256": "c0422442a79421ea88aa69918a0fee21d21c5ed89ced45c13940469a2c7400da"
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/geo_feed.json",
+      "bytes": 18925,
+      "sha256": "0f27b09f1e73009991cd26b77b2f0818ea07b5005d7564d74c3a6260d606690b"
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/geo_feed_tail.txt",
+      "bytes": 60209,
+      "sha256": "6ef91b0265547a186ae58c0afa832ef356abd4e879b986ff4a5deb12b2b42010"
+    },
+    {
+      "path": "analysis/evidence/2026-10-07/integrity_analysis.json",
+      "bytes": 607,
+      "sha256": "8584faeb5e1070490fa06b78194ce4086a5fe7bf01bd5890035a3aefb0fd88b9"
+    }
+  ],
+  "integrity_analysis": {
+    "status": "PASS",
+    "issues": [],
+    "all_published_rows_analyzed": 3558,
+    "table_count": 15,
+    "duplicate_decision_event_ids": 0,
+    "orphan_order_attempts": 0,
+    "accepted_attempts_without_order_id": 0,
+    "duplicate_fill_order_ids": 0,
+    "resolved_zpta_predictions_without_return": 0,
+    "order_gate_counts": {
+      "ORDER_ACCEPTED": 2
+    },
+    "zpta_exit_reason_counts": {},
+    "database_error": null,
+    "empty_tables": [
+      "financial_leverage_shadow",
+      "financial_leverage_signals",
+      "financial_leverage_outcomes",
+      "premarket_intelligence",
+      "zpta_shadow_trades"
+    ]
+  }
+}

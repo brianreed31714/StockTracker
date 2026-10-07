@@ -1,0 +1,24 @@
+{
+  "title": "Add a shadow near-miss opportunity and forward-outcome ledger",
+  "change_type": "CODE",
+  "target": "Decision funnel instrumentation for all configured symbols",
+  "current": "Daily maxima and aggregate gate counts are available, but near-threshold events are not joined to symbol-specific gates or subsequent prices. AMZN's exact blocker and TSLA/NVDA forward outcomes cannot be proven.",
+  "proposed": "For every no-position decision with score at least 60, and every raw threshold crossing, write a SHADOW record containing symbol, event ID, score components, threshold distance, momentum, volume ratio, confirmation count, exact gate, VIX, geo adjustment, regime, and forward returns/MFE/MAE at 5, 15, 30, and 60 minutes. Report results per symbol only after at least 12 resolved events; do not alter execution thresholds.",
+  "evidence": [
+    "AMZN maximum score was 72.697 with no BUY.",
+    "TSLA maximum was 68.13 and NVDA maximum was 68.65.",
+    "Two BUY-side events awaited confirmation, but the supplied summary does not definitively join them to symbols.",
+    "Only three raw crossings and one realized trade are insufficient for calibration."
+  ],
+  "risk": "Low instrumentation risk; additional log volume and delayed-price alignment must be monitored. Execution behavior remains unchanged.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261007-01",
+  "status": "PENDING",
+  "review_date": "2026-10-07",
+  "created_at": "2026-10-07T13:05:58",
+  "updated_at": "2026-10-07T13:05:58",
+  "implementation": {},
+  "deployment": {}
+}

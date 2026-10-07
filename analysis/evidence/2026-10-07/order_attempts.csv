@@ -1,0 +1,3 @@
+accepted,alpaca_order_id,attempt_id,attempted,decision_event_id,gate_reason,side,symbol,ts
+1,sha256:3785f374433c1ac3,a46f5617-96af-4672-bc45-a5b656180e37,1,691f25ec-8c7f-4b3a-a07a-42348c59c51d,ORDER_ACCEPTED,SELL,XOM,2026-10-07T15:01:13.204185+00:00
+1,sha256:d41acb721732be17,59c75f3b-fbef-4e3d-ac97-0c47439508b0,1,ab4bf505-7779-4d84-812c-458e59b6fa88,ORDER_ACCEPTED,BUY,XOM,2026-10-07T19:05:36.368330+00:00

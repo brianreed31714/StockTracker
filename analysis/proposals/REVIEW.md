@@ -1,156 +1,158 @@
-# StockTracker Proposals — 2026-10-06
+# StockTracker Proposals — 2026-10-07
 
 Paper-trading model improvement proposals. Human approval is required before implementation/deployment.
 
-## P-STOCK-20261006-01 — Populate decision-funnel lineage for every threshold-relevant decision
+## P-STOCK-20261007-01 — Add a shadow near-miss opportunity and forward-outcome ledger
 
 - **Status:** PENDING
 - **Type:** CODE
-- **Target:** decision_funnel.csv and decision-event instrumentation
-- **Current:** The decision funnel has zero rows despite 3,150 decisions and at least one observed score above the buy threshold. Gate counts and final dispositions are unavailable.
-- **Proposed:** In SHADOW logging, emit a funnel record keyed to decision_event_id whenever a score crosses either raw threshold or has a nonzero confirmation count. Record symbol, side, raw score, threshold, confirmation count/requirement, position state, each evaluated gate, final disposition, and hypothetical requested notional. Do not submit additional orders or alter thresholds.
+- **Target:** Decision funnel instrumentation for all configured symbols
+- **Current:** Daily maxima and aggregate gate counts are available, but near-threshold events are not joined to symbol-specific gates or subsequent prices. AMZN's exact blocker and TSLA/NVDA forward outcomes cannot be proven.
+- **Proposed:** For every no-position decision with score at least 60, and every raw threshold crossing, write a SHADOW record containing symbol, event ID, score components, threshold distance, momentum, volume ratio, confirmation count, exact gate, VIX, geo adjustment, regime, and forward returns/MFE/MAE at 5, 15, 30, and 60 minutes. Report results per symbol only after at least 12 resolved events; do not alter execution thresholds.
 - **Confidence:** HIGH
 - **Recommended mode:** SHADOW
-- **Risk:** Low operational risk if writes are asynchronous and failures cannot affect the decision loop. Avoid logging sensitive brokerage data. Preserve paper=True, exposure caps, position caps, trade caps, and daily-loss controls.
+- **Risk:** Low instrumentation risk; additional log volume and delayed-price alignment must be monitored. Execution behavior remains unchanged.
 - **Evidence:**
-  - XOM maximum score was 70.274 versus the 70 buy threshold, yet all XOM decisions were HOLD.
-  - decision_funnel and order_attempts both contain zero rows; order_gate_counts is empty.
-  - All 3,150 decision rows were analyzed without duplicate event IDs.
+  - AMZN maximum score was 72.697 with no BUY.
+  - TSLA maximum was 68.13 and NVDA maximum was 68.65.
+  - Two BUY-side events awaited confirmation, but the supplied summary does not definitively join them to symbols.
+  - Only three raw crossings and one realized trade are insufficient for calibration.
 
 **Approve in ChatGPT:**
 
-`Approve P-STOCK-20261006-01`
+`Approve P-STOCK-20261007-01`
 
 **Decline in ChatGPT:**
 
-`Decline P-STOCK-20261006-01`
+`Decline P-STOCK-20261007-01`
 
 ---
 
-## P-STOCK-20261006-02 — Add position-to-fill provenance and daily reconciliation fields
-
-- **Status:** PENDING
-- **Type:** CODE
-- **Target:** dashboard position snapshot and evidence publisher
-- **Current:** The dashboard shows three open positions, but same-day orders and fills are empty, leaving their opening date and fill lineage unknown in the review evidence.
-- **Proposed:** Add read-only fields for position_origin_date, opening_order_id, opening_fill_id, carried_from_prior_day, and reconciled_quantity. Publish a reconciliation summary that separately totals requested notional, accepted orders, fills, realized P/L, and dashboard-only positions. Flag mismatches without changing positions or submitting orders.
-- **Confidence:** HIGH
-- **Recommended mode:** SHADOW
-- **Risk:** Low if implemented as read-only instrumentation. Brokerage/order identifiers should remain sanitized. Dashboard behavior must remain read-only.
-- **Evidence:**
-  - Dashboard snapshot reports AAPL, SPY, and XOM positions with $7,608.47 exposure.
-  - Same-day orders, fills, and realized tables each contain zero rows.
-  - Dashboard unrealized P/L cannot be treated as realized P/L or same-day execution evidence.
-
-**Approve in ChatGPT:**
-
-`Approve P-STOCK-20261006-02`
-
-**Decline in ChatGPT:**
-
-`Decline P-STOCK-20261006-02`
-
----
-
-## P-STOCK-20261006-03 — Link regime snapshots to contemporaneous decisions and forward outcomes
-
-- **Status:** PENDING
-- **Type:** CODE
-- **Target:** regime_decision_shadow.csv
-- **Current:** Seventy market-regime snapshots were recorded, all RISK_ON at score 100, but no regime-decision linkage rows were published.
-- **Proposed:** For each decision, write a SHADOW linkage to the latest nonfuture regime snapshot, including snapshot age, state, score, hypothetical regime-adjusted action, unchanged baseline action, and forward returns at fixed horizons when available. Do not let the regime shadow alter paper orders until multiple states and adequate outcome samples exist.
-- **Confidence:** HIGH
-- **Recommended mode:** SHADOW
-- **Risk:** Low instrumentation risk; timestamp joins must prohibit look-ahead. A single-state day could otherwise produce misleading apparent performance.
-- **Evidence:**
-  - market_regime_shadow has 70 rows spanning 14:10–19:57 UTC.
-  - All 70 observations are RISK_ON with score 100.
-  - regime_decision_shadow has zero rows, preventing assessment of incremental contribution.
-
-**Approve in ChatGPT:**
-
-`Approve P-STOCK-20261006-03`
-
-**Decline in ChatGPT:**
-
-`Decline P-STOCK-20261006-03`
-
----
-
-## P-STOCK-20261006-04 — Emit financial-leverage availability diagnostics and XLF/FAS/FAZ outcomes
+## P-STOCK-20261007-02 — Restore XLF/FAS/FAZ shadow snapshot, signal, and outcome publication
 
 - **Status:** PENDING
 - **Type:** CODE+CONFIG
-- **Target:** financial_leverage_shadow, financial_leverage_signals, and financial_leverage_outcomes publishers
-- **Current:** Financial-leverage SHADOW is enabled, but all related tables are empty and the dashboard only reports FINANCIAL_SNAPSHOT_UNAVAILABLE.
-- **Proposed:** Keep the feature SHADOW-only. At each scheduled evaluation, log XLF/FAS/FAZ quote/bar availability, provider, bar timestamps, freshness, missing-field reason, candidate score, eligibility result, and rejection reason. When valid signals exist, record non-trading forward returns at the configured 5/15/30/60-minute horizons.
+- **Target:** financial_leverage_shadow pipeline
+- **Current:** The feature is enabled with outcome horizons 5,15,30,60, but all three financial-leverage tables contain zero rows and the dashboard reports FINANCIAL_SNAPSHOT_UNAVAILABLE.
+- **Proposed:** Add a startup/provider health check for XLF, FAS, and FAZ; publish one timestamped snapshot per evaluation cycle, including explicit provider/error status. When a shadow signal occurs, persist its score, regime, prices, and forward returns at configured horizons. Keep it non-executable and require at least 12 resolved signals before any calibration review.
 - **Confidence:** HIGH
 - **Recommended mode:** SHADOW
-- **Risk:** Moderate data-volume and provider-rate risk. No leveraged ETF orders should be created, and the configured minimum score must remain unchanged.
+- **Risk:** Provider limitations or leveraged-ETF data quality could create misleading shadow signals; explicit freshness and error fields mitigate this.
 - **Evidence:**
-  - financial_leverage_shadow, financial_leverage_signals, and financial_leverage_outcomes each have zero rows.
-  - The latest dashboard candidate is NONE with FINANCIAL_SNAPSHOT_UNAVAILABLE.
-  - No XLF/FAS/FAZ signal or forward-outcome evidence exists for calibration.
+  - financial_leverage_shadow rows: 0.
+  - financial_leverage_signals rows: 0.
+  - financial_leverage_outcomes rows: 0.
+  - The enabled feature produced no evidence despite 70 market-regime snapshots.
 
 **Approve in ChatGPT:**
 
-`Approve P-STOCK-20261006-04`
+`Approve P-STOCK-20261007-02`
 
 **Decline in ChatGPT:**
 
-`Decline P-STOCK-20261006-04`
+`Decline P-STOCK-20261007-02`
 
 ---
 
-## P-STOCK-20261006-05 — Add premarket schedule heartbeats, gap provenance, and bias-outcome logging
+## P-STOCK-20261007-03 — Repair premarket gap and bias observability
 
 - **Status:** PENDING
 - **Type:** CODE
-- **Target:** premarket_intelligence.csv
-- **Current:** Premarket collection is enabled for five refresh offsets, but the table contains zero rows and all latest gap/bias fields are absent.
-- **Proposed:** At every configured offset, emit a SHADOW heartbeat even on failure. Record expected and actual run time, symbol-level prior close and premarket price timestamps, gap percentage, computed bias components, geo status, explicit social_source=UNAVAILABLE, failure reason, and post-open forward returns. Keep premarket adjustment behavior unchanged pending at least 12 valid independent samples.
+- **Target:** premarket_intelligence collection and publication
+- **Current:** Premarket is enabled with five refresh offsets and a 60-minute context window, but the published table has zero rows and all latest gap/bias fields are null.
+- **Proposed:** At each configured premarket offset, publish a row for every trade symbol with prior close, current premarket price, gap percentage, data freshness, provider status, computed bias, geo status, and an explicit social_status=UNAVAILABLE. Emit a failure row rather than silently producing no data. Keep premarket adjustments unchanged until at least 12 resolved sessions or qualifying events are available.
 - **Confidence:** HIGH
 - **Recommended mode:** SHADOW
-- **Risk:** Low model risk because this only records SHADOW evidence. Timestamp handling must avoid stale quotes and look-ahead; social data must not be fabricated.
+- **Risk:** Premarket IEX coverage may be sparse; stale or absent quotes must be marked rather than imputed.
 - **Evidence:**
-  - premarket_enabled is true with offsets 30,20,10,5,1 minutes.
-  - premarket_intelligence has zero rows and latest_gaps_pct is empty.
-  - All dashboard premarket adjustments are 0.0.
+  - premarket_intelligence rows: 0.
+  - Premarket adjustment was 0.0 in every displayed top signal.
   - Social source is explicitly UNAVAILABLE.
 
 **Approve in ChatGPT:**
 
-`Approve P-STOCK-20261006-05`
+`Approve P-STOCK-20261007-03`
 
 **Decline in ChatGPT:**
 
-`Decline P-STOCK-20261006-05`
+`Decline P-STOCK-20261007-03`
 
 ---
 
-## P-STOCK-20261006-06 — Measure geo deduplication and marginal score contribution without changing weights
+## P-STOCK-20261007-04 — Evaluate volatility-normalized exits in parallel
 
 - **Status:** PENDING
-- **Type:** CODE
-- **Target:** geo-feed scoring audit and decision evidence
-- **Current:** Geo adjustments materially lift XOM and GLD scores, while the displayed top events contain multiple variants of the same underlying headlines. The evidence does not expose deduplication clusters or counterfactual scores.
-- **Proposed:** Log a stable story-cluster ID, canonical URL/title hash, source count, deduplication decision, event-level contribution, total capped contribution, and counterfactual score_without_geo for each affected decision. Record whether geo alone changed a raw threshold-crossing state and attach fixed-horizon forward returns. Do not change the geo cap or weight.
-- **Confidence:** MEDIUM
+- **Type:** CODE+CONFIG
+- **Target:** Paper position exit research
+- **Current:** Paper execution uses fixed 2% stop-loss, 3% take-profit, 1% trailing activation, and 1.25% trailing distance without published ATR or entry-volatility context.
+- **Proposed:** Run a SHADOW exit simulator beside each paper position using frozen-at-entry ATR or realized-volatility multiples. Log baseline versus shadow exit timestamp, reason, return, MFE, MAE, and holding time by symbol. Preserve all current execution exits and risk caps; require at least 12 closed comparable positions before considering any configuration change.
+- **Confidence:** HIGH
 - **Recommended mode:** SHADOW
-- **Risk:** Low trading risk in SHADOW mode; clustering errors may merge distinct updates, so retain raw event IDs and make the audit reversible.
+- **Risk:** ATR definitions and lookback choices can introduce research degrees of freedom; freeze the specification before collecting outcomes.
 - **Evidence:**
-  - XOM average geo adjustment was +3.64 and GLD was +0.91; other symbols averaged zero.
-  - The top-event list repeats WSJ and TradeWinds stories across source/title variants.
-  - XOM's maximum total score exceeded the buy threshold, but the marginal role of geo at that timestamp is not supplied.
-  - Geo log tail had zero errors and 25 warnings, but warning categories are not summarized.
+  - TSLA and NVDA displayed elevated volume and are plausible high-volatility cases.
+  - Only one realized XOM trade exists.
+  - No ATR, range-normalized stop distance, or stop/target exit attribution was supplied.
 
 **Approve in ChatGPT:**
 
-`Approve P-STOCK-20261006-06`
+`Approve P-STOCK-20261007-04`
 
 **Decline in ChatGPT:**
 
-`Decline P-STOCK-20261006-06`
+`Decline P-STOCK-20261007-04`
+
+---
+
+## P-STOCK-20261007-05 — Add geo-score counterfactual attribution for XOM and GLD
+
+- **Status:** PENDING
+- **Type:** CODE
+- **Target:** Geo context instrumentation
+- **Current:** Geo adjustments materially affect XOM and GLD scores, but logs do not expose score-without-geo, event contribution weights, freshness, or subsequent outcome attribution.
+- **Proposed:** For each XOM and GLD decision, persist the executed score, score excluding geo, contributing event IDs with age/direction/materiality, conflict ratio, and whether the threshold outcome changes without geo. Attach 15-, 30-, and 60-minute forward returns without changing the current geo adjustment.
+- **Confidence:** HIGH
+- **Recommended mode:** SHADOW
+- **Risk:** Headline duplication and correlated events may overstate attribution; event IDs and conflict metrics should make this auditable.
+- **Evidence:**
+  - XOM average geo adjustment was +5.876 and its maximum score was 79.348.
+  - GLD average geo adjustment was +1.469.
+  - The feed's leading oil events included both bullish and bearish directions.
+  - XOM supplied the only same-day realized P/L, which is insufficient to isolate geo value.
+
+**Approve in ChatGPT:**
+
+`Approve P-STOCK-20261007-05`
+
+**Decline in ChatGPT:**
+
+`Decline P-STOCK-20261007-05`
+
+---
+
+## P-STOCK-20261007-06 — Diagnose why ZPTA creates predictions but no shadow trades
+
+- **Status:** PENDING
+- **Type:** CODE
+- **Target:** ZPTA shadow entry/exit funnel
+- **Current:** ZPTA produced 300 predictions and 264 resolved predictions but zero shadow trades and zero exit reasons. Several model families report identical horizon metrics.
+- **Proposed:** Publish a ZPTA funnel row for each evaluated bar with provider freshness, model score, 68-point entry comparison, liquidity gate, regime gate, duplicate-signal gate, final disposition, and model-specific label/outcome identifiers. Add a validation warning when distinct models have identical predictions or metrics across a session. Do not change the entry score until at least 12 closed shadow trades exist.
+- **Confidence:** HIGH
+- **Recommended mode:** SHADOW
+- **Risk:** Diagnostic logging may reveal that delayed data cannot support timely shadow entries; it must not be used to bypass freshness or liquidity controls.
+- **Evidence:**
+  - ZPTA shadow trades: 0 despite 300 predictions.
+  - Latest status was NO_NEW_BAR using yahoo_delayed.
+  - Latest regime was LIQUIDITY_DANGER.
+  - zpta_exit_reason_counts was empty and multiple model families had identical reported statistics.
+
+**Approve in ChatGPT:**
+
+`Approve P-STOCK-20261007-06`
+
+**Decline in ChatGPT:**
+
+`Decline P-STOCK-20261007-06`
 
 ---
 

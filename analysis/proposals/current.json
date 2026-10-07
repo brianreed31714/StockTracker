@@ -1,55 +1,55 @@
 {
-  "generated_at": "2026-10-06T13:06:00",
-  "review_date": "2026-10-06",
+  "generated_at": "2026-10-07T13:05:58",
+  "review_date": "2026-10-07",
   "proposal_count": 6,
   "pending": [
-    "P-STOCK-20261006-01",
-    "P-STOCK-20261006-02",
-    "P-STOCK-20261006-03",
-    "P-STOCK-20261006-04",
-    "P-STOCK-20261006-05",
-    "P-STOCK-20261006-06"
+    "P-STOCK-20261007-01",
+    "P-STOCK-20261007-02",
+    "P-STOCK-20261007-03",
+    "P-STOCK-20261007-04",
+    "P-STOCK-20261007-05",
+    "P-STOCK-20261007-06"
   ],
   "proposals": [
     {
-      "proposal_id": "P-STOCK-20261006-01",
-      "title": "Populate decision-funnel lineage for every threshold-relevant decision",
+      "proposal_id": "P-STOCK-20261007-01",
+      "title": "Add a shadow near-miss opportunity and forward-outcome ledger",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261006-02",
-      "title": "Add position-to-fill provenance and daily reconciliation fields",
+      "proposal_id": "P-STOCK-20261007-02",
+      "title": "Restore XLF/FAS/FAZ shadow snapshot, signal, and outcome publication",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261006-03",
-      "title": "Link regime snapshots to contemporaneous decisions and forward outcomes",
+      "proposal_id": "P-STOCK-20261007-03",
+      "title": "Repair premarket gap and bias observability",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261006-04",
-      "title": "Emit financial-leverage availability diagnostics and XLF/FAS/FAZ outcomes",
+      "proposal_id": "P-STOCK-20261007-04",
+      "title": "Evaluate volatility-normalized exits in parallel",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261006-05",
-      "title": "Add premarket schedule heartbeats, gap provenance, and bias-outcome logging",
+      "proposal_id": "P-STOCK-20261007-05",
+      "title": "Add geo-score counterfactual attribution for XOM and GLD",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261006-06",
-      "title": "Measure geo deduplication and marginal score contribution without changing weights",
-      "confidence": "MEDIUM",
+      "proposal_id": "P-STOCK-20261007-06",
+      "title": "Diagnose why ZPTA creates predictions but no shadow trades",
+      "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     }
