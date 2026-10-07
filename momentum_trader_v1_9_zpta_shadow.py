@@ -1,7 +1,7 @@
 """
 Momentum Trader v1.9 — PAPER-ONLY market-aware trader with integrated ZPTA specialist shadow research.
 
-Tradable: XOM, WMT, AMZN, AAPL, NVDA, TSLA, SPY, QQQ, GLD
+Tradable: XOM, WMT, AMZN, AAPL, NVDA, TSLA, NBIS, SPY, QQQ, GLD
 Context: SPY, QQQ, GLD, USO, VIX (^VIX via Yahoo chart endpoint; VIXY fallback)
 
 Design:
@@ -48,7 +48,7 @@ load_dotenv(SECRETS_FILE, override=True)
 # ---------------- Configuration ----------------
 PAPER_ONLY = True
 TRADE_SYMBOLS = [s.strip().upper() for s in os.getenv(
-    "TRADE_SYMBOLS", "XOM,WMT,AMZN,AAPL,NVDA,TSLA,SPY,QQQ,GLD"
+    "TRADE_SYMBOLS", "XOM,WMT,AMZN,AAPL,NVDA,TSLA,NBIS,SPY,QQQ,GLD"
 ).split(",") if s.strip()]
 CONTEXT_SYMBOLS = ["SPY", "QQQ", "GLD", "USO"]
 SHADOW_FINANCIAL_SYMBOLS = ["XLF", "FAS", "FAZ"]
