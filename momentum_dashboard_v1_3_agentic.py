@@ -29,7 +29,7 @@ with st.sidebar:
 h1,h2=st.columns([5,1])
 with h1:
     st.markdown('<div class="app-title">Momentum Trader</div>',unsafe_allow_html=True)
-    st.markdown('<div class="subtle">XOM • WMT • AMZN • AAPL • NVDA • TSLA • SPY • QQQ • GLD &nbsp; | &nbsp; ZPTA shadow specialist</div>',unsafe_allow_html=True)
+    st.markdown('<div class="subtle">XOM • WMT • AMZN • AAPL • NVDA • TSLA • NBIS • SPY • QQQ • GLD &nbsp; | &nbsp; ZPTA shadow specialist</div>',unsafe_allow_html=True)
 with h2: st.markdown('<span class="pill">PAPER ONLY</span>',unsafe_allow_html=True)
 
 try: state=json.loads(STATE.read_text(encoding="utf-8")) if STATE.exists() else {}
