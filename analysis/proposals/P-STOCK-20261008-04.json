@@ -1,0 +1,24 @@
+{
+  "title": "Measure and deduplicate geo-feed score contribution",
+  "change_type": "CODE",
+  "target": "geo event normalization and score-attribution logs",
+  "current": "XOM received an average +7.754 geo adjustment, and repeated versions of the same headline appear among top events; no deduplication or with/without-geo forward outcome is published.",
+  "proposed": "Cluster geo items by normalized headline, canonical URL, event category, and publication window before aggregation. Log raw item count, unique-event count, capped contribution, and counterfactual score without geo adjustment for each XOM/GLD decision. Keep the live paper score unchanged until at least 12 resolved geo-triggered opportunities have forward outcomes.",
+  "evidence": [
+    "XOM average technical score was 50.671 versus average final score 58.226 and average geo adjustment +7.754.",
+    "GLD average geo adjustment was +1.939.",
+    "Multiple top events repeat the same Guardian tanker-attack headline.",
+    "Geo tail contained 14 errors and 34 warnings in 500 lines."
+  ],
+  "risk": "Incorrect clustering could merge genuinely distinct updates; retain raw events and use SHADOW counterfactuals before changing scoring.",
+  "confidence": "MEDIUM",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261008-04",
+  "status": "PENDING",
+  "review_date": "2026-10-08",
+  "created_at": "2026-10-08T13:06:06",
+  "updated_at": "2026-10-08T13:06:06",
+  "implementation": {},
+  "deployment": {}
+}

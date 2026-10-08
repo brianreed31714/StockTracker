@@ -1,0 +1,250 @@
+{
+  "generated_at": "2026-10-08T20:01:56.134572+00:00",
+  "status": "ok",
+  "signal": 0.7559,
+  "score_adjustment": 7.56,
+  "max_materiality": 0.9,
+  "active_event_count": 181,
+  "events": [
+    {
+      "id": "eda12c01c76ec124d82b1ee4",
+      "title": "Tanker attacked off Qatar as Iran claims route transporting oil through strait of Hormuz will be \u2018closed\u2019 - The Guardian",
+      "source": "The Guardian",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPWGpBZ3dHeE0yV0pvMTR0VTBMdHpZQUZoWjdneXNyV0d3RWVoZm1TWFJ5cS16Y0lCRk5PM2dEdVp1dlp2ZEJwTkQ5SlR4dVVoYzVwa0pEdjd5OUJCUTZmaVdRTUk4alo5TTJFRlVVV2lkSzl3MU5PMER5WkR1T2tlYVdNNU15cGQxMVViendna1NZRjBxdnUxb2dMZHFua2ZzVFZ4YTJ4cUg?oc=5",
+      "published_at": "2026-10-08T05:36:00+00:00",
+      "description": "Tanker attacked off Qatar as Iran claims route transporting oil through strait of Hormuz will be \u2018closed\u2019 \u00a0\u00a0 The Guardian",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.9,
+        "confidence": 0.82,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "The reported tanker attack off Qatar and Iran\u2019s stated intention to close the Strait of Hormuz indicate a potentially severe disruption risk to a major oil-transport route, supporting crude prices. The closure claim is not independently detailed in the supplied text, so uncertainty remains.",
+        "why_xom": "Higher crude prices could support Exxon Mobil\u2019s upstream earnings and cash flow, although any broader market or operational effects are not specified."
+      },
+      "analyzed_at": "2026-10-08T07:47:40.568568+00:00"
+    },
+    {
+      "id": "e079abc9d7fdc64ea754bbbb",
+      "title": "Tanker attacked off Qatar as Iran claims route transporting oil through strait of Hormuz will be \u2018closed\u2019 - The Guardian",
+      "source": "The Guardian",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPWGpBZ3dHeE0yV0pvMTR0VTBMdHpZQUZoWjdneXNyV0d3RWVoZm1TWFJ5cS16Y0lCRk5PM2dEdVp1dlp2ZEJwTkQ5SlR4dVVoYzVwa0pEdjd5OUJCUTZmaVdRTUk4alo5TTJFRlVVV2lkSzl3MU5PMER5WkR1T2tlYVdNNU15cGQxMVViendna1NZRjBxdnUxb2dMZHFua2ZzVFZ4YTJ4cUg?oc=5",
+      "published_at": "2026-10-08T03:15:00+00:00",
+      "description": "Tanker attacked off Qatar as Iran claims route transporting oil through strait of Hormuz will be \u2018closed\u2019 \u00a0\u00a0 The Guardian",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.9,
+        "confidence": 0.78,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "The reported tanker attack off Qatar and Iran\u2019s claim that the Strait of Hormuz oil route will be closed indicate a potentially severe disruption risk to crude shipments, likely supporting oil prices and benefiting upstream exposure such as XOM. The closure claim is not independently detailed in the supplied text, so confirmation risk remains.",
+        "why_xom": "XOM could benefit from higher crude prices through stronger upstream realizations, although shipping disruption could also raise logistics and downstream operating risks."
+      },
+      "analyzed_at": "2026-10-08T06:18:13.546908+00:00"
+    },
+    {
+      "id": "b9b5106eb44ef8e87de798c8",
+      "title": "Tanker attacked off Qatar as Iran claims route transporting oil through strait of Hormuz will be \u2018closed\u2019 - The Guardian",
+      "source": "The Guardian",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPWGpBZ3dHeE0yV0pvMTR0VTBMdHpZQUZoWjdneXNyV0d3RWVoZm1TWFJ5cS16Y0lCRk5PM2dEdVp1dlp2ZEJwTkQ5SlR4dVVoYzVwa0pEdjd5OUJCUTZmaVdRTUk4alo5TTJFRlVVV2lkSzl3MU5PMER5WkR1T2tlYVdNNU15cGQxMVViendna1NZRjBxdnUxb2dMZHFua2ZzVFZ4YTJ4cUg?oc=5",
+      "published_at": "2026-10-08T09:41:00+00:00",
+      "description": "Tanker attacked off Qatar as Iran claims route transporting oil through strait of Hormuz will be \u2018closed\u2019 \u00a0\u00a0 The Guardian",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.88,
+        "confidence": 0.78,
+        "category": "hormuz",
+        "supply_impact": "uncertain",
+        "summary": "A reported tanker attack off Qatar and Iran\u2019s claim that the oil route through the Strait of Hormuz will be closed signal significant escalation risk for crude transportation. The headline does not confirm that the strait has actually been closed or that supply has been disrupted.",
+        "why_xom": "Potential disruption or risk premium in a major oil transit route could support crude prices and benefit Exxon Mobil\u2019s upstream earnings, though the effect is partly offset by uncertainty and possible broader geopolitical or operational risks."
+      },
+      "analyzed_at": "2026-10-08T10:55:36.687503+00:00"
+    },
+    {
+      "id": "e915827a1eb7f98580b74c33",
+      "title": "Oil Prices Fall as G-7 Plans Crude, Diesel Release But Hormuz Shipping Risks Persist - WSJ",
+      "source": "WSJ",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPOFA5UUZFdndtdnBodnFleklOcmpCZmdBUzlROTlFSkFiWkZsNG5sMHU4M0VoR2ZLNFVNYlhKbmpjYlc4Q0NObmdDdFNLenRmU0VQdVZfWXU1YU44NWFUcnlWeUNtQkhBMlAyZGpDemdPY3VkY3NzdDRpNWlOcTlabURzNE1udEdkOVVYeW5qcmhndjM3VHVHYVFSZy0yQzYyR1VnSnJGWVdZdEZTUV9IeF84OXpEaFcyNUxzNFIwaFAybGplVHN3cTM1THc?oc=5",
+      "published_at": "2026-10-07T20:17:41+00:00",
+      "description": "Oil Prices Fall as G-7 Plans Crude, Diesel Release But Hormuz Shipping Risks Persist \u00a0\u00a0 WSJ",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "mixed",
+        "xom_direction": "mixed",
+        "materiality": 0.76,
+        "confidence": 0.89,
+        "category": "hormuz",
+        "supply_impact": "uncertain",
+        "summary": "The planned G-7 release of crude and diesel is bearish for oil prices, while persistent Strait of Hormuz shipping risks provide an offsetting bullish supply-risk factor. The headline reports that prices fell, but does not confirm the scale or timing of the release or any actual shipping disruption.",
+        "why_xom": "XOM could face lower realized crude prices from the planned release, while continued Hormuz risk may support energy prices and raise logistics or regional operating concerns. The net effect is therefore mixed."
+      },
+      "analyzed_at": "2026-10-07T20:19:35.136460+00:00"
+    },
+    {
+      "id": "9628ad0a44eacadbc3be86ab",
+      "title": "Tanker attacked off Qatar as Iran claims route transporting oil through strait of Hormuz will be \u2018closed\u2019 - The Guardian",
+      "source": "The Guardian",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPWGpBZ3dHeE0yV0pvMTR0VTBMdHpZQUZoWjdneXNyV0d3RWVoZm1TWFJ5cS16Y0lCRk5PM2dEdVp1dlp2ZEJwTkQ5SlR4dVVoYzVwa0pEdjd5OUJCUTZmaVdRTUk4alo5TTJFRlVVV2lkSzl3MU5PMER5WkR1T2tlYVdNNU15cGQxMVViendna1NZRjBxdnUxb2dMZHFua2ZzVFZ4YTJ4cUg?oc=5",
+      "published_at": "2026-10-08T16:50:00+00:00",
+      "description": "Tanker attacked off Qatar as Iran claims route transporting oil through strait of Hormuz will be \u2018closed\u2019 \u00a0\u00a0 The Guardian",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.86,
+        "confidence": 0.78,
+        "category": "hormuz",
+        "supply_impact": "uncertain",
+        "summary": "A reported tanker attack off Qatar and Iran\u2019s stated threat that the Strait of Hormuz oil route will be closed indicate elevated disruption risk for crude flows. The closure is not confirmed in the supplied text, so the immediate supply impact remains uncertain.",
+        "why_xom": "Exxon Mobil could benefit from higher crude prices and disruption risk through upstream earnings, though any broader market or operational effects are not specified."
+      },
+      "analyzed_at": "2026-10-08T18:27:31.261203+00:00"
+    },
+    {
+      "id": "f11085a9e5038ae7a864f007",
+      "title": "Oil jumps 5% as Hormuz tanker attacks escalate, US Gulf hurricane shuts in production - Oil & Gas Journal",
+      "source": "Oil & Gas Journal",
+      "url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxNZWE4MDk0OC16dUFpdERsSlVkNTFVbHNKTGZUY1RFRFRFd2E4UUlWUXNSN1hWaGJQbjh3X0NpM2ZtOFd6ZG1pa3BUa1JMVF9KNWVoaXNTOG16eUhxcnZPaC0xbjlPUVJSTkc4QmpBdXFyUm9fQzNiTE5tQmZhYkhSUmJ1V05xOGVSTU5KNmpJb0hzcEJhaE5QNFMzTmNrcElQa255ZWVxWjBUdWtlMDRCdjVfY2hTS2tsNXN3a1NvZkRWNjUtTzdCb2xJcXhNWWdQSDNlZ0lmejBTRUNlS0l4VWJaVXhDQVk?oc=5",
+      "published_at": "2026-10-08T17:38:25+00:00",
+      "description": "Oil jumps 5% as Hormuz tanker attacks escalate, US Gulf hurricane shuts in production \u00a0\u00a0 Oil & Gas Journal",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.85,
+        "confidence": 0.78,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "The headline reports escalating tanker attacks in the Strait of Hormuz and hurricane-related US Gulf production shut-ins, both indicating near-term supply disruption and explaining the reported 5% oil-price increase.",
+        "why_xom": "Higher crude prices generally support Exxon Mobil\u2019s upstream earnings and cash flow, although Gulf operational disruptions could create offsetting asset-specific risks."
+      },
+      "analyzed_at": "2026-10-08T17:46:17.042919+00:00"
+    },
+    {
+      "id": "2d6e83690ff806ee00a1bc96",
+      "title": "Oil Prices Fall as G-7 Plans Crude, Diesel Release But Hormuz Shipping Risks Persist - WSJ",
+      "source": "WSJ",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPOFA5UUZFdndtdnBodnFleklOcmpCZmdBUzlROTlFSkFiWkZsNG5sMHU4M0VoR2ZLNFVNYlhKbmpjYlc4Q0NObmdDdFNLenRmU0VQdVZfWXU1YU44NWFUcnlWeUNtQkhBMlAyZGpDemdPY3VkY3NzdDRpNWlOcTlabURzNE1udEdkOVVYeW5qcmhndjM3VHVHYVFSZy0yQzYyR1VnSnJGWVdZdEZTUV9IeF84OXpEaFcyNUxzNFIwaFAybGplVHN3cTM1THc?oc=5",
+      "published_at": "2026-10-08T10:25:02+00:00",
+      "description": "Oil Prices Fall as G-7 Plans Crude, Diesel Release But Hormuz Shipping Risks Persist \u00a0\u00a0 WSJ",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "mixed",
+        "xom_direction": "mixed",
+        "materiality": 0.8,
+        "confidence": 0.82,
+        "category": "hormuz",
+        "supply_impact": "uncertain",
+        "summary": "The headline reports that G-7 plans to release crude and diesel, pressuring oil prices lower, while Strait of Hormuz shipping risks remain. The release is bearish for crude, but persistent transit risk is supportive, producing a mixed overall signal.",
+        "why_xom": "Lower crude prices could weigh on Exxon Mobil's upstream earnings, while continued Hormuz disruption could support crude pricing and potentially benefit refining margins. The net effect on XOM is therefore mixed."
+      },
+      "analyzed_at": "2026-10-08T11:01:01.275529+00:00"
+    },
+    {
+      "id": "8eb536b7277f170ba2e1a2c3",
+      "title": "Tanker attacked off Qatar as Iran claims route transporting oil through strait of Hormuz will be \u2018closed\u2019 - AOL.com",
+      "source": "AOL.com",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQMkdzZ001aVR2NUNiSjV6TmhMRzh2ZnNTckdLZHVMLUphYkFzRzJES25TMVdmRlBHUlNLUEw2cjk4M2pUWE5mTzFEODVhMUZETkh6NDN3alBicnlKYmxqSjBqbTdySm4zQ2tRcWVHazRtTEVjUmlLbzFBNkpxbWdMdDB3?oc=5",
+      "published_at": "2026-10-08T03:16:00+00:00",
+      "description": "Tanker attacked off Qatar as Iran claims route transporting oil through strait of Hormuz will be \u2018closed\u2019 \u00a0\u00a0 AOL.com",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.86,
+        "confidence": 0.76,
+        "category": "hormuz",
+        "supply_impact": "uncertain",
+        "summary": "A reported tanker attack off Qatar and Iran\u2019s claim that the oil-transport route through the Strait of Hormuz will be closed indicate a potentially major disruption risk to Gulf crude flows. The headline does not confirm that the strait has actually closed, so the immediate supply impact remains uncertain, but the risk premium for crude is likely higher.",
+        "why_xom": "Higher crude prices can support Exxon Mobil\u2019s upstream earnings and valuation. However, the benefit is partly offset by uncertainty around actual supply disruption and potential risks to XOM\u2019s regional operations, refining, and shipping exposure."
+      },
+      "analyzed_at": "2026-10-08T03:42:11.865494+00:00"
+    },
+    {
+      "id": "22e77f899e6e4e4edab3e9bf",
+      "title": "Tanker attacked off Qatar as Iran claims route transporting oil through strait of Hormuz will be \u2018closed\u2019 - The Guardian",
+      "source": "The Guardian",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPWGpBZ3dHeE0yV0pvMTR0VTBMdHpZQUZoWjdneXNyV0d3RWVoZm1TWFJ5cS16Y0lCRk5PM2dEdVp1dlp2ZEJwTkQ5SlR4dVVoYzVwa0pEdjd5OUJCUTZmaVdRTUk4alo5TTJFRlVVV2lkSzl3MU5PMER5WkR1T2tlYVdNNU15cGQxMVViendna1NZRjBxdnUxb2dMZHFua2ZzVFZ4YTJ4cUg?oc=5",
+      "published_at": "2026-10-08T03:16:00+00:00",
+      "description": "Tanker attacked off Qatar as Iran claims route transporting oil through strait of Hormuz will be \u2018closed\u2019 \u00a0\u00a0 The Guardian",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.88,
+        "confidence": 0.74,
+        "category": "hormuz",
+        "supply_impact": "uncertain",
+        "summary": "A reported tanker attack off Qatar and Iran\u2019s claim that the oil-transport route through the Strait of Hormuz will be closed indicate a potentially severe disruption risk to Gulf crude flows. The headline does not confirm that the strait has actually closed or that supply has been interrupted.",
+        "why_xom": "XOM could benefit from higher crude prices through upstream exposure, although its global operations and Gulf-region geopolitical risks could also create offsetting effects."
+      },
+      "analyzed_at": "2026-10-08T03:47:22.568985+00:00"
+    },
+    {
+      "id": "7194396f9fc69df263939f79",
+      "title": "Crude oil jumps on fresh Persian Gulf tanker attack, U.S. Gulf shutdowns - TradingView",
+      "source": "TradingView",
+      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNWXV2THcyaWFVREZ0MUl1TmZYMmNYeXlTTXpPSkIzUWNtTlNNb2Mwb2ViZmVpcXNUY0RlR0lrZ3l4dnF4Zlg3aVVZaEZlWVNMZVl5UlQwNWwzSkhYc2NjdFFFeDA4OFF2d3hicnpRS3pxLU1fUU1mbGVJQl9YU3VMalpGMFpzS19ZZTNqN0tjbzdHeTd2ZGl0eHd6QUhXcTlJY3NwRkxaUzMzTC1XcGt2eW9adFh3UEtXSkFOUURqQjRxekdsdkdWT2ZGY3daQQ?oc=5",
+      "published_at": "2026-10-08T14:35:43+00:00",
+      "description": "Crude oil jumps on fresh Persian Gulf tanker attack, U.S. Gulf shutdowns \u00a0\u00a0 TradingView",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "mixed",
+        "materiality": 0.85,
+        "confidence": 0.76,
+        "category": "tanker_shipping",
+        "supply_impact": "tighter",
+        "summary": "The headline reports a fresh Persian Gulf tanker attack and U.S. Gulf shutdowns, with crude prices rising. These developments imply potential disruption to oil transport and Gulf energy operations, but the supplied summary provides no operational details or duration.",
+        "why_xom": "Higher crude prices could benefit Exxon Mobil\u2019s upstream earnings, while U.S. Gulf shutdowns could negatively affect its refining, production, or logistics operations. The overall XOM impact is therefore mixed."
+      },
+      "analyzed_at": "2026-10-08T15:22:56.390112+00:00"
+    },
+    {
+      "id": "315baac0e4b954afe960349a",
+      "title": "US-Israel-Iran War Live: Oil Prices Rise $102 a Barrel Amid Supply Disruptions in Middle East and Increase in Attacks on Shipping in Gulf and Strait of Hormuz - The Sunday Guardian",
+      "source": "The Sunday Guardian",
+      "url": "https://news.google.com/rss/articles/CBMirgJBVV95cUxQX3l4ekNWNEZPRjFiZmdwT1BIb1U3VmRqekhib0ZpLW9WeTA1dkZ3YzUtTHZydGJXQ2pmZ2RMUjd1Y05TQVZROW1iSXFOaUg2UUlITjVjbjJfVUpxN09EOUxBeEVjSlJTWk5ZYXRaUE5ESVhnU09mZkhkV1dTbE5GRGljZ1hxVHpwRFg1V2MzYVZUSkM0cGhCMTVhV29NVjJUVm9aSkJCdTRhalJwRXZOZzA0RUwtQkJqRjNtQUhRZUVITWRPWVZWT0tKcnpaUy16em14UEhsMmllSkV1QVpHTG5MZXBUeEU0SUliVW52enQ3ek9uQllmMGxVb1dheVpuTEt4QXZRV0tWcUk1T0dWX2VVV1JNUGlrVFI3bVdaRmtJVlZmanh0aEpWVFI2d9IBrgJBVV95cUxQX3l4ekNWNEZPRjFiZmdwT1BIb1U3VmRqekhib0ZpLW9WeTA1dkZ3YzUtTHZydGJXQ2pmZ2RMUjd1Y05TQVZROW1iSXFOaUg2UUlITjVjbjJfVUpxN09EOUxBeEVjSlJTWk5ZYXRaUE5ESVhnU09mZkhkV1dTbE5GRGljZ1hxVHpwRFg1V2MzYVZUSkM0cGhCMTVhV29NVjJUVm9aSkJCdTRhalJwRXZOZzA0RUwtQkJqRjNtQUhRZUVITWRPWVZWT0tKcnpaUy16em14UEhsMmllSkV1QVpHTG5MZXBUeEU0SUliVW52enQ3ek9uQllmMGxVb1dheVpuTEt4QXZRV0tWcUk1T0dWX2VVV1JNUGlrVFI3bVdaRmtJVlZmanh0aEpWVFI2dw?oc=5",
+      "published_at": "2026-10-08T08:58:23+00:00",
+      "description": "US-Israel-Iran War Live: Oil Prices Rise $102 a Barrel Amid Supply Disruptions in Middle East and Increase in Attacks on Shipping in Gulf and Strait of Hormuz \u00a0\u00a0 The Sunday Guardian",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.85,
+        "confidence": 0.76,
+        "category": "hormuz",
+        "supply_impact": "tighter",
+        "summary": "The headline reports Middle East supply disruptions and increased attacks on shipping in the Gulf and Strait of Hormuz, alongside oil prices rising to about $102 per barrel. This implies heightened disruption and risk to crude flows, though no specific outage, closure, or volume impact is provided.",
+        "why_xom": "Higher crude prices and tighter perceived supply can support Exxon Mobil\u2019s upstream earnings and cash-flow outlook, but the headline alone does not establish a sustained disruption or quantify the effect."
+      },
+      "analyzed_at": "2026-10-08T09:52:18.912907+00:00"
+    },
+    {
+      "id": "cb9aff502bae01f8aa3a25a4",
+      "title": "Oil Prices Rise More Than 2% Amid Houthi Attacks, U.S. Gulf Shut-Ins - WSJ",
+      "source": "WSJ",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOSFNuVFZRc2hyY2lPWFZHdnlHZUxTRm1ubWRnOHAyTktHTlZrNTNrU2ZKeEN6UXJ3SkZVUFhPMmV1azFhVXFNSmRiY25VbHl5T1EwdzBoVDZiWVB4aHl0VjZpLXRQUlJQV2FyaDh1aWVFTnU0M25IX1V2VE1aNWlVWk1XZWtBcE55YXZfWHhXeWgxMHlDcnBTT05ManNpZlZxaDJmUU5TUVhub0lFSmxZOGVR?oc=5",
+      "published_at": "2026-10-08T08:09:00+00:00",
+      "description": "Oil Prices Rise More Than 2% Amid Houthi Attacks, U.S. Gulf Shut-Ins \u00a0\u00a0 WSJ",
+      "analysis": {
+        "relevant": true,
+        "crude_direction": "bullish",
+        "xom_direction": "bullish",
+        "materiality": 0.75,
+        "confidence": 0.86,
+        "category": "supply",
+        "supply_impact": "tighter",
+        "summary": "The headline reports oil prices rising more than 2% amid Houthi attacks and shut-ins in the U.S. Gulf, indicating a potentially tighter near-term supply and shipping-risk backdrop.",
+        "why_xom": "Higher crude prices are generally supportive of Exxon Mobil's upstream earnings, although the headline does not provide details on Exxon's specific operational exposure or the duration of the shut-ins."
+      },
+      "analyzed_at": "2026-10-08T08:13:49.785072+00:00"
+    }
+  ]
+}

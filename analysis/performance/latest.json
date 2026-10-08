@@ -1,7 +1,7 @@
 {
   "metrics": {
-    "review_date": "2026-10-07",
-    "generated_at": "2026-10-07T20:05:03.874407+00:00",
+    "review_date": "2026-10-08",
+    "generated_at": "2026-10-08T20:05:04.105784+00:00",
     "paper_only": true,
     "coverage": {
       "db_path_exists": true,
@@ -9,7 +9,7 @@
       "daily_csv": {
         "folder_exists": true,
         "decision_rows": 3150,
-        "trade_rows": 2
+        "trade_rows": 3
       },
       "dashboard_state_exists": true,
       "geo_feed_exists": true
@@ -60,23 +60,23 @@
     "decisions": {
       "rows": 3150,
       "actions": {
-        "HOLD": 3148,
-        "SELL": 1,
+        "HOLD": 3147,
+        "SELL": 2,
         "BUY": 1
       },
       "by_symbol": {
         "AAPL": {
           "rows": 350,
           "buy": 0,
-          "sell": 0,
-          "hold": 350,
-          "avg_score": 51.399,
-          "median_score": 52.355,
-          "max_score": 66.165,
-          "min_score": 32.838,
-          "avg_technical": 51.27,
-          "avg_context": 0.08,
-          "avg_vix_adjustment": 0.049,
+          "sell": 1,
+          "hold": 349,
+          "avg_score": 51.756,
+          "median_score": 51.903,
+          "max_score": 74.41,
+          "min_score": 33.789,
+          "avg_technical": 51.889,
+          "avg_context": -0.124,
+          "avg_vix_adjustment": -0.009,
           "avg_geo_adjustment": 0.0
         },
         "AMZN": {
@@ -84,13 +84,13 @@
           "buy": 0,
           "sell": 0,
           "hold": 350,
-          "avg_score": 52.753,
-          "median_score": 52.351,
-          "max_score": 72.697,
-          "min_score": 33.832,
-          "avg_technical": 52.621,
-          "avg_context": 0.08,
-          "avg_vix_adjustment": 0.052,
+          "avg_score": 48.179,
+          "median_score": 48.424,
+          "max_score": 69.076,
+          "min_score": 18.247,
+          "avg_technical": 48.312,
+          "avg_context": -0.124,
+          "avg_vix_adjustment": -0.009,
           "avg_geo_adjustment": 0.0
         },
         "GLD": {
@@ -98,27 +98,27 @@
           "buy": 0,
           "sell": 0,
           "hold": 350,
-          "avg_score": 50.603,
-          "median_score": 49.805,
-          "max_score": 65.456,
-          "min_score": 37.049,
-          "avg_technical": 49.186,
-          "avg_context": -0.03,
-          "avg_vix_adjustment": -0.023,
-          "avg_geo_adjustment": 1.469
+          "avg_score": 51.85,
+          "median_score": 51.284,
+          "max_score": 73.207,
+          "min_score": 36.97,
+          "avg_technical": 49.886,
+          "avg_context": 0.021,
+          "avg_vix_adjustment": 0.004,
+          "avg_geo_adjustment": 1.939
         },
         "NVDA": {
           "rows": 350,
           "buy": 0,
           "sell": 0,
           "hold": 350,
-          "avg_score": 49.011,
-          "median_score": 48.557,
-          "max_score": 68.65,
-          "min_score": 31.635,
-          "avg_technical": 48.866,
-          "avg_context": 0.08,
-          "avg_vix_adjustment": 0.065,
+          "avg_score": 47.608,
+          "median_score": 48.079,
+          "max_score": 71.235,
+          "min_score": 19.642,
+          "avg_technical": 47.744,
+          "avg_context": -0.124,
+          "avg_vix_adjustment": -0.012,
           "avg_geo_adjustment": 0.0
         },
         "QQQ": {
@@ -126,41 +126,41 @@
           "buy": 0,
           "sell": 0,
           "hold": 350,
-          "avg_score": 51.402,
-          "median_score": 51.131,
-          "max_score": 64.788,
-          "min_score": 36.137,
-          "avg_technical": 51.327,
-          "avg_context": 0.02,
-          "avg_vix_adjustment": 0.055,
+          "avg_score": 48.578,
+          "median_score": 48.207,
+          "max_score": 68.711,
+          "min_score": 27.154,
+          "avg_technical": 48.602,
+          "avg_context": -0.014,
+          "avg_vix_adjustment": -0.01,
           "avg_geo_adjustment": 0.0
         },
         "SPY": {
           "rows": 350,
           "buy": 0,
-          "sell": 0,
-          "hold": 350,
-          "avg_score": 51.077,
-          "median_score": 50.942,
-          "max_score": 63.606,
-          "min_score": 37.999,
-          "avg_technical": 51.006,
-          "avg_context": 0.032,
-          "avg_vix_adjustment": 0.039,
+          "sell": 1,
+          "hold": 349,
+          "avg_score": 49.387,
+          "median_score": 49.308,
+          "max_score": 66.575,
+          "min_score": 32.164,
+          "avg_technical": 49.443,
+          "avg_context": -0.05,
+          "avg_vix_adjustment": -0.007,
           "avg_geo_adjustment": 0.0
         },
         "TSLA": {
           "rows": 350,
-          "buy": 0,
+          "buy": 1,
           "sell": 0,
-          "hold": 350,
-          "avg_score": 50.772,
-          "median_score": 50.69,
-          "max_score": 68.13,
-          "min_score": 33.975,
-          "avg_technical": 50.627,
-          "avg_context": 0.08,
-          "avg_vix_adjustment": 0.065,
+          "hold": 349,
+          "avg_score": 50.66,
+          "median_score": 51.116,
+          "max_score": 71.557,
+          "min_score": 29.188,
+          "avg_technical": 50.796,
+          "avg_context": -0.124,
+          "avg_vix_adjustment": -0.012,
           "avg_geo_adjustment": 0.0
         },
         "WMT": {
@@ -168,66 +168,82 @@
           "buy": 0,
           "sell": 0,
           "hold": 350,
-          "avg_score": 50.144,
-          "median_score": 49.556,
-          "max_score": 65.932,
-          "min_score": 35.964,
-          "avg_technical": 50.087,
-          "avg_context": 0.037,
-          "avg_vix_adjustment": 0.019,
+          "avg_score": 51.696,
+          "median_score": 51.819,
+          "max_score": 67.645,
+          "min_score": 34.426,
+          "avg_technical": 51.726,
+          "avg_context": -0.027,
+          "avg_vix_adjustment": -0.004,
           "avg_geo_adjustment": 0.0
         },
         "XOM": {
           "rows": 350,
-          "buy": 1,
-          "sell": 1,
-          "hold": 348,
-          "avg_score": 54.218,
-          "median_score": 53.43,
-          "max_score": 79.348,
-          "min_score": 39.546,
-          "avg_technical": 48.952,
-          "avg_context": -0.626,
-          "avg_vix_adjustment": 0.016,
-          "avg_geo_adjustment": 5.876
+          "buy": 0,
+          "sell": 0,
+          "hold": 350,
+          "avg_score": 58.226,
+          "median_score": 58.298,
+          "max_score": 78.24,
+          "min_score": 22.5,
+          "avg_technical": 50.671,
+          "avg_context": -0.196,
+          "avg_vix_adjustment": -0.003,
+          "avg_geo_adjustment": 7.754
         }
       }
     },
     "orders": {
-      "rows": 2,
+      "rows": 3,
       "buys": 1,
-      "sells": 1,
+      "sells": 2,
       "by_symbol": {
-        "XOM": {
-          "buy": 1,
+        "AAPL": {
+          "buy": 0,
           "sell": 1,
+          "buy_notional": 0.0,
+          "sell_notional": 2576.04
+        },
+        "SPY": {
+          "buy": 0,
+          "sell": 1,
+          "buy_notional": 0.0,
+          "sell_notional": 2511.91
+        },
+        "TSLA": {
+          "buy": 1,
+          "sell": 0,
           "buy_notional": 2500.0,
-          "sell_notional": 2540.33
+          "sell_notional": 0.0
         }
       }
     },
     "realized": {
-      "rows": 1,
-      "realized_pnl": 39.41,
-      "wins": 1,
+      "rows": 2,
+      "realized_pnl": 84.98,
+      "wins": 2,
       "losses": 0,
       "win_rate_pct": 100.0,
-      "avg_win": 39.41,
+      "avg_win": 42.49,
       "avg_loss": null,
-      "best_trade": 39.41,
-      "worst_trade": 39.41,
+      "best_trade": 75.25,
+      "worst_trade": 9.73,
       "by_symbol": {
-        "XOM": {
+        "AAPL": {
           "trades": 1,
-          "pnl": 39.41
+          "pnl": 75.25
+        },
+        "SPY": {
+          "trades": 1,
+          "pnl": 9.73
         }
       }
     },
     "fills": {
-      "rows": 2
+      "rows": 3
     },
-    "decision_funnel_rows": 4,
-    "order_attempt_rows": 2,
+    "decision_funnel_rows": 8,
+    "order_attempt_rows": 3,
     "market_regime_shadow": {
       "rows": 70,
       "state_counts": {
@@ -239,16 +255,17 @@
       "latest_defensive_asset": "SGOV"
     },
     "regime_decision_shadow": {
-      "rows": 3,
+      "rows": 5,
       "by_shadow_action": {
-        "ALLOW_EQUITY": 3
+        "ALLOW_EQUITY": 5
       },
       "by_regime_state": {
-        "RISK_ON": 3
+        "RISK_ON": 5
       },
       "by_symbol": {
-        "AMZN": 1,
-        "XOM": 2
+        "NVDA": 2,
+        "GLD": 1,
+        "TSLA": 2
       }
     },
     "financial_leverage_shadow": {
@@ -272,329 +289,321 @@
       "latest_gaps_pct": {}
     },
     "zpta_shadow": {
-      "observation_rows": 24,
-      "prediction_rows": 300,
-      "resolved_predictions": 264,
+      "observation_rows": 10,
+      "prediction_rows": 120,
+      "resolved_predictions": 92,
       "models": {
         "breakout_continuation_5m": {
-          "samples": 24,
-          "accuracy_pct": 29.17,
-          "avg_return_pct": 0.107
+          "samples": 8,
+          "accuracy_pct": 37.5,
+          "avg_return_pct": 0.944
         },
         "breakout_continuation_15m": {
-          "samples": 22,
-          "accuracy_pct": 36.36,
-          "avg_return_pct": 0.12
+          "samples": 8,
+          "accuracy_pct": 50.0,
+          "avg_return_pct": 1.175
         },
         "breakout_continuation_60m": {
-          "samples": 20,
-          "accuracy_pct": 40.0,
-          "avg_return_pct": 0.949
+          "samples": 7,
+          "accuracy_pct": 57.14,
+          "avg_return_pct": 1.618
         },
         "exhaustion_exit_5m": {
-          "samples": 24,
-          "accuracy_pct": 25.0,
-          "avg_return_pct": 0.107
+          "samples": 8,
+          "accuracy_pct": 0.0,
+          "avg_return_pct": 0.944
         },
         "exhaustion_exit_15m": {
-          "samples": 22,
-          "accuracy_pct": 27.27,
-          "avg_return_pct": 0.12
+          "samples": 8,
+          "accuracy_pct": 0.0,
+          "avg_return_pct": 1.175
         },
         "exhaustion_exit_60m": {
-          "samples": 20,
-          "accuracy_pct": 25.0,
-          "avg_return_pct": 0.949
+          "samples": 7,
+          "accuracy_pct": 0.0,
+          "avg_return_pct": 1.618
         },
         "momentum_pullback_5m": {
-          "samples": 24,
-          "accuracy_pct": 29.17,
-          "avg_return_pct": 0.107
+          "samples": 8,
+          "accuracy_pct": 37.5,
+          "avg_return_pct": 0.944
         },
         "momentum_pullback_15m": {
-          "samples": 22,
-          "accuracy_pct": 36.36,
-          "avg_return_pct": 0.12
+          "samples": 8,
+          "accuracy_pct": 50.0,
+          "avg_return_pct": 1.175
         },
         "momentum_pullback_60m": {
-          "samples": 20,
-          "accuracy_pct": 40.0,
-          "avg_return_pct": 0.949
+          "samples": 7,
+          "accuracy_pct": 57.14,
+          "avg_return_pct": 1.618
         },
         "vwap_reclaim_5m": {
-          "samples": 24,
-          "accuracy_pct": 29.17,
-          "avg_return_pct": 0.107
+          "samples": 8,
+          "accuracy_pct": 37.5,
+          "avg_return_pct": 0.944
         },
         "vwap_reclaim_15m": {
-          "samples": 22,
-          "accuracy_pct": 36.36,
-          "avg_return_pct": 0.12
+          "samples": 8,
+          "accuracy_pct": 50.0,
+          "avg_return_pct": 1.175
         },
         "vwap_reclaim_60m": {
-          "samples": 20,
-          "accuracy_pct": 40.0,
-          "avg_return_pct": 0.949
+          "samples": 7,
+          "accuracy_pct": 57.14,
+          "avg_return_pct": 1.618
         }
       },
       "shadow_trades": 0,
       "closed_shadow_trades": 0,
       "shadow_realized_pnl": 0,
       "shadow_win_rate_pct": null,
-      "latest_price": 0.5600000023841858,
+      "latest_price": 0.550000011920929,
       "latest_regime": "LIQUIDITY_DANGER",
       "latest_provider": "yahoo_delayed"
     },
     "decision_funnel": {
-      "rows": 4,
-      "raw_threshold_crossings": 3,
+      "rows": 8,
+      "raw_threshold_crossings": 6,
       "by_side": {
-        "SELL": 1,
-        "BUY": 3
+        "BUY": 5,
+        "SELL": 3
       },
       "by_gate_reason": {
-        "ORDER_ACCEPTED": 2,
-        "AWAITING_CONFIRMATION": 2
+        "AWAITING_CONFIRMATION": 5,
+        "ORDER_ACCEPTED": 3
       },
       "by_final_disposition": {
-        "ORDER_SUBMITTED": 2,
-        "AWAITING_CONFIRMATION": 2
+        "AWAITING_CONFIRMATION": 5,
+        "ORDER_SUBMITTED": 3
       }
     },
     "order_attempts": {
-      "rows": 2,
-      "attempted": 2,
-      "accepted": 2,
+      "rows": 3,
+      "attempted": 3,
+      "accepted": 3,
       "blocked_before_submit": 0,
       "submit_failures": 0,
       "by_gate_reason": {
-        "ORDER_ACCEPTED": 2
+        "ORDER_ACCEPTED": 3
       }
     },
     "dashboard_snapshot": {
-      "generated_at": "2026-10-07T19:59:39.320522+00:00",
+      "generated_at": "2026-10-08T19:59:37.781751+00:00",
       "market_open": true,
       "portfolio": {
-        "open_positions": 3,
-        "exposure": 7567.727766,
-        "realized_today": 39.409015080719875,
-        "trades_today": 2
+        "open_positions": 2,
+        "exposure": 5058.246665000001,
+        "realized_today": 84.98094185815553,
+        "trades_today": 3
       },
       "positions": [
         {
-          "symbol": "AAPL",
-          "qty": 7.550163082,
-          "avg_entry_price": 331.117351,
-          "market_value": 2543.951949,
-          "unrealized_pl": 43.96195,
-          "current_price": 336.94
-        },
-        {
-          "symbol": "SPY",
-          "qty": 3.255788815,
-          "avg_entry_price": 767.86,
-          "market_value": 2531.375804,
-          "unrealized_pl": 31.385805,
-          "current_price": 777.5
+          "symbol": "TSLA",
+          "qty": 6.666462227,
+          "avg_entry_price": 375.01,
+          "market_value": 2498.922699,
+          "unrealized_pl": -1.067301,
+          "current_price": 374.8499
         },
         {
           "symbol": "XOM",
           "qty": 15.179974497,
           "avg_entry_price": 164.69,
-          "market_value": 2492.400013,
-          "unrealized_pl": -7.589987,
-          "current_price": 164.19
+          "market_value": 2559.323966,
+          "unrealized_pl": 59.333966,
+          "current_price": 168.5987
         }
       ],
       "top_signals": [
         {
           "symbol": "TSLA",
-          "price": 377.96,
-          "sma20": 377.36775,
-          "momentum_5m": 0.0009533898305083,
-          "momentum_15m": 0.002413473014188927,
-          "rsi14": 68.75000000000043,
-          "volume_ratio": 3.53722568774402,
-          "score": 64.82964393136884,
-          "technical": 64.46771966317894,
-          "context": 0.16280016280016224,
+          "price": 374.97,
+          "sma20": 373.7895,
+          "momentum_5m": 0.003344750080273906,
+          "momentum_15m": 0.004177713505262304,
+          "rsi14": 75.8842443729914,
+          "volume_ratio": 3.2920860144090636,
+          "score": 69.903728378121,
+          "technical": 69.3406228197143,
+          "context": 0.5760407247395646,
           "premarket_adjustment": 0.0,
-          "vix_adjustment": 0.1991241053897319,
+          "vix_adjustment": -0.012935166332859183,
           "geo_adjustment": 0.0,
           "decision": "HOLD",
-          "reason": "no position; score 64.8; buy confirm 0/2",
-          "position": false,
-          "unrealized_pl": 0.0
-        },
-        {
-          "symbol": "AAPL",
-          "price": 336.68,
-          "sma20": 336.22575,
-          "momentum_5m": 0.0005051855814093287,
-          "momentum_15m": 0.0016511714391966859,
-          "rsi14": 65.36144578313255,
-          "volume_ratio": 5.53200966765378,
-          "score": 62.89838281894747,
-          "technical": 62.58623957710501,
-          "context": 0.16280016280016224,
-          "premarket_adjustment": 0.0,
-          "vix_adjustment": 0.14934307904229893,
-          "geo_adjustment": 0.0,
-          "decision": "HOLD",
-          "reason": "position open; score 62.9; pnl 1.68%",
+          "reason": "position open; score 69.9; pnl -0.01%",
           "position": true,
-          "unrealized_pl": 43.96195
-        },
-        {
-          "symbol": "NVDA",
-          "price": 237.385,
-          "sma20": 237.20850000000002,
-          "momentum_5m": 0.0001263929556993837,
-          "momentum_15m": 0.0014132039654080053,
-          "rsi14": 61.48648648648712,
-          "volume_ratio": 2.8591797910018717,
-          "score": 60.92665377777817,
-          "technical": 60.56472950958828,
-          "context": 0.16280016280016224,
-          "premarket_adjustment": 0.0,
-          "vix_adjustment": 0.1991241053897319,
-          "geo_adjustment": 0.0,
-          "decision": "HOLD",
-          "reason": "no position; score 60.9; buy confirm 0/2",
-          "position": false,
-          "unrealized_pl": 0.0
-        },
-        {
-          "symbol": "AMZN",
-          "price": 259.91,
-          "sma20": 259.704,
-          "momentum_5m": 0.0007315570614507827,
-          "momentum_15m": 0.0006930273745813231,
-          "rsi14": 56.91489361702407,
-          "volume_ratio": 2.2861201875266373,
-          "score": 58.98957640760232,
-          "technical": 58.667476960490376,
-          "context": 0.16280016280016224,
-          "premarket_adjustment": 0.0,
-          "vix_adjustment": 0.15929928431178553,
-          "geo_adjustment": 0.0,
-          "decision": "HOLD",
-          "reason": "no position; score 59.0; buy confirm 0/2",
-          "position": false,
-          "unrealized_pl": 0.0
+          "unrealized_pl": -1.067301
         },
         {
           "symbol": "QQQ",
-          "price": 757.945,
-          "sma20": 757.589,
-          "momentum_5m": 0.00027054134663617724,
-          "momentum_15m": 0.0004884004884004867,
-          "rsi14": 56.955380577430546,
-          "volume_ratio": 4.027178301913063,
-          "score": 58.90206720707202,
-          "technical": 58.718230300648784,
-          "context": 0.014581416841963346,
+          "price": 747.765,
+          "sma20": 746.81475,
+          "momentum_5m": 0.0014530990518026865,
+          "momentum_15m": 0.0017281221742186936,
+          "rsi14": 75.48806941430998,
+          "volume_ratio": 5.156991719352024,
+          "score": 64.55902386259805,
+          "technical": 64.47175644533392,
+          "context": 0.09826230864706058,
           "premarket_adjustment": 0.0,
-          "vix_adjustment": 0.16925548958127212,
+          "vix_adjustment": -0.010994891382930305,
           "geo_adjustment": 0.0,
           "decision": "HOLD",
-          "reason": "no position; score 58.9; buy confirm 0/2",
+          "reason": "no position; score 64.6; buy confirm 0/2",
           "position": false,
           "unrealized_pl": 0.0
         },
         {
           "symbol": "SPY",
-          "price": 777.33,
-          "sma20": 777.17425,
-          "momentum_5m": 4.502794949168276e-05,
-          "momentum_15m": 0.0001093606263147251,
-          "rsi14": 52.94117647058942,
-          "volume_ratio": 2.9363967043917136,
-          "score": 57.22193288889987,
-          "technical": 57.037338360545974,
-          "context": 0.0651200651200649,
+          "price": 774.01,
+          "sma20": 773.4735,
+          "momentum_5m": 0.0009828645328160412,
+          "momentum_15m": 0.0007369673148529543,
+          "rsi14": 72.06896551724195,
+          "volume_ratio": 4.364877999520329,
+          "score": 63.144751485859985,
+          "technical": 62.92209629576387,
+          "context": 0.23041628989582583,
           "premarket_adjustment": 0.0,
-          "vix_adjustment": 0.11947446323383915,
+          "vix_adjustment": -0.0077610997997155096,
           "geo_adjustment": 0.0,
           "decision": "HOLD",
-          "reason": "position open; score 57.2; pnl 1.23%",
-          "position": true,
-          "unrealized_pl": 31.385805
-        },
-        {
-          "symbol": "XOM",
-          "price": 164.24,
-          "sma20": 164.31275,
-          "momentum_5m": -0.0011555069026333298,
-          "momentum_15m": -0.0008516851198441255,
-          "rsi14": 45.71428571428548,
-          "volume_ratio": 1.6945213060320974,
-          "score": 49.93448951668181,
-          "technical": 44.272316385254115,
-          "context": 0.2223921050802602,
-          "premarket_adjustment": 0.0,
-          "vix_adjustment": 0.04978102634743298,
-          "geo_adjustment": 5.39,
-          "decision": "HOLD",
-          "reason": "position open; score 49.9; pnl -0.27%",
-          "position": true,
-          "unrealized_pl": -7.589987
-        },
-        {
-          "symbol": "WMT",
-          "price": 108.135,
-          "sma20": 108.08675000000001,
-          "momentum_5m": -0.00036977120406744834,
-          "momentum_15m": 0.00041631973355538143,
-          "rsi14": 57.14285714285763,
-          "volume_ratio": 3.557176358360825,
-          "score": 46.273167242825885,
-          "technical": 46.18608985463028,
-          "context": 0.027340156578681274,
-          "premarket_adjustment": 0.0,
-          "vix_adjustment": 0.05973723161691957,
-          "geo_adjustment": 0.0,
-          "decision": "HOLD",
-          "reason": "no position; score 46.3; buy confirm 0/2",
+          "reason": "no position; score 63.1; buy confirm 0/2",
           "position": false,
           "unrealized_pl": 0.0
         },
         {
           "symbol": "GLD",
-          "price": 375.85,
-          "sma20": 376.09875,
-          "momentum_5m": -0.00041222856079037307,
-          "momentum_15m": -0.0010498478385094767,
-          "rsi14": 23.134328358212812,
-          "volume_ratio": 1.637855931037645,
-          "score": 42.083423717281725,
-          "technical": 40.82748927943108,
-          "context": -0.02187212526294502,
+          "price": 378.58,
+          "sma20": 378.4715,
+          "momentum_5m": 0.0004889070944382734,
+          "momentum_15m": -0.0003696662441911025,
+          "rsi14": 50.649350649350076,
+          "volume_ratio": 2.27412056634068,
+          "score": 57.49445914812257,
+          "technical": 55.71482530287666,
+          "context": -0.14739346297059086,
           "premarket_adjustment": 0.0,
-          "vix_adjustment": -0.06969343688640617,
-          "geo_adjustment": 1.3475,
+          "vix_adjustment": 0.004527308216500714,
+          "geo_adjustment": 1.9225,
           "decision": "HOLD",
-          "reason": "no position; score 42.1; buy confirm 0/2",
+          "reason": "no position; score 57.5; buy confirm 0/2",
+          "position": false,
+          "unrealized_pl": 0.0
+        },
+        {
+          "symbol": "XOM",
+          "price": 168.46,
+          "sma20": 168.64475,
+          "momentum_5m": -0.0005932605600379448,
+          "momentum_15m": -0.0017776724342259964,
+          "rsi14": 34.09090909090945,
+          "volume_ratio": 3.800702841145988,
+          "score": 44.69381617748374,
+          "technical": 37.38601728313614,
+          "context": -0.3789673140691896,
+          "premarket_adjustment": 0.0,
+          "vix_adjustment": -0.0032337915832147957,
+          "geo_adjustment": 7.69,
+          "decision": "HOLD",
+          "reason": "position open; score 44.7; pnl 2.29%",
+          "position": true,
+          "unrealized_pl": 59.333966
+        },
+        {
+          "symbol": "NVDA",
+          "price": 230.58,
+          "sma20": 230.571,
+          "momentum_5m": -4.336701504836782e-05,
+          "momentum_15m": -0.0004768303784298267,
+          "rsi14": 42.39482200647291,
+          "volume_ratio": 3.1654740768637577,
+          "score": 42.380052750730506,
+          "technical": 41.8169471923238,
+          "context": 0.5760407247395646,
+          "premarket_adjustment": 0.0,
+          "vix_adjustment": -0.012935166332859183,
+          "geo_adjustment": 0.0,
+          "decision": "HOLD",
+          "reason": "no position; score 42.4; buy confirm 0/2",
+          "position": false,
+          "unrealized_pl": 0.0
+        },
+        {
+          "symbol": "AAPL",
+          "price": 340.535,
+          "sma20": 341.05375,
+          "momentum_5m": -0.0006896146961292704,
+          "momentum_15m": -0.0024021912671559065,
+          "rsi14": 33.1125827814563,
+          "volume_ratio": 5.06724849676818,
+          "score": 36.830457281506156,
+          "technical": 36.26411793151624,
+          "context": 0.5760407247395646,
+          "premarket_adjustment": 0.0,
+          "vix_adjustment": -0.009701374749644387,
+          "geo_adjustment": 0.0,
+          "decision": "HOLD",
+          "reason": "no position; score 36.8; buy confirm 0/2",
+          "position": false,
+          "unrealized_pl": 0.0
+        },
+        {
+          "symbol": "AMZN",
+          "price": 254.265,
+          "sma20": 254.81725,
+          "momentum_5m": -0.0021388485538245128,
+          "momentum_15m": -0.0037809034988049994,
+          "rsi14": 26.605504587155792,
+          "volume_ratio": 2.0917249853090443,
+          "score": 35.05193224530298,
+          "technical": 34.4862396536297,
+          "context": 0.5760407247395646,
+          "premarket_adjustment": 0.0,
+          "vix_adjustment": -0.010348133066287346,
+          "geo_adjustment": 0.0,
+          "decision": "HOLD",
+          "reason": "no position; score 35.1; buy confirm 0/2",
+          "position": false,
+          "unrealized_pl": 0.0
+        },
+        {
+          "symbol": "WMT",
+          "price": 110.54,
+          "sma20": 110.76375,
+          "momentum_5m": -0.0012197876665912544,
+          "momentum_15m": -0.002931493257565365,
+          "rsi14": 28.906250000000327,
+          "volume_ratio": 3.088367484163216,
+          "score": 34.42556996207932,
+          "technical": 34.245208683265936,
+          "context": 0.18424182871323858,
+          "premarket_adjustment": 0.0,
+          "vix_adjustment": -0.0038805498998577548,
+          "geo_adjustment": 0.0,
+          "decision": "HOLD",
+          "reason": "no position; score 34.4; buy confirm 0/2",
           "position": false,
           "unrealized_pl": 0.0
         }
       ],
       "vix": {
-        "level": 15.0,
-        "change_5m": -0.001995990253105706,
-        "change_15m": -0.005964224763275183,
+        "level": 15.569999694824219,
+        "change_5m": -0.0006418632176383721,
+        "change_15m": 0.0019304847519197033,
         "source": "^VIX"
       },
       "market_regime_shadow": {
         "state": "RISK_ON",
         "score": 100.0,
-        "spy_close": 777.415,
-        "spy_sma50": 765.9299000000001,
-        "spy_sma200": 721.963725,
-        "spy_mom20": 0.019660950257402332,
-        "qqq_close": 757.74,
-        "qqq_sma200": 670.8255250000001,
-        "vix_level": 15.0,
+        "spy_close": 773.39,
+        "spy_sma50": 766.801,
+        "spy_sma200": 722.4267500000001,
+        "spy_mom20": 0.02047844617150707,
+        "qqq_close": 746.82,
+        "qqq_sma200": 671.4739750000001,
+        "vix_level": 15.569999694824219,
         "defensive_asset": "SGOV",
         "reasons": [
           "SPY_ABOVE_200_BUFFER",
@@ -615,37 +624,21 @@
       "zpta_shadow": {
         "status": "NO_NEW_BAR",
         "provider": "yahoo_delayed",
-        "bar_ts": "2026-10-07T19:42:40+00:00"
+        "bar_ts": "2026-10-08T18:14:44+00:00"
       }
     },
     "geo": {
-      "generated_at": "2026-10-07T20:04:01.258751+00:00",
+      "generated_at": "2026-10-08T20:01:56.134572+00:00",
       "status": "ok",
-      "signal": 0.5447,
-      "score_adjustment": 5.45,
+      "signal": 0.7559,
+      "score_adjustment": 7.56,
       "max_materiality": 0.9,
-      "active_event_count": 161,
+      "active_event_count": 181,
       "top_events": [
         {
-          "title": "IEA members agree to accelerate strategic reserve release totalling about 100 million barrels - The Globe and Mail",
-          "source": "The Globe and Mail",
-          "published_at": "2026-10-07T11:06:31+00:00",
-          "analysis": {
-            "relevant": true,
-            "crude_direction": "bearish",
-            "xom_direction": "bearish",
-            "materiality": 0.82,
-            "confidence": 0.9,
-            "category": "supply",
-            "supply_impact": "looser",
-            "summary": "IEA members reportedly agreed to accelerate a strategic reserve release totaling about 100 million barrels. The added near-term crude availability could pressure oil prices, although the headline does not specify timing, participating countries, or release rates.",
-            "why_xom": "Lower crude prices can reduce Exxon Mobil\u2019s upstream revenue, earnings, and cash flow. The impact may be partly offset by downstream benefits from cheaper feedstock, and the release could be temporary."
-          }
-        },
-        {
-          "title": "Middle East Oil Exports Drop at Least 60% as Hormuz Stays Mostly Closed, Data Shows - EnergyNow.com",
-          "source": "EnergyNow.com",
-          "published_at": "2026-10-06T22:33:29+00:00",
+          "title": "Tanker attacked off Qatar as Iran claims route transporting oil through strait of Hormuz will be \u2018closed\u2019 - The Guardian",
+          "source": "The Guardian",
+          "published_at": "2026-10-08T05:36:00+00:00",
           "analysis": {
             "relevant": true,
             "crude_direction": "bullish",
@@ -654,154 +647,170 @@
             "confidence": 0.82,
             "category": "hormuz",
             "supply_impact": "tighter",
-            "summary": "The headline reports that Middle East oil exports have fallen at least 60% while the Strait of Hormuz remains mostly closed, implying a major reduction in seaborne crude supply and likely upward pressure on oil prices.",
-            "why_xom": "Higher crude prices can support Exxon Mobil\u2019s upstream revenue and earnings, although the headline alone does not establish the disruption\u2019s duration or Exxon\u2019s direct operational exposure."
+            "summary": "The reported tanker attack off Qatar and Iran\u2019s stated intention to close the Strait of Hormuz indicate a potentially severe disruption risk to a major oil-transport route, supporting crude prices. The closure claim is not independently detailed in the supplied text, so uncertainty remains.",
+            "why_xom": "Higher crude prices could support Exxon Mobil\u2019s upstream earnings and cash flow, although any broader market or operational effects are not specified."
+          }
+        },
+        {
+          "title": "Tanker attacked off Qatar as Iran claims route transporting oil through strait of Hormuz will be \u2018closed\u2019 - The Guardian",
+          "source": "The Guardian",
+          "published_at": "2026-10-08T03:15:00+00:00",
+          "analysis": {
+            "relevant": true,
+            "crude_direction": "bullish",
+            "xom_direction": "bullish",
+            "materiality": 0.9,
+            "confidence": 0.78,
+            "category": "hormuz",
+            "supply_impact": "tighter",
+            "summary": "The reported tanker attack off Qatar and Iran\u2019s claim that the Strait of Hormuz oil route will be closed indicate a potentially severe disruption risk to crude shipments, likely supporting oil prices and benefiting upstream exposure such as XOM. The closure claim is not independently detailed in the supplied text, so confirmation risk remains.",
+            "why_xom": "XOM could benefit from higher crude prices through stronger upstream realizations, although shipping disruption could also raise logistics and downstream operating risks."
+          }
+        },
+        {
+          "title": "Tanker attacked off Qatar as Iran claims route transporting oil through strait of Hormuz will be \u2018closed\u2019 - The Guardian",
+          "source": "The Guardian",
+          "published_at": "2026-10-08T09:41:00+00:00",
+          "analysis": {
+            "relevant": true,
+            "crude_direction": "bullish",
+            "xom_direction": "bullish",
+            "materiality": 0.88,
+            "confidence": 0.78,
+            "category": "hormuz",
+            "supply_impact": "uncertain",
+            "summary": "A reported tanker attack off Qatar and Iran\u2019s claim that the oil route through the Strait of Hormuz will be closed signal significant escalation risk for crude transportation. The headline does not confirm that the strait has actually been closed or that supply has been disrupted.",
+            "why_xom": "Potential disruption or risk premium in a major oil transit route could support crude prices and benefit Exxon Mobil\u2019s upstream earnings, though the effect is partly offset by uncertainty and possible broader geopolitical or operational risks."
           }
         },
         {
           "title": "Oil Prices Fall as G-7 Plans Crude, Diesel Release But Hormuz Shipping Risks Persist - WSJ",
           "source": "WSJ",
-          "published_at": "2026-10-07T14:12:12+00:00",
+          "published_at": "2026-10-07T20:17:41+00:00",
           "analysis": {
             "relevant": true,
             "crude_direction": "mixed",
             "xom_direction": "mixed",
-            "materiality": 0.72,
-            "confidence": 0.87,
+            "materiality": 0.76,
+            "confidence": 0.89,
             "category": "hormuz",
             "supply_impact": "uncertain",
-            "summary": "G-7 plans to release crude and diesel, weighing on oil prices, while persistent Strait of Hormuz shipping risks provide an offsetting supply concern. The release is described as planned rather than confirmed operational supply.",
-            "why_xom": "Lower crude prices could pressure Exxon Mobil's upstream earnings, while diesel availability and refining-market effects could offset some impact for its integrated refining operations."
+            "summary": "The planned G-7 release of crude and diesel is bearish for oil prices, while persistent Strait of Hormuz shipping risks provide an offsetting bullish supply-risk factor. The headline reports that prices fell, but does not confirm the scale or timing of the release or any actual shipping disruption.",
+            "why_xom": "XOM could face lower realized crude prices from the planned release, while continued Hormuz risk may support energy prices and raise logistics or regional operating concerns. The net effect is therefore mixed."
           }
         },
         {
-          "title": "\u2018Preparing to Fire\u2019: Hear the Radio Commands Enforcing the U.S. Blockade of Iran - WSJ",
-          "source": "WSJ",
-          "published_at": "2026-10-06T23:00:00+00:00",
+          "title": "Tanker attacked off Qatar as Iran claims route transporting oil through strait of Hormuz will be \u2018closed\u2019 - The Guardian",
+          "source": "The Guardian",
+          "published_at": "2026-10-08T16:50:00+00:00",
           "analysis": {
             "relevant": true,
             "crude_direction": "bullish",
             "xom_direction": "bullish",
-            "materiality": 0.78,
-            "confidence": 0.8,
-            "category": "sanctions",
-            "supply_impact": "tighter",
-            "summary": "The headline describes active U.S. enforcement of a blockade of Iran, including radio commands to vessels. If operationally restricting Iranian exports or regional shipping, this could tighten crude supply and raise geopolitical risk, though the supplied text does not quantify disruptions.",
-            "why_xom": "Higher crude prices and tighter global supply could support Exxon Mobil\u2019s upstream earnings, but the headline alone does not establish the scale or duration of any physical disruption."
-          }
-        },
-        {
-          "title": "UAE Says Iranian Missiles Struck Oil Tankers in Strait of Hormuz, One Sailor Killed - EnergyNow.com",
-          "source": "EnergyNow.com",
-          "published_at": "2026-10-07T10:45:04+00:00",
-          "analysis": {
-            "relevant": true,
-            "crude_direction": "bullish",
-            "xom_direction": "bullish",
-            "materiality": 0.84,
-            "confidence": 0.73,
+            "materiality": 0.86,
+            "confidence": 0.78,
             "category": "hormuz",
             "supply_impact": "uncertain",
-            "summary": "The UAE says Iranian missiles struck oil tankers in the Strait of Hormuz, killing one sailor. This is a significant escalation in a critical oil-shipping chokepoint, but the supplied report does not confirm a closure, sustained disruption, or broader supply outage.",
-            "why_xom": "Potential disruption to Gulf crude shipments could support oil prices and benefit Exxon Mobil\u2019s upstream earnings, although shipping, insurance, and geopolitical risks could also weigh on operations and market sentiment."
+            "summary": "A reported tanker attack off Qatar and Iran\u2019s stated threat that the Strait of Hormuz oil route will be closed indicate elevated disruption risk for crude flows. The closure is not confirmed in the supplied text, so the immediate supply impact remains uncertain.",
+            "why_xom": "Exxon Mobil could benefit from higher crude prices and disruption risk through upstream earnings, though any broader market or operational effects are not specified."
           }
         },
         {
-          "title": "IRAN\u2019S \u201cCROWN JEWEL\u201d \u2013 Kharg Island, Struck by US, is Key Hub for Iran Oil Exports - EnergyNow.com",
-          "source": "EnergyNow.com",
-          "published_at": "2026-10-07T10:56:47+00:00",
+          "title": "Oil jumps 5% as Hormuz tanker attacks escalate, US Gulf hurricane shuts in production - Oil & Gas Journal",
+          "source": "Oil & Gas Journal",
+          "published_at": "2026-10-08T17:38:25+00:00",
           "analysis": {
             "relevant": true,
             "crude_direction": "bullish",
             "xom_direction": "bullish",
             "materiality": 0.85,
-            "confidence": 0.72,
-            "category": "supply",
+            "confidence": 0.78,
+            "category": "hormuz",
             "supply_impact": "tighter",
-            "summary": "The headline reports that the United States struck Kharg Island, described as a key hub for Iran's oil exports. If operations or exports are disrupted, the event could tighten global crude supply and raise oil prices. The headline does not provide details on the extent or duration of any disruption.",
-            "why_xom": "Higher crude prices could support Exxon Mobil's upstream earnings and cash flow, though the overall effect depends on the actual impact on Iranian exports and any broader geopolitical escalation."
+            "summary": "The headline reports escalating tanker attacks in the Strait of Hormuz and hurricane-related US Gulf production shut-ins, both indicating near-term supply disruption and explaining the reported 5% oil-price increase.",
+            "why_xom": "Higher crude prices generally support Exxon Mobil\u2019s upstream earnings and cash flow, although Gulf operational disruptions could create offsetting asset-specific risks."
           }
         }
       ],
       "log_health": {
         "exists": true,
         "tail_lines": 500,
-        "error_lines": 0,
-        "warning_lines": 31,
-        "last_line": "2026-10-07 13:04:01,302 | INFO | feed updated | new=2 active=161 signal=+0.545 adjustment=+5.45"
+        "error_lines": 14,
+        "warning_lines": 34,
+        "last_line": "2026-10-08 13:01:56,166 | INFO | feed updated | new=2 active=181 signal=+0.756 adjustment=+7.56"
       }
     },
     "supporting_logs": {
-      "manifest_path": "analysis/evidence/2026-10-07/manifest.json",
+      "manifest_path": "analysis/evidence/2026-10-08/manifest.json",
       "published_file_count": 20,
-      "published_row_count": 3558,
+      "published_row_count": 3374,
       "files": [
         {
-          "path": "analysis/evidence/2026-10-07/decisions.csv",
-          "bytes": 1097168,
-          "sha256": "7114e1848d6e7805060532c84f5dde853077eecad5f28cd636bb7de83b3a2596",
+          "path": "analysis/evidence/2026-10-08/decisions.csv",
+          "bytes": 1103269,
+          "sha256": "1ca35c753f9b4f7238b44484b9949eaf2f2a926d1a14f3f88fb95a85b785887a",
           "rows": 3150,
-          "first_ts": "2026-10-07T14:10:08.393445+00:00",
-          "last_ts": "2026-10-07T19:59:39.310047+00:00"
+          "first_ts": "2026-10-08T14:10:08.535560+00:00",
+          "last_ts": "2026-10-08T19:59:37.772606+00:00"
         },
         {
-          "path": "analysis/evidence/2026-10-07/orders.csv",
-          "bytes": 380,
-          "sha256": "51d0e0c1cafed445712e80480ca5544a7e4694c62e1bd2ca234f671bb418f7ac",
-          "rows": 2,
-          "first_ts": "2026-10-07T15:01:12.331938+00:00",
-          "last_ts": "2026-10-07T19:05:34.898326+00:00"
-        },
-        {
-          "path": "analysis/evidence/2026-10-07/fills.csv",
-          "bytes": 215,
-          "sha256": "5c7c80f5f40e345df1b69e925fab85b4594ac45aa78dc0f7256afebd8980242d",
-          "rows": 2,
-          "first_ts": "2026-10-07T15:01:12.752617+00:00",
-          "last_ts": "2026-10-07T19:05:35.278751+00:00"
-        },
-        {
-          "path": "analysis/evidence/2026-10-07/realized.csv",
-          "bytes": 78,
-          "sha256": "dd67544b6204aaf364a6bdb9ece93d3578d6fc9eb711fd85afb95e60db8eee74",
-          "rows": 1,
-          "first_ts": "2026-10-07T15:01:12.752617+00:00",
-          "last_ts": "2026-10-07T15:01:12.752617+00:00"
-        },
-        {
-          "path": "analysis/evidence/2026-10-07/decision_funnel.csv",
-          "bytes": 1082,
-          "sha256": "cb2ed30b97a041853c28f04fdc73b60aca14784dd52e7baabfc404cdadb26b08",
-          "rows": 4,
-          "first_ts": "2026-10-07T15:01:13.216576+00:00",
-          "last_ts": "2026-10-07T19:05:36.384353+00:00"
-        },
-        {
-          "path": "analysis/evidence/2026-10-07/order_attempts.csv",
-          "bytes": 411,
-          "sha256": "1609cc0f40a8e645c5c511274ab9a71c98a656f4dbf99cfe48b016054c949f6b",
-          "rows": 2,
-          "first_ts": "2026-10-07T15:01:13.204185+00:00",
-          "last_ts": "2026-10-07T19:05:36.368330+00:00"
-        },
-        {
-          "path": "analysis/evidence/2026-10-07/market_regime_shadow.csv",
-          "bytes": 22445,
-          "sha256": "75f5ce2c6327935d4ea0f724ef555fe3b6d360a4b9da68601996a82f250e3752",
-          "rows": 70,
-          "first_ts": "2026-10-07T14:10:04.807490+00:00",
-          "last_ts": "2026-10-07T19:58:35.539368+00:00"
-        },
-        {
-          "path": "analysis/evidence/2026-10-07/regime_decision_shadow.csv",
-          "bytes": 610,
-          "sha256": "1562700921c8d3a99168e8db9252426a4ac5587adaf2c1311512a897bd1634d1",
+          "path": "analysis/evidence/2026-10-08/orders.csv",
+          "bytes": 541,
+          "sha256": "55fabae75067b7c9fb877bcf69a2cf36cdde0aa9ecbd6fd32c631517ec9f4c74",
           "rows": 3,
-          "first_ts": "2026-10-07T15:46:16.779335+00:00",
-          "last_ts": "2026-10-07T19:05:34.706421+00:00"
+          "first_ts": "2026-10-08T17:26:26.264146+00:00",
+          "last_ts": "2026-10-08T19:57:38.080844+00:00"
         },
         {
-          "path": "analysis/evidence/2026-10-07/financial_leverage_shadow.csv",
+          "path": "analysis/evidence/2026-10-08/fills.csv",
+          "bytes": 305,
+          "sha256": "d8038446b60e0e0badac1938f15f0621244ddd5c272f01ae431f454a5d537528",
+          "rows": 3,
+          "first_ts": "2026-10-08T17:26:27.665269+00:00",
+          "last_ts": "2026-10-08T19:57:39.675711+00:00"
+        },
+        {
+          "path": "analysis/evidence/2026-10-08/realized.csv",
+          "bytes": 135,
+          "sha256": "7b4087a263d0bcd67e69ab18382f1adbd1b31f6abb895e215ba8d8831472c399",
+          "rows": 2,
+          "first_ts": "2026-10-08T17:26:27.665269+00:00",
+          "last_ts": "2026-10-08T18:51:34.805460+00:00"
+        },
+        {
+          "path": "analysis/evidence/2026-10-08/decision_funnel.csv",
+          "bytes": 1965,
+          "sha256": "7fe1c699700cb12cdea47fbb72a9d15bd306656c43f126a1c606b945b6e68737",
+          "rows": 8,
+          "first_ts": "2026-10-08T14:12:07.420714+00:00",
+          "last_ts": "2026-10-08T19:57:38.940395+00:00"
+        },
+        {
+          "path": "analysis/evidence/2026-10-08/order_attempts.csv",
+          "bytes": 573,
+          "sha256": "79bfb120faa818b542ae57d600c4de60aaec37f117b3bd3984914bf75195d80a",
+          "rows": 3,
+          "first_ts": "2026-10-08T17:26:27.156998+00:00",
+          "last_ts": "2026-10-08T19:57:38.931016+00:00"
+        },
+        {
+          "path": "analysis/evidence/2026-10-08/market_regime_shadow.csv",
+          "bytes": 22739,
+          "sha256": "f096b074e09b5892b9d416cb317254286b24c17561388d613369d0015efb34f1",
+          "rows": 70,
+          "first_ts": "2026-10-08T14:10:04.709349+00:00",
+          "last_ts": "2026-10-08T19:58:34.711283+00:00"
+        },
+        {
+          "path": "analysis/evidence/2026-10-08/regime_decision_shadow.csv",
+          "bytes": 947,
+          "sha256": "67ee09f4cc4009374e49434a06e92f27f6df2adf8e57032ee1f93b15575174bb",
+          "rows": 5,
+          "first_ts": "2026-10-08T14:12:07.407755+00:00",
+          "last_ts": "2026-10-08T19:57:37.922749+00:00"
+        },
+        {
+          "path": "analysis/evidence/2026-10-08/financial_leverage_shadow.csv",
           "bytes": 0,
           "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
           "rows": 0,
@@ -809,7 +818,7 @@
           "last_ts": null
         },
         {
-          "path": "analysis/evidence/2026-10-07/financial_leverage_signals.csv",
+          "path": "analysis/evidence/2026-10-08/financial_leverage_signals.csv",
           "bytes": 0,
           "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
           "rows": 0,
@@ -817,7 +826,7 @@
           "last_ts": null
         },
         {
-          "path": "analysis/evidence/2026-10-07/financial_leverage_outcomes.csv",
+          "path": "analysis/evidence/2026-10-08/financial_leverage_outcomes.csv",
           "bytes": 0,
           "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
           "rows": 0,
@@ -825,7 +834,7 @@
           "last_ts": null
         },
         {
-          "path": "analysis/evidence/2026-10-07/premarket_intelligence.csv",
+          "path": "analysis/evidence/2026-10-08/premarket_intelligence.csv",
           "bytes": 0,
           "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
           "rows": 0,
@@ -833,23 +842,23 @@
           "last_ts": null
         },
         {
-          "path": "analysis/evidence/2026-10-07/zpta_observations.csv",
-          "bytes": 16852,
-          "sha256": "ec531d649c0c439a05ed28942207795f5e80964ec2bb8e41d83eb67198edec67",
-          "rows": 24,
-          "first_ts": "2026-10-07T14:31:31+00:00",
-          "last_ts": "2026-10-07T19:42:40+00:00"
+          "path": "analysis/evidence/2026-10-08/zpta_observations.csv",
+          "bytes": 6853,
+          "sha256": "ede9771f1b2954779f46c6cfd1348d2ce146a1f42b7fd441826e8091cb021146",
+          "rows": 10,
+          "first_ts": "2026-10-08T15:55:02+00:00",
+          "last_ts": "2026-10-08T18:14:44+00:00"
         },
         {
-          "path": "analysis/evidence/2026-10-07/zpta_predictions.csv",
-          "bytes": 82804,
-          "sha256": "d99216a622b9584d995c2b0ec624ddb3bccb29a54883169a1f7fa2321d781bcd",
-          "rows": 300,
-          "first_ts": "2026-10-07T14:47:08.071598+00:00",
-          "last_ts": "2026-10-07T19:58:37.248228+00:00"
+          "path": "analysis/evidence/2026-10-08/zpta_predictions.csv",
+          "bytes": 31889,
+          "sha256": "5f5a1a6fa74fcdf22f80d614b9b2b2e3c6c8d4377a2cbb9407cabd9c66283ae5",
+          "rows": 120,
+          "first_ts": "2026-10-08T16:34:19.094808+00:00",
+          "last_ts": "2026-10-08T18:30:28.319420+00:00"
         },
         {
-          "path": "analysis/evidence/2026-10-07/zpta_shadow_trades.csv",
+          "path": "analysis/evidence/2026-10-08/zpta_shadow_trades.csv",
           "bytes": 0,
           "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
           "rows": 0,
@@ -857,31 +866,31 @@
           "last_ts": null
         },
         {
-          "path": "analysis/evidence/2026-10-07/dashboard_state.json",
-          "bytes": 7797,
-          "sha256": "c0422442a79421ea88aa69918a0fee21d21c5ed89ced45c13940469a2c7400da"
+          "path": "analysis/evidence/2026-10-08/dashboard_state.json",
+          "bytes": 7618,
+          "sha256": "283476161a9ec8e14e4f60d5478ef826acccc220c028a4f4a50e1f27e0fd317c"
         },
         {
-          "path": "analysis/evidence/2026-10-07/geo_feed.json",
-          "bytes": 18925,
-          "sha256": "0f27b09f1e73009991cd26b77b2f0818ea07b5005d7564d74c3a6260d606690b"
+          "path": "analysis/evidence/2026-10-08/geo_feed.json",
+          "bytes": 19775,
+          "sha256": "f572c6d08d6f309283be795414b17b9251968093bd646fa8a5ec06d59e88d061"
         },
         {
-          "path": "analysis/evidence/2026-10-07/geo_feed_tail.txt",
-          "bytes": 60209,
-          "sha256": "6ef91b0265547a186ae58c0afa832ef356abd4e879b986ff4a5deb12b2b42010"
+          "path": "analysis/evidence/2026-10-08/geo_feed_tail.txt",
+          "bytes": 56656,
+          "sha256": "1c9a22b6737143d2021e6b2179ade7fb068ef10cec03b3009eea7eb3cfde999f"
         },
         {
-          "path": "analysis/evidence/2026-10-07/integrity_analysis.json",
+          "path": "analysis/evidence/2026-10-08/integrity_analysis.json",
           "bytes": 607,
-          "sha256": "8584faeb5e1070490fa06b78194ce4086a5fe7bf01bd5890035a3aefb0fd88b9"
+          "sha256": "c8efdb22cf38a6ed9387fd8952096c01d1f78605be72f4cc8fa7a98413835a1a"
         }
       ]
     },
     "supporting_log_analysis": {
       "status": "PASS",
       "issues": [],
-      "all_published_rows_analyzed": 3558,
+      "all_published_rows_analyzed": 3374,
       "table_count": 15,
       "duplicate_decision_event_ids": 0,
       "orphan_order_attempts": 0,
@@ -889,7 +898,7 @@
       "duplicate_fill_order_ids": 0,
       "resolved_zpta_predictions_without_return": 0,
       "order_gate_counts": {
-        "ORDER_ACCEPTED": 2
+        "ORDER_ACCEPTED": 3
       },
       "zpta_exit_reason_counts": {},
       "database_error": null,
@@ -903,120 +912,130 @@
     }
   },
   "review": {
-    "summary": "The paper system was operational and internally consistent, but evidence is limited to one session with one realized trade. Across 3,150 decisions, only three raw threshold crossings produced one BUY and one SELL; both submitted orders were accepted and filled. XOM generated the only realized paper result, +$39.41, while no drawdown series was supplied. TSLA and NVDA showed the clearest no-position momentum/volume snapshots but never reached the 70 BUY threshold; AMZN reached 72.697 yet produced no BUY, with aggregate funnel evidence pointing to confirmation as the blocker. This suggests the static framework may under-capture volatile symbols, but forward outcomes are missing, so no execution-threshold change is justified. Keep paper=True, portfolio and loss caps, and the read-only dashboard unchanged.",
+    "summary": "The paper system was operational and profitable on the limited realized sample, but today does not support execution-threshold or exit-setting changes. Of 3,150 decisions, 3,147 were HOLD, one was BUY, and two were SELL. Three order attempts were accepted and all had corresponding orders and fills; only the two closing sells produced realized records, totaling +$84.98. The open TSLA fill must not be counted as realized performance. Several symbols exceeded the 70 BUY threshold without a BUY, but event-level gate and forward-return evidence is insufficient to determine whether these were harmful misses. Critical SHADOW datasets for premarket and XLF/FAS/FAZ leverage research were empty, regime observations had no state variation, and all per-model ZPTA samples were below the 12-sample calibration minimum. Preserve paper=True, portfolio and loss caps, current thresholds, and read-only dashboard behavior.",
     "data_quality": "LIMITED",
     "findings": [
-      "Observed integrity: supporting_log_analysis passed with no listed integrity issues, no database error, and all 3,558 published rows reported analyzed across 15 tabular datasets. It found zero duplicate decision IDs, orphan attempts, accepted attempts lacking order IDs, duplicate fill order IDs, or resolved ZPTA predictions lacking returns.",
-      "Observed evidence gaps: five published tables were empty\u2014financial_leverage_shadow, financial_leverage_signals, financial_leverage_outcomes, premarket_intelligence, and zpta_shadow_trades. Thus enabled XLF/FAS/FAZ research, premarket gap/bias research, and ZPTA trade outcomes cannot be evaluated. Social sentiment was explicitly unavailable and must not be assumed.",
-      "Observed funnel: 3,150 decisions consisted of 3,148 HOLD, one BUY, and one SELL. There were only three raw threshold crossings, approximately 0.095% of decision rows, although row-level and event-level denominators are not necessarily interchangeable. Funnel gates were two ORDER_ACCEPTED and two AWAITING_CONFIRMATION; both actual order attempts were accepted, so there is no evidence of portfolio-cap, daily-loss, or broker-submit rejection.",
-      "Observed opportunity capture: XOM reached 79.348 and generated both the sole BUY and sole SELL. AMZN reached 72.697 but generated no BUY. Aggregate evidence records two BUY-side AWAITING_CONFIRMATION events and regime shadow includes AMZN, making confirmation the likely AMZN blocker, but the supplied summary does not provide the event-level symbol/gate join needed for definitive attribution.",
-      "Observed missed opportunities: TSLA had a no-position snapshot with +0.241% 15-minute momentum, 3.54 volume ratio, and score 64.83; its full-day maximum was 68.13. NVDA had +0.141% 15-minute momentum, 2.86 volume ratio, and score 60.93; its maximum was 68.65. Neither reached the 70 threshold, and both snapshot reasons showed buy confirmation 0/2. Forward MFE/MAE after their score peaks is absent, so they cannot yet be classified as profitable missed trades.",
-      "Observed comparison: AMZN and XOM were the only symbols whose reported daily maxima exceeded 70, while AAPL, GLD, NVDA, QQQ, SPY, TSLA, and WMT remained below it. TSLA and NVDA came within 1.87 and 1.35 points, respectively. The framework may be restrictive for volatile names, but this is a hypothesis pending forward outcomes. NBIS was not configured and has no same-day evidence, so no NBIS conclusion is possible.",
-      "Observed order accounting: the logs show requested/order notionals of $2,500 for the XOM buy and $2,540.33 for the XOM sell, two accepted attempts, two order records, and two fills. These are distinct from the single realized P/L record of +$39.41 and from the dashboard snapshot showing three open positions and $7,567.73 exposure. The AAPL and SPY dashboard positions are not explained by same-day order rows and should not be treated as same-day entries.",
-      "Observed performance: realized paper P/L was +$39.41 from one winning XOM realization. One trade cannot support a win-rate conclusion, stop calibration, or comparison with the 1% daily stretch benchmark. No equity curve, daily return denominator, maximum drawdown, or intraday drawdown was supplied.",
-      "Observed context effects: VIX was 15 and falling, while average VIX score adjustments were small, ranging from -0.023 for GLD to +0.065 for NVDA and TSLA. There is no same-day variation sufficient to estimate a causal VIX effect.",
-      "Observed regime shadow: all 70 snapshots were RISK_ON with score 100, and all three linked shadow decisions were ALLOW_EQUITY. This confirms consistent state reporting but provides no contrasting regime observations or evidence that regime filtering improves forward returns; the saturated score also limits discrimination.",
-      "Observed geo contribution: average geo adjustment was +5.876 for XOM and +1.469 for GLD, versus zero for the other symbols. XOM's latest adjustment was about +5.39 despite the feed containing both bullish and bearish oil headlines. Geo context materially contributed to XOM's score, but no counterfactual score, event-age attribution, or forward outcome table isolates its value.",
-      "Observed ZPTA evidence: 264 predictions were resolved and each reported horizon has at least 20 samples, but no shadow trades were opened. Multiple model families have identical sample counts, accuracies, and average returns at each horizon, which may reflect shared outcomes rather than independent model skill. Delayed Yahoo data, a LIQUIDITY_DANGER state, and no exit records further limit conclusions; no ZPTA threshold tuning is supported.",
-      "Hypothesis on exits: fixed 2% stop, 3% take-profit, 1% trailing activation, and 1.25% trail may interact differently with TSLA/NVDA volatility than with SPY/WMT. The evidence contains no ATR, realized-range-at-entry, stop-distance normalization, or stop/target exit sample, so mismatch cannot be established from this session."
+      "Observed integrity: supporting_log_analysis reports PASS with no listed integrity issues, no database error, and all 3,374 published rows analyzed across 15 row-bearing/recognized tables. There were no duplicate decision IDs, orphan order attempts, accepted attempts missing order IDs, duplicate fill order IDs, or resolved ZPTA predictions missing returns.",
+      "Coverage gaps remain material despite the PASS: financial_leverage_shadow, financial_leverage_signals, financial_leverage_outcomes, premarket_intelligence, and zpta_shadow_trades were empty. Consequently there is no same-day XLF/FAS/FAZ signal or forward-outcome evidence, no premarket gap/bias evidence, and no ZPTA shadow-trade P/L or exit-reason evidence.",
+      "The funnel recorded eight rows: five AWAITING_CONFIRMATION and three ORDER_ACCEPTED. It also reports six raw threshold crossings while side counts total eight events (five BUY and three SELL); this semantic mismatch needs reconciliation even though referential integrity passed. Published order-gate counts contain only three ORDER_ACCEPTED events because awaiting-confirmation events never became order attempts.",
+      "Order lifecycle distinctions: requested/submitted order notionals were one $2,500 TSLA BUY and SELL notionals of $2,576.04 for AAPL and $2,511.91 for SPY. There were three accepted attempts, three orders, and three fills, but only two realized closing records. Realized P/L was +$84.98 from AAPL (+$75.25) and SPY (+$9.73); TSLA remained open and therefore contributed no realized P/L.",
+      "The 100% win rate is based on only two realized exits and is not calibration evidence. The dashboard snapshot showed approximately +$58.27 aggregate unrealized P/L across XOM and TSLA, but this is a point-in-time snapshot, not realized performance. Portfolio return percentage and drawdown cannot be computed because starting equity and intraday equity-curve data were not supplied. The 1% objective therefore cannot be evaluated and remains only a stretch research benchmark.",
+      "Buy/sell balance was sparse but operationally balanced at the order level: one accepted BUY and two accepted SELLs. Only one of 3,150 decision rows was a BUY and two were SELLs; 99.90% were HOLD. This alone does not establish excessive restrictiveness because repeated minute-level rows are not independent opportunities.",
+      "Threshold opportunity evidence: AAPL reached 74.410, GLD 73.207, NVDA 71.235, TSLA 71.557, and XOM 78.240, while only TSLA generated a BUY. The funnel indicates that confirmation blocked five candidate events overall, but supplied aggregates do not map each blocked event to a symbol and timestamp. XOM and possibly AAPL also had position-state complications, so their threshold peaks cannot safely be labeled missed entries.",
+      "Explicit missed-opportunity candidates: NVDA produced no BUY despite a maximum score of 71.235; GLD produced no BUY despite 73.207. Confirmation is the likely aggregate blocker, but exact attribution is unavailable. Required evidence is event-level symbol, timestamp, raw score, confirmation counter, position state, gate reason, price/volume features, and 5/15/30/60-minute forward returns.",
+      "QQQ showed strong late-session relative volume of 5.157 and positive 5/15-minute momentum, but its daily maximum score was only 68.711, below the 70 threshold, so the score gate prevented entry at its best observed score. Forward outcomes after the high-volume episode are absent, so lowering the threshold is not justified.",
+      "NVDA's closing snapshot had elevated volume ratio 3.165 but flat-to-negative short momentum and score 42.38, so the closing observation itself was not a missed momentum entry. Its earlier 71.235 peak needs timestamped feature and forward-return evidence. TSLA was captured with a BUY; NBIS was not in the configured universe and has no evidence.",
+      "The static score-plus-two-confirmation framework may be restrictive for episodically volatile names because NVDA crossed 70 without a BUY and five funnel events awaited confirmation. However, TSLA was captured and no missed-event forward outcomes were published. There is insufficient causal evidence to loosen thresholds or confirmations for NVDA, TSLA, or any unobserved NBIS case.",
+      "Per-symbol capture differed materially: TSLA generated the only BUY; AAPL and SPY generated the two SELLs; AMZN, QQQ, WMT, NVDA, GLD, and XOM generated no new BUY. AMZN, QQQ, SPY, and WMT never reached 70, while NVDA and GLD did. XOM's average score of 58.226 was highest, largely because its average geo adjustment was +7.754 versus average technical score 50.671.",
+      "Geo data materially influenced XOM and modestly influenced GLD: average geo adjustments were +7.754 and +1.939 respectively, while all other symbols were zero. The feed had 181 active events and repeated versions of the same Guardian headline among top events. This raises a hypothesis of duplicate-headline amplification, but no event-level deduplication or counterfactual score/outcome evidence was supplied.",
+      "Geo feed health is not clean: the last 500 log lines contained 14 errors and 34 warnings. The feed still reported status ok and continued updating, but error categories and impact on scoring were not provided.",
+      "VIX effects were negligible today: average symbol adjustments ranged roughly from -0.012 to +0.004, with VIX near 15.57. There is no evidence that VIX materially changed opportunity capture or realized P/L.",
+      "Market-regime SHADOW evidence was unanimous RISK_ON across 70 snapshots with score 100, and all five linked shadow decisions were ALLOW_EQUITY. This confirms internal consistency for today's benign state but supplies no contrasting regime observations and cannot support calibration or promotion into execution logic.",
+      "Financial-leverage SHADOW was enabled but produced no XLF/FAS/FAZ snapshots, signals, or outcomes; the dashboard explicitly reported FINANCIAL_SNAPSHOT_UNAVAILABLE. No conclusion about leveraged-financial signal quality is possible.",
+      "Premarket intelligence was enabled but produced zero rows, zero gap measurements, and no bias, regime, geo-status, or source-status record. Social sentiment remains unavailable because premarket_social_source is explicitly UNAVAILABLE.",
+      "ZPTA produced 120 predictions and 92 resolved predictions, but each reported model/horizon has only 7 or 8 samples, below the minimum calibration target of 12. Zero shadow trades and no exit reasons were recorded. Identical average returns across several model families at each horizon suggest shared outcome labels rather than independently demonstrated model value; this is an instrumentation question, not evidence for tuning.",
+      "Fixed 2% stop, 3% take-profit, 1% trailing activation, and 1.25% trailing distance cannot be assessed against symbol volatility because ATR, realized volatility, maximum adverse excursion, and maximum favorable excursion were not supplied. No execution change is supported."
     ],
     "proposals": [
       {
-        "title": "Add a shadow near-miss opportunity and forward-outcome ledger",
+        "title": "Restore and verify premarket and XLF/FAS/FAZ SHADOW pipelines",
         "change_type": "CODE",
-        "target": "Decision funnel instrumentation for all configured symbols",
-        "current": "Daily maxima and aggregate gate counts are available, but near-threshold events are not joined to symbol-specific gates or subsequent prices. AMZN's exact blocker and TSLA/NVDA forward outcomes cannot be proven.",
-        "proposed": "For every no-position decision with score at least 60, and every raw threshold crossing, write a SHADOW record containing symbol, event ID, score components, threshold distance, momentum, volume ratio, confirmation count, exact gate, VIX, geo adjustment, regime, and forward returns/MFE/MAE at 5, 15, 30, and 60 minutes. Report results per symbol only after at least 12 resolved events; do not alter execution thresholds.",
+        "target": "premarket_intelligence and financial_leverage SHADOW publishers",
+        "current": "Both features are enabled, but premarket intelligence and all three financial-leverage tables published zero rows; the dashboard reports FINANCIAL_SNAPSHOT_UNAVAILABLE.",
+        "proposed": "Add startup and scheduled-run diagnostics that emit a SHADOW status row for every expected refresh, including provider, requested symbols, gap fields, source availability, failure class, and retry result. For XLF/FAS/FAZ, publish snapshots even when no candidate qualifies and attach 5/15/30/60-minute forward outcomes. Do not route these signals into paper execution until adequate outcome evidence exists.",
         "evidence": [
-          "AMZN maximum score was 72.697 with no BUY.",
-          "TSLA maximum was 68.13 and NVDA maximum was 68.65.",
-          "Two BUY-side events awaited confirmation, but the supplied summary does not definitively join them to symbols.",
-          "Only three raw crossings and one realized trade are insufficient for calibration."
+          "premarket_intelligence rows: 0 despite premarket_enabled=true.",
+          "financial_leverage snapshot, signal, and outcome rows: 0 despite financial_leverage_shadow_enabled=true.",
+          "Dashboard reason: FINANCIAL_SNAPSHOT_UNAVAILABLE.",
+          "Social source is explicitly UNAVAILABLE and must remain represented as unavailable rather than inferred."
         ],
-        "risk": "Low instrumentation risk; additional log volume and delayed-price alignment must be monitored. Execution behavior remains unchanged.",
+        "risk": "Low execution risk because the change is SHADOW-only; operational risk is added log volume and possible provider retries.",
         "confidence": "HIGH",
         "recommended_mode": "SHADOW",
         "approval_required": true
       },
       {
-        "title": "Restore XLF/FAS/FAZ shadow snapshot, signal, and outcome publication",
+        "title": "Add symbol-level missed-opportunity and confirmation outcome records",
+        "change_type": "CODE",
+        "target": "decision_funnel and forward-outcome instrumentation",
+        "current": "Five events were blocked awaiting confirmation, but aggregate evidence does not identify their symbols, exact scores, confirmation sequences, position state, or subsequent returns.",
+        "proposed": "For every BUY threshold crossing and every near-threshold high-volume event, publish symbol, timestamp, score components, threshold distance, confirmation count, gate reason, position/cap state, volume ratio, short-horizon momentum, and 5/15/30/60-minute forward returns. Include SHADOW counterfactual entries for both immediate entry and current two-confirmation entry. Require at least 12 resolved independent events per symbol/cohort before considering calibration.",
+        "evidence": [
+          "NVDA max score 71.235 with no BUY.",
+          "GLD max score 73.207 with no BUY.",
+          "QQQ max score 68.711 and late volume ratio 5.157 with positive short momentum.",
+          "Five funnel events ended AWAITING_CONFIRMATION.",
+          "No event-level blocked-gate forward outcomes were supplied."
+        ],
+        "risk": "No trading risk in SHADOW mode; counterfactual assumptions must be clearly labeled and include paper slippage rules.",
+        "confidence": "HIGH",
+        "recommended_mode": "SHADOW",
+        "approval_required": true
+      },
+      {
+        "title": "Research ATR-normalized exits beside fixed exits",
         "change_type": "CODE+CONFIG",
-        "target": "financial_leverage_shadow pipeline",
-        "current": "The feature is enabled with outcome horizons 5,15,30,60, but all three financial-leverage tables contain zero rows and the dashboard reports FINANCIAL_SNAPSHOT_UNAVAILABLE.",
-        "proposed": "Add a startup/provider health check for XLF, FAS, and FAZ; publish one timestamped snapshot per evaluation cycle, including explicit provider/error status. When a shadow signal occurs, persist its score, regime, prices, and forward returns at configured horizons. Keep it non-executable and require at least 12 resolved signals before any calibration review.",
+        "target": "SHADOW exit evaluator for configured trade symbols",
+        "current": "All symbols share fixed 2% stop, 3% take-profit, 1% trailing activation, and 1.25% trailing distance, while no ATR or excursion evidence is logged.",
+        "proposed": "Keep current paper execution exits unchanged. Add SHADOW comparators using pre-entry ATR percentage or realized-volatility bands, and record maximum adverse/favorable excursion, time-to-exit, fixed-exit outcome, and volatility-normalized outcome for each paper entry. Segment results by symbol and volatility bucket with a minimum of 12 closed comparisons before any configuration proposal.",
         "evidence": [
-          "financial_leverage_shadow rows: 0.",
-          "financial_leverage_signals rows: 0.",
-          "financial_leverage_outcomes rows: 0.",
-          "The enabled feature produced no evidence despite 70 market-regime snapshots."
+          "No ATR, realized-volatility, MAE, or MFE fields were supplied.",
+          "The universe mixes lower-volatility ETFs and equities with higher-volatility names such as NVDA and TSLA.",
+          "Only two realized exits occurred today, far below calibration requirements."
         ],
-        "risk": "Provider limitations or leveraged-ETF data quality could create misleading shadow signals; explicit freshness and error fields mitigate this.",
+        "risk": "Low while SHADOW-only; ATR lookback and bar-source choices could introduce leakage unless fixed at entry time.",
         "confidence": "HIGH",
         "recommended_mode": "SHADOW",
         "approval_required": true
       },
       {
-        "title": "Repair premarket gap and bias observability",
+        "title": "Measure and deduplicate geo-feed score contribution",
         "change_type": "CODE",
-        "target": "premarket_intelligence collection and publication",
-        "current": "Premarket is enabled with five refresh offsets and a 60-minute context window, but the published table has zero rows and all latest gap/bias fields are null.",
-        "proposed": "At each configured premarket offset, publish a row for every trade symbol with prior close, current premarket price, gap percentage, data freshness, provider status, computed bias, geo status, and an explicit social_status=UNAVAILABLE. Emit a failure row rather than silently producing no data. Keep premarket adjustments unchanged until at least 12 resolved sessions or qualifying events are available.",
+        "target": "geo event normalization and score-attribution logs",
+        "current": "XOM received an average +7.754 geo adjustment, and repeated versions of the same headline appear among top events; no deduplication or with/without-geo forward outcome is published.",
+        "proposed": "Cluster geo items by normalized headline, canonical URL, event category, and publication window before aggregation. Log raw item count, unique-event count, capped contribution, and counterfactual score without geo adjustment for each XOM/GLD decision. Keep the live paper score unchanged until at least 12 resolved geo-triggered opportunities have forward outcomes.",
         "evidence": [
-          "premarket_intelligence rows: 0.",
-          "Premarket adjustment was 0.0 in every displayed top signal.",
-          "Social source is explicitly UNAVAILABLE."
+          "XOM average technical score was 50.671 versus average final score 58.226 and average geo adjustment +7.754.",
+          "GLD average geo adjustment was +1.939.",
+          "Multiple top events repeat the same Guardian tanker-attack headline.",
+          "Geo tail contained 14 errors and 34 warnings in 500 lines."
         ],
-        "risk": "Premarket IEX coverage may be sparse; stale or absent quotes must be marked rather than imputed.",
-        "confidence": "HIGH",
+        "risk": "Incorrect clustering could merge genuinely distinct updates; retain raw events and use SHADOW counterfactuals before changing scoring.",
+        "confidence": "MEDIUM",
         "recommended_mode": "SHADOW",
         "approval_required": true
       },
       {
-        "title": "Evaluate volatility-normalized exits in parallel",
-        "change_type": "CODE+CONFIG",
-        "target": "Paper position exit research",
-        "current": "Paper execution uses fixed 2% stop-loss, 3% take-profit, 1% trailing activation, and 1.25% trailing distance without published ATR or entry-volatility context.",
-        "proposed": "Run a SHADOW exit simulator beside each paper position using frozen-at-entry ATR or realized-volatility multiples. Log baseline versus shadow exit timestamp, reason, return, MFE, MAE, and holding time by symbol. Preserve all current execution exits and risk caps; require at least 12 closed comparable positions before considering any configuration change.",
-        "evidence": [
-          "TSLA and NVDA displayed elevated volume and are plausible high-volatility cases.",
-          "Only one realized XOM trade exists.",
-          "No ATR, range-normalized stop distance, or stop/target exit attribution was supplied."
-        ],
-        "risk": "ATR definitions and lookback choices can introduce research degrees of freedom; freeze the specification before collecting outcomes.",
-        "confidence": "HIGH",
-        "recommended_mode": "SHADOW",
-        "approval_required": true
-      },
-      {
-        "title": "Add geo-score counterfactual attribution for XOM and GLD",
+        "title": "Reconcile funnel counts and expose complete paper order lifecycle",
         "change_type": "CODE",
-        "target": "Geo context instrumentation",
-        "current": "Geo adjustments materially affect XOM and GLD scores, but logs do not expose score-without-geo, event contribution weights, freshness, or subsequent outcome attribution.",
-        "proposed": "For each XOM and GLD decision, persist the executed score, score excluding geo, contributing event IDs with age/direction/materiality, conflict ratio, and whether the threshold outcome changes without geo. Attach 15-, 30-, and 60-minute forward returns without changing the current geo adjustment.",
+        "target": "decision_funnel, order_attempt, order, fill, realized, and dashboard audit views",
+        "current": "The funnel reports six raw threshold crossings but eight side-classified rows. Lifecycle tables reconcile by count for three accepted attempts/orders/fills, yet dashboard snapshots do not explicitly distinguish requested notional, accepted quantity, filled quantity, and realized status.",
+        "proposed": "Define and validate separate counters for unique threshold-crossing episodes, repeated confirmation observations, and final gate events. Add immutable linkage IDs and a read-only audit view showing requested notional, accepted order ID, fill price/quantity, open-versus-closing classification, realized P/L record, and dashboard snapshot timestamp. Fail the daily integrity check on unexplained counter divergence.",
         "evidence": [
-          "XOM average geo adjustment was +5.876 and its maximum score was 79.348.",
-          "GLD average geo adjustment was +1.469.",
-          "The feed's leading oil events included both bullish and bearish directions.",
-          "XOM supplied the only same-day realized P/L, which is insufficient to isolate geo value."
+          "decision_funnel rows: 8; raw_threshold_crossings: 6; side counts: 5 BUY and 3 SELL.",
+          "Three attempts were accepted, with three orders and three fills.",
+          "Only two realized rows exist because the TSLA BUY remained open.",
+          "Current referential-integrity checks passed, so the remaining issue is metric semantics and presentation."
         ],
-        "risk": "Headline duplication and correlated events may overstate attribution; event IDs and conflict metrics should make this auditable.",
+        "risk": "Low; schema migration and linkage backfills must not alter paper order submission behavior or dashboard write permissions.",
         "confidence": "HIGH",
-        "recommended_mode": "SHADOW",
+        "recommended_mode": "PAPER",
         "approval_required": true
       },
       {
-        "title": "Diagnose why ZPTA creates predictions but no shadow trades",
-        "change_type": "CODE",
-        "target": "ZPTA shadow entry/exit funnel",
-        "current": "ZPTA produced 300 predictions and 264 resolved predictions but zero shadow trades and zero exit reasons. Several model families report identical horizon metrics.",
-        "proposed": "Publish a ZPTA funnel row for each evaluated bar with provider freshness, model score, 68-point entry comparison, liquidity gate, regime gate, duplicate-signal gate, final disposition, and model-specific label/outcome identifiers. Add a validation warning when distinct models have identical predictions or metrics across a session. Do not change the entry score until at least 12 closed shadow trades exist.",
+        "title": "Diagnose zero ZPTA shadow trades and model-outcome duplication",
+        "change_type": "RESEARCH",
+        "target": "ZPTA prediction-to-shadow-trade transition",
+        "current": "There were 120 predictions and 92 resolved outcomes but zero shadow trades, no exit reasons, and only 7-8 samples per model/horizon. Several model families show identical average returns at each horizon.",
+        "proposed": "Trace each prediction through eligibility, entry-score, liquidity/regime, stale-bar, provider, and position-limit gates; publish one terminal reason per prediction. Verify whether identical returns are intentionally shared underlying forward returns or an accidental model-label duplication. Continue collecting SHADOW evidence without tuning the 68 entry score until each evaluated cohort has at least 12 independent resolved cases.",
         "evidence": [
-          "ZPTA shadow trades: 0 despite 300 predictions.",
-          "Latest status was NO_NEW_BAR using yahoo_delayed.",
+          "zpta_shadow_trades rows: 0 and exit-reason counts are empty.",
+          "Latest status was NO_NEW_BAR using yahoo_delayed data.",
           "Latest regime was LIQUIDITY_DANGER.",
-          "zpta_exit_reason_counts was empty and multiple model families had identical reported statistics."
+          "Every reported model/horizon sample count is below 12.",
+          "Average returns repeat across multiple model families at the same horizon."
         ],
-        "risk": "Diagnostic logging may reveal that delayed data cannot support timely shadow entries; it must not be used to bypass freshness or liquidity controls.",
+        "risk": "No execution risk; delayed data may make simulated entry assumptions unreliable, so provider timestamps and staleness must be retained.",
         "confidence": "HIGH",
         "recommended_mode": "SHADOW",
         "approval_required": true
@@ -1024,7 +1043,7 @@
     ],
     "review_source": "OPENAI",
     "model": "gpt-5.6-sol",
-    "review_date": "2026-10-07",
-    "generated_at": "2026-10-07T16:05:57.094953-04:00"
+    "review_date": "2026-10-08",
+    "generated_at": "2026-10-08T16:06:04.769787-04:00"
   }
 }

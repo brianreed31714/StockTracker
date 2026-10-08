@@ -1,0 +1,24 @@
+{
+  "title": "Reconcile funnel counts and expose complete paper order lifecycle",
+  "change_type": "CODE",
+  "target": "decision_funnel, order_attempt, order, fill, realized, and dashboard audit views",
+  "current": "The funnel reports six raw threshold crossings but eight side-classified rows. Lifecycle tables reconcile by count for three accepted attempts/orders/fills, yet dashboard snapshots do not explicitly distinguish requested notional, accepted quantity, filled quantity, and realized status.",
+  "proposed": "Define and validate separate counters for unique threshold-crossing episodes, repeated confirmation observations, and final gate events. Add immutable linkage IDs and a read-only audit view showing requested notional, accepted order ID, fill price/quantity, open-versus-closing classification, realized P/L record, and dashboard snapshot timestamp. Fail the daily integrity check on unexplained counter divergence.",
+  "evidence": [
+    "decision_funnel rows: 8; raw_threshold_crossings: 6; side counts: 5 BUY and 3 SELL.",
+    "Three attempts were accepted, with three orders and three fills.",
+    "Only two realized rows exist because the TSLA BUY remained open.",
+    "Current referential-integrity checks passed, so the remaining issue is metric semantics and presentation."
+  ],
+  "risk": "Low; schema migration and linkage backfills must not alter paper order submission behavior or dashboard write permissions.",
+  "confidence": "HIGH",
+  "recommended_mode": "PAPER",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261008-05",
+  "status": "PENDING",
+  "review_date": "2026-10-08",
+  "created_at": "2026-10-08T13:06:06",
+  "updated_at": "2026-10-08T13:06:06",
+  "implementation": {},
+  "deployment": {}
+}

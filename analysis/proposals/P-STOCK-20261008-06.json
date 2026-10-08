@@ -1,0 +1,25 @@
+{
+  "title": "Diagnose zero ZPTA shadow trades and model-outcome duplication",
+  "change_type": "RESEARCH",
+  "target": "ZPTA prediction-to-shadow-trade transition",
+  "current": "There were 120 predictions and 92 resolved outcomes but zero shadow trades, no exit reasons, and only 7-8 samples per model/horizon. Several model families show identical average returns at each horizon.",
+  "proposed": "Trace each prediction through eligibility, entry-score, liquidity/regime, stale-bar, provider, and position-limit gates; publish one terminal reason per prediction. Verify whether identical returns are intentionally shared underlying forward returns or an accidental model-label duplication. Continue collecting SHADOW evidence without tuning the 68 entry score until each evaluated cohort has at least 12 independent resolved cases.",
+  "evidence": [
+    "zpta_shadow_trades rows: 0 and exit-reason counts are empty.",
+    "Latest status was NO_NEW_BAR using yahoo_delayed data.",
+    "Latest regime was LIQUIDITY_DANGER.",
+    "Every reported model/horizon sample count is below 12.",
+    "Average returns repeat across multiple model families at the same horizon."
+  ],
+  "risk": "No execution risk; delayed data may make simulated entry assumptions unreliable, so provider timestamps and staleness must be retained.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261008-06",
+  "status": "PENDING",
+  "review_date": "2026-10-08",
+  "created_at": "2026-10-08T13:06:06",
+  "updated_at": "2026-10-08T13:06:06",
+  "implementation": {},
+  "deployment": {}
+}

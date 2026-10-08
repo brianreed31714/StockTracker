@@ -1,54 +1,54 @@
 {
-  "generated_at": "2026-10-07T13:05:58",
-  "review_date": "2026-10-07",
+  "generated_at": "2026-10-08T13:06:06",
+  "review_date": "2026-10-08",
   "proposal_count": 6,
   "pending": [
-    "P-STOCK-20261007-01",
-    "P-STOCK-20261007-02",
-    "P-STOCK-20261007-03",
-    "P-STOCK-20261007-04",
-    "P-STOCK-20261007-05",
-    "P-STOCK-20261007-06"
+    "P-STOCK-20261008-01",
+    "P-STOCK-20261008-02",
+    "P-STOCK-20261008-03",
+    "P-STOCK-20261008-04",
+    "P-STOCK-20261008-05",
+    "P-STOCK-20261008-06"
   ],
   "proposals": [
     {
-      "proposal_id": "P-STOCK-20261007-01",
-      "title": "Add a shadow near-miss opportunity and forward-outcome ledger",
+      "proposal_id": "P-STOCK-20261008-01",
+      "title": "Restore and verify premarket and XLF/FAS/FAZ SHADOW pipelines",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261007-02",
-      "title": "Restore XLF/FAS/FAZ shadow snapshot, signal, and outcome publication",
+      "proposal_id": "P-STOCK-20261008-02",
+      "title": "Add symbol-level missed-opportunity and confirmation outcome records",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261007-03",
-      "title": "Repair premarket gap and bias observability",
+      "proposal_id": "P-STOCK-20261008-03",
+      "title": "Research ATR-normalized exits beside fixed exits",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261007-04",
-      "title": "Evaluate volatility-normalized exits in parallel",
-      "confidence": "HIGH",
+      "proposal_id": "P-STOCK-20261008-04",
+      "title": "Measure and deduplicate geo-feed score contribution",
+      "confidence": "MEDIUM",
       "recommended_mode": "SHADOW",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261007-05",
-      "title": "Add geo-score counterfactual attribution for XOM and GLD",
+      "proposal_id": "P-STOCK-20261008-05",
+      "title": "Reconcile funnel counts and expose complete paper order lifecycle",
       "confidence": "HIGH",
-      "recommended_mode": "SHADOW",
+      "recommended_mode": "PAPER",
       "status": "PENDING"
     },
     {
-      "proposal_id": "P-STOCK-20261007-06",
-      "title": "Diagnose why ZPTA creates predictions but no shadow trades",
+      "proposal_id": "P-STOCK-20261008-06",
+      "title": "Diagnose zero ZPTA shadow trades and model-outcome duplication",
       "confidence": "HIGH",
       "recommended_mode": "SHADOW",
       "status": "PENDING"

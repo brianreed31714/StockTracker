@@ -1,0 +1,24 @@
+{
+  "title": "Restore and verify premarket and XLF/FAS/FAZ SHADOW pipelines",
+  "change_type": "CODE",
+  "target": "premarket_intelligence and financial_leverage SHADOW publishers",
+  "current": "Both features are enabled, but premarket intelligence and all three financial-leverage tables published zero rows; the dashboard reports FINANCIAL_SNAPSHOT_UNAVAILABLE.",
+  "proposed": "Add startup and scheduled-run diagnostics that emit a SHADOW status row for every expected refresh, including provider, requested symbols, gap fields, source availability, failure class, and retry result. For XLF/FAS/FAZ, publish snapshots even when no candidate qualifies and attach 5/15/30/60-minute forward outcomes. Do not route these signals into paper execution until adequate outcome evidence exists.",
+  "evidence": [
+    "premarket_intelligence rows: 0 despite premarket_enabled=true.",
+    "financial_leverage snapshot, signal, and outcome rows: 0 despite financial_leverage_shadow_enabled=true.",
+    "Dashboard reason: FINANCIAL_SNAPSHOT_UNAVAILABLE.",
+    "Social source is explicitly UNAVAILABLE and must remain represented as unavailable rather than inferred."
+  ],
+  "risk": "Low execution risk because the change is SHADOW-only; operational risk is added log volume and possible provider retries.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261008-01",
+  "status": "PENDING",
+  "review_date": "2026-10-08",
+  "created_at": "2026-10-08T13:06:06",
+  "updated_at": "2026-10-08T13:06:06",
+  "implementation": {},
+  "deployment": {}
+}

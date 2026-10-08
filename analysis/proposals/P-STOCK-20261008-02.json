@@ -1,0 +1,25 @@
+{
+  "title": "Add symbol-level missed-opportunity and confirmation outcome records",
+  "change_type": "CODE",
+  "target": "decision_funnel and forward-outcome instrumentation",
+  "current": "Five events were blocked awaiting confirmation, but aggregate evidence does not identify their symbols, exact scores, confirmation sequences, position state, or subsequent returns.",
+  "proposed": "For every BUY threshold crossing and every near-threshold high-volume event, publish symbol, timestamp, score components, threshold distance, confirmation count, gate reason, position/cap state, volume ratio, short-horizon momentum, and 5/15/30/60-minute forward returns. Include SHADOW counterfactual entries for both immediate entry and current two-confirmation entry. Require at least 12 resolved independent events per symbol/cohort before considering calibration.",
+  "evidence": [
+    "NVDA max score 71.235 with no BUY.",
+    "GLD max score 73.207 with no BUY.",
+    "QQQ max score 68.711 and late volume ratio 5.157 with positive short momentum.",
+    "Five funnel events ended AWAITING_CONFIRMATION.",
+    "No event-level blocked-gate forward outcomes were supplied."
+  ],
+  "risk": "No trading risk in SHADOW mode; counterfactual assumptions must be clearly labeled and include paper slippage rules.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261008-02",
+  "status": "PENDING",
+  "review_date": "2026-10-08",
+  "created_at": "2026-10-08T13:06:06",
+  "updated_at": "2026-10-08T13:06:06",
+  "implementation": {},
+  "deployment": {}
+}

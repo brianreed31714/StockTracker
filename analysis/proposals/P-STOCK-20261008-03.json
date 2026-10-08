@@ -1,0 +1,23 @@
+{
+  "title": "Research ATR-normalized exits beside fixed exits",
+  "change_type": "CODE+CONFIG",
+  "target": "SHADOW exit evaluator for configured trade symbols",
+  "current": "All symbols share fixed 2% stop, 3% take-profit, 1% trailing activation, and 1.25% trailing distance, while no ATR or excursion evidence is logged.",
+  "proposed": "Keep current paper execution exits unchanged. Add SHADOW comparators using pre-entry ATR percentage or realized-volatility bands, and record maximum adverse/favorable excursion, time-to-exit, fixed-exit outcome, and volatility-normalized outcome for each paper entry. Segment results by symbol and volatility bucket with a minimum of 12 closed comparisons before any configuration proposal.",
+  "evidence": [
+    "No ATR, realized-volatility, MAE, or MFE fields were supplied.",
+    "The universe mixes lower-volatility ETFs and equities with higher-volatility names such as NVDA and TSLA.",
+    "Only two realized exits occurred today, far below calibration requirements."
+  ],
+  "risk": "Low while SHADOW-only; ATR lookback and bar-source choices could introduce leakage unless fixed at entry time.",
+  "confidence": "HIGH",
+  "recommended_mode": "SHADOW",
+  "approval_required": true,
+  "proposal_id": "P-STOCK-20261008-03",
+  "status": "PENDING",
+  "review_date": "2026-10-08",
+  "created_at": "2026-10-08T13:06:06",
+  "updated_at": "2026-10-08T13:06:06",
+  "implementation": {},
+  "deployment": {}
+}
