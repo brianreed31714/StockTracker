@@ -391,7 +391,7 @@ def scan_once():
         if req.get("status") == "READY_TO_DEPLOY":
             pid = str(req.get("proposal_id") or "")
             done = processed_requests().get(pid)
-            if done and done.get("status") in {"DEPLOYED", "ROLLED_BACK"}:
+            if done and done.get("status") in {"DEPLOYED", "ROLLED_BACK", "VALIDATION_FAILED"}:
                 continue
 
             # Migration guard for deployments completed by the older agent,
@@ -411,7 +411,15 @@ def scan_once():
                 )
                 continue
 
-            deploy(path, req)
+            try:
+                deploy(path, req)
+            except Exception as exc:
+                # Validation errors occur before deploy()'s own exception handler.
+                # Record and notify rather than silently retrying forever.
+                log(f"{pid}: validation/deployment FAILED: {exc}")
+                mark_processed(pid, "VALIDATION_FAILED", commit=req.get("commit"), error=str(exc))
+                push("StockTracker Deployment FAILED", f"{pid}: {exc}")
+                # Continue to evaluate subsequent requests; never kill the active release.
 
 
 def main():
