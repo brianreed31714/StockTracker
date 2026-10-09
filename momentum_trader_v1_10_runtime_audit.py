@@ -1730,7 +1730,7 @@ def write_runtime_audit():
     target = BASE_DIR / "stocktracker_runtime_audit.json"
     try:
         temp = target.with_suffix(".json.tmp")
-        temp.write_text(json.dumps(audit, indent=2) + "\\n", encoding="utf-8")
+        temp.write_text(json.dumps(audit, indent=2) + "\n", encoding="utf-8")
         temp.replace(target)
         log.info("Runtime audit written: %s | NBIS=%s", target, audit["nbis_enabled"])
     except OSError:
