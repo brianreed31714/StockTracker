@@ -1,11 +1,12 @@
 {
   "proposal_id": "P-STOCK-20261009-04",
-  "status": "READY_TO_DEPLOY",
+  "status": "CANCELLED",
   "commit": "bfc1a964482f3494a96b55de2f701169d6aa9fa5",
   "components": [
     "trader"
   ],
   "files": {
     "trader": "momentum_trader_v1_12_1_smoke.py"
-  }
+  },
+  "cancel_reason": "Recovery freeze: retain last confirmed v1.10; do not activate unverified releases."
 }
