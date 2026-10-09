@@ -1,6 +1,6 @@
 {
   "proposal_id": "P-STOCK-20261009-03",
-  "status": "READY_TO_DEPLOY",
+  "status": "CANCELLED",
   "commit": "3dd2bd558a15b6ed16e818c9c2dceadb4fc396a9",
   "components": [
     "trader",
@@ -9,5 +9,6 @@
   "files": {
     "trader": "momentum_trader_v1_12_research_instrumentation.py",
     "geo_feed": "xom_geo_feed_v1_2_dedup_shadow.py"
-  }
+  },
+  "cancel_reason": "Recovery freeze: retain last confirmed v1.10; do not activate unverified releases."
 }
