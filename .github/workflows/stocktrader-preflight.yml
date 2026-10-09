@@ -1,0 +1,39 @@
+name: StockTrader deployment preflight
+on:
+  push:
+    paths:
+      - 'momentum_trader_v1_*.py'
+      - 'xom_geo_feed_v1_*.py'
+      - 'stocktracker_deployment_agent.py'
+      - 'deploy/requests/P-STOCK-*.json'
+      - '.github/workflows/stocktrader-preflight.yml'
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Validate deployment requests and Python syntax
+        run: |
+          python - <<'PY'
+          import json, pathlib, py_compile, subprocess
+          root=pathlib.Path('.')
+          py_compile.compile('stocktracker_deployment_agent.py', doraise=True)
+          requests=sorted((root/'deploy/requests').glob('P-STOCK-*.json'))
+          for path in requests:
+              req=json.loads(path.read_text(encoding='utf-8'))
+              if req.get('status')!='READY_TO_DEPLOY':
+                  continue
+              commit=req['commit']
+              for component in req['components']:
+                  name=req['files'][component]
+                  target=root/name
+                  assert target.is_file(), f'{path}: missing {name}'
+                  py_compile.compile(str(target), doraise=True)
+                  expected=subprocess.check_output(['git','rev-parse',f'{commit}:{name}'],text=True).strip()
+                  current=subprocess.check_output(['git','rev-parse',f'HEAD:{name}'],text=True).strip()
+                  assert expected==current, f'{path}: approved blob differs from HEAD: {name}'
+              print('PASS',path)
+          PY
