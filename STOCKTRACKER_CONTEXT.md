@@ -98,3 +98,6 @@ A fresh ChatGPT session should use this file plus `analysis/performance/latest.*
 - Social sentiment is explicitly marked UNAVAILABLE until a real source is configured; it is never inferred or fabricated.
 - The latest premarket bias can contribute a bounded +/-5 context adjustment during the first 60 regular-session minutes.
 - No premarket orders are submitted.
+
+## Approved remediation work (2026-10-09)
+The user approved implementing proposals P-STOCK-20261008-01 through -06, plus NBIS runtime verification, independent methodology scorecards, equity curve/return attribution, and unattended daily health assessment. Approval does not imply code deployed. Preserve paper-only, risk limits, and shadow isolation. Implementation agents should prioritize restoring empty premarket and financial leverage datasets, ZPTA zero shadow trades, funnel and missed-opportunity outcome instrumentation, ATR exit counterfactuals, geo deduplication, NBIS env/runtime reconciliation, and daily methodology attribution. Verify tests, publish evidence and deployment status. ChatGPT daily external review is scheduled separately; Windows review/supervisor remain necessary.
