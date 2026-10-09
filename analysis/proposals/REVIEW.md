@@ -4,7 +4,7 @@ Paper-trading model improvement proposals. Human approval is required before imp
 
 ## P-STOCK-20261008-01 — Restore and verify premarket and XLF/FAS/FAZ SHADOW pipelines
 
-- **Status:** PENDING
+- **Status:** APPROVED (user authorization 2026-10-09; implementation/deployment pending)
 - **Type:** CODE
 - **Target:** premarket_intelligence and financial_leverage SHADOW publishers
 - **Current:** Both features are enabled, but premarket intelligence and all three financial-leverage tables published zero rows; the dashboard reports FINANCIAL_SNAPSHOT_UNAVAILABLE.
@@ -30,7 +30,7 @@ Paper-trading model improvement proposals. Human approval is required before imp
 
 ## P-STOCK-20261008-02 — Add symbol-level missed-opportunity and confirmation outcome records
 
-- **Status:** PENDING
+- **Status:** APPROVED (user authorization 2026-10-09; implementation/deployment pending)
 - **Type:** CODE
 - **Target:** decision_funnel and forward-outcome instrumentation
 - **Current:** Five events were blocked awaiting confirmation, but aggregate evidence does not identify their symbols, exact scores, confirmation sequences, position state, or subsequent returns.
@@ -57,7 +57,7 @@ Paper-trading model improvement proposals. Human approval is required before imp
 
 ## P-STOCK-20261008-03 — Research ATR-normalized exits beside fixed exits
 
-- **Status:** PENDING
+- **Status:** APPROVED (user authorization 2026-10-09; implementation/deployment pending)
 - **Type:** CODE+CONFIG
 - **Target:** SHADOW exit evaluator for configured trade symbols
 - **Current:** All symbols share fixed 2% stop, 3% take-profit, 1% trailing activation, and 1.25% trailing distance, while no ATR or excursion evidence is logged.
@@ -82,7 +82,7 @@ Paper-trading model improvement proposals. Human approval is required before imp
 
 ## P-STOCK-20261008-04 — Measure and deduplicate geo-feed score contribution
 
-- **Status:** PENDING
+- **Status:** APPROVED (user authorization 2026-10-09; implementation/deployment pending)
 - **Type:** CODE
 - **Target:** geo event normalization and score-attribution logs
 - **Current:** XOM received an average +7.754 geo adjustment, and repeated versions of the same headline appear among top events; no deduplication or with/without-geo forward outcome is published.
@@ -108,7 +108,7 @@ Paper-trading model improvement proposals. Human approval is required before imp
 
 ## P-STOCK-20261008-05 — Reconcile funnel counts and expose complete paper order lifecycle
 
-- **Status:** PENDING
+- **Status:** APPROVED (user authorization 2026-10-09; implementation/deployment pending)
 - **Type:** CODE
 - **Target:** decision_funnel, order_attempt, order, fill, realized, and dashboard audit views
 - **Current:** The funnel reports six raw threshold crossings but eight side-classified rows. Lifecycle tables reconcile by count for three accepted attempts/orders/fills, yet dashboard snapshots do not explicitly distinguish requested notional, accepted quantity, filled quantity, and realized status.
@@ -134,7 +134,7 @@ Paper-trading model improvement proposals. Human approval is required before imp
 
 ## P-STOCK-20261008-06 — Diagnose zero ZPTA shadow trades and model-outcome duplication
 
-- **Status:** PENDING
+- **Status:** APPROVED (user authorization 2026-10-09; implementation/deployment pending)
 - **Type:** RESEARCH
 - **Target:** ZPTA prediction-to-shadow-trade transition
 - **Current:** There were 120 predictions and 92 resolved outcomes but zero shadow trades, no exit reasons, and only 7-8 samples per model/horizon. Several model families show identical average returns at each horizon.
