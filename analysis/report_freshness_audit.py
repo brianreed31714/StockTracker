@@ -1,0 +1,106 @@
+#!/usr/bin/env python3
+"""Read-only audit of published StockTracker paper-research evidence.
+
+This script never touches broker credentials, submits orders, or mutates runtime
+state. Pass the last *completed* exchange session explicitly to avoid treating
+weekends and exchange holidays as missing reports.
+"""
+from __future__ import annotations
+
+import argparse
+import csv
+import json
+from datetime import date
+from decimal import Decimal, InvalidOperation
+from pathlib import Path
+
+
+def audit(root: Path, expected_session: str) -> dict:
+    date.fromisoformat(expected_session)
+    errors, warnings = [], []
+    report_path = root / "analysis/performance/latest.json"
+    if not report_path.is_file():
+        return {"status": "FAIL", "expected_session": expected_session,
+                "errors": ["MISSING_LATEST_REPORT"], "warnings": []}
+
+    try:
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+        metrics = report["metrics"]
+        published = str(metrics["review_date"])
+    except (ValueError, KeyError, TypeError) as exc:
+        return {"status": "FAIL", "expected_session": expected_session,
+                "errors": ["INVALID_LATEST_REPORT: " + str(exc)], "warnings": []}
+
+    if published != expected_session:
+        errors.append("STALE_REPORT: expected " + expected_session + ", got " + published)
+    if metrics.get("paper_only") is not True:
+        errors.append("PAPER_ONLY_NOT_CONFIRMED")
+
+    manifest_path = root / "analysis/evidence" / published / "manifest.json"
+    if not manifest_path.is_file():
+        errors.append("MISSING_EVIDENCE_MANIFEST")
+    else:
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            if manifest.get("review_date") != published:
+                errors.append("MANIFEST_DATE_MISMATCH")
+            integrity = manifest.get("integrity_analysis") or {}
+            if integrity.get("status") != "PASS" or integrity.get("issues"):
+                errors.append("EVIDENCE_INTEGRITY_NOT_PASS")
+            for table in integrity.get("empty_tables") or []:
+                warnings.append("EMPTY_RESEARCH_TABLE: " + str(table))
+        except (ValueError, TypeError):
+            errors.append("INVALID_EVIDENCE_MANIFEST")
+
+    config = metrics.get("config") or {}
+    if "NBIS" not in (config.get("trade_symbols") or []):
+        warnings.append("NBIS_NOT_IN_REPORTED_RUNTIME_UNIVERSE")
+
+    # This is deliberately not called account P/L or an account equity curve:
+    # only realized rows from published, dated evidence are observable here.
+    evidence_root = root / "analysis/evidence"
+    pnl, row_count, sessions = Decimal("0"), 0, []
+    seen = set()
+    for csv_path in sorted(evidence_root.glob("????-??-??/realized.csv")):
+        try:
+            with csv_path.open(encoding="utf-8", newline="") as stream:
+                for row in csv.DictReader(stream):
+                    key = (csv_path.parent.name, row.get("id"), row.get("ts"))
+                    if key in seen:
+                        warnings.append("DUPLICATE_REALIZED_ROW: " + str(key))
+                        continue
+                    seen.add(key)
+                    pnl += Decimal(str(row["pnl"]))
+                    row_count += 1
+            sessions.append(csv_path.parent.name)
+        except (OSError, KeyError, InvalidOperation, ValueError) as exc:
+            errors.append("INVALID_REALIZED_CSV: " + str(csv_path) + ": " + str(exc))
+
+    warnings.append("ACCOUNT_EQUITY_RETURN_AND_DRAWDOWN_NOT_VERIFIABLE_FROM_PUBLISHED_EVIDENCE")
+    return {
+        "status": "FAIL" if errors else "WARN" if warnings else "PASS",
+        "expected_session": expected_session,
+        "published_session": published,
+        "published_realized_pnl_usd_observed_only": str(pnl.quantize(Decimal("0.01"))),
+        "published_realized_row_count": row_count,
+        "published_sessions_with_realized_file": sessions,
+        "account_equity_return_available": False,
+        "account_max_drawdown_available": False,
+        "errors": errors,
+        "warnings": sorted(set(warnings)),
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
+    parser.add_argument("--expected-session", required=True,
+                        help="YYYY-MM-DD of the last completed NYSE session")
+    args = parser.parse_args()
+    result = audit(args.root, args.expected_session)
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 2 if result["status"] == "FAIL" else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
