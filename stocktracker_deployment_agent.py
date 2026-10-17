@@ -237,11 +237,40 @@ def validate_request(req: dict):
     return pid, commit, validated
 
 
+def _is_runtime_output(path: str) -> bool:
+    """Allow only known generated research artifacts; never application code."""
+    path = path.replace("\\", "/")
+    if path in {
+        "analysis/performance/latest.json",
+        "analysis/performance/latest.md",
+        "analysis/proposals/REVIEW.md",
+        "analysis/proposals/current.json",
+        "stocktracker_runtime_audit.json",
+    }:
+        return True
+    if path.startswith("analysis/proposals/P-STOCK-") and path.endswith(".json"):
+        return True
+    if path.startswith("analysis/evidence/"):
+        return True
+    return False
+
+
 def pull_repo():
-    # Do not merge dirty local code.
-    dirty = run("git", "status", "--porcelain", "--untracked-files=all").stdout.strip()
-    if dirty:
-        raise RuntimeError("Local repo has uncommitted changes; deployment halted.")
+    # Preserve generated evidence while refusing unexpected local code changes.
+    # Git itself still blocks a pull that would overwrite any modified file.
+    result = run("git", "status", "--porcelain", "--untracked-files=all")
+    unexpected = []
+    for line in result.stdout.splitlines():
+        if len(line) < 4:
+            continue
+        rel = line[3:].strip().strip('"')
+        if not _is_runtime_output(rel):
+            unexpected.append(rel)
+    if unexpected:
+        raise RuntimeError(
+            "Local non-runtime changes block deployment: "
+            + ", ".join(unexpected[:12])
+        )
     run("git", "fetch", "--all")
     run("git", "pull", "--ff-only")
 
