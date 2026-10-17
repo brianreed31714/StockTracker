@@ -8,6 +8,7 @@ on:
       - 'proposal_registry.py'
       - 'post_close_review_guard.py'
       - 'sync_proposals_to_git.py'
+      - 'migrate_runtime_research.py'
       - '.github/workflows/runtime-report-smoke.yml'
   workflow_dispatch:
 jobs:
@@ -25,6 +26,7 @@ jobs:
         run: |
           python - <<'PY'
           import importlib.util, pathlib, py_compile, os, tempfile
+          py_compile.compile('migrate_runtime_research.py', doraise=True)
           names = ['build_daily_review_bundle','publish_supporting_evidence','daily_model_review','proposal_registry','post_close_review_guard','sync_proposals_to_git']
           for name in names: py_compile.compile(name+'.py', doraise=True)
           root=pathlib.Path(os.environ['STOCKTRACKER_RUNTIME_ROOT']).resolve()
