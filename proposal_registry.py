@@ -6,8 +6,11 @@ import json
 import os
 from datetime import datetime
 from pathlib import Path
+from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parent
+load_dotenv(ROOT / '.env.config')
+load_dotenv(ROOT / '.env', override=True)
 # Explicit opt-in; defaults preserve the active v1.10 file layout.
 # Set STOCKTRACKER_RUNTIME_ROOT to a folder OUTSIDE the Git checkout.
 _runtime_setting = os.getenv("STOCKTRACKER_RUNTIME_ROOT", "").strip()
