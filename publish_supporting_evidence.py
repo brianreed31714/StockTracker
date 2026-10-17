@@ -28,6 +28,8 @@ except ImportError:  # Keeps evidence export usable in minimal recovery environm
         return False
 
 ROOT = Path(__file__).resolve().parent
+load_dotenv(ROOT / ".env.config")
+load_dotenv(ROOT / ".env", override=True)
 # Explicit opt-in; defaults preserve the active v1.10 file layout.
 # Set STOCKTRACKER_RUNTIME_ROOT to a folder OUTSIDE the Git checkout.
 _runtime_setting = os.getenv("STOCKTRACKER_RUNTIME_ROOT", "").strip()
@@ -39,8 +41,6 @@ MARKET_TZ = ZoneInfo("America/New_York")
 EVIDENCE_ROOT = RUNTIME_ROOT / "analysis" / "evidence"
 DAILY_ROOT = RUNTIME_ROOT / "analysis" / "daily"
 
-load_dotenv(ROOT / ".env.config")
-load_dotenv(ROOT / ".env", override=True)
 
 
 def project_path(env_name: str, default_name: str) -> Path:
