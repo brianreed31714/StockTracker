@@ -1,6 +1,6 @@
 {
   "proposal_id": "P-STOCK-20260927-08",
-  "status": "READY_TO_DEPLOY",
+  "status": "CANCELLED",
   "commit": "c9ca0bb6bdb24160a004323eca4d41075d9f1310",
   "components": [
     "trader"
@@ -9,5 +9,6 @@
     "trader": "momentum_trader_v1_8_market_aware_premarket.py"
   },
   "mode": "PAPER",
-  "note": "Redeploy finalized v1.8 so dashboard_state.json exposes premarket_context. No trading logic or thresholds changed."
+  "note": "Redeploy finalized v1.8 so dashboard_state.json exposes premarket_context. No trading logic or thresholds changed.",
+  "cancel_reason": "2026-10-17 deployment reconciliation: stale pending request retired to prevent unexpected restart. v1.10 recovery baseline remains available; new deployments require new explicit request."
 }
