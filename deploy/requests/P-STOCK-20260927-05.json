@@ -1,6 +1,6 @@
 {
   "proposal_id": "P-STOCK-20260927-05",
-  "status": "READY_TO_DEPLOY",
+  "status": "CANCELLED",
   "commit": "d1d16d551f639d828002e88fe5b275898543ca62",
   "components": [
     "trader"
@@ -9,5 +9,6 @@
     "trader": "momentum_trader_v1_6_shadow_regime.py"
   },
   "mode": "SHADOW",
-  "note": "SHADOW-only market-regime research. Preserves existing paper order logic and thresholds; SGOV is a simulated defensive benchmark only."
+  "note": "SHADOW-only market-regime research. Preserves existing paper order logic and thresholds; SGOV is a simulated defensive benchmark only.",
+  "cancel_reason": "2026-10-17 deployment reconciliation: stale pending request retired to prevent unexpected restart. v1.10 recovery baseline remains available; new deployments require new explicit request."
 }
