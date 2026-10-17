@@ -5,8 +5,11 @@ import argparse
 import os
 import subprocess
 from pathlib import Path
+from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parent
+load_dotenv(ROOT / '.env.config')
+load_dotenv(ROOT / '.env', override=True)
 ALLOWED_PREFIXES = ("analysis/proposals/", "analysis/performance/", "analysis/evidence/")
 
 def run(*args, check=True):
