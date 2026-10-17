@@ -2,10 +2,14 @@
 from __future__ import annotations
 
 import argparse
+import os
 import subprocess
 from pathlib import Path
+from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parent
+load_dotenv(ROOT / '.env.config')
+load_dotenv(ROOT / '.env', override=True)
 ALLOWED_PREFIXES = ("analysis/proposals/", "analysis/performance/", "analysis/evidence/")
 
 def run(*args, check=True):
@@ -27,6 +31,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--message", default="Publish StockTracker proposals and performance")
     args = ap.parse_args()
+
+    # External reports are intentionally never added to the Git checkout.
+    # Publishing is a separate, explicit operation after review.
+    if os.getenv("STOCKTRACKER_RUNTIME_ROOT", "").strip():
+        print("Runtime reports stored externally; automatic Git evidence publishing skipped.")
+        return
 
     bad = dirty_outside_allowed()
     if bad:

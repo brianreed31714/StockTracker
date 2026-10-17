@@ -28,12 +28,19 @@ except ImportError:  # Keeps evidence export usable in minimal recovery environm
         return False
 
 ROOT = Path(__file__).resolve().parent
-MARKET_TZ = ZoneInfo("America/New_York")
-EVIDENCE_ROOT = ROOT / "analysis" / "evidence"
-DAILY_ROOT = ROOT / "analysis" / "daily"
-
 load_dotenv(ROOT / ".env.config")
 load_dotenv(ROOT / ".env", override=True)
+# Explicit opt-in; defaults preserve the active v1.10 file layout.
+# Set STOCKTRACKER_RUNTIME_ROOT to a folder OUTSIDE the Git checkout.
+_runtime_setting = os.getenv("STOCKTRACKER_RUNTIME_ROOT", "").strip()
+RUNTIME_ROOT = Path(_runtime_setting).expanduser().resolve() if _runtime_setting else ROOT
+if _runtime_setting and (RUNTIME_ROOT == ROOT or ROOT in RUNTIME_ROOT.parents):
+    raise ValueError("STOCKTRACKER_RUNTIME_ROOT must be outside the source repository")
+
+MARKET_TZ = ZoneInfo("America/New_York")
+EVIDENCE_ROOT = RUNTIME_ROOT / "analysis" / "evidence"
+DAILY_ROOT = RUNTIME_ROOT / "analysis" / "daily"
+
 
 
 def project_path(env_name: str, default_name: str) -> Path:
@@ -126,7 +133,7 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
 def file_metadata(path: Path, rows: int | None = None, first_ts: Any = None, last_ts: Any = None) -> dict[str, Any]:
     raw = path.read_bytes()
     result: dict[str, Any] = {
-        "path": str(path.relative_to(ROOT)).replace("\\", "/"),
+        "path": str(path.relative_to(RUNTIME_ROOT)).replace("\\", "/"),
         "bytes": len(raw),
         "sha256": hashlib.sha256(raw).hexdigest(),
     }
@@ -265,7 +272,7 @@ def export(date_text: str) -> tuple[dict[str, Any], Path]:
     bundle = read_json(performance_input)
     if isinstance(bundle, dict):
         bundle["supporting_logs"] = {
-            "manifest_path": str(manifest_path.relative_to(ROOT)).replace("\\", "/"),
+            "manifest_path": str(manifest_path.relative_to(RUNTIME_ROOT)).replace("\\", "/"),
             "published_file_count": len(files) + 1,
             "published_row_count": analysis["all_published_rows_analyzed"],
             "files": files,

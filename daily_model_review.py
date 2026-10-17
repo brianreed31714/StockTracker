@@ -13,12 +13,19 @@ from dotenv import load_dotenv
 from openai import OpenAI
 
 ROOT = Path(__file__).resolve().parent
-DAILY_DIR = ROOT / "analysis" / "daily"
-PERF_DIR = ROOT / "analysis" / "performance"
-MARKET_TZ = ZoneInfo("America/New_York")
-
 load_dotenv(ROOT / ".env.config")
 load_dotenv(ROOT / ".env", override=True)
+# Explicit opt-in; defaults preserve the active v1.10 file layout.
+# Set STOCKTRACKER_RUNTIME_ROOT to a folder OUTSIDE the Git checkout.
+_runtime_setting = os.getenv("STOCKTRACKER_RUNTIME_ROOT", "").strip()
+RUNTIME_ROOT = Path(_runtime_setting).expanduser().resolve() if _runtime_setting else ROOT
+if _runtime_setting and (RUNTIME_ROOT == ROOT or ROOT in RUNTIME_ROOT.parents):
+    raise ValueError("STOCKTRACKER_RUNTIME_ROOT must be outside the source repository")
+
+DAILY_DIR = RUNTIME_ROOT / "analysis" / "daily"
+PERF_DIR = RUNTIME_ROOT / "analysis" / "performance"
+MARKET_TZ = ZoneInfo("America/New_York")
+
 
 MODEL = os.getenv("DAILY_REVIEW_MODEL", os.getenv("OPENAI_MODEL", "gpt-5.6-sol"))
 MIN_SAMPLES = int(os.getenv("DAILY_REVIEW_MIN_PROPOSAL_SAMPLES", "12"))
