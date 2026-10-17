@@ -1,6 +1,6 @@
 {
   "proposal_id": "P-STOCK-20260927-06",
-  "status": "READY_TO_DEPLOY",
+  "status": "CANCELLED",
   "commit": "e9bc83a60a9874c8fc4b7fb80fb45f3768d0dec4",
   "components": [
     "trader"
@@ -9,5 +9,6 @@
     "trader": "momentum_trader_v1_7_financial_leverage_shadow.py"
   },
   "mode": "SHADOW",
-  "note": "XLF/FAS/FAZ SHADOW research only. FAS/FAZ are not tradable symbols and no paper order logic or thresholds are changed."
+  "note": "XLF/FAS/FAZ SHADOW research only. FAS/FAZ are not tradable symbols and no paper order logic or thresholds are changed.",
+  "cancel_reason": "2026-10-17 deployment reconciliation: stale pending request retired to prevent unexpected restart. v1.10 recovery baseline remains available; new deployments require new explicit request."
 }
