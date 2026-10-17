@@ -33,9 +33,10 @@ jobs:
               mod=importlib.util.module_from_spec(spec)
               spec.loader.exec_module(mod)
               if hasattr(mod,'RUNTIME_ROOT'): assert mod.RUNTIME_ROOT == root, (name,mod.RUNTIME_ROOT)
-              for attr in ('DAILY_DIR','PERF_DIR','EVIDENCE_ROOT','PROPOSAL_DIR','STATE_PATH'):
+              for attr in ('DAILY_DIR','PERF_DIR','EVIDENCE_ROOT','PROPOSAL_DIR'):
                   if hasattr(mod,attr): assert getattr(mod,attr).is_relative_to(root),(name,attr)
           import proposal_registry, post_close_review_guard, sync_proposals_to_git
+          assert post_close_review_guard.STATE_PATH.is_relative_to(root)
           proposal_registry.save_json(root/'analysis'/'proposals'/'test.json',{'ok':True})
           assert (root/'analysis'/'proposals'/'test.json').exists()
           post_close_review_guard.write_state({'review_date':'2026-10-17','status':'COMPLETED'})
