@@ -18,9 +18,13 @@ ROOT = Path(__file__).resolve().parent
 load_dotenv(ROOT / ".env.config")
 load_dotenv(ROOT / ".env", override=True)
 
+_runtime_setting = os.getenv("STOCKTRACKER_RUNTIME_ROOT", "").strip()
+RUNTIME_ROOT = Path(_runtime_setting).expanduser().resolve() if _runtime_setting else ROOT
+if _runtime_setting and (RUNTIME_ROOT == ROOT or ROOT in RUNTIME_ROOT.parents):
+    raise ValueError("STOCKTRACKER_RUNTIME_ROOT must be outside the source repository")
 MARKET_TZ = ZoneInfo("America/New_York")
-DAILY_DIR = ROOT / "analysis" / "daily"
-PERF_DIR = ROOT / "analysis" / "performance"
+DAILY_DIR = RUNTIME_ROOT / "analysis" / "daily"
+PERF_DIR = RUNTIME_ROOT / "analysis" / "performance"
 
 def project_path(env_name: str, default_name: str) -> Path:
     raw = str(os.getenv(env_name) or "").strip()
