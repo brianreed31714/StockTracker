@@ -7,8 +7,15 @@ from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-DAILY_DIR = ROOT / "analysis" / "daily"
-PROPOSAL_DIR = ROOT / "analysis" / "proposals"
+# Explicit opt-in; defaults preserve the active v1.10 file layout.
+# Set STOCKTRACKER_RUNTIME_ROOT to a folder OUTSIDE the Git checkout.
+_runtime_setting = os.getenv("STOCKTRACKER_RUNTIME_ROOT", "").strip()
+RUNTIME_ROOT = Path(_runtime_setting).expanduser().resolve() if _runtime_setting else ROOT
+if _runtime_setting and (RUNTIME_ROOT == ROOT or ROOT in RUNTIME_ROOT.parents):
+    raise ValueError("STOCKTRACKER_RUNTIME_ROOT must be outside the source repository")
+
+DAILY_DIR = RUNTIME_ROOT / "analysis" / "daily"
+PROPOSAL_DIR = RUNTIME_ROOT / "analysis" / "proposals"
 
 def load_json(path: Path, default=None):
     try:
