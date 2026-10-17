@@ -7,9 +7,12 @@ import json
 import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from dotenv import load_dotenv
 from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parent
+load_dotenv(ROOT / '.env.config')
+load_dotenv(ROOT / '.env', override=True)
 _runtime_setting = os.getenv("STOCKTRACKER_RUNTIME_ROOT", "").strip()
 RUNTIME_ROOT = Path(_runtime_setting).expanduser().resolve() if _runtime_setting else ROOT
 if _runtime_setting and (RUNTIME_ROOT == ROOT or ROOT in RUNTIME_ROOT.parents):
