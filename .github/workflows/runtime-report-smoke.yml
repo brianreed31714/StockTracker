@@ -44,7 +44,7 @@ jobs:
           import build_daily_review_bundle, publish_supporting_evidence
           build_daily_review_bundle.build('2026-10-17')
           assert (root/'analysis'/'daily'/'2026-10-17'/'performance_input.json').exists()
-          publish_supporting_evidence.publish('2026-10-17')
+          publish_supporting_evidence.export('2026-10-17')
           assert (root/'analysis'/'evidence'/'2026-10-17'/'manifest.json').exists()
           sync_proposals_to_git.main()
           assert not (pathlib.Path.cwd()/'analysis'/'proposals'/'test.json').exists()
