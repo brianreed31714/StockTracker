@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import subprocess
 from pathlib import Path
 
@@ -27,6 +28,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--message", default="Publish StockTracker proposals and performance")
     args = ap.parse_args()
+
+    # External reports are intentionally never added to the Git checkout.
+    # Publishing is a separate, explicit operation after review.
+    if os.getenv("STOCKTRACKER_RUNTIME_ROOT", "").strip():
+        print("Runtime reports stored externally; automatic Git evidence publishing skipped.")
+        return
 
     bad = dirty_outside_allowed()
     if bad:
