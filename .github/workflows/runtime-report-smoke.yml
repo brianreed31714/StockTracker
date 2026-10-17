@@ -1,0 +1,46 @@
+name: Isolated runtime report smoke tests
+on:
+  pull_request:
+    paths:
+      - 'build_daily_review_bundle.py'
+      - 'publish_supporting_evidence.py'
+      - 'daily_model_review.py'
+      - 'proposal_registry.py'
+      - 'post_close_review_guard.py'
+      - 'sync_proposals_to_git.py'
+      - '.github/workflows/runtime-report-smoke.yml'
+  workflow_dispatch:
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install python-dotenv requests openai
+      - name: Compile and check isolated writer locations
+        env:
+          STOCKTRACKER_RUNTIME_ROOT: ${{ runner.temp }}/stocktracker-research
+        run: |
+          python - <<'PY'
+          import importlib.util, pathlib, py_compile, os, tempfile
+          names = ['build_daily_review_bundle','publish_supporting_evidence','daily_model_review','proposal_registry','post_close_review_guard','sync_proposals_to_git']
+          for name in names: py_compile.compile(name+'.py', doraise=True)
+          root=pathlib.Path(os.environ['STOCKTRACKER_RUNTIME_ROOT']).resolve()
+          for name in names:
+              spec=importlib.util.spec_from_file_location(name, name+'.py')
+              mod=importlib.util.module_from_spec(spec)
+              spec.loader.exec_module(mod)
+              if hasattr(mod,'RUNTIME_ROOT'): assert mod.RUNTIME_ROOT == root, (name,mod.RUNTIME_ROOT)
+              for attr in ('DAILY_DIR','PERF_DIR','EVIDENCE_ROOT','PROPOSAL_DIR','STATE_PATH'):
+                  if hasattr(mod,attr): assert getattr(mod,attr).is_relative_to(root),(name,attr)
+          import proposal_registry, post_close_review_guard, sync_proposals_to_git
+          proposal_registry.save_json(root/'analysis'/'proposals'/'test.json',{'ok':True})
+          assert (root/'analysis'/'proposals'/'test.json').exists()
+          post_close_review_guard.write_state({'review_date':'2026-10-17','status':'COMPLETED'})
+          assert (root/'post_close_review_state.json').exists()
+          sync_proposals_to_git.main()
+          assert not (pathlib.Path.cwd()/'analysis'/'proposals'/'test.json').exists()
+          print('PASS: isolated outputs, review state, and no automatic Git sync')
+          PY
