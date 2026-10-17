@@ -10,7 +10,11 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parent
-STATE_PATH = ROOT / "post_close_review_state.json"
+_runtime_setting = os.getenv("STOCKTRACKER_RUNTIME_ROOT", "").strip()
+RUNTIME_ROOT = Path(_runtime_setting).expanduser().resolve() if _runtime_setting else ROOT
+if _runtime_setting and (RUNTIME_ROOT == ROOT or ROOT in RUNTIME_ROOT.parents):
+    raise ValueError("STOCKTRACKER_RUNTIME_ROOT must be outside the source repository")
+STATE_PATH = RUNTIME_ROOT / "post_close_review_state.json"
 MARKET_TZ = ZoneInfo("America/New_York")
 
 
@@ -22,6 +26,7 @@ def read_state() -> dict:
 
 
 def write_state(value: dict) -> None:
+    STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
     temp = STATE_PATH.with_suffix(".json.tmp")
     temp.write_text(json.dumps(value, indent=2), encoding="utf-8")
     os.replace(temp, STATE_PATH)
