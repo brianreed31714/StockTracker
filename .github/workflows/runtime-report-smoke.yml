@@ -41,6 +41,11 @@ jobs:
           assert (root/'analysis'/'proposals'/'test.json').exists()
           post_close_review_guard.write_state({'review_date':'2026-10-17','status':'COMPLETED'})
           assert (root/'post_close_review_state.json').exists()
+          import build_daily_review_bundle, publish_supporting_evidence
+          build_daily_review_bundle.build('2026-10-17')
+          assert (root/'analysis'/'daily'/'2026-10-17'/'performance_input.json').exists()
+          publish_supporting_evidence.publish('2026-10-17')
+          assert (root/'analysis'/'evidence'/'2026-10-17'/'manifest.json').exists()
           sync_proposals_to_git.main()
           assert not (pathlib.Path.cwd()/'analysis'/'proposals'/'test.json').exists()
           print('PASS: isolated outputs, review state, and no automatic Git sync')
