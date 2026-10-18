@@ -55,6 +55,11 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw "Registry validation failed" }
           python -m unittest -v infrastructure.test_registry_contract infrastructure.test_runtime_inventory infrastructure.test_agent_preflight
           if ($LASTEXITCODE -ne 0) { throw "Registry negative tests failed" }
+      - name: Real Windows CIM discovery and project process isolation
+        shell: pwsh
+        run: |
+          python -m unittest -v infrastructure.test_windows_integration test_project_process_control
+          if ($LASTEXITCODE -ne 0) { throw "Windows process integration failed" }
       - name: Compile deployable modules without imports or side effects
         shell: pwsh
         run: |
