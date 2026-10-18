@@ -2,13 +2,15 @@
 
 StockTracker is a PAPER-ONLY trading research system. The agentic workflow reviews paper-trading evidence, publishes human-readable proposals, accepts proposal approval in ChatGPT, and can deploy approved code/config updates through the local deployment agent.
 
-## Managed processes
+## Managed processes (version resolution)
 
-- `momentum_trader_v1_4_agentic.py`
-- `xom_geo_feed_v1_1_agentic.py`
-- `momentum_dashboard_v1_3_agentic.py`
-- `stocktracker_deployment_agent.py`
-- `stocktracker_supervisor.py`
+- Trader: `momentum_trader_v*.py` resolved from the **local active manifest** first; `.env.config` fallback currently names v1.9. Windows observation on 2026-10-18 showed v1.10.
+- Geo feed: `xom_geo_feed_v1_1_agentic.py` (or the local active-manifest override).
+- Dashboard: `momentum_dashboard_v1_3_agentic.py` (or the local active-manifest override).
+- Deployment agent: `stocktracker_deployment_agent.py`.
+- Supervisor: `stocktracker_supervisor.py`.
+
+See [infrastructure registry](infrastructure/registry.json) and [operations contract](infrastructure/OPERATIONS.md) for source ownership, read-only inventory and enforced release preflight.
 
 The deployment agent has regression guards that prevent a future release from silently removing PAPER-ONLY mode, portfolio/daily-loss controls, split config loading, geo-feed boundaries, or read-only dashboard behavior.
 
