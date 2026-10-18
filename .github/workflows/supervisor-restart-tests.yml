@@ -1,0 +1,19 @@
+name: Supervisor restart safety tests
+on:
+  pull_request:
+  push:
+    branches:
+      - feature/controlled-supervisor-restarts-20261017
+jobs:
+  windows-process-tests:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Test process isolation
+        run: python -m unittest -v test_project_process_control.py
+      - name: Compile deployment scripts
+        run: python -m py_compile project_process_control.py *supervisor.py
+        shell: bash
