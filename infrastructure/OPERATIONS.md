@@ -31,7 +31,15 @@ The currently approved StockTracker trading path is paper-only: trader code must
 
 ## Local host inventory (read-only)
 
-After a clean fast-forward to the exact expected `origin/main`, run from the respective repository root in PowerShell:
+For a **single** side-effect-free inventory of both repositories, once the new files have synced to the PC, run from either repository root:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\infrastructure\audit_both_projects.ps1
+```
+
+This helper intentionally does not run Git commands, stop services or create tasks; it reports if either repository lacks the new files. The two local reports are written only to each repository's ignored `deploy/state/` folder.
+
+For project-specific inspection, after a clean fast-forward to the exact expected `origin/main`, run from the respective repository root in PowerShell:
 
 ```powershell
 python -m infrastructure.registry_contract --local-safety
@@ -63,6 +71,8 @@ Both deployment agents use explicit `git fetch origin main` + `git merge --ff-on
 4. **Deploy:** local agent verifies source blob and registry before touching a running process; preserve previous manifest and rollback plan.
 5. **Verify on the host:** compare manifest/commit and start times, scheduled task and component identity, dashboard status, and required data-feed heartbeat. Require repeated successful observation after startup (not just one good JSON report).
 6. **Report:** declare "code committed", "CI validated", "host observed", or "release verified" separately. Never collapse those into "deployed successfully" without host evidence.
+
+Deployment agents now record `verification_status=UNVERIFIED` and notify that supervisor startup was acknowledged, **not** that sustained health was proven. Invalid unchanged release requests are locally quarantined as `VALIDATION_FAILED` rather than retried repeatedly.
 
 The repository does **not yet** contain a fully proven autonomous deployment-attestation loop for every service. Treat any unresolved runtime verification as `UNVERIFIED`, not success. In particular, the existing supervisor success handshake primarily verifies processes, not three independent healthy operating cycles.
 
