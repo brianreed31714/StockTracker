@@ -367,6 +367,7 @@ def deploy(req_path: Path, req: dict):
             "deployed_at": datetime.now().isoformat(timespec="seconds"),
             "files": {c: str(p.relative_to(ROOT)).replace("\\","/") for c,p in validated.items()},
             "pids": {c: p.pid for c,p in started},
+            "verification_status": "UNVERIFIED",
         }
         save_manifest(ACTIVE_MANIFEST, active)
 
@@ -378,6 +379,7 @@ def deploy(req_path: Path, req: dict):
             "DEPLOYED",
             commit=commit,
             deployed_at=active["deployed_at"],
+            verification_status="UNVERIFIED",
         )
         # A deployed trader is not healthy until the supervisor has cycled all project services.
         # Supervisor is intentionally separate and is never terminated by this operation.
@@ -405,8 +407,9 @@ def deploy(req_path: Path, req: dict):
             time.sleep(1)
         else:
             raise RuntimeError("Supervisor did not confirm controlled restart")
-        log(f"{pid}: deployment successful")
-        push("StockTracker Deployment", f"{pid} deployed successfully.\nCommit {commit[:10]}")
+        log(f"{pid}: supervisor acknowledged code startup; runtime health remains UNVERIFIED")
+        push("StockTracker Deployment Pending Verification",
+             f"{pid}: supervisor acknowledged startup; sustained health NOT verified.\nCommit {commit[:10]}")
         return True
 
     except Exception as exc:
