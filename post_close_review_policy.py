@@ -55,6 +55,11 @@ def review_retry_decision(
     if status == "COMPLETED":
         return {"action": "SKIP", "reason": "COMPLETED",
                 "attempts": attempts, "next_attempt_utc": None}
+    if status == "FAILED" and state.get("failure_category") == "AUTHENTICATION":
+        # A bad or unauthorized API key will not recover from retrying every
+        # five minutes. Require explicit correction; a new session resets.
+        return {"action": "SKIP", "reason": "NON_RETRYABLE_AUTH",
+                "attempts": attempts, "next_attempt_utc": None}
     if status == "RUNNING":
         started = parse_utc_timestamp(state.get("started_at"))
         if started is None:
