@@ -1,0 +1,13 @@
+{
+  "proposal_id": "P-STOCK-20261018-01",
+  "status": "READY_TO_DEPLOY",
+  "commit": "a24d545dbb8652de3fd0a73a19394c21c78ef1ff",
+  "components": [
+    "trader"
+  ],
+  "files": {
+    "trader": "momentum_trader_v1_10_runtime_audit.py"
+  },
+  "mode": "PAPER",
+  "note": "Approved model configuration refresh. Pull latest main with OPENAI_MODEL=gpt-6-luna and DAILY_REVIEW_MODEL=gpt-6-luna. Restart paper trader only; preserve all other components and risk controls. Verify API calls and runtime health; do not enable live trading."
+}
