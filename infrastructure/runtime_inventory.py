@@ -104,6 +104,30 @@ ConvertTo-Json -InputObject $rows -Depth 4 -Compress
     return powershell_json(query) or []
 
 
+def classify_task_result(raw_value) -> dict:
+    """Classify an action's last result without mistaking a running task for failure."""
+    if raw_value is None:
+        return {"state": "UNKNOWN", "hex": "UNAVAILABLE"}
+    try:
+        code = int(raw_value) & 0xFFFFFFFF
+    except (TypeError, ValueError, OverflowError):
+        return {"state": "UNKNOWN", "hex": "UNAVAILABLE"}
+    result = {"hex": f"0x{code:08X}"}
+    if code == 0:
+        result["state"] = "SUCCEEDED"
+    elif code == 0x41301:
+        result["state"] = "RUNNING"
+    elif code == 0x41303:
+        result["state"] = "NOT_RUN"
+    elif code == 0x8007042B:
+        result["state"] = "PROCESS_TERMINATED_UNEXPECTEDLY"
+    elif code & 0x80000000 or (0 < code < 256):
+        result["state"] = "FAILED_OR_NONZERO_EXIT"
+    else:
+        result["state"] = "OTHER"
+    return result
+
+
 def evaluate_task_registration(task: dict, expected: dict,
                                process_state: str | None = None) -> dict:
     """Treat Ready as a registered idle task, not proof of a stopped child.
@@ -133,6 +157,15 @@ def evaluate_task_registration(task: dict, expected: dict,
     if expected_trigger.startswith("weekday") and not any("weekly" in x for x in kinds):
         warnings.append("Weekly review trigger not verified")
 
+    last_result = classify_task_result(task.get("last_result"))
+    if last_result["state"] in {"PROCESS_TERMINATED_UNEXPECTEDLY", "FAILED_OR_NONZERO_EXIT"}:
+        warnings.append(
+            "Previous scheduled invocation returned a non-success result "
+            + last_result["hex"]
+        )
+    elif last_result["state"] == "OTHER":
+        cautions.append("Last task result not recognized: " + last_result["hex"])
+
     supervisor = expected["name"].endswith(" Supervisor")
     if supervisor and state == "READY":
         if process_state == "OBSERVED":
@@ -146,7 +179,11 @@ def evaluate_task_registration(task: dict, expected: dict,
         "name": expected["name"],
         "task_state": state,
         "supervisor_process_state": process_state if supervisor else "NOT_APPLICABLE",
-        "registration_consistent": not warnings,
+        "registration_consistent": not any(
+            "Task " in w or "trigger" in w or "different script" in w for w in warnings
+        ),
+        "last_result": last_result,
+        "task_operational_status": "NEEDS_ATTENTION" if warnings else "NO_FAILURE_OBSERVED",
         "startup_provenance_verified": False,
         "warnings": warnings,
         "cautions": cautions,
