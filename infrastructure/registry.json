@@ -210,6 +210,23 @@
       "health": {
         "type": "not_applicable"
       }
+    },
+    {
+      "id": "host_audit",
+      "role": "read_only_audit",
+      "entrypoint": "infrastructure/audit_both_projects.ps1",
+      "managed_by": null,
+      "depends_on": [
+        "runtime_inventory"
+      ],
+      "deployment_component": null,
+      "script_pattern": null,
+      "source_files": [
+        "infrastructure/audit_both_projects.ps1"
+      ],
+      "health": {
+        "type": "not_applicable"
+      }
     }
   ],
   "runtime_notes": [
