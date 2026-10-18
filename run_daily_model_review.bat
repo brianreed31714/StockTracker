@@ -17,6 +17,7 @@ echo.
 echo [0/6] Deployment agent owns Git synchronization; review reads local scripts only.
 
 python post_close_review_guard.py begin --date %REVIEWDATE%
+if errorlevel 23 goto :auth_blocked
 if errorlevel 22 goto :retry_cooldown
 if errorlevel 21 goto :retry_exhausted
 if errorlevel 20 goto :already_done
@@ -38,6 +39,8 @@ echo.
 echo [3/6] Running GPT model review over full-log summaries and integrity checks...
 set FAILSTAGE=model_review
 python daily_model_review.py --date %REVIEWDATE%
+if errorlevel 3 goto :fail
+if errorlevel 2 goto :auth_failure
 if errorlevel 1 goto :fail
 
 echo.
@@ -64,6 +67,10 @@ echo StockTracker post-close review complete.
 echo ============================================================
 exit /b 0
 
+:auth_blocked
+echo StockTracker post-close review stopped: previous OpenAI authorization failure.
+exit /b 23
+
 :retry_exhausted
 echo StockTracker post-close review retry limit reached; needs investigation.
 exit /b 21
@@ -75,6 +82,11 @@ exit /b 22
 :already_done
 echo StockTracker post-close review already completed or is running.
 exit /b 0
+
+:auth_failure
+python post_close_review_guard.py fail --date %REVIEWDATE% --stage model_review --category AUTHENTICATION --error "OpenAI authorization or API key validation failed"
+echo StockTracker review stopped on non-retryable OpenAI authorization failure.
+exit /b 2
 
 :fail
 python post_close_review_guard.py fail --date %REVIEWDATE% --stage %FAILSTAGE% --error "daily review pipeline failed"
