@@ -66,7 +66,10 @@
       ],
       "health": {
         "type": "process"
-      }
+      },
+      "code_imports": [
+        "registry_contract"
+      ]
     },
     {
       "id": "geo_feed",
@@ -112,7 +115,10 @@
       "health": {
         "type": "process_plus_dashboard_state",
         "artifact": "dashboard_state.json"
-      }
+      },
+      "code_imports": [
+        "zpta_shadow"
+      ]
     },
     {
       "id": "dashboard",
@@ -185,7 +191,10 @@
       ],
       "health": {
         "type": "not_applicable"
-      }
+      },
+      "code_imports": [
+        "registry_contract"
+      ]
     },
     {
       "id": "zpta_shadow",
