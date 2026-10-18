@@ -77,7 +77,7 @@ $rows = @()
 foreach ($name in @(""" + literal_names + r""")) {
   $task = Get-ScheduledTask -TaskName $name -ErrorAction SilentlyContinue
   if ($null -eq $task) {
-    $rows += [pscustomobject]@{name=$name; state='MISSING'; last_result=$null; run_level=''; action_script=''}
+    $rows += [pscustomobject]@{name=$name; state='MISSING'; last_result=$null; run_level=''; action_script=''; last_run_utc=''; trigger_types=@()}
     continue
   }
   $info = Get-ScheduledTaskInfo -TaskName $name -ErrorAction SilentlyContinue
@@ -91,11 +91,66 @@ foreach ($name in @(""" + literal_names + r""")) {
     last_result=if ($info) { [int64]$info.LastTaskResult } else { $null }
     run_level=[string]$task.Principal.RunLevel
     action_script=$script
+    last_run_utc=if ($info -and $info.LastRunTime -and $info.LastRunTime.Year -ge 2000) {
+      $info.LastRunTime.ToUniversalTime().ToString('o')
+    } else { '' }
+    trigger_types=@($task.Triggers | ForEach-Object {
+      [string]($_.CimClass.CimClassName -replace '^MSFT_Task','')
+    })
   }
 }
 ConvertTo-Json -InputObject $rows -Depth 4 -Compress
 """
     return powershell_json(query) or []
+
+
+def evaluate_task_registration(task: dict, expected: dict,
+                               process_state: str | None = None) -> dict:
+    """Treat Ready as a registered idle task, not proof of a stopped child.
+
+    A separately observed supervisor can be alive while its scheduled
+    launcher has already returned. That leaves *startup provenance* unknown
+    and must not be equated with a Windows process outage.
+    """
+    warnings: list[str] = []
+    cautions: list[str] = []
+    state = str(task.get("state") or "").upper()
+    expected_script = PurePosixPath(expected["script"]).name.lower()
+    observed_script = str(task.get("action_script") or "").lower()
+    if state not in {"READY", "RUNNING"}:
+        warnings.append("Task missing, disabled or in unexpected state")
+    if str(task.get("run_level") or "").lower() != "highest":
+        warnings.append("Task run level differs from expected Highest")
+    if not observed_script:
+        warnings.append("Task action script could not be verified")
+    elif observed_script != expected_script:
+        warnings.append("Task launches a different script than the registry")
+
+    kinds = [str(x).lower() for x in task.get("trigger_types") or []]
+    expected_trigger = str(expected.get("trigger") or "").lower()
+    if expected_trigger == "at_logon" and not any("logon" in x for x in kinds):
+        warnings.append("Logon trigger not verified")
+    if expected_trigger.startswith("weekday") and not any("weekly" in x for x in kinds):
+        warnings.append("Weekly review trigger not verified")
+
+    supervisor = expected["name"].endswith(" Supervisor")
+    if supervisor and state == "READY":
+        if process_state == "OBSERVED":
+            cautions.append("Supervisor process observed, but scheduled task is idle; startup provenance unverified")
+        else:
+            warnings.append("Supervisor task idle and supervisor process not positively identified")
+    if supervisor and state == "RUNNING" and process_state != "OBSERVED":
+        warnings.append("Supervisor task running, but supervisor process not positively identified")
+
+    return {
+        "name": expected["name"],
+        "task_state": state,
+        "supervisor_process_state": process_state if supervisor else "NOT_APPLICABLE",
+        "registration_consistent": not warnings,
+        "startup_provenance_verified": False,
+        "warnings": warnings,
+        "cautions": cautions,
+    }
 
 
 def latest_launches(log_file: Path) -> dict[int, dict]:
@@ -233,16 +288,21 @@ def collect(root: Path) -> dict:
             "artifact": report_health(root, component),
         }
     warnings = []
+    cautions = []
+    task_assessments = []
     for task in tasks:
-        expected = next(t["script"] for t in registry["scheduled_tasks"] if t["name"] == task["name"])
-        state = task.get("state")
-        expected_running = task["name"].endswith(" Supervisor")
-        if state not in ({"Running"} if expected_running else {"Running", "Ready"}):
-            warnings.append(f"Scheduled task not in expected state: {task['name']}")
-        if task.get("run_level", "").lower() != "highest":
-            warnings.append(f"Scheduled task is not configured for Highest run level: {task['name']}")
-        if task.get("action_script") and task["action_script"] != Path(expected).name:
-            warnings.append(f"Unexpected scheduled task script: {task['name']}")
+        expected = next((item for item in registry["scheduled_tasks"] if item["name"] == task["name"]), None)
+        if expected is None:
+            warnings.append("Observed an undeclared scheduled task")
+            continue
+        is_supervisor = task["name"].endswith(" Supervisor")
+        supervisor_state = observed["supervisor"]["process"]["state"] if is_supervisor else None
+        assessment = evaluate_task_registration(task, expected, supervisor_state)
+        task_assessments.append(assessment)
+        warnings.extend(f"{task['name']}: {item}" for item in assessment["warnings"])
+        cautions.extend(f"{task['name']}: {item}" for item in assessment["cautions"])
+    if not tasks:
+        warnings.append("No scheduled tasks could be verified")
     if discovery_error:
         warnings.append(discovery_error)
     for cid, state in observed.items():
@@ -271,10 +331,13 @@ def collect(root: Path) -> dict:
         "active_manifest_commit": str(manifest.get("commit") or "UNVERIFIED"),
         "active_manifest_files": active_files,
         "tasks": tasks,
+        "task_assessments": task_assessments,
         "components": observed,
         "host_snapshot_consistent": discovery_error is None and not warnings,
+        "startup_provenance_verified": False,  # Requires reboot/logon lineage or a separate attestation.
         "release_verified": False,  # Requires a separate approved-commit + sustained-health attestation.
         "warnings": warnings,
+        "cautions": cautions,
         "authority": "local read-only Windows evidence; GitHub tests are not runtime proof",
     }
 
