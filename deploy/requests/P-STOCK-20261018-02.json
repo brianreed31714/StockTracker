@@ -1,6 +1,6 @@
 {
   "proposal_id": "P-STOCK-20261018-02",
-  "status": "READY_TO_DEPLOY",
+  "status": "DEPLOYED",
   "commit": "286dd9416f291580797256d573dca14ca55ccdce",
   "components": [
     "trader"
@@ -9,5 +9,11 @@
     "trader": "momentum_trader_v1_10_runtime_audit.py"
   },
   "mode": "PAPER",
-  "note": "Approved controlled refresh after GPT-6 Luna daily-review high-effort code change. Pull latest main, restart paper trader only, preserve all other services and risk controls. Do not enable live trading. Daily review is a separate scheduled process and will use updated code on its next launch. Verify restart and model API success in local logs."
+  "note": "Approved controlled refresh after GPT-6 Luna daily-review high-effort code change. Pull latest main, restart paper trader only, preserve all other services and risk controls. Do not enable live trading. Daily review is a separate scheduled process and will use updated code on its next launch. Verify restart and model API success in local logs.",
+  "history_reconciliation": {
+    "recorded_status": "DEPLOYED",
+    "evidence": "User-supplied Windows deploy/state/processed_requests.json, 2026-10-18",
+    "current_active_release": "P-STOCK-20261018-02",
+    "explanation": "Historical deployment already recorded on host; preserve original commit and component files and never replay."
+  }
 }
