@@ -44,7 +44,7 @@ from pathlib import Path
 
 import requests
 from dotenv import load_dotenv
-from infrastructure.registry_contract import release_preflight
+from infrastructure.registry_contract import release_preflight, enforce_commit_release_scope
 
 ROOT = Path(__file__).resolve().parent
 DEPLOY_DIR = ROOT / "deploy"
@@ -226,6 +226,7 @@ def validate_request(req: dict):
     files = req.get("files") or {}
     # Fail closed on component dependencies and paper safety before any process stop.
     release_preflight(ROOT, comps, files)
+    enforce_commit_release_scope(ROOT, commit, comps)
     if not comps:
         raise ValueError("No components requested.")
 
