@@ -14,9 +14,7 @@ echo Review date: %REVIEWDATE%
 echo ============================================================
 echo.
 
-echo [0/6] Updating local repo...
-git pull --ff-only
-if errorlevel 1 goto :fail_before_lock
+echo [0/6] Deployment agent owns Git synchronization; review reads local scripts only.
 
 python post_close_review_guard.py begin --date %REVIEWDATE%
 if errorlevel 20 goto :already_done
