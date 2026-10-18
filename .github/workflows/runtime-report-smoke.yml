@@ -1,5 +1,11 @@
 name: Isolated runtime report smoke tests
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'post_close_review_guard.py'
+      - 'run_daily_model_review.bat'
+      - '.github/workflows/runtime-report-smoke.yml'
   pull_request:
     paths:
       - 'build_daily_review_bundle.py'
@@ -43,6 +49,9 @@ jobs:
           assert (root/'analysis'/'proposals'/'test.json').exists()
           post_close_review_guard.write_state({'review_date':'2026-10-17','status':'COMPLETED'})
           assert (root/'post_close_review_state.json').exists()
+          assert pathlib.Path('post_close_review_state.json').is_file()
+          assert post_close_review_guard.begin('2026-10-17') == 20
+          assert 'git pull --ff-only' not in pathlib.Path('run_daily_model_review.bat').read_text()
           import build_daily_review_bundle, publish_supporting_evidence
           build_daily_review_bundle.build('2026-10-17')
           assert (root/'analysis'/'daily'/'2026-10-17'/'performance_input.json').exists()
