@@ -1,6 +1,6 @@
 {
   "proposal_id": "P-STOCK-20261001-01",
-  "status": "READY_TO_DEPLOY",
+  "status": "DEPLOYED",
   "commit": "05103683bcedb98a6bdc5a3870d881a4157add66",
   "components": [
     "trader"
@@ -9,5 +9,11 @@
     "trader": "momentum_trader_v1_9_zpta_shadow.py"
   },
   "mode": "PAPER",
-  "note": "Reporting and instrumentation only. Publishes sanitized supporting evidence and starts the daily AI analysis five minutes after Alpaca's actual session close, including early-close days. Preserves paper-only execution and all existing risk limits."
+  "note": "Reporting and instrumentation only. Publishes sanitized supporting evidence and starts the daily AI analysis five minutes after Alpaca's actual session close, including early-close days. Preserves paper-only execution and all existing risk limits.",
+  "history_reconciliation": {
+    "recorded_status": "DEPLOYED",
+    "evidence": "2026-10-18 read-only Windows audit and user-supplied local deploy/state/processed_requests.json status",
+    "current_active_release": "P-STOCK-20261018-02",
+    "explanation": "Historical request already processed on the Windows host. Reconcile GitHub status only; do not replay or reactivate old release. Original approved commit/files preserved."
+  }
 }
