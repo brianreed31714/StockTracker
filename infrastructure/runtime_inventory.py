@@ -157,6 +157,8 @@ def report_health(root: Path, component: dict, *, now: datetime | None = None) -
     if not artifact:
         return {"state": "NO_ARTIFACT_CONTRACT"}
     p = safe_path(root, artifact)
+    if p.is_dir():
+        return {"state": "OBSERVED_DIRECTORY"}
     if not p.is_file():
         return {"state": "MISSING"}
     if health.get("type") != "json_heartbeat":
@@ -232,8 +234,12 @@ def collect(root: Path) -> dict:
     warnings = []
     for task in tasks:
         expected = next(t["script"] for t in registry["scheduled_tasks"] if t["name"] == task["name"])
-        if task.get("state") not in {"Running", "Ready"}:
-            warnings.append(f"Task not running/ready: {task['name']}")
+        state = task.get("state")
+        expected_running = task["name"].endswith(" Supervisor")
+        if state not in ({"Running"} if expected_running else {"Running", "Ready"}):
+            warnings.append(f"Scheduled task not in expected state: {task['name']}")
+        if task.get("run_level", "").lower() != "highest":
+            warnings.append(f"Scheduled task is not configured for Highest run level: {task['name']}")
         if task.get("action_script") and task["action_script"] != Path(expected).name:
             warnings.append(f"Unexpected scheduled task script: {task['name']}")
     if discovery_error:
@@ -243,7 +249,7 @@ def collect(root: Path) -> dict:
             warnings.append(f"Duplicate process: {cid}")
         if state["process"]["state"] == "UNKNOWN" and registry["components"]:
             warnings.append(f"Process identity unverified: {cid}")
-        if state["artifact"]["state"] in {"STALE", "DEGRADED", "ERROR", "UNREADABLE", "CLOCK_SKEW"}:
+        if state["artifact"]["state"] in {"MISSING", "STALE", "DEGRADED", "ERROR", "INCONSISTENT", "UNREADABLE", "CLOCK_SKEW"}:
             warnings.append(f"Artifact health needs attention: {cid}")
     active_files = {}
     for component, path in (manifest.get("files") or {}).items():
@@ -256,7 +262,8 @@ def collect(root: Path) -> dict:
         "active_manifest_files": active_files,
         "tasks": tasks,
         "components": observed,
-        "runtime_verified": discovery_error is None and not warnings,
+        "host_snapshot_consistent": discovery_error is None and not warnings,
+        "release_verified": False,  # Requires a separate approved-commit + sustained-health attestation.
         "warnings": warnings,
         "authority": "local read-only Windows evidence; GitHub tests are not runtime proof",
     }
