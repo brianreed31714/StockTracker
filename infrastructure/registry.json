@@ -231,6 +231,30 @@
       "health": {
         "type": "not_applicable"
       }
+    },
+    {
+      "id": "review_activation",
+      "role": "manual_local_maintenance",
+      "entrypoint": "infrastructure/activate_review_repair.py",
+      "managed_by": null,
+      "depends_on": [
+        "runtime_inventory",
+        "registry_contract",
+        "trader"
+      ],
+      "code_imports": [
+        "runtime_inventory",
+        "registry_contract"
+      ],
+      "deployment_component": null,
+      "script_pattern": null,
+      "source_files": [
+        "infrastructure/activate_review_repair.py"
+      ],
+      "health": {
+        "type": "not_applicable"
+      },
+      "notes": "Runs only on Windows with --apply and explicit user action; scopes stop request to one verified StockTracker paper trader PID; never a remote GitHub deployment action."
     }
   ],
   "runtime_notes": [
