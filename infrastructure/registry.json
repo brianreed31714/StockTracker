@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "project": "StockTracker",
+  "platform": "Windows",
+  "mode": "PAPER_ONLY",
+  "registry_policy": "fail_closed_before_process_change",
+  "settings_file": ".env.config",
+  "local_secrets_file": ".env",
+  "runtime_manifest": "deploy/state/active_release.json",
+  "inventory_output": "deploy/state/infrastructure_inventory.json",
+  "safety": {
+    "tracked_settings": {},
+    "effective_settings_must_not_enable": [],
+    "trader_source_markers": [
+      "PAPER_ONLY = True",
+      "paper=True"
+    ]
+  },
+  "scheduled_tasks": [
+    {
+      "name": "StockTracker Supervisor",
+      "installer": "install_stocktracker_tasks.ps1",
+      "script": "stocktracker_supervisor.py",
+      "trigger": "at_logon",
+      "run_level": "highest",
+      "host_verified": false
+    },
+    {
+      "name": "StockTracker Daily Review",
+      "installer": "install_stocktracker_tasks.ps1",
+      "script": "run_daily_model_review.bat",
+      "trigger": "weekday_13_30_local",
+      "run_level": "highest",
+      "host_verified": false
+    }
+  ],
+  "components": [
+    {
+      "id": "supervisor",
+      "role": "service",
+      "entrypoint": "stocktracker_supervisor.py",
+      "managed_by": null,
+      "depends_on": [],
+      "deployment_component": null,
+      "script_pattern": "stocktracker_supervisor.py",
+      "source_files": [
+        "stocktracker_supervisor.py",
+        "project_process_control.py"
+      ],
+      "health": {
+        "type": "process"
+      }
+    },
+    {
+      "id": "deployment_agent",
+      "role": "service",
+      "entrypoint": "stocktracker_deployment_agent.py",
+      "managed_by": "supervisor",
+      "depends_on": [],
+      "deployment_component": null,
+      "script_pattern": "stocktracker_deployment_agent.py",
+      "source_files": [
+        "stocktracker_deployment_agent.py"
+      ],
+      "health": {
+        "type": "process"
+      }
+    },
+    {
+      "id": "geo_feed",
+      "role": "read_only_feed",
+      "entrypoint": "xom_geo_feed_v1_1_agentic.py",
+      "entrypoint_resolution": "local_manifest_then_env_fallback",
+      "config_key": "STOCKTRACKER_ACTIVE_GEO",
+      "manifest_key": "geo_feed",
+      "managed_by": "supervisor",
+      "depends_on": [],
+      "deployment_component": "geo_feed",
+      "script_pattern": "xom_geo_feed*.py",
+      "source_files": [
+        "xom_geo_feed_v1_1_agentic.py"
+      ],
+      "health": {
+        "type": "json_feed",
+        "artifact": "geo_feed.json"
+      }
+    },
+    {
+      "id": "trader",
+      "role": "trading_engine",
+      "entrypoint": "momentum_trader_v1_9_zpta_shadow.py",
+      "entrypoint_resolution": "local_manifest_then_env_fallback",
+      "config_key": "STOCKTRACKER_ACTIVE_TRADER",
+      "manifest_key": "trader",
+      "managed_by": "supervisor",
+      "depends_on": [
+        "geo_feed"
+      ],
+      "dependency_optional": [
+        "geo_feed"
+      ],
+      "deployment_component": "trader",
+      "script_pattern": "momentum_trader_*.py",
+      "source_files": [
+        "momentum_trader_v1_9_zpta_shadow.py",
+        "momentum_trader_v1_10_runtime_audit.py",
+        "post_close_review_guard.py",
+        "zpta_specialist_v0_1.py"
+      ],
+      "health": {
+        "type": "process_plus_dashboard_state",
+        "artifact": "dashboard_state.json"
+      }
+    },
+    {
+      "id": "dashboard",
+      "role": "readonly_dashboard",
+      "entrypoint": "momentum_dashboard_v1_3_agentic.py",
+      "entrypoint_resolution": "local_manifest_then_env_fallback",
+      "config_key": "STOCKTRACKER_ACTIVE_DASHBOARD",
+      "manifest_key": "dashboard",
+      "managed_by": "supervisor",
+      "depends_on": [
+        "trader",
+        "geo_feed"
+      ],
+      "deployment_component": "dashboard",
+      "script_pattern": "momentum_dashboard_*.py",
+      "source_files": [
+        "momentum_dashboard_v1_3_agentic.py"
+      ],
+      "health": {
+        "type": "process_plus_dependency_health"
+      }
+    },
+    {
+      "id": "daily_review",
+      "role": "scheduled_job",
+      "entrypoint": "run_daily_model_review.bat",
+      "managed_by": null,
+      "depends_on": [
+        "trader"
+      ],
+      "deployment_component": null,
+      "script_pattern": null,
+      "source_files": [
+        "run_daily_model_review.bat",
+        "daily_model_review.py",
+        "build_daily_review_bundle.py",
+        "publish_supporting_evidence.py"
+      ],
+      "health": {
+        "type": "evidence_only"
+      }
+    }
+  ],
+  "runtime_notes": [
+    "The repository's StockTracker active-trader documents disagree (v1.4/v1.8/v1.9), while host process evidence on 2026-10-18 showed v1.10; consult the local active manifest.",
+    "StockTracker's configured fallback is v1.9, not a verified currently deployed release.",
+    "Scheduled task settings are inferred from the tracked installer script; host inventory must confirm them.",
+    "Alpaca trader source must preserve PAPER_ONLY=True and TradingClient(...,paper=True)."
+  ]
+}
