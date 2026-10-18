@@ -56,7 +56,9 @@
       "role": "service",
       "entrypoint": "stocktracker_deployment_agent.py",
       "managed_by": "supervisor",
-      "depends_on": [],
+      "depends_on": [
+        "registry_contract"
+      ],
       "deployment_component": null,
       "script_pattern": "stocktracker_deployment_agent.py",
       "source_files": [
@@ -94,7 +96,8 @@
       "manifest_key": "trader",
       "managed_by": "supervisor",
       "depends_on": [
-        "geo_feed"
+        "geo_feed",
+        "zpta_shadow"
       ],
       "dependency_optional": [
         "geo_feed"
@@ -104,8 +107,7 @@
       "source_files": [
         "momentum_trader_v1_9_zpta_shadow.py",
         "momentum_trader_v1_10_runtime_audit.py",
-        "post_close_review_guard.py",
-        "zpta_specialist_v0_1.py"
+        "post_close_review_guard.py"
       ],
       "health": {
         "type": "process_plus_dashboard_state",
@@ -152,13 +154,61 @@
       "health": {
         "type": "evidence_only"
       }
+    },
+    {
+      "id": "registry_contract",
+      "role": "library",
+      "entrypoint": "infrastructure/registry_contract.py",
+      "managed_by": null,
+      "depends_on": [],
+      "deployment_component": null,
+      "script_pattern": null,
+      "source_files": [
+        "infrastructure/registry_contract.py"
+      ],
+      "health": {
+        "type": "not_applicable"
+      }
+    },
+    {
+      "id": "runtime_inventory",
+      "role": "read_only_audit",
+      "entrypoint": "infrastructure/runtime_inventory.py",
+      "managed_by": null,
+      "depends_on": [
+        "registry_contract"
+      ],
+      "deployment_component": null,
+      "script_pattern": null,
+      "source_files": [
+        "infrastructure/runtime_inventory.py"
+      ],
+      "health": {
+        "type": "not_applicable"
+      }
+    },
+    {
+      "id": "zpta_shadow",
+      "role": "shadow_research_only",
+      "entrypoint": "zpta_specialist_v0_1.py",
+      "managed_by": null,
+      "depends_on": [],
+      "deployment_component": null,
+      "script_pattern": null,
+      "source_files": [
+        "zpta_specialist_v0_1.py"
+      ],
+      "health": {
+        "type": "not_applicable"
+      }
     }
   ],
   "runtime_notes": [
     "The repository's StockTracker active-trader documents disagree (v1.4/v1.8/v1.9), while host process evidence on 2026-10-18 showed v1.10; consult the local active manifest.",
     "StockTracker's configured fallback is v1.9, not a verified currently deployed release.",
     "Scheduled task settings are inferred from the tracked installer script; host inventory must confirm them.",
-    "Alpaca trader source must preserve PAPER_ONLY=True and TradingClient(...,paper=True)."
+    "Alpaca trader source must preserve PAPER_ONLY=True and TradingClient(...,paper=True).",
+    "ZPTA specialist is imported by the trader for shadow-only research, not an independently managed Python process."
   ],
   "external_services": [
     {
