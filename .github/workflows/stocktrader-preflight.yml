@@ -15,25 +15,47 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Validate deployment requests and Python syntax
+      - name: Validate every READY release and report all stale approvals
         run: |
           python - <<'PY'
-          import json, pathlib, py_compile, subprocess
+          import json, pathlib, py_compile, subprocess, sys
           root=pathlib.Path('.')
+          errors=[]
           py_compile.compile('stocktracker_deployment_agent.py', doraise=True)
           requests=sorted((root/'deploy/requests').glob('P-STOCK-*.json'))
+          ready=0
           for path in requests:
-              req=json.loads(path.read_text(encoding='utf-8'))
-              if req.get('status')!='READY_TO_DEPLOY':
-                  continue
-              commit=req['commit']
-              for component in req['components']:
-                  name=req['files'][component]
-                  target=root/name
-                  assert target.is_file(), f'{path}: missing {name}'
-                  py_compile.compile(str(target), doraise=True)
-                  expected=subprocess.check_output(['git','rev-parse',f'{commit}:{name}'],text=True).strip()
-                  current=subprocess.check_output(['git','rev-parse',f'HEAD:{name}'],text=True).strip()
-                  assert expected==current, f'{path}: approved blob differs from HEAD: {name}'
-              print('PASS',path)
+              try:
+                  req=json.loads(path.read_text(encoding='utf-8'))
+                  if req.get('status')!='READY_TO_DEPLOY':
+                      continue
+                  ready+=1
+                  commit=str(req['commit'])
+                  components=req['components']
+                  files=req['files']
+                  if not components:
+                      raise ValueError('empty component list')
+                  for component in components:
+                      rel=files[component]
+                      target=root/rel
+                      if not target.is_file():
+                          raise ValueError(f'missing script: {rel}')
+                      py_compile.compile(str(target), doraise=True)
+                      approved=subprocess.run(['git','rev-parse',f'{commit}:{rel}'],
+                                              capture_output=True,text=True)
+                      current=subprocess.run(['git','rev-parse',f'HEAD:{rel}'],
+                                             capture_output=True,text=True)
+                      if approved.returncode or current.returncode:
+                          raise ValueError(f'cannot resolve approved/current blob: {rel}')
+                      if approved.stdout.strip()!=current.stdout.strip():
+                          raise ValueError(f'STALE_APPROVAL {component}: {rel} differs from approved commit')
+                  print('VALID_READY', path)
+              except Exception as exc:
+                  errors.append(f'{path}: {exc}')
+          print(f'Checked {ready} READY release request(s).')
+          if errors:
+              print(f'BLOCKED: {len(errors)} invalid/stale request(s); no approval rewritten.')
+              for error in errors: print(' -',error)
+              sys.exit(1)
+          print('PASS: every READY release has its approved content at HEAD')
           PY
