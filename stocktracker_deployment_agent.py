@@ -371,6 +371,32 @@ def deploy(req_path: Path, req: dict):
             commit=commit,
             deployed_at=active["deployed_at"],
         )
+        # A deployed trader is not healthy until the supervisor has cycled all project services.
+        # Supervisor is intentionally separate and is never terminated by this operation.
+        restart_request = STATE_DIR / "restart_services.request"
+        restart_result = STATE_DIR / "restart_services.result"
+        restart_result.unlink(missing_ok=True)
+        restart_request.write_text(pid, encoding="utf-8")
+        supervisor_name = "stocktracker_supervisor.py"
+        ps = ("Get-CimInstance Win32_Process | Where-Object { "
+              "$_.Name -match '^python' -and $_.CommandLine -like '*" + supervisor_name + "*' } | "
+              "Select-Object -First 1 -ExpandProperty ProcessId")
+        check = subprocess.run(["powershell","-NoProfile","-Command",ps],capture_output=True,text=True,timeout=20)
+        if check.returncode or not check.stdout.strip():
+            subprocess.Popen([sys.executable, str(ROOT / supervisor_name)],cwd=ROOT,
+                             creationflags=(subprocess.CREATE_NEW_CONSOLE | subprocess.CREATE_NEW_PROCESS_GROUP)
+                             if os.name == "nt" else 0)
+        deadline = time.monotonic() + 150
+        while time.monotonic() < deadline:
+            if restart_result.exists():
+                result = restart_result.read_text(encoding="utf-8").strip()
+                if result == pid + "|OK":
+                    break
+                if result.startswith(pid + "|ERROR|"):
+                    raise RuntimeError("Supervisor restart failed: " + result)
+            time.sleep(1)
+        else:
+            raise RuntimeError("Supervisor did not confirm controlled restart")
         log(f"{pid}: deployment successful")
         push("StockTracker Deployment", f"{pid} deployed successfully.\nCommit {commit[:10]}")
         return True
