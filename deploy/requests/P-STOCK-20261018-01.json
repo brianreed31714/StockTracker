@@ -1,6 +1,6 @@
 {
   "proposal_id": "P-STOCK-20261018-01",
-  "status": "READY_TO_DEPLOY",
+  "status": "DEPLOYED",
   "commit": "a24d545dbb8652de3fd0a73a19394c21c78ef1ff",
   "components": [
     "trader"
@@ -9,5 +9,11 @@
     "trader": "momentum_trader_v1_10_runtime_audit.py"
   },
   "mode": "PAPER",
-  "note": "Approved model configuration refresh. Pull latest main with OPENAI_MODEL=gpt-6-luna and DAILY_REVIEW_MODEL=gpt-6-luna. Restart paper trader only; preserve all other components and risk controls. Verify API calls and runtime health; do not enable live trading."
+  "note": "Approved model configuration refresh. Pull latest main with OPENAI_MODEL=gpt-6-luna and DAILY_REVIEW_MODEL=gpt-6-luna. Restart paper trader only; preserve all other components and risk controls. Verify API calls and runtime health; do not enable live trading.",
+  "history_reconciliation": {
+    "recorded_status": "DEPLOYED",
+    "evidence": "User-supplied Windows deploy/state/processed_requests.json, 2026-10-18",
+    "current_active_release": "P-STOCK-20261018-02",
+    "explanation": "Historical deployment already recorded on host; preserve original commit and component files and never replay."
+  }
 }
