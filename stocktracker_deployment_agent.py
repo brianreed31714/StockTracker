@@ -457,7 +457,10 @@ def scan_once():
         if req.get("status") == "READY_TO_DEPLOY":
             pid = str(req.get("proposal_id") or "")
             done = processed_requests().get(pid)
-            if done and done.get("status") in {"DEPLOYED", "ROLLED_BACK", "VALIDATION_FAILED"}:
+            if done and done.get("status") in {"DEPLOYED", "ROLLED_BACK"}:
+                continue
+            if (done and done.get("status") == "VALIDATION_FAILED"
+                    and str(done.get("commit") or "") == str(req.get("commit") or "")):
                 continue
 
             # Migration guard for deployments completed by the older agent,
