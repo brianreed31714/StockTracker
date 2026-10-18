@@ -144,6 +144,7 @@ def ai_review(metrics):
     client = OpenAI(api_key=key)
     resp = client.responses.create(
         model=MODEL,
+        reasoning={"effort": os.getenv("DAILY_REVIEW_REASONING_EFFORT", "high")},
         input=prompt_for(metrics),
         text={"format": {"type": "json_schema", "name": "stocktracker_daily_review", "schema": SCHEMA, "strict": True}},
     )
