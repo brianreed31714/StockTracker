@@ -8,6 +8,7 @@ import unittest
 
 from infrastructure.registry_contract import (
     RegistryError, validate_registry, release_preflight, change_impact,
+    enforce_changed_release_scope,
 )
 
 
@@ -101,6 +102,32 @@ class RegistryContractTests(unittest.TestCase):
             impact = change_impact(self.registry, ["xom_geo_feed_v1_1_agentic.py"])
             self.assertIn("geo_feed", impact["source_owners"])
             self.assertIn("trader", impact["verification_dependencies"])
+
+    def test_imported_library_requires_owning_process_reload(self):
+        if self.registry["project"] == "CryptoTracker":
+            changed = ["SmartMoneyMonitor/solana_public_rpc_v23.py"]
+            expected = "smart_money"
+            unrelated = "trader"
+        else:
+            changed = ["zpta_specialist_v0_1.py"]
+            expected = "trader"
+            unrelated = "geo_feed"
+        impact = change_impact(self.registry, changed)
+        self.assertIn(expected, impact["required_reload_components"])
+        self.assertNotIn(unrelated, impact["required_reload_components"])
+        with self.assertRaisesRegex(RegistryError, expected):
+            enforce_changed_release_scope(self.registry, changed, [unrelated])
+        enforce_changed_release_scope(self.registry, changed, [expected])
+
+    def test_data_consumer_is_not_forced_to_restart(self):
+        if self.registry["project"] == "CryptoTracker":
+            impact = change_impact(self.registry, ["SmartMoneyMonitor/solana_public_rpc_v23.py"])
+            self.assertIn("trader", impact["verification_dependencies"])
+            self.assertNotIn("trader", impact["required_reload_components"])
+        else:
+            impact = change_impact(self.registry, ["xom_geo_feed_v1_1_agentic.py"])
+            self.assertIn("trader", impact["verification_dependencies"])
+            self.assertNotIn("trader", impact["required_reload_components"])
 
     def test_unmapped_python_change_is_visible(self):
         impact = change_impact(self.registry, ["unexpected_new_engine.py"])
