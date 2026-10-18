@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 from datetime import datetime, timezone
 import fnmatch
+from importlib.metadata import version, PackageNotFoundError
 import json
 import os
 from pathlib import Path, PurePosixPath
@@ -255,8 +256,17 @@ def collect(root: Path) -> dict:
     for component, path in (manifest.get("files") or {}).items():
         if isinstance(component, str) and isinstance(path, str):
             active_files[component] = PurePosixPath(path.replace("\\", "/")).name
+    package_versions = {}
+    for name in registry.get("expected_packages", []):
+        try:
+            package_versions[name] = version(name)
+        except PackageNotFoundError:
+            package_versions[name] = "NOT_INSTALLED_IN_PROBE_INTERPRETER"
     return {
         "schema_version": 1, "project": registry["project"], "observed_at_utc": utc_now().isoformat(),
+        "probe_python_version": sys.version.split()[0],
+        "probe_executable_name": Path(sys.executable).name,
+        "package_versions_in_probe_interpreter": package_versions,
         "git_head": git_head(root),
         "active_manifest_commit": str(manifest.get("commit") or "UNVERIFIED"),
         "active_manifest_files": active_files,
