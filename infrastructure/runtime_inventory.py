@@ -179,9 +179,7 @@ def evaluate_task_registration(task: dict, expected: dict,
         "name": expected["name"],
         "task_state": state,
         "supervisor_process_state": process_state if supervisor else "NOT_APPLICABLE",
-        "registration_consistent": not any(
-            "Task " in w or "trigger" in w or "different script" in w for w in warnings
-        ),
+        "registration_consistent": not warnings,
         "last_result": last_result,
         "task_operational_status": "NEEDS_ATTENTION" if warnings else "NO_FAILURE_OBSERVED",
         "startup_provenance_verified": False,
