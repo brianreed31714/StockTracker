@@ -76,6 +76,28 @@ Deployment agents now record `verification_status=UNVERIFIED` and notify that su
 
 The repository does **not yet** contain a fully proven autonomous deployment-attestation loop for every service. Treat any unresolved runtime verification as `UNVERIFIED`, not success. In particular, the existing supervisor success handshake primarily verifies processes, not three independent healthy operating cycles.
 
+## Controlled review repair activation (local Windows only)
+
+The committed review fix does **not** automatically modify an existing in-memory trader process. The existing deployment agent's `READY_TO_DEPLOY` path still uses a **whole-StockTracker** supervisor restart, and the already-running agent will not hot-reload its Python implementation. **Do not create a new READY_TO_DEPLOY request for this maintenance repair.**
+
+A scoped activation utility is available at [activate_review_repair.py](activate_review_repair.py), with isolated tests on both Windows and Linux. On the Windows PC, from the **StockTracker** repository root:
+
+```powershell
+python -m infrastructure.activate_review_repair
+```
+
+The default performs read-only safety and ownership validation. After confirmation, this is the explicit operator-initiated action:
+
+```powershell
+python -m infrastructure.activate_review_repair --apply
+```
+
+Only the **exact positively identified v1.10 StockTracker paper-trader PID** may be stopped. The existing running supervisor must restore that trader; this tool **never creates a competing second trading process**, never restarts geo/dashboard/agent/supervisor, never touches CryptoTracker, and refuses daytime weekday activation (07:00–19:00 Eastern). It requires a clean, fully synced Git HEAD, valid infrastructure registry, paper-only source markers, working review retry tests, an idle review, unique trader identity with absolute StockTracker path, and all ten expected project processes observed. It aborts without a stop if any precondition is ambiguous.
+
+The tool polls for the replacement trader, then observes its PID for 65 seconds and compares all other StockTracker and CryptoTracker service PIDs. Its **local ignored** `deploy/state/review_repair_activation.json` receipt records the results without secrets. If the existing supervisor fails to restart the trader, it reports **RESTART_NOT_OBSERVED** and stops; it deliberately does *not* launch a second trader or blindly restart other components. The previous Git trader revision remains available for a separately controlled rollback, but **automatic rollback is not yet implemented**.
+
+A verified paper-trader process restart **does not verify** the next successful OpenAI review, an unattended task run, broker paper-order state, or sustained trading correctness. Require the next genuine market-close report, successful scheduled task result, and a separate restart/reboot recovery test before marking the release VERIFIED.
+
 ## Incident / dependency protocol
 
 When a status is incorrect, compare its data source with producer output before restarting. Verify PID start time and process ownership before stopping anything. Stop only the affected component with minimal privilege. Do not restart healthy trading engines to repair a dashboard or auxiliary feed. When a test fails, capture the precise failing path, build log and expected runtime evidence; never suppress the failure to make CI green.
