@@ -1,11 +1,17 @@
 {
   "proposal_id": "P-STOCK-20261009-01",
-  "status": "READY_TO_DEPLOY",
+  "status": "DEPLOYED",
   "commit": "cd6aad4ac81c8cd7c9d68bde41866846e582d368",
   "components": [
     "trader"
   ],
   "files": {
     "trader": "momentum_trader_v1_10_runtime_audit.py"
+  },
+  "history_reconciliation": {
+    "recorded_status": "DEPLOYED",
+    "evidence": "User-supplied Windows deploy/state/processed_requests.json, 2026-10-18",
+    "current_active_release": "P-STOCK-20261018-02",
+    "explanation": "Historical deployment already recorded on host; preserve original commit and component files and never replay."
   }
 }
