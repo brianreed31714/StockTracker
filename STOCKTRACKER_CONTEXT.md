@@ -3,10 +3,12 @@
 ## Purpose
 StockTracker is a PAPER-ONLY multi-asset momentum research/trading system. It must remain paper-only unless the user explicitly redesigns the project outside this agentic workflow.
 
-## Active baseline
-- Trader: `momentum_trader_v1_9_zpta_shadow.py`
-- Geo/oil feed: `xom_geo_feed_v1_1_agentic.py`
-- Dashboard: `momentum_dashboard_v1_3_agentic.py`
+## Configured fallback (not live deployment proof)
+- Trader fallback from `.env.config`: `momentum_trader_v1_9_zpta_shadow.py`
+- Geo/oil feed fallback: `xom_geo_feed_v1_1_agentic.py`
+- Dashboard fallback: `momentum_dashboard_v1_3_agentic.py`
+- Historical observed Windows trader on 2026-10-18: `momentum_trader_v1_10_runtime_audit.py` (revalidate on host).
+- Local `deploy/state/active_release.json` and the [infrastructure registry](infrastructure/registry.json) govern code resolution and dependencies; do not infer current runtime from this document.
 
 ## Tradable universe
 Configured by `TRADE_SYMBOLS` in `.env.config`. Current tradable baseline:
