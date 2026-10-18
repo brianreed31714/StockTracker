@@ -42,6 +42,12 @@ class AgentRegistryHookTests(unittest.TestCase):
                 agent.deploy(ROOT / "nonexistent-request.json", {"status": "INVALID"})
             stop.assert_not_called()
 
+    def test_supervisor_acknowledgement_is_not_declared_healthy(self):
+        source = Path(agent.__file__).read_text(encoding="utf-8")
+        self.assertIn('"verification_status": "UNVERIFIED"', source)
+        self.assertIn("runtime health remains UNVERIFIED", source)
+        self.assertNotIn('log(f"{pid}: deployment successful")', source)
+
     def test_registry_safety_failure_precedes_process_stop(self):
         with patch.object(agent, "run", return_value=SimpleNamespace(returncode=0, stdout="same-blob\n")), \
              patch.object(agent, "release_preflight", side_effect=RegistryError("safety gate")), \
