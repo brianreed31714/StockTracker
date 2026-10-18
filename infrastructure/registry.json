@@ -346,5 +346,13 @@
     "process_log_identity": "Only match hidden commandline PIDs with a supervisor launch record and matching process creation timestamp",
     "runtime_reports": "Local ignored files; never publish raw command lines or secret values",
     "github_green_means": "Repository validation only; never a live Windows deployment acknowledgement"
-  }
+  },
+  "expected_packages": [
+    "alpaca-py",
+    "requests",
+    "python-dotenv",
+    "openai",
+    "streamlit",
+    "pandas"
+  ]
 }
