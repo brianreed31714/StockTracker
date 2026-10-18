@@ -157,7 +157,8 @@
         "build_daily_review_bundle.py",
         "publish_supporting_evidence.py",
         "post_close_review_guard.py",
-        "post_close_review_policy.py"
+        "post_close_review_policy.py",
+        "infrastructure/review_artifact_probe.py"
       ],
       "health": {
         "type": "evidence_only"
@@ -224,7 +225,8 @@
       "deployment_component": null,
       "script_pattern": null,
       "source_files": [
-        "infrastructure/audit_both_projects.ps1"
+        "infrastructure/audit_both_projects.ps1",
+        "infrastructure/review_artifact_probe.py"
       ],
       "health": {
         "type": "not_applicable"
