@@ -43,6 +43,7 @@ foreach ($Project in @('CryptoTracker', 'StockTracker')) {
         }
         $State = Get-Content $Report -Raw | ConvertFrom-Json
         Write-Host ("Host snapshot consistent: {0} (release verified: {1})" -f $State.host_snapshot_consistent, $State.release_verified)
+        Write-Host ("Startup launch provenance verified: {0} (requires separate logon/reboot evidence)" -f $State.startup_provenance_verified)
         Write-Host ("Local Git HEAD: {0}" -f $State.git_head)
         Write-Host ("Local active release commit: {0}" -f $State.active_manifest_commit)
         foreach ($Entry in $State.components.PSObject.Properties) {
@@ -53,12 +54,16 @@ foreach ($Project in @('CryptoTracker', 'StockTracker')) {
                 $Cid, $Proc.state, ($Proc.pids -join ','), $Artifact.state)
         }
         foreach ($Task in $State.tasks) {
-            Write-Host ("  Task {0}: {1}, RunLevel={2}" -f $Task.name, $Task.state, $Task.run_level)
+            Write-Host ("  Task {0}: {1}, RunLevel={2}, LastResult={3}, LastRunUTC={4}" -f $Task.name, $Task.state, $Task.run_level, $Task.last_result, $Task.last_run_utc)
         }
         if ($State.warnings.Count -gt 0) {
             Write-Host ("Warnings ({0}):" -f $State.warnings.Count)
             foreach ($Warning in $State.warnings) { Write-Host ("  - {0}" -f $Warning) }
             $Issues += "$Project has host warnings"
+        }
+        if ($State.cautions.Count -gt 0) {
+            Write-Host ("Startup/recovery cautions ({0}; not service failures):" -f $State.cautions.Count)
+            foreach ($Caution in $State.cautions) { Write-Host ("  - {0}" -f $Caution) }
         }
         Write-Host 'Local evidence: deploy\state\infrastructure_inventory.json (gitignored)'
     } finally {
