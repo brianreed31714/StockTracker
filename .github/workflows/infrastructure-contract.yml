@@ -1,0 +1,58 @@
+name: Infrastructure registry contract
+on:
+  push:
+    branches: [main]
+    paths:
+      - "infrastructure/**"
+      - ".env.config"
+      - "*deployment_agent.py"
+      - "deployment_agent.py"
+      - "*supervisor.py"
+      - ".github/workflows/infrastructure-contract.yml"
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  contract-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Registry, safety invariants, dependency graph
+        run: |
+          python -m infrastructure.registry_contract
+          python -m unittest -v infrastructure.test_registry_contract
+      - name: Verify all release-component script families
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from infrastructure.registry_contract import validate_registry, release_preflight
+          root = Path.cwd()
+          reg = validate_registry(root)
+          for component in reg["components"]:
+              if component.get("deployment_component"):
+                  release_preflight(root, [component["id"]], {component["id"]: component["entrypoint"]})
+                  print("PASS release contract:", component["id"])
+          PY
+
+  contract-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Test Windows-compatible registry enforcement
+        shell: pwsh
+        run: |
+          python -m infrastructure.registry_contract
+          if ($LASTEXITCODE -ne 0) { throw "Registry validation failed" }
+          python -m unittest -v infrastructure.test_registry_contract
+          if ($LASTEXITCODE -ne 0) { throw "Registry negative tests failed" }
+      - name: Compile deployable modules without imports or side effects
+        shell: pwsh
+        run: |
+          python -m py_compile infrastructure/registry_contract.py
+          if ($LASTEXITCODE -ne 0) { throw "Registry compile failed" }
