@@ -68,7 +68,7 @@ class ReviewArtifactProbeTests(unittest.TestCase):
         runtime=self.root.parent/(self.root.name+"_review_runtime")
         runtime.mkdir(exist_ok=True)
         self.addCleanup(lambda: runtime.rmdir() if runtime.exists() and not any(runtime.iterdir()) else None)
-        (self.root/".env").write_text("STOCKTRACKER_RUNTIME_ROOT="+str(runtime)+"\\n",encoding="utf-8")
+        (self.root/".env").write_text("STOCKTRACKER_RUNTIME_ROOT="+str(runtime)+"\n",encoding="utf-8")
         with patch.dict(os.environ, {"STOCKTRACKER_RUNTIME_ROOT": ""}):
             output=probe(self.root,"2026-10-16")
         self.assertEqual(output["git_publishing_mode"],"SKIPPED_BY_EXTERNAL_RUNTIME_CONFIG")
