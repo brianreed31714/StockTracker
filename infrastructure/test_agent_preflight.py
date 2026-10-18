@@ -40,7 +40,7 @@ class AgentRegistryHookTests(unittest.TestCase):
     def test_invalid_pending_request_is_quarantined_without_retries(self):
         with TemporaryDirectory() as temp:
             folder = Path(temp)
-            (folder / "P-TEST-001.json").write_text(json.dumps(self.request()), encoding="utf-8")
+            (folder / "P-STOCK-TEST-001.json").write_text(json.dumps(self.request()), encoding="utf-8")
             with patch.object(agent, "AUTO_DEPLOY", True), \
                  patch.object(agent, "REQUEST_DIR", folder), \
                  patch.object(agent, "pull_repo"), \
@@ -56,7 +56,7 @@ class AgentRegistryHookTests(unittest.TestCase):
     def test_unchanged_failed_approval_is_skipped_but_new_commit_can_revalidate(self):
         with TemporaryDirectory() as temp:
             folder = Path(temp)
-            path = folder / "P-TEST-001.json"
+            path = folder / "P-STOCK-TEST-001.json"
             request = self.request()
             path.write_text(json.dumps(request), encoding="utf-8")
             done = {PROPOSAL: {"status": "VALIDATION_FAILED", "commit": request["commit"]}}
