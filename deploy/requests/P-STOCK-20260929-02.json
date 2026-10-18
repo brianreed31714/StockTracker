@@ -1,6 +1,6 @@
 {
   "proposal_id": "P-STOCK-20260929-02",
-  "status": "READY_TO_DEPLOY",
+  "status": "DEPLOYED",
   "commit": "440ad4409853c3c7e481ea22d58e20066099c376",
   "components": [
     "trader",
@@ -13,5 +13,11 @@
     "dashboard": "momentum_dashboard_v1_3_agentic.py"
   },
   "mode": "SHADOW",
-  "note": "Replacement deployment for StockTracker v1.9 with integrated ZPTA OTC shadow specialist and corrected split config loading. Supersedes P-STOCK-20260929-01. ZPTA has no broker-order path; existing StockTracker remains PAPER_ONLY."
+  "note": "Replacement deployment for StockTracker v1.9 with integrated ZPTA OTC shadow specialist and corrected split config loading. Supersedes P-STOCK-20260929-01. ZPTA has no broker-order path; existing StockTracker remains PAPER_ONLY.",
+  "history_reconciliation": {
+    "recorded_status": "DEPLOYED",
+    "evidence": "2026-10-18 read-only Windows audit and user-supplied local deploy/state/processed_requests.json status",
+    "current_active_release": "P-STOCK-20261018-02",
+    "explanation": "Historical request already processed on the Windows host. Reconcile GitHub status only; do not replay or reactivate old release. Original approved commit/files preserved."
+  }
 }
