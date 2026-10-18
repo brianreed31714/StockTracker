@@ -141,6 +141,9 @@ def validate_registry(root: Path, *, check_local_safety: bool = False) -> dict:
         for optional in component.get("dependency_optional", []):
             if optional not in component["depends_on"]:
                 raise RegistryError(f"{cid}: optional dependency is not declared")
+        for imported in component.get("code_imports", []):
+            if imported not in component["depends_on"]:
+                raise RegistryError(f"{cid}: imported Python module not in dependencies: {imported}")
         manager = component.get("managed_by")
         if manager is not None and manager not in by_id:
             raise RegistryError(f"{cid}: unknown supervisor {manager}")
@@ -283,7 +286,9 @@ def change_impact(registry: dict, changed_paths: list[str]) -> dict:
         matched = {cid for cid, c in by_id.items() if path in c["source_files"]}
         if path == ".env.config" or path in {"infrastructure/registry.json", "infrastructure/registry_contract.py"}:
             matched |= set(by_id)
-        if not matched and path.endswith(".py") and not path.startswith("tests/") and not path.startswith("test_"):
+        if (not matched and path.endswith(".py")
+                and not PurePosixPath(path).name.startswith("test_")
+                and not path.startswith(("tests/", "analysis/"))):
             uncovered.append(path)
         owners |= matched
     impacted = set(owners)
@@ -295,12 +300,63 @@ def change_impact(registry: dict, changed_paths: list[str]) -> dict:
         if next_set == impacted:
             break
         impacted = next_set
+    # Only code imports propagate mandatory reloads. Data consumers still
+    # require verification, but not necessarily a destructive restart.
+    must_reload = set(owners)
+    while True:
+        next_set = must_reload | {
+            cid for cid, comp in by_id.items()
+            if any(other in must_reload for other in comp.get("code_imports", []))
+        }
+        if next_set == must_reload:
+            break
+        must_reload = next_set
     return {
         "source_owners": sorted(owners),
         "verification_dependencies": sorted(impacted - owners),
         "deployable_owners": sorted(cid for cid in owners if by_id[cid].get("deployment_component")),
+        "required_reload_components": sorted(cid for cid in must_reload if by_id[cid].get("deployment_component")),
+        "non_deployable_reload_owners": sorted(cid for cid in must_reload if not by_id[cid].get("deployment_component")),
         "unmapped_python_files": uncovered,
     }
+
+
+def enforce_changed_release_scope(registry: dict, changed_paths: list[str],
+                                  requested_components: list[str]) -> dict:
+    """Reject partial releases whose source dependencies require reload.
+
+    Verification-only data consumers are NOT forced to restart.
+    """
+    impact = change_impact(registry, changed_paths)
+    if impact["unmapped_python_files"]:
+        raise RegistryError(
+            "Unregistered Python sources in approved commit: "
+            + ", ".join(impact["unmapped_python_files"][:8])
+        )
+    missing = sorted(set(impact["required_reload_components"]) - set(requested_components))
+    if missing:
+        raise RegistryError("Approved change requires additional component reload: " + ", ".join(missing))
+    return impact
+
+
+def enforce_commit_release_scope(root: Path, commit: str,
+                                 requested_components: list[str]) -> dict:
+    """Inspect exact approved Git commit without pulling or executing it."""
+    import subprocess
+    root = Path(root).resolve()
+    registry = validate_registry(root, check_local_safety=True)
+    if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{7,40}", commit):
+        raise RegistryError("Approved commit must be a Git SHA")
+    result = subprocess.run(
+        ["git", "-C", str(root), "diff-tree", "--root", "--no-commit-id",
+         "--name-only", "-r", commit],
+        text=True, capture_output=True, timeout=15,
+    )
+    if result.returncode:
+        raise RegistryError("Could not inspect approved Git commit file impact")
+    return enforce_changed_release_scope(
+        registry, result.stdout.splitlines(), requested_components
+    )
 
 
 def main() -> int:
