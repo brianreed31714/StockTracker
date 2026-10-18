@@ -39,6 +39,38 @@ def artifact_status(path: Path) -> dict:
         return {"state": "UNREADABLE"}
 
 
+def safe_metadata(path: Path, fields: tuple[str, ...]) -> dict:
+    try:
+        obj = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return {"state": "UNREADABLE_OR_MISSING"}
+    if not isinstance(obj, dict):
+        return {"state": "NOT_OBJECT"}
+    # Allowlist scalar metadata only. Never return source JSON, full report,
+    # market positions, user identifiers, keys, or error messages.
+    result = {"state": "READABLE"}
+    for key in fields:
+        val = obj.get(key)
+        if key in {"generated_at", "review_date", "review_source", "status", "finished_at", "started_at"}:
+            if isinstance(val, str):
+                result[key] = val[:80]
+        elif key == "attempts" and isinstance(val, int):
+            result[key] = val
+        elif key == "proposals" and isinstance(val, list):
+            result["proposal_count"] = len(val)
+    return result
+
+
+def iso_utc(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    try:
+        dt = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        return dt.astimezone(timezone.utc) if dt.tzinfo else None
+    except (TypeError, ValueError, OverflowError):
+        return None
+
+
 def probe(root: Path, review_date: str) -> dict:
     root = root.resolve()
     values = settings(root / ".env.config")
@@ -66,6 +98,28 @@ def probe(root: Path, review_date: str) -> dict:
         "performance_latest": runtime / "analysis" / "performance" / "latest.json",
     }
     artifacts = {name: artifact_status(path) for name, path in file_defs.items()}
+    report_meta = safe_metadata(
+        file_defs["ai_review"],
+        ("review_date", "generated_at", "review_source", "proposals"),
+    )
+    external_state_meta = safe_metadata(
+        runtime / "post_close_review_state.json",
+        ("review_date", "status", "attempts", "started_at", "finished_at"),
+    )
+    mirror_state_meta = safe_metadata(
+        root / "post_close_review_state.json",
+        ("review_date", "status", "attempts", "started_at", "finished_at"),
+    )
+    state_mirror_agrees = (
+        external_state_meta == mirror_state_meta if runtime != root else True
+    )
+    state_finished = iso_utc(obj.get("finished_at"))
+    updated_after_failure = []
+    if date_matches and obj.get("status") == "FAILED" and state_finished:
+        for name, artifact in artifacts.items():
+            artifact_updated = iso_utc(artifact.get("updated_at_utc"))
+            if artifact_updated and artifact_updated > state_finished:
+                updated_after_failure.append(name)
     try:
         result = subprocess.run(
             ["git", "-C", str(root), "status", "--porcelain", "--untracked-files=all"],
@@ -97,10 +151,20 @@ def probe(root: Path, review_date: str) -> dict:
             os.environ.get("OPENAI_API_KEY") or values.get("OPENAI_API_KEY")
         ),
         "artifacts": artifacts,
+        "ai_review_metadata": report_meta,
+        "state_mirror_agrees": state_mirror_agrees,
+        "external_state_metadata": external_state_meta,
+        "local_mirror_state_metadata": mirror_state_meta,
+        "artifacts_updated_after_failed_state": sorted(updated_after_failure),
+        "git_publishing_mode": (
+            "SKIPPED_BY_EXTERNAL_RUNTIME_CONFIG" if runtime != root
+            else "ELIGIBLE_ONLY_IF_PIPELINE_REACHES_SYNC_STAGE"
+        ),
         "git": git,
         "interpretation": (
             "Artifact presence is a timestamped clue, not proof a pipeline step succeeded. "
-            "The old generic FAILED state may not identify the underlying error."
+            "Files written after the FAILED state can be from later manual or separate runs. "
+            "The historical generic FAILED state does not identify its failing stage."
         ),
         "side_effects": "NONE",
     }
