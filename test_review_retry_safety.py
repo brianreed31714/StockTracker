@@ -52,6 +52,16 @@ class RetryPolicyTests(unittest.TestCase):
         s["attempts"] = 3
         self.assertEqual(review_retry_decision(s, DATE, now=BASE)["reason"], "RETRY_LIMIT")
 
+    def test_openai_401_is_nonretryable_after_first_attempt(self):
+        s = {"review_date": DATE, "status": "FAILED", "attempts": 1,
+             "failure_stage": "model_review", "failure_category": "AUTHENTICATION",
+             "finished_at": (BASE-timedelta(hours=1)).isoformat()}
+        result = review_retry_decision(s, DATE, now=BASE)
+        self.assertEqual(result["action"], "SKIP")
+        self.assertEqual(result["reason"], "NON_RETRYABLE_AUTH")
+        self.assertEqual(result["attempts"], 1)
+        self.assertEqual(review_retry_decision(s, "2026-10-17", now=BASE)["action"], "RUN")
+
     def test_93_attempts_is_blocked_and_never_incremented(self):
         s = {"review_date": DATE, "status": "FAILED", "attempts": 93,
              "finished_at": (BASE-timedelta(minutes=20)).isoformat()}
@@ -112,6 +122,17 @@ class GuardTests(unittest.TestCase):
             guard.STATE_PATH.write_text(json.dumps(s))
         self.assertEqual(guard.begin(DATE), 21)
         self.assertEqual(self.state()["attempts"], MAX_ATTEMPTS_PER_SESSION)
+
+    def test_auth_failure_stops_after_single_run_and_preserves_stage(self):
+        self.assertEqual(guard.begin(DATE), 0)
+        self.assertEqual(guard.finish(DATE, "FAILED",
+                                      "OpenAI authorization or API key validation failed",
+                                      "model_review", "AUTHENTICATION"), 0)
+        self.assertEqual(self.state()["attempts"], 1)
+        self.assertEqual(self.state()["failure_category"], "AUTHENTICATION")
+        self.assertEqual(self.state()["failure_stage"], "model_review")
+        self.assertEqual(guard.begin(DATE), 23)
+        self.assertEqual(self.state()["attempts"], 1)
 
     def test_guard_respects_cooldown(self):
         self.assertEqual(guard.begin(DATE), 0)
@@ -174,6 +195,15 @@ class TraderScheduleTests(unittest.TestCase):
 
 
 class BatchRunnerContractTests(unittest.TestCase):
+    def test_openai_auth_exit_classified_distinctly_from_transient_failure(self):
+        batch=(ROOT/"run_daily_model_review.bat").read_text(encoding="utf-8")
+        self.assertIn("if errorlevel 3 goto :fail", batch)
+        self.assertIn("if errorlevel 2 goto :auth_failure", batch)
+        self.assertIn(":auth_failure", batch)
+        self.assertIn("--category AUTHENTICATION", batch)
+        self.assertIn("if errorlevel 23 goto :auth_blocked", batch)
+        self.assertIn("exit /b 23", batch)
+
     def test_exit_codes_and_stage_evidence_are_distinct(self):
         batch=(ROOT/"run_daily_model_review.bat").read_text(encoding="utf-8")
         self.assertIn("if errorlevel 22 goto :retry_cooldown", batch)
