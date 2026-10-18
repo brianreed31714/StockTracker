@@ -2,13 +2,6 @@ name: Infrastructure registry contract
 on:
   push:
     branches: [main]
-    paths:
-      - "infrastructure/**"
-      - ".env.config"
-      - "*deployment_agent.py"
-      - "deployment_agent.py"
-      - "*supervisor.py"
-      - ".github/workflows/infrastructure-contract.yml"
   pull_request:
   workflow_dispatch:
 
@@ -17,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
@@ -26,6 +21,22 @@ jobs:
         run: |
           python -m infrastructure.registry_contract
           python -m unittest -v infrastructure.test_registry_contract infrastructure.test_runtime_inventory infrastructure.test_agent_preflight
+      - name: Detect unmapped changed Python modules
+        run: |
+          python - <<'PY'
+          import pathlib, subprocess, sys
+          from infrastructure.registry_contract import validate_registry, change_impact
+          root = pathlib.Path.cwd()
+          reg = validate_registry(root)
+          result = subprocess.run(['git', 'diff', '--name-only', 'HEAD^', 'HEAD'],
+                                  capture_output=True, text=True)
+          if result.returncode != 0:
+              raise SystemExit('Cannot establish change scope; fail closed')
+          impact = change_impact(reg, result.stdout.splitlines())
+          print('Impact / verification plan:', impact)
+          if impact['unmapped_python_files']:
+              raise SystemExit('Python change with no registered infrastructure owner')
+          PY
       - name: Verify all release-component script families
         run: |
           python - <<'PY'
@@ -43,6 +54,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
