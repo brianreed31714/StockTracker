@@ -348,8 +348,8 @@ def enforce_commit_release_scope(root: Path, commit: str,
     if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{7,40}", commit):
         raise RegistryError("Approved commit must be a Git SHA")
     result = subprocess.run(
-        ["git", "-C", str(root), "diff-tree", "--root", "--no-commit-id",
-         "--name-only", "-r", commit],
+        ["git", "-C", str(root), "diff-tree", "--root", "--first-parent", "-m",
+         "--no-commit-id", "--name-only", "-r", commit],
         text=True, capture_output=True, timeout=15,
     )
     if result.returncode:
