@@ -50,8 +50,13 @@ foreach ($Project in @('CryptoTracker', 'StockTracker')) {
             $Cid = $Entry.Name
             $Proc = $Entry.Value.process
             $Artifact = $Entry.Value.artifact
-            Write-Host ("  {0}: PID evidence={1} [{2}]; artifact={3}" -f
-                $Cid, $Proc.state, ($Proc.pids -join ','), $Artifact.state)
+            $Script = $Entry.Value.script_version
+            $ScriptStatus = if ($Script) { $Script.state } else { 'UNKNOWN' }
+            Write-Host ("  {0}: PID evidence={1} [{2}]; script={3}; artifact={4}" -f
+                $Cid, $Proc.state, ($Proc.pids -join ','), $ScriptStatus, $Artifact.state)
+            if ($ScriptStatus -eq 'MISMATCH') {
+                Write-Host ("    Expected: {0} | Observed: {1}" -f $Script.expected_script, $Script.observed_script)
+            }
         }
         foreach ($Task in $State.tasks) {
             Write-Host ("  Task {0}: {1}, RunLevel={2}, LastResult={3}, LastRunUTC={4}" -f $Task.name, $Task.state, $Task.run_level, $Task.last_result, $Task.last_run_utc)
