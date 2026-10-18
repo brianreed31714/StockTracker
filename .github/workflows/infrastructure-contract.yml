@@ -23,7 +23,7 @@ jobs:
       - name: Registry, safety invariants, dependency graph
         run: |
           python -m infrastructure.registry_contract
-          python -m unittest -v infrastructure.test_registry_contract
+          python -m unittest -v infrastructure.test_registry_contract infrastructure.test_runtime_inventory
       - name: Verify all release-component script families
         run: |
           python - <<'PY'
@@ -49,10 +49,10 @@ jobs:
         run: |
           python -m infrastructure.registry_contract
           if ($LASTEXITCODE -ne 0) { throw "Registry validation failed" }
-          python -m unittest -v infrastructure.test_registry_contract
+          python -m unittest -v infrastructure.test_registry_contract infrastructure.test_runtime_inventory
           if ($LASTEXITCODE -ne 0) { throw "Registry negative tests failed" }
       - name: Compile deployable modules without imports or side effects
         shell: pwsh
         run: |
-          python -m py_compile infrastructure/registry_contract.py
+          python -m py_compile infrastructure/registry_contract.py infrastructure/runtime_inventory.py
           if ($LASTEXITCODE -ne 0) { throw "Registry compile failed" }
