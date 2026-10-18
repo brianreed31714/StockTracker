@@ -44,6 +44,7 @@ from pathlib import Path
 
 import requests
 from dotenv import load_dotenv
+from infrastructure.registry_contract import release_preflight
 
 ROOT = Path(__file__).resolve().parent
 DEPLOY_DIR = ROOT / "deploy"
@@ -223,6 +224,8 @@ def validate_request(req: dict):
 
     comps = req.get("components") or []
     files = req.get("files") or {}
+    # Fail closed on component dependencies and paper safety before any process stop.
+    release_preflight(ROOT, comps, files)
     if not comps:
         raise ValueError("No components requested.")
 
@@ -271,8 +274,12 @@ def pull_repo():
             "Local non-runtime changes block deployment: "
             + ", ".join(unexpected[:12])
         )
-    run("git", "fetch", "--all")
-    run("git", "pull", "--ff-only")
+    # Pin the exact repository branch; local git pull can have multiple configured upstreams.
+    branch = run("git", "branch", "--show-current").stdout.strip()
+    if branch != "main":
+        raise RuntimeError("Deployment agent must run on main, not " + branch)
+    run("git", "fetch", "origin", "main")
+    run("git", "merge", "--ff-only", "origin/main")
 
 
 def taskkill_for_script(script_name: str):
