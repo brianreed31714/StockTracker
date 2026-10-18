@@ -27,6 +27,7 @@ from zoneinfo import ZoneInfo
 
 import requests
 import zpta_specialist_v0_1 as zpta_specialist
+from post_close_review_policy import review_retry_decision
 from dotenv import load_dotenv
 from alpaca.common.exceptions import APIError
 from alpaca.data.historical.stock import StockHistoricalDataClient
@@ -1239,12 +1240,19 @@ def post_close_review_due_target(now_et):
         return None
     review_date = now_et.date().isoformat()
     state = load_post_close_review_state()
-    if state.get("review_date") == review_date and state.get("status") in {"RUNNING", "COMPLETED"}:
+    decision = review_retry_decision(state, review_date, now=now_et.astimezone(timezone.utc))
+    # Share the same three-attempt budget and cooldown as the Scheduled Task
+    # runner. Do not reopen FAILED reviews indefinitely or retry during a
+    # legitimately running background review.
+    if decision["action"] == "SKIP":
         return None
     close_utc = market_session_close_utc(now_et.date())
     if close_utc is None:
         return None
-    return (close_utc + timedelta(minutes=POST_CLOSE_REVIEW_DELAY_MINUTES)).astimezone(MARKET_TZ)
+    due = close_utc + timedelta(minutes=POST_CLOSE_REVIEW_DELAY_MINUTES)
+    if decision["action"] == "WAIT":
+        due = max(due, decision["next_attempt_utc"])
+    return due.astimezone(MARKET_TZ)
 
 
 def maybe_run_post_close_review(now_et):
