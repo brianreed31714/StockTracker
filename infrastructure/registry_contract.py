@@ -6,6 +6,7 @@ local runtime input, not something assumed from GitHub documentation.
 from __future__ import annotations
 
 import argparse
+import ast
 import fnmatch
 import json
 from pathlib import Path, PurePosixPath
@@ -166,6 +167,45 @@ def validate_registry(root: Path, *, check_local_safety: bool = False) -> dict:
     for cid in by_id:
         visit(cid)
 
+    # Prove that local Python imports are covered by the owning component
+    # or a declared dependency. This catches a missing module edge BEFORE
+    # the Windows release agent can stop a service.
+    for cid, comp in by_id.items():
+        entry = safe_path(root, comp["entrypoint"])
+        if entry.suffix != ".py":
+            continue
+        closure = {cid}
+        stack = list(comp["depends_on"])
+        while stack:
+            dependency = stack.pop()
+            if dependency in closure:
+                continue
+            closure.add(dependency)
+            stack.extend(by_id[dependency]["depends_on"])
+        allowed_sources = {
+            src for dep_id in closure for src in by_id[dep_id]["source_files"]
+        }
+        try:
+            tree = ast.parse(entry.read_text(encoding="utf-8"))
+        except (SyntaxError, UnicodeError) as exc:
+            raise RegistryError(f"{cid}: invalid Python entrypoint") from exc
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                names = [alias.name for alias in node.names]
+            elif isinstance(node, ast.ImportFrom) and node.level == 0 and node.module:
+                names = [node.module]
+            else:
+                continue
+            for name in names:
+                relmodule = name.replace(".", "/") + ".py"
+                candidates = [relmodule]
+                if "/" not in relmodule:
+                    parent = PurePosixPath(comp["entrypoint"]).parent
+                    candidates.append(str(parent / relmodule))
+                for path in candidates:
+                    if (root / path).is_file() and path not in allowed_sources:
+                        raise RegistryError(f"{cid}: undeclared local import {path}")
+
     tasks = data.get("scheduled_tasks")
     if not isinstance(tasks, list) or not tasks:
         raise RegistryError("No scheduled task contract")
@@ -200,6 +240,7 @@ def release_preflight(root: Path, components: list[str], files: dict[str, str]) 
         raise RegistryError("No components or duplicate deployment components")
     if not isinstance(files, dict):
         raise RegistryError("Missing deployment file map")
+    compiled_dependency_files = set()
     for cid in components:
         if cid not in by_id or by_id[cid].get("deployment_component") != cid:
             raise RegistryError(f"Unregistered release component: {cid}")
@@ -208,9 +249,18 @@ def release_preflight(root: Path, components: list[str], files: dict[str, str]) 
             raise RegistryError(f"{cid}: proposed script doesn't match registry")
         target = safe_path(root, rel, must_exist=True)
         py_compile.compile(str(target), doraise=True)
-        for source in by_id[cid]["source_files"]:
-            if source.endswith(".py"):
-                py_compile.compile(str(safe_path(root, source, must_exist=True)), doraise=True)
+        # Compile declared dependencies transitively, not just the changed file.
+        pending, visited = [cid], set()
+        while pending:
+            dependency = pending.pop()
+            if dependency in visited:
+                continue
+            visited.add(dependency)
+            pending.extend(by_id[dependency]["depends_on"])
+            for source in by_id[dependency]["source_files"]:
+                if source.endswith(".py") and source not in compiled_dependency_files:
+                    py_compile.compile(str(safe_path(root, source, must_exist=True)), doraise=True)
+                    compiled_dependency_files.add(source)
         if cid == "trader":
             code = target.read_text(encoding="utf-8", errors="replace")
             for marker in registry["safety"]["trader_source_markers"]:
