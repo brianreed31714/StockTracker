@@ -60,6 +60,13 @@ jobs:
         run: |
           python -m unittest -v infrastructure.test_windows_integration test_project_process_control
           if ($LASTEXITCODE -ne 0) { throw "Windows process integration failed" }
+      - name: PowerShell host audit syntax (does not execute)
+        shell: pwsh
+        run: |
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile("infrastructure/audit_both_projects.ps1", [ref]$tokens, [ref]$errors) | Out-Null
+          if ($errors.Count -gt 0) { throw ($errors | Out-String) }
       - name: Compile deployable modules without imports or side effects
         shell: pwsh
         run: |
