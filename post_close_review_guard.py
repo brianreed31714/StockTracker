@@ -18,6 +18,8 @@ RUNTIME_ROOT = Path(_runtime_setting).expanduser().resolve() if _runtime_setting
 if _runtime_setting and (RUNTIME_ROOT == ROOT or ROOT in RUNTIME_ROOT.parents):
     raise ValueError("STOCKTRACKER_RUNTIME_ROOT must be outside the source repository")
 STATE_PATH = RUNTIME_ROOT / "post_close_review_state.json"
+# Compatibility mirror: existing v1.10 trader reads this path to avoid repeat runs.
+LEGACY_STATE_PATH = ROOT / "post_close_review_state.json"
 MARKET_TZ = ZoneInfo("America/New_York")
 
 
@@ -33,6 +35,10 @@ def write_state(value: dict) -> None:
     temp = STATE_PATH.with_suffix(".json.tmp")
     temp.write_text(json.dumps(value, indent=2), encoding="utf-8")
     os.replace(temp, STATE_PATH)
+    if LEGACY_STATE_PATH != STATE_PATH:
+        legacy_tmp = LEGACY_STATE_PATH.with_suffix(".json.tmp")
+        legacy_tmp.write_text(json.dumps(value, indent=2), encoding="utf-8")
+        os.replace(legacy_tmp, LEGACY_STATE_PATH)
 
 
 def parse_ts(value: object) -> datetime | None:
