@@ -88,7 +88,8 @@ def begin(date_text: str) -> int:
         if decision["action"] == "SKIP":
             reason = decision["reason"]
             print(f"Post-close review not launched: {reason} ({decision['attempts']} attempts).")
-            return 21 if reason in {"RETRY_LIMIT", "INVALID_ATTEMPT_COUNT"} else 20
+            return (23 if reason == "NON_RETRYABLE_AUTH" else
+                    21 if reason in {"RETRY_LIMIT", "INVALID_ATTEMPT_COUNT"} else 20)
         if decision["action"] == "WAIT":
             print(f"Post-close review cooling down ({decision['attempts']} attempts).")
             return 22
@@ -106,7 +107,7 @@ def begin(date_text: str) -> int:
 
 
 def finish(date_text: str, status: str, error: str | None = None,
-           stage: str | None = None) -> int:
+           stage: str | None = None, category: str = "OTHER") -> int:
     with exclusive_state():
         state = read_state()
         if state.get("review_date") != date_text or state.get("status") != "RUNNING":
@@ -120,9 +121,13 @@ def finish(date_text: str, status: str, error: str | None = None,
         if status == "FAILED":
             state["error"] = (error or "review pipeline failed")[:1000]
             state["failure_stage"] = stage or "UNKNOWN"
+            state["failure_category"] = (
+                "AUTHENTICATION" if category == "AUTHENTICATION" else "OTHER"
+            )
         else:
             state.pop("error", None)
             state.pop("failure_stage", None)
+            state.pop("failure_category", None)
         write_state(state)
     print(f"Post-close review status for {date_text}: {status}" +
           (f", stage {stage}" if status == "FAILED" and stage else ""))
@@ -138,13 +143,17 @@ def main() -> None:
         "bundle", "evidence", "model_review", "proposal_publish", "github_sync",
         "guard_complete", "unknown",
     ), default="unknown")
+    parser.add_argument(
+        "--category", choices=("AUTHENTICATION", "OTHER"), default="OTHER"
+    )
     args = parser.parse_args()
 
     if args.action == "begin":
         raise SystemExit(begin(args.date))
     if args.action == "complete":
         raise SystemExit(finish(args.date, "COMPLETED"))
-    raise SystemExit(finish(args.date, "FAILED", args.error or "pipeline failed", args.stage))
+    raise SystemExit(finish(args.date, "FAILED", args.error or "pipeline failed",
+                            args.stage, args.category))
 
 
 if __name__ == "__main__":
