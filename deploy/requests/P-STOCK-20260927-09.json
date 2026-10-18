@@ -1,6 +1,6 @@
 {
   "proposal_id": "P-STOCK-20260927-09",
-  "status": "READY_TO_DEPLOY",
+  "status": "DEPLOYED",
   "commit": "a6791e32f5750acc5a5c6eb23bb6a8dcb80e7897",
   "components": [
     "trader"
@@ -9,5 +9,11 @@
     "trader": "momentum_trader_v1_8_market_aware_premarket.py"
   },
   "mode": "PAPER",
-  "note": "Reporting-only deployment. Reload .env.config so EOD sends at 7:30 PM Pacific; daily self-analysis Pushover now contains the actual review. No trading logic changed."
+  "note": "Reporting-only deployment. Reload .env.config so EOD sends at 7:30 PM Pacific; daily self-analysis Pushover now contains the actual review. No trading logic changed.",
+  "history_reconciliation": {
+    "recorded_status": "DEPLOYED",
+    "evidence": "User-supplied Windows deploy/state/processed_requests.json, 2026-10-18",
+    "current_active_release": "P-STOCK-20261018-02",
+    "explanation": "Historical deployment already recorded on host; preserve original commit and component files and never replay."
+  }
 }
