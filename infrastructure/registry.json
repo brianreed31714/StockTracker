@@ -159,5 +159,116 @@
     "StockTracker's configured fallback is v1.9, not a verified currently deployed release.",
     "Scheduled task settings are inferred from the tracked installer script; host inventory must confirm them.",
     "Alpaca trader source must preserve PAPER_ONLY=True and TradingClient(...,paper=True)."
-  ]
+  ],
+  "external_services": [
+    {
+      "name": "Alpaca",
+      "mode": "paper_broker",
+      "component": "trader",
+      "endpoint": "configured",
+      "current_policy": "TradingClient(paper=True), PAPER_ONLY=True; reject live trading"
+    },
+    {
+      "name": "Alpaca Market Data",
+      "mode": "market_data",
+      "component": "trader",
+      "endpoint": "configured",
+      "current_policy": "ALPACA_DATA_FEED=iex in tracked settings"
+    },
+    {
+      "name": "OpenAI",
+      "mode": "analysis",
+      "component": "geo_feed",
+      "endpoint": "service-configured",
+      "current_policy": "classifies geo/news relevance; not a broker"
+    },
+    {
+      "name": "Public headlines and RSS",
+      "mode": "news_feeds",
+      "component": "geo_feed",
+      "endpoint": "source-defined",
+      "current_policy": "read-only classifications"
+    },
+    {
+      "name": "Pushover",
+      "mode": "notifications",
+      "component": "trader",
+      "endpoint": "https://api.pushover.net",
+      "current_policy": "optional; secret local"
+    },
+    {
+      "name": "Yahoo market data",
+      "mode": "shadow_research_fallback",
+      "component": "trader",
+      "endpoint": "source-defined",
+      "current_policy": "delayed research-only fallback, no brokerage orders"
+    }
+  ],
+  "data_contracts": [
+    {
+      "producer": "geo_feed",
+      "artifact": "geo_feed.json",
+      "consumers": [
+        "trader",
+        "dashboard"
+      ],
+      "freshness_seconds": null,
+      "reason": "Market sessions and published news cadence vary"
+    },
+    {
+      "producer": "trader",
+      "artifact": "momentum_trader.sqlite3",
+      "consumers": [
+        "dashboard",
+        "daily_review"
+      ],
+      "freshness_seconds": null
+    },
+    {
+      "producer": "trader",
+      "artifact": "dashboard_state.json",
+      "consumers": [
+        "dashboard"
+      ],
+      "freshness_seconds": null
+    },
+    {
+      "producer": "daily_review",
+      "artifact": "analysis/evidence/",
+      "consumers": [
+        "daily_review"
+      ],
+      "freshness_seconds": null
+    },
+    {
+      "producer": "daily_review",
+      "artifact": "analysis/performance/latest.json",
+      "consumers": [
+        "daily_review"
+      ],
+      "freshness_seconds": null
+    },
+    {
+      "producer": "deployment_agent",
+      "artifact": "deploy/state/active_release.json",
+      "consumers": [
+        "supervisor",
+        "runtime_inventory"
+      ],
+      "freshness_seconds": null
+    },
+    {
+      "producer": "supervisor",
+      "artifact": "deploy/state/supervisor.log",
+      "consumers": [
+        "runtime_inventory"
+      ],
+      "freshness_seconds": null
+    }
+  ],
+  "observation_policy": {
+    "process_log_identity": "Only match hidden commandline PIDs with a supervisor launch record and matching process creation timestamp",
+    "runtime_reports": "Local ignored files; never publish raw command lines or secret values",
+    "github_green_means": "Repository validation only; never a live Windows deployment acknowledgement"
+  }
 }
