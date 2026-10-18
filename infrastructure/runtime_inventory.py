@@ -178,11 +178,16 @@ def associate_process(component: dict, processes: list[dict], launches: dict[int
         pid = int(proc.get("pid") or 0)
         command = str(proc.get("command") or "")
         started = str(proc.get("started_utc") or "")
-        direct = False
-        # Match whole script basename tokens; do not match an adjacent backup name.
+        matched_script = ""
+        # Match whole Python script basename tokens, not backup files.
         if command:
             names = re.findall(r"(?i)(?<![\w.])([\w.-]+\.py)(?![\w.])", command)
-            direct = any(fnmatch.fnmatch(name.lower(), pattern.lower()) for name in names)
+            candidates = sorted({name for name in names if fnmatch.fnmatch(name.lower(), pattern.lower())})
+            if len(candidates) == 1:
+                matched_script = candidates[0]
+            elif len(candidates) > 1:
+                return {"state": "AMBIGUOUS", "pids": [pid], "identification": "multiple_scripts"}
+        direct = bool(matched_script)
         inferred = False
         if not command and pid in launches and started:
             launch = launches[pid]
@@ -194,17 +199,63 @@ def associate_process(component: dict, processes: list[dict], launches: dict[int
                     log_time = datetime.fromisoformat(launch["time"]).astimezone(timezone.utc)
                     started_dt = parse_timestamp(started)
                     inferred = abs((started_dt - log_time).total_seconds()) <= max_launch_skew_seconds
+                    if inferred:
+                        matched_script = expected
                 except (ValueError, OverflowError):
                     inferred = False
         if direct or inferred:
-            matching.append({"pid": pid, "identified_by": "command_line" if direct else "supervisor_log_verified_start"})
+            matching.append({
+                "pid": pid, "identified_by": "command_line" if direct else "supervisor_log_verified_start",
+                "script": matched_script,
+            })
     if len(matching) > 1:
-        return {"state": "DUPLICATE", "pids": [p["pid"] for p in matching], "identification": "multiple"}
+        return {"state": "DUPLICATE", "pids": [p["pid"] for p in matching],
+                "scripts": sorted({p["script"] for p in matching}), "identification": "multiple"}
     if matching:
         return {"state": "OBSERVED", "pids": [matching[0]["pid"]],
+                "script": matching[0]["script"],
                 "identification": matching[0]["identified_by"]}
     return {"state": "UNKNOWN", "pids": [],
             "identification": "not_visible_or_missing"}
+
+
+def compare_expected_script(component: dict, process: dict,
+                            manifest: dict, tracked_settings: dict) -> dict:
+    """Reconcile observed version with the local release manifest/fallback.
+
+    Checks script name and selection, not in-memory code digest, executable
+    provenance, or the Windows Task Scheduler launch chain.
+    """
+    if process.get("state") == "NOT_PROCESS" or not component.get("script_pattern"):
+        return {"state": "NOT_APPLICABLE"}
+    files = manifest.get("files") or {}
+    if not isinstance(files, dict):
+        files = {}
+    key = component.get("manifest_key")
+    config_key = component.get("config_key")
+    if key and isinstance(files.get(key), str) and files[key].strip():
+        planned = files[key]
+        source = "local_active_release_manifest"
+    elif config_key and isinstance(tracked_settings.get(config_key), str):
+        planned = tracked_settings[config_key]
+        source = "tracked_config_fallback"
+    else:
+        planned = component.get("entrypoint") or ""
+        source = "registry_default"
+
+    expected = PurePosixPath(str(planned).replace("\\", "/")).name
+    observed = PurePosixPath(str(process.get("script") or "").replace("\\", "/")).name
+    if not expected or process.get("state") != "OBSERVED" or not observed:
+        state = "UNVERIFIED"
+    elif observed.lower() == expected.lower():
+        state = "MATCHED"
+    else:
+        state = "MISMATCH"
+    return {
+        "state": state, "expected_script": expected,
+        "observed_script": observed or "UNVERIFIED",
+        "expected_source": source, "code_digest_verified": False,
+    }
 
 
 def report_health(root: Path, component: dict, *, now: datetime | None = None) -> dict:
@@ -280,11 +331,14 @@ def collect(root: Path) -> dict:
     if not isinstance(manifest, dict):
         manifest = {}
     launchlog = latest_launches(root / "deploy" / "state" / "supervisor.log")
+    tracked_settings = config_values(root / registry["settings_file"])
     observed = {}
     for component in registry["components"]:
         cid = component["id"]
+        process = associate_process(component, processes, launchlog)
         observed[cid] = {
-            "process": associate_process(component, processes, launchlog),
+            "process": process,
+            "script_version": compare_expected_script(component, process, manifest, tracked_settings),
             "artifact": report_health(root, component),
         }
     warnings = []
@@ -306,10 +360,14 @@ def collect(root: Path) -> dict:
     if discovery_error:
         warnings.append(discovery_error)
     for cid, state in observed.items():
-        if state["process"]["state"] == "DUPLICATE":
-            warnings.append(f"Duplicate process: {cid}")
-        if state["process"]["state"] == "UNKNOWN" and registry["components"]:
+        if state["process"]["state"] in {"DUPLICATE", "AMBIGUOUS"}:
+            warnings.append(f"Duplicate or ambiguous process: {cid}")
+        if state["process"]["state"] == "UNKNOWN":
             warnings.append(f"Process identity unverified: {cid}")
+        if state["script_version"]["state"] == "MISMATCH":
+            warnings.append(f"Active script version differs from expected release: {cid}")
+        elif state["script_version"]["state"] == "UNVERIFIED" and state["process"]["state"] == "OBSERVED":
+            warnings.append(f"Active script version could not be verified: {cid}")
         if state["artifact"]["state"] in {"MISSING", "STALE", "DEGRADED", "ERROR", "INCONSISTENT", "UNREADABLE", "CLOCK_SKEW"}:
             warnings.append(f"Artifact health needs attention: {cid}")
     active_files = {}
