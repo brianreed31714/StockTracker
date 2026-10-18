@@ -1,0 +1,13 @@
+{
+  "proposal_id": "P-STOCK-20261018-02",
+  "status": "READY_TO_DEPLOY",
+  "commit": "286dd9416f291580797256d573dca14ca55ccdce",
+  "components": [
+    "trader"
+  ],
+  "files": {
+    "trader": "momentum_trader_v1_10_runtime_audit.py"
+  },
+  "mode": "PAPER",
+  "note": "Approved controlled refresh after GPT-6 Luna daily-review high-effort code change. Pull latest main, restart paper trader only, preserve all other services and risk controls. Do not enable live trading. Daily review is a separate scheduled process and will use updated code on its next launch. Verify restart and model API success in local logs."
+}
