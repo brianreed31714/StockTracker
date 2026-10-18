@@ -25,8 +25,8 @@ def _matches(command, patterns):
 
 def project_services(project):
     patterns = ({
-        "stock": [r"momentum_trader_v[\w.\-]*\\.py",r"xom_geo_feed_v[\w.\-]*\\.py",r"momentum_dashboard_v[\w.\-]*\\.py"],
-        "crypto": [r"auto_trader_with_alerts_v[\w.\-]*\\.py",r"cryptotracker_dashboard_v[\w.\-]*\\.py",r"smart_money_monitor_v[\w.\-]*\\.py"]
+        "stock": [r"momentum_trader_v[\w.\-]*\.py",r"xom_geo_feed_v[\w.\-]*\.py",r"momentum_dashboard_v[\w.\-]*\.py"],
+        "crypto": [r"auto_trader_with_alerts_v[\w.\-]*\.py",r"cryptotracker_dashboard_v[\w.\-]*\.py",r"smart_money_monitor_v[\w.\-]*\.py"]
     })[project]
     return [(int(p["ProcessId"]),p.get("CommandLine") or "") for p in _processes()
             if p.get("CommandLine") and _matches(p["CommandLine"],patterns)]
