@@ -165,10 +165,7 @@ def report_health(root: Path, component: dict, *, now: datetime | None = None) -
     try:
         report = json.loads(p.read_text(encoding="utf-8"))
         observed = parse_timestamp(report["observed_at_utc"])
-        age = (now or utc_now() - observed).total_seconds()
-        # Distinct parentheses are intentional for deterministic injected 'now'.
-        if now is not None:
-            age = (now - observed).total_seconds()
+        age = ((now or utc_now()) - observed).total_seconds()
         tracked = int(report["tracked_wallets"])
         success = int(report["successful_wallet_checks"])
         failed = int(report["failed_wallet_checks"])
