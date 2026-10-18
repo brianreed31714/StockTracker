@@ -258,7 +258,14 @@ def main():
         review["review_source"] = "OPENAI"
         review["model"] = MODEL
     except Exception as exc:
-        print(f"AI review warning: {exc}")
+        # Auth/configuration errors are operational failures, not successful reviews.
+        # Avoid logging exception text: provider errors can contain parts of API keys.
+        status = getattr(exc, "status_code", None)
+        if status in (401, 403) or type(exc).__name__ in {"AuthenticationError", "PermissionDeniedError"}:
+            print(f"AI review FAILED: authentication/permission error (HTTP {status or 'unknown'}).")
+            print("Review and proposals not published. Update OPENAI_API_KEY, then rerun.")
+            raise SystemExit(2)
+        print(f"AI review warning: {type(exc).__name__} (details redacted)")
         review = deterministic_review(metrics)
         review["review_source"] = "DETERMINISTIC_FALLBACK"
         review["model"] = None
