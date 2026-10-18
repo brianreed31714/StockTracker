@@ -27,9 +27,11 @@ class AgentRegistryHookTests(unittest.TestCase):
 
     def test_agent_invokes_contract_for_approved_request(self):
         with patch.object(agent, "run", return_value=SimpleNamespace(returncode=0, stdout="same-blob\n")), \
-             patch.object(agent, "release_preflight", return_value={}) as preflight:
+             patch.object(agent, "release_preflight", return_value={}) as preflight, \
+             patch.object(agent, "enforce_commit_release_scope", return_value={}) as commit_scope:
             proposal_id, commit, targets = agent.validate_request(self.request())
         preflight.assert_called_once_with(agent.ROOT, ["dashboard"], {"dashboard": FILE})
+        commit_scope.assert_called_once_with(agent.ROOT, "a" * 40, ["dashboard"])
         self.assertEqual(proposal_id, PROPOSAL)
         self.assertIn("dashboard", targets)
 
