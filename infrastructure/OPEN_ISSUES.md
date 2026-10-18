@@ -9,7 +9,7 @@ the [operations runbook](OPERATIONS.md) defines release gates.
 |---|---|---|---|
 | P1 | Windows inventory observed both trading systems on 2026-10-18; exact release health still unverified | User-supplied on-PC snapshot identified Crypto supervisor/agent/trader/Smart Money/dashboard, and Stock supervisor/agent/geo/trader/dashboard. Crypto Smart Money heartbeat healthy. | Repeat against latest script-version checks, collect task metadata and sustained service health before release attestation |
 | P1 | StockTracker supervisor task's last invocation terminated unexpectedly, but service currently runs | 2026-10-18 on-PC audit: task `Ready`, last result `2147943467` (`0x8007042B`, Windows 1067), last task run 2026-09-28; supervisor PID 25084 observed with exact script version. Task state is not service health. | Read task and event history, establish process parent/startup lineage, then non-disruptive task recovery plan; no blind restart |
-| P1 | StockTracker daily scheduled review last returned nonzero | On-PC last task result `1` after 2026-10-16 20:30 UTC scheduled run; `run_daily_model_review.bat` intentionally returns 1 on pipeline failure. Current review completion/state unknown. | Examine local post-close review state and sanitized task history. Do not manually re-run the research job or assume failed/successful reporting without evidence. |
+| P0 | StockTracker 2026-10-16 daily review entered an unbounded retry loop | On-PC post-close review mirror: `FAILED`, `attempts=93`, last attempt finished 2026-10-17 03:59:11 UTC, stage not recorded by original runner. Trader v1.10 repeatedly retries failed reviews, while the original guard had no attempt budget. | Code committed for 3 attempts/session, 15-minute cooldown, cross-process entry lock and failure stage. CI validated; **NOT YET ACTIVE IN RUNNING TRADER** until controlled paper-mode deployment. Read-only artifact probe may narrow underlying failing stage; do not replay review blindly. |
 | P0 | Full-project restart can misidentify Python children with hidden command lines | Earlier Smart Money PID 36368 had blank Win32_Process.CommandLine and survived script-based cleanup | Fail-closed process identity and permission tests **before stopping healthy traders**; isolated rollback simulation |
 | RESOLVED | Historical StockTracker requests falsely remained READY_TO_DEPLOY in GitHub | On-PC processed-request history showed `P-STOCK-20260929-01`, `-02`, and `P-STOCK-20261001-01` as DEPLOYED; current active local trader is P-STOCK-20261018-02. GitHub records have now been reconciled to DEPLOYED, retaining their original SHA/file lists. | StockTrader deployment preflight passed after reconciliation; no old release replayed |
 | P1 | Current supervisor OK handshake is not sustained health attestation | Handshake chiefly checks process presence; Smart Money produced DEGRADED output despite a running process | Verify deployed SHA plus repeated runtime health cycles and producer/consumer agreement before claiming release VERIFIED |
@@ -20,6 +20,16 @@ the [operations runbook](OPERATIONS.md) defines release gates.
 | P2 | Historical setup documentation contradicted active runtime | Prior Stock README v1.8 vs fallback v1.9 vs host observation v1.10; old Crypto doc claimed password-based boot task | Reconciled README/startup docs; recheck task installation with host inventory |
 
 Host snapshot note: current runtime observations do **not** verify exact code digests, process longevity, or task launch provenance. The user reran the audit on 2026-10-18: exact script basenames matched all ten observed services, Smart Money feed healthy. This still does not prove code digests, full heartbeat continuity, or scheduled task launch ownership.
+
+
+## Review retry circuit breaker status (2026-10-18)
+
+- `post_close_review_policy.py`: pure fail-closed three-attempt/session limit and 15-minute failed-review cooldown.
+- `post_close_review_guard.py`: inter-process file lock shared by Scheduled Task and trader runner, distinct exit status for completed/running (20), budget exhausted (21), and cooldown (22). Stage evidence is recorded for future failures.
+- `run_daily_model_review.bat`: handles guard exit codes and records failed pipeline phase without exposing provider error text.
+- `momentum_trader_v1_10_runtime_audit.py`: future EOD execution uses the same retry budget/cooldown. Trader remains `PAPER_ONLY=True` and `TradingClient(...paper=True)`.
+- `infrastructure/review_artifact_probe.py`: read-only sanitized previous-review artifacts; old 93-attempt status cannot retroactively reveal a step that was never recorded.
+- **Do not claim the change deployed** merely because GitHub Actions passed. The currently running Python trader was started before these changes. Preserve existing trader until controlled deployment and host attestation are authorized.
 
 ## Status vocabulary
 
