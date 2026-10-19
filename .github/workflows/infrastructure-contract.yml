@@ -84,6 +84,10 @@ jobs:
           $errors = $null
           [System.Management.Automation.Language.Parser]::ParseFile("infrastructure/diagnose_stock_tasks.ps1", [ref]$tokens, [ref]$errors) | Out-Null
           if ($errors.Count -gt 0) { throw ($errors | Out-String) }
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile("infrastructure/apply_review_135.ps1", [ref]$tokens, [ref]$errors) | Out-Null
+          if ($errors.Count -gt 0) { throw ($errors | Out-String) }
       - name: Compile deployable modules without imports or side effects
         shell: pwsh
         run: |
