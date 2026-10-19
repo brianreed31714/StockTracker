@@ -168,7 +168,8 @@ class TraderScheduleTests(unittest.TestCase):
         self.state = {}
         self.namespace = {
             "POST_CLOSE_REVIEW_ENABLED": True, "MARKET_TZ": timezone.utc,
-            "POST_CLOSE_REVIEW_DELAY_MINUTES": 5, "timedelta": timedelta,
+            "datetime": datetime, "ZoneInfo": __import__("zoneinfo").ZoneInfo,
+            "POST_CLOSE_REVIEW_DELAY_MINUTES": 35, "timedelta": timedelta,
             "timezone": timezone, "load_post_close_review_state": lambda: self.state,
             "market_session_close_utc": lambda _: self.close,
             "review_retry_decision": review_retry_decision,
@@ -180,7 +181,7 @@ class TraderScheduleTests(unittest.TestCase):
         now = self.close+timedelta(minutes=15)
         self.state = {"review_date":DATE, "status":"FAILED", "attempts":1,
                       "finished_at":now.isoformat()}
-        self.assertEqual(self.fn(now), now+timedelta(minutes=FAILED_RETRY_COOLDOWN_MINUTES))
+        self.assertEqual(self.fn(now), self.close+timedelta(minutes=35))
 
     def test_exhausted_review_is_not_rescheduled(self):
         now = self.close+timedelta(minutes=45)
@@ -191,7 +192,7 @@ class TraderScheduleTests(unittest.TestCase):
     def test_new_session_runs_close_plus_delay(self):
         now = self.close+timedelta(minutes=7)
         self.state = {"review_date":"2026-10-15", "status":"FAILED","attempts":93}
-        self.assertEqual(self.fn(now), self.close+timedelta(minutes=5))
+        self.assertEqual(self.fn(now), self.close+timedelta(minutes=35))
 
 
 class BatchRunnerContractTests(unittest.TestCase):
