@@ -24,4 +24,9 @@ if (-not $Apply) {
 $Trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday,Tuesday,Wednesday,Thursday,Friday -At 1:35PM
 Set-ScheduledTask -TaskName $Name -Trigger $Trigger -ErrorAction Stop | Out-Null
 $Updated = Get-ScheduledTask -TaskName $Name -ErrorAction Stop
-Write-Host "Review trigger now: $($Updated.Triggers[0].StartBoundary)"
+if (@($Updated.Triggers).Count -ne 1 -or
+    ([datetime]$Updated.Triggers[0].StartBoundary).ToString('HH:mm') -ne '13:35') {
+    throw 'Schedule update returned without verified 13:35 trigger.'
+}
+Write-Host "VERIFIED: Review task now starts weekdays at 13:35 Pacific."
+Write-Host 'No StockTracker or CryptoTracker process was restarted.'
