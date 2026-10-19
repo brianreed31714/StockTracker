@@ -223,6 +223,22 @@ def validate_target(snapshot: dict, processes: list[dict], root: Path) -> dict:
     stock = require_observed_services(snapshot, REQUIRED_STOCK)
     current = matching_traders(processes, root)
     if len(current) != 1 or current[0].get("pid") != stock["trader"]:
+        # Explain which independent ownership proof is missing without
+        # printing raw command lines, directory names or credentials.
+        if not current:
+            inventory_pid = stock["trader"]
+            observed = next(
+                (p for p in processes if int(p.get("pid") or 0) == inventory_pid),
+                None,
+            )
+            if observed is not None:
+                script = _trader_script_argument(str(observed.get("command") or ""))
+                if script and PureWindowsPath(script).name.casefold() == TRADER_NAME.casefold():
+                    if not PureWindowsPath(script).is_absolute() and not Path(script).is_absolute():
+                        reason = relative_process_cwd_evidence(observed, root)
+                        raise ActivationBlocked(
+                            "Relative trader process ownership not verified: " + reason
+                        )
         raise ActivationBlocked("Refusing to target an ambiguous trader process")
     active_files = snapshot.get("active_manifest_files") or {}
     if active_files.get("trader") != TRADER_NAME:
