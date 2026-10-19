@@ -159,7 +159,8 @@
         "publish_supporting_evidence.py",
         "post_close_review_guard.py",
         "post_close_review_policy.py",
-        "infrastructure/review_artifact_probe.py"
+        "infrastructure/review_artifact_probe.py",
+        "infrastructure/apply_review_135.ps1"
       ],
       "health": {
         "type": "evidence_only"
@@ -264,7 +265,8 @@
     "Scheduled task settings are inferred from the tracked installer script; host inventory must confirm them.",
     "Alpaca trader source must preserve PAPER_ONLY=True and TradingClient(...,paper=True).",
     "ZPTA specialist is imported by the trader for shadow-only research, not an independently managed Python process.",
-    "Post-close reviews are launched from the paper trader and from the weekday Scheduled Task; both use post_close_review_policy.py, with three attempts per market session and 15-minute cooldown. No running trader reload is implied by a successful GitHub commit."
+    "Post-close reviews are launched from the paper trader and from the weekday Scheduled Task; both use post_close_review_policy.py, with three attempts per market session and 15-minute cooldown. No running trader reload is implied by a successful GitHub commit.",
+    "Weekday EOD review task is 13:35 America/Los_Angeles on the Windows Pacific host; installer changes do not alter already-installed tasks. Operator uses infrastructure/apply_review_135.ps1 -Apply to update only the existing trigger."
   ],
   "external_services": [
     {
