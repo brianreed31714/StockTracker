@@ -205,7 +205,10 @@ def activate(root: Path = ROOT, *, apply: bool = False, timeout_seconds: int = 2
     # Tests load only the isolated review guard and AST of the trader; they do
     # not construct Alpaca TradingClient or place paper/live orders.
     run_readonly(
-        sys.executable, "-m", "unittest", "-q", "test_review_retry_safety",
+        sys.executable, "-m", "unittest", "-q", "test_review_retry_safety.RetryPolicyTests",
+        "test_review_retry_safety.GuardTests",
+        "test_review_retry_safety.BatchRunnerContractTests",
+        "infrastructure.test_eod_timing", "infrastructure.test_pacific_times",
         cwd=root, timeout=100,
     )
     if not outside_active_hours(datetime.now(timezone.utc)):
