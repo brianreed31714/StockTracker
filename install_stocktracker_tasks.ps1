@@ -34,9 +34,9 @@ $SupervisorTrigger = New-ScheduledTaskTrigger -AtLogOn -User $CurrentUser
 $SupervisorTrigger.Delay = "PT30S"
 Register-ScheduledTask -TaskName $SupervisorTask -Action $SupervisorAction -Trigger $SupervisorTrigger -Principal $Principal -Settings $Settings -Force | Out-Null
 
-# Weekdays at 1:30 PM LOCAL Windows time (intended 4:30 PM Eastern on this PC).
+# Weekdays at 1:35 PM LOCAL Windows time (intended 4:30 PM Eastern on this PC).
 $ReviewAction = New-ScheduledTaskAction -Execute "cmd.exe" -Argument ("/c `"" + $ReviewBat + "`"") -WorkingDirectory $Repo
-$ReviewTrigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday,Tuesday,Wednesday,Thursday,Friday -At 1:30PM
+$ReviewTrigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday,Tuesday,Wednesday,Thursday,Friday -At 1:35PM
 Register-ScheduledTask -TaskName $ReviewTask -Action $ReviewAction -Trigger $ReviewTrigger -Principal $Principal -Settings $Settings -Force | Out-Null
 
 Write-Host "Created scheduled task: $SupervisorTask"
