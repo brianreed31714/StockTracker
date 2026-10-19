@@ -16,7 +16,7 @@ jobs:
         with:
           python-version: "3.13"
       - name: Install minimal local agent dependencies
-        run: python -m pip install requests python-dotenv tzdata
+        run: python -m pip install requests python-dotenv tzdata psutil
       - name: Registry, safety invariants, dependency graph
         run: |
           python -m infrastructure.registry_contract
@@ -60,7 +60,7 @@ jobs:
         with:
           python-version: "3.13"
       - name: Install minimal local agent dependencies
-        run: python -m pip install requests python-dotenv tzdata
+        run: python -m pip install requests python-dotenv tzdata psutil
       - name: Test Windows-compatible registry enforcement
         shell: pwsh
         run: |
