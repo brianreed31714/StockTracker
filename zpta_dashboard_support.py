@@ -6,6 +6,7 @@ Never imports the ZPTA specialist or broker clients and never places orders.
 """
 from __future__ import annotations
 
+from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
 import sqlite3
@@ -76,7 +77,7 @@ def daily_resolved_forecasts(db_path: Path, *, max_groups: int = 300) -> list[di
         raise ValueError("max_groups must be between 1 and 2000")
     if not db_path.is_file():
         return []
-    with _read_only_connection(db_path) as conn:
+    with closing(_read_only_connection(db_path)) as conn:
         conn.row_factory = sqlite3.Row
         conn.create_function("resolution_market_date", 1, resolution_market_date)
         cursor = conn.execute(
@@ -101,7 +102,7 @@ def all_time_resolved_forecasts(db_path: Path) -> list[dict]:
     """Retain existing lifetime model metrics alongside the dated detail."""
     if not db_path.is_file():
         return []
-    with _read_only_connection(db_path) as conn:
+    with closing(_read_only_connection(db_path)) as conn:
         conn.row_factory = sqlite3.Row
         cursor = conn.execute(
             """
@@ -121,7 +122,7 @@ def latest_observation(db_path: Path) -> dict | None:
     """Most recent stored quote is historical evidence, never a live quote."""
     if not db_path.is_file():
         return None
-    with _read_only_connection(db_path) as conn:
+    with closing(_read_only_connection(db_path)) as conn:
         conn.row_factory = sqlite3.Row
         row = conn.execute(
             "SELECT ts,provider,price FROM zpta_observations ORDER BY ts DESC LIMIT 1"
