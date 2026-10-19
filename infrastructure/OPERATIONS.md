@@ -84,6 +84,25 @@ Deployment agents now record `verification_status=UNVERIFIED` and notify that su
 
 The repository does **not yet** contain a fully proven autonomous deployment-attestation loop for every service. Treat any unresolved runtime verification as `UNVERIFIED`, not success. In particular, the existing supervisor success handshake primarily verifies processes, not three independent healthy operating cycles.
 
+## Pacific market/review timing (October 19, 2026)
+
+The Windows StockTracker host is on Pacific Time. The weekday safety blackout for **scoped paper-trader activations** is now **06:30–13:40 Pacific** (inclusive of the opening boundary and exclusive of the 13:40 boundary), using `America/Los_Angeles` to handle PDT and PST. Weekend activation is not time-blocked, but all process ownership and paper safety checks remain mandatory.
+
+Both reporting paths now target **13:35 Pacific (16:35 Eastern)** on regular weekdays:
+
+- Dedicated Stock EOD Pushover notification: `PUSHOVER_STOCK_EOD_HOUR=16`, `PUSHOVER_STOCK_EOD_MINUTE=35`.
+- AI review and sanitized evidence: `POST_CLOSE_REVIEW_DELAY_MINUTES=35` plus a 13:35 Pacific **minimum start** on shortened trading sessions. Alpaca's actual session close still controls market-calendar availability, and the shared retry guard prevents overlapping trader/scheduled-task attempts.
+
+The installer `install_stocktracker_tasks.ps1` is updated for future installations but **must not be rerun** merely to change the existing task; it unregisters tasks and starts the supervisor. To change only the existing daily review task's trigger without touching any running services, use this from an authorized **Pacific-time Windows PowerShell** in the StockTracker repo:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\infrastructure\apply_review_135.ps1
+# After reviewing the output, explicitly apply just the weekday trigger:
+powershell -NoProfile -ExecutionPolicy Bypass -File .\infrastructure\apply_review_135.ps1 -Apply
+```
+
+The helper fails closed if the task action or existing trigger is unexpected or if the task is running. It may require elevated Task Scheduler permissions. A changed GitHub installer alone does not change the already-installed Windows task. The running trader also needs a **separately controlled restart after 13:40** to load new in-memory EOD settings; code sync does not hot-reload the Python process. If the task starts after its scheduled minute because Windows was unavailable, it can run late; no guarantee of exactly 13:35 execution is possible without live task verification.
+
 ## Controlled review repair activation (local Windows only)
 
 The committed review fix does **not** automatically modify an existing in-memory trader process. The existing deployment agent's `READY_TO_DEPLOY` path still uses a **whole-StockTracker** supervisor restart, and the already-running agent will not hot-reload its Python implementation. **Do not create a new READY_TO_DEPLOY request for this maintenance repair.**
