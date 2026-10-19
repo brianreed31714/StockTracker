@@ -135,7 +135,8 @@
       "deployment_component": "dashboard",
       "script_pattern": "momentum_dashboard_*.py",
       "source_files": [
-        "momentum_dashboard_v1_3_agentic.py"
+        "momentum_dashboard_v1_3_agentic.py",
+        "zpta_dashboard_support.py"
       ],
       "health": {
         "type": "process_plus_dependency_health"
