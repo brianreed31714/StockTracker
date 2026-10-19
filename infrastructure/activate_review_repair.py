@@ -60,13 +60,18 @@ def remote_matches_head(root: Path) -> str:
 
 
 def outside_active_hours(now: datetime) -> bool:
-    """Conservative stock-market and reporting blackout, New York wall clock."""
+    """Weekday protected trading + EOD window: 06:30–13:40 Pacific.
+
+    Use America/Los_Angeles rather than a fixed PDT/PST UTC offset. Weekends
+    remain eligible, with all original release, identity and paper checks.
+    """
     if now.tzinfo is None:
         raise ActivationBlocked("Time must be timezone-aware")
-    et = now.astimezone(ZoneInfo("America/New_York"))
-    if et.weekday() >= 5:
+    pacific = now.astimezone(ZoneInfo("America/Los_Angeles"))
+    if pacific.weekday() >= 5:
         return True
-    return et.hour < 7 or et.hour >= 19
+    minute_of_day = pacific.hour * 60 + pacific.minute
+    return not (6 * 60 + 30 <= minute_of_day < 13 * 60 + 40)
 
 
 def require_observed_services(snapshot: dict, components: tuple[str, ...]) -> dict[str, int]:
@@ -155,7 +160,7 @@ def inspect_host(root: Path) -> tuple[dict, dict, dict, dict, str]:
     if os.name != "nt":
         raise ActivationBlocked("Activation requires the actual Windows host")
     if not outside_active_hours(datetime.now(timezone.utc)):
-        raise ActivationBlocked("Market/review blackout 07:00–19:00 Eastern weekdays")
+        raise ActivationBlocked("Market/review blackout 06:30–13:40 Pacific weekdays")
     head = remote_matches_head(root)
     assert_paper_safe(root)
     stock = collect(root)
