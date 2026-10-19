@@ -4,6 +4,9 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
+from zpta_dashboard_support import (all_time_resolved_forecasts, daily_resolved_forecasts,
+                                    explain_zpta_status, latest_observation,
+                                    market_timestamp_label)
 
 BASE_DIR = Path(__file__).resolve().parent
 load_dotenv(BASE_DIR / ".env.config")
@@ -98,6 +101,11 @@ zd.metric("Action",str(z.get("action","—")))
 ze.metric("Shadow Equity",f"${float(z.get('equity')):,.2f}" if isinstance(z.get('equity'),(int,float)) else "—")
 st.caption(f"Provider: {z.get('provider','—')} • Regime: {z.get('regime','—')} • no broker orders")
 
+zpta_issue=explain_zpta_status(z)
+if zpta_issue:
+    st.warning(zpta_issue)
+    st.caption("ZPTA error reflects the last trader snapshot, not the health of historical forecasts. The specialist remains SHADOW ONLY.")
+
 zsignals=pd.DataFrame(z.get("signals",[]) or [])
 if not zsignals.empty:
     if "score" in zsignals: zsignals["score"]=pd.to_numeric(zsignals["score"],errors="coerce").round(1)
@@ -105,19 +113,42 @@ if not zsignals.empty:
 
 if DB.exists():
     try:
-        with sqlite3.connect(DB) as c:
-            zstats=pd.read_sql_query("""
-                SELECT model,horizon_minutes,COUNT(*) AS samples,
-                       ROUND(AVG(correct)*100,1) AS accuracy_pct,
-                       ROUND(AVG(forward_return)*100,3) AS avg_return_pct
-                FROM zpta_predictions WHERE resolved_ts IS NOT NULL
-                GROUP BY model,horizon_minutes ORDER BY model,horizon_minutes
-            """,c)
-        if not zstats.empty:
-            st.caption("Resolved ZPTA forecast performance")
-            st.dataframe(zstats,hide_index=True,use_container_width=True,height=210)
-    except Exception:
-        st.caption("ZPTA evidence tables will appear after the first specialist cycle.")
+        last_zpta=latest_observation(DB)
+        daily_zstats=daily_resolved_forecasts(DB)
+        lifetime_zstats=all_time_resolved_forecasts(DB)
+        if last_zpta:
+            last_price=last_zpta.get("price")
+            price_text=f"${float(last_price):.4f}" if isinstance(last_price,(int,float)) else "unavailable"
+            st.caption(
+                f"Last stored ZPTA quote (historical, not live): {price_text} • "
+                f"{market_timestamp_label(last_zpta.get('ts'))} • "
+                f"source: {last_zpta.get('provider') or 'unknown'}"
+            )
+        if daily_zstats:
+            st.caption("Resolved ZPTA forecast performance • dates are forecast resolution dates in Eastern Time")
+            daily_tab,all_time_tab=st.tabs(["Daily detail (ET)","All-time summary"])
+            with daily_tab:
+                dated=pd.DataFrame(daily_zstats).rename(columns={
+                    "market_date":"Date (ET)", "model":"Model",
+                    "horizon_minutes":"Horizon (min)", "samples":"Samples",
+                    "accuracy_pct":"Accuracy (%)", "avg_return_pct":"Avg return (%)",
+                })
+                st.dataframe(dated,hide_index=True,use_container_width=True,height=260)
+                if len(daily_zstats)>=300:
+                    st.caption("Displaying 300 most recent date/model/horizon groups; the averages include every stored forecast in each group.")
+            with all_time_tab:
+                lifetime=pd.DataFrame(lifetime_zstats).rename(columns={
+                    "model":"Model", "horizon_minutes":"Horizon (min)",
+                    "samples":"Samples", "accuracy_pct":"Accuracy (%)",
+                    "avg_return_pct":"Avg return (%)",
+                })
+                st.dataframe(lifetime,hide_index=True,use_container_width=True,height=260)
+        else:
+            st.caption("No resolved ZPTA forecasts are stored yet.")
+    except (sqlite3.Error, OSError, ValueError):
+        st.caption("ZPTA forecast history is temporarily unavailable; the historical database could not be read.")
+else:
+    st.caption("No ZPTA forecast database is available yet.")
 
 st.subheader("Recent Paper Orders")
 if DB.exists():
