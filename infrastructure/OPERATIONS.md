@@ -13,6 +13,14 @@ This file describes the **repository design**, not a claim that every service is
 | Dashboard | `momentum_dashboard_v1_3_agentic.py` | Supervisor | Read-only paper and research status |
 | Daily review | `run_daily_model_review.bat` | StockTracker Daily Review task and trader post-close path | EOD proposals and evidence |
 
+## ZPTA shadow specialist dashboard (October 19, 2026)
+
+The read-only `momentum_dashboard_v1_3_agentic.py` now uses `zpta_dashboard_support.py` to classify and explain the *actual* ZPTA error recorded in `dashboard_state.json`, without printing raw provider exceptions or credentials. The error remains visible until the specialist recovers. The last stored quote includes its original timestamp and an explicit **historical, not live** label; no stale market data is substituted into live signal metrics.
+
+ZPTA resolved forecast detail is now grouped by the **Eastern Time date of resolution**, model, and horizon, with correct per-date sample counts, accuracy and average returns. The former lifetime aggregates are preserved under an **All-time summary** tab. The dashboard SQLite connections use read-only mode with explicit closure to avoid Windows file-lock leaks and accidental database creation. These changes do not edit the shadow specialist, the paper trader, its process, the source database, or the provider credentials.
+
+**Outstanding:** A user screenshot of `Status: ERROR` proves the specialist reported an exception, but does not establish its root cause. The underlying provider/data or specialist exception can only be diagnosed from the Windows-local `zpta_shadow.error` state or local logs. Code CI and visible dashboard improvements do not establish live data-feed recovery. A normal Git auto-sync may refresh Streamlit files; no `READY_TO_DEPLOY` request or broad restart is authorized for a presentation-only repair.
+
 ## Provider and data dependencies
 
 `registry.json` lists outbound providers, whether they are paper/read-only, local evidence files, producer/consumer relationships, and freshness semantics. A component may be *alive but not healthy* or *invisible to Windows command-line inspection but writing healthy heartbeats*. We test these separately.
