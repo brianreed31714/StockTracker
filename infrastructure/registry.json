@@ -29,7 +29,7 @@
       "name": "StockTracker Daily Review",
       "installer": "install_stocktracker_tasks.ps1",
       "script": "run_daily_model_review.bat",
-      "trigger": "weekday_13_30_local",
+      "trigger": "weekday_13_35_local",
       "run_level": "highest",
       "host_verified": false
     }
