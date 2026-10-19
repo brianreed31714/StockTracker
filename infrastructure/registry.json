@@ -251,7 +251,8 @@
       "deployment_component": null,
       "script_pattern": null,
       "source_files": [
-        "infrastructure/activate_review_repair.py"
+        "infrastructure/activate_review_repair.py",
+        "infrastructure/test_trader_identity.py"
       ],
       "health": {
         "type": "not_applicable"
