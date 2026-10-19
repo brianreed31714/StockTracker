@@ -97,6 +97,26 @@ def daily_resolved_forecasts(db_path: Path, *, max_groups: int = 300) -> list[di
         return [dict(row) for row in cursor.fetchall()]
 
 
+def all_time_resolved_forecasts(db_path: Path) -> list[dict]:
+    """Retain existing lifetime model metrics alongside the dated detail."""
+    if not db_path.is_file():
+        return []
+    with _read_only_connection(db_path) as conn:
+        conn.row_factory = sqlite3.Row
+        cursor = conn.execute(
+            """
+            SELECT model, horizon_minutes, COUNT(*) AS samples,
+                   ROUND(AVG(correct)*100,1) AS accuracy_pct,
+                   ROUND(AVG(forward_return)*100,3) AS avg_return_pct
+            FROM zpta_predictions
+            WHERE resolved_ts IS NOT NULL
+            GROUP BY model,horizon_minutes
+            ORDER BY model,horizon_minutes
+            """
+        )
+        return [dict(row) for row in cursor.fetchall()]
+
+
 def latest_observation(db_path: Path) -> dict | None:
     """Most recent stored quote is historical evidence, never a live quote."""
     if not db_path.is_file():
