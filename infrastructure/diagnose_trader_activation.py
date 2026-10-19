@@ -15,7 +15,7 @@ from pathlib import Path, PureWindowsPath
 
 from infrastructure.activate_review_repair import (
     ROOT, TRADER_NAME, ActivationBlocked, _trader_script_argument,
-    _verified_supervisor_launch, matching_traders,
+    _verified_supervisor_launch, matching_traders, relative_process_cwd_evidence,
 )
 from infrastructure.runtime_inventory import collect, latest_launches, windows_processes
 
@@ -42,6 +42,12 @@ def diagnostic_report(root: Path, snapshot: dict, processes: list[dict],
             PureWindowsPath(script).is_absolute() or Path(script).is_absolute()
         ) and not full_path_match
         log_attested = _verified_supervisor_launch(proc, launch, TRADER_NAME)
+        cwd_evidence = (
+            relative_process_cwd_evidence(proc, root)
+            if same_name and script
+            and not (PureWindowsPath(script).is_absolute() or Path(script).is_absolute())
+            else "NOT_APPLICABLE"
+        )
         if not raw:
             role = "COMMAND_LINE_HIDDEN"
         elif not script and contains_name:
@@ -65,6 +71,7 @@ def diagnostic_report(root: Path, snapshot: dict, processes: list[dict],
             "executed_script_category": role,
             "supervisor_log_entry_present": launch is not None,
             "supervisor_start_provenance_matched": log_attested,
+            "process_cwd_evidence": cwd_evidence,
             "has_process_start_timestamp": bool(proc.get("started_utc")),
         })
     candidates.sort(key=lambda c: (not c["inventory_pid"], c["pid"]))
