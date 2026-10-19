@@ -20,7 +20,7 @@ jobs:
       - name: Registry, safety invariants, dependency graph
         run: |
           python -m infrastructure.registry_contract
-          python -m unittest -v infrastructure.test_registry_contract infrastructure.test_runtime_inventory infrastructure.test_agent_preflight infrastructure.test_task_registration infrastructure.test_script_version infrastructure.test_task_results test_review_retry_safety infrastructure.test_review_artifact_probe infrastructure.test_review_activation test_zpta_dashboard infrastructure.test_pacific_times infrastructure.test_eod_timing infrastructure.test_trader_identity
+          python -m unittest -v infrastructure.test_registry_contract infrastructure.test_runtime_inventory infrastructure.test_agent_preflight infrastructure.test_task_registration infrastructure.test_script_version infrastructure.test_task_results test_review_retry_safety infrastructure.test_review_artifact_probe infrastructure.test_review_activation test_zpta_dashboard infrastructure.test_pacific_times infrastructure.test_eod_timing infrastructure.test_trader_identity infrastructure.test_trader_activation_diagnostic
       - name: Detect unmapped changed Python modules
         run: |
           python - <<'PY'
@@ -66,7 +66,7 @@ jobs:
         run: |
           python -m infrastructure.registry_contract
           if ($LASTEXITCODE -ne 0) { throw "Registry validation failed" }
-          python -m unittest -v infrastructure.test_registry_contract infrastructure.test_runtime_inventory infrastructure.test_agent_preflight infrastructure.test_task_registration infrastructure.test_script_version infrastructure.test_task_results test_review_retry_safety infrastructure.test_review_artifact_probe infrastructure.test_review_activation test_zpta_dashboard infrastructure.test_pacific_times infrastructure.test_eod_timing infrastructure.test_trader_identity
+          python -m unittest -v infrastructure.test_registry_contract infrastructure.test_runtime_inventory infrastructure.test_agent_preflight infrastructure.test_task_registration infrastructure.test_script_version infrastructure.test_task_results test_review_retry_safety infrastructure.test_review_artifact_probe infrastructure.test_review_activation test_zpta_dashboard infrastructure.test_pacific_times infrastructure.test_eod_timing infrastructure.test_trader_identity infrastructure.test_trader_activation_diagnostic
           if ($LASTEXITCODE -ne 0) { throw "Registry negative tests failed" }
       - name: Real Windows CIM discovery and project process isolation
         shell: pwsh
