@@ -44,6 +44,8 @@ def diagnostic_report(root: Path, snapshot: dict, processes: list[dict],
         log_attested = _verified_supervisor_launch(proc, launch, TRADER_NAME)
         if not raw:
             role = "COMMAND_LINE_HIDDEN"
+        elif not script and contains_name:
+            role = "TRADER_NAME_IN_ARGUMENTS_NOT_EXECUTED_SCRIPT"
         elif not script:
             role = "COMMAND_VISIBLE_EXECUTED_SCRIPT_UNRESOLVED"
         elif full_path_match:
