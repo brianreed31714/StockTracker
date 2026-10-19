@@ -34,7 +34,7 @@ $SupervisorTrigger = New-ScheduledTaskTrigger -AtLogOn -User $CurrentUser
 $SupervisorTrigger.Delay = "PT30S"
 Register-ScheduledTask -TaskName $SupervisorTask -Action $SupervisorAction -Trigger $SupervisorTrigger -Principal $Principal -Settings $Settings -Force | Out-Null
 
-# Weekdays at 1:35 PM LOCAL Windows time (intended 4:30 PM Eastern on this PC).
+# Weekdays at 1:35 PM local Pacific time (4:35 PM Eastern; daylight saving aware).
 $ReviewAction = New-ScheduledTaskAction -Execute "cmd.exe" -Argument ("/c `"" + $ReviewBat + "`"") -WorkingDirectory $Repo
 $ReviewTrigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday,Tuesday,Wednesday,Thursday,Friday -At 1:35PM
 Register-ScheduledTask -TaskName $ReviewTask -Action $ReviewAction -Trigger $ReviewTrigger -Principal $Principal -Settings $Settings -Force | Out-Null
@@ -42,7 +42,7 @@ Register-ScheduledTask -TaskName $ReviewTask -Action $ReviewAction -Trigger $Rev
 Write-Host "Created scheduled task: $SupervisorTask"
 Write-Host "  At logon for $CurrentUser, 30 second delay"
 Write-Host "Created scheduled task: $ReviewTask"
-Write-Host "  Weekdays at 1:30 PM local Windows time"
+Write-Host "  Weekdays at 1:35 PM local Pacific Windows time"
 Write-Host "No Windows account password was stored."
 Write-Host ""
 Write-Host "Starting the StockTracker supervisor now for a test..."
