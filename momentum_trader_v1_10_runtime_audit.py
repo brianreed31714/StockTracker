@@ -132,11 +132,11 @@ PUSHOVER_STOCK_EOD_ENABLED = str(os.getenv("PUSHOVER_STOCK_EOD_ENABLED", "1")).s
 PUSHOVER_STOCK_EOD_TOKEN = os.getenv("PUSHOVER_STOCK_EOD_TOKEN")
 PUSHOVER_STOCK_EOD_USER_KEY = os.getenv("PUSHOVER_STOCK_EOD_USER_KEY") or PUSHOVER_USER_KEY
 PUSHOVER_STOCK_EOD_HOUR = int(os.getenv("PUSHOVER_STOCK_EOD_HOUR", "16"))
-PUSHOVER_STOCK_EOD_MINUTE = int(os.getenv("PUSHOVER_STOCK_EOD_MINUTE", "10"))
+PUSHOVER_STOCK_EOD_MINUTE = int(os.getenv("PUSHOVER_STOCK_EOD_MINUTE", "35"))
 STOCK_EOD_STATE_PATH = project_path("STOCK_EOD_STATE_PATH", "stock_eod_report_state.json")
 PREMARKET_STATE_PATH = project_path("PREMARKET_STATE_PATH", "premarket_state.json")
 POST_CLOSE_REVIEW_ENABLED = str(os.getenv("POST_CLOSE_REVIEW_ENABLED", "1")).strip().lower() in {"1","true","yes","y","on"}
-POST_CLOSE_REVIEW_DELAY_MINUTES = int(os.getenv("POST_CLOSE_REVIEW_DELAY_MINUTES", "5"))
+POST_CLOSE_REVIEW_DELAY_MINUTES = int(os.getenv("POST_CLOSE_REVIEW_DELAY_MINUTES", "35"))
 POST_CLOSE_REVIEW_RUNNER = project_path("POST_CLOSE_REVIEW_RUNNER", "run_daily_model_review.bat")
 POST_CLOSE_REVIEW_TIMEOUT_SECONDS = int(os.getenv("POST_CLOSE_REVIEW_TIMEOUT_SECONDS", "1800"))
 POST_CLOSE_REVIEW_STATE_PATH = project_path("POST_CLOSE_REVIEW_STATE_PATH", "post_close_review_state.json")
@@ -1249,7 +1249,16 @@ def post_close_review_due_target(now_et):
     close_utc = market_session_close_utc(now_et.date())
     if close_utc is None:
         return None
-    due = close_utc + timedelta(minutes=POST_CLOSE_REVIEW_DELAY_MINUTES)
+    # Regular sessions close at 13:00 Pacific. Start EOD at 13:35 Pacific
+    # (35 minutes after close), and never start before that local clock time
+    # on holiday/early-close sessions. Alpaca remains authoritative for close.
+    due = max(
+        close_utc + timedelta(minutes=POST_CLOSE_REVIEW_DELAY_MINUTES),
+        datetime(
+            now_et.year, now_et.month, now_et.day, 13, 35,
+            tzinfo=ZoneInfo("America/Los_Angeles"),
+        ).astimezone(timezone.utc),
+    )
     if decision["action"] == "WAIT":
         due = max(due, decision["next_attempt_utc"])
     return due.astimezone(MARKET_TZ)
@@ -1788,9 +1797,16 @@ def main():
                 time.sleep(max(1,CHECK_INTERVAL_SECONDS-(time.monotonic()-started)))
                 continue
 
-            # Market closed: publish/review at Alpaca's actual close + delay. This
-            # is calendar-aware, so half days automatically run after the early close.
+            # Market closed: notify performance promptly when 13:35 Pacific
+            # arrives, BEFORE potentially slow AI review/model publication.
+            # Both routines keep their existing once-per-session checks.
             now_et = market_now()
+            report_target = eod_due_target(now_et)
+            if report_target is not None and report_target <= now_et:
+                maybe_send_stock_eod_report()
+
+            # Review starts no earlier than 13:35 Pacific and at least
+            # 35 minutes after Alpaca's actual close (including early closes).
             review_target = post_close_review_due_target(now_et)
             if review_target is not None:
                 if review_target > now_et:
@@ -1800,13 +1816,10 @@ def main():
                     sleep_until(utc_now() + timedelta(minutes=5), "POST-CLOSE REVIEW — retry")
                     continue
 
-            eod_target = eod_due_target(now_et)
-            if eod_target is not None:
-                if eod_target <= now_et:
-                    maybe_send_stock_eod_report()
-                else:
-                    sleep_until(eod_target.astimezone(timezone.utc), "MARKET CLOSED — waiting for EOD report")
-                    continue
+            eod_target = eod_due_target(market_now())
+            if eod_target is not None and eod_target > market_now():
+                sleep_until(eod_target.astimezone(timezone.utc), "MARKET CLOSED — waiting for EOD report")
+                continue
 
             next_open = _aware_utc(clock.next_open)
             premarket_start = next_open - timedelta(minutes=PREMARKET_START_MINUTES)
