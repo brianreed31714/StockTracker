@@ -1,6 +1,7 @@
 """ZPTA dashboard correctness: Eastern dates, real sample counts, diagnostics, no trading."""
 from __future__ import annotations
 
+from contextlib import closing
 import json
 import sqlite3
 import tempfile
@@ -18,7 +19,7 @@ from zpta_dashboard_support import (
 
 
 def populate(path: Path):
-    with sqlite3.connect(path) as db:
+    with closing(sqlite3.connect(path)) as db:
         db.executescript("""
             CREATE TABLE zpta_predictions (
                 id TEXT, model TEXT, horizon_minutes INTEGER,
@@ -43,6 +44,7 @@ def populate(path: Path):
             "INSERT INTO zpta_observations VALUES (?,?,?)",
             ("2026-10-16T20:10:00+00:00", "yahoo_delayed", 0.52),
         )
+        db.commit()
 
 
 class ResolutionDateTests(unittest.TestCase):
