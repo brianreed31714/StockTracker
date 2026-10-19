@@ -29,7 +29,7 @@ ZPTA resolved forecast detail is now grouped by the **Eastern Time date of resol
 
 - The tracked fallback trader is **v1.9**; prior documentation mentions **v1.4** and **v1.8**. User-supplied October 18 process evidence showed **v1.10**, but this is not a live attestation.
 - Local `deploy/state/active_release.json` (not GitHub README) supplies deployed component filenames and may differ from the fallback.
-- The Windows scheduled review task is configured for weekdays at 1:30 PM local in the installer. Actual installation/last run require host inventory.
+- The Windows scheduled review task is configured for weekdays at 1:35 PM Pacific in the installer. Existing installed tasks must be updated separately. Actual installation/last run require host inventory.
 - Geo feed can be quiet when news is quiet; missing fresh news is not automatically a stopped process.
 - The post-close review also has a trader-initiated path; these mechanisms require duplicate-run protection, not an invented single scheduler assumption.
 
@@ -100,7 +100,7 @@ The default performs read-only safety and ownership validation. After confirmati
 python -m infrastructure.activate_review_repair --apply
 ```
 
-Only the **exact positively identified v1.10 StockTracker paper-trader PID** may be stopped. The existing running supervisor must restore that trader; this tool **never creates a competing second trading process**, never restarts geo/dashboard/agent/supervisor, never touches CryptoTracker, and refuses daytime weekday activation (07:00–19:00 Eastern). It requires a clean, fully synced Git HEAD, valid infrastructure registry, paper-only source markers, working review retry tests, an idle review, unique trader identity with absolute StockTracker path, and all ten expected project processes observed. It aborts without a stop if any precondition is ambiguous.
+Only the **exact positively identified v1.10 StockTracker paper-trader PID** may be stopped. The existing running supervisor must restore that trader; this tool **never creates a competing second trading process**, never restarts geo/dashboard/agent/supervisor, never touches CryptoTracker, and refuses weekday activation from 06:30–13:40 Pacific (PDT/PST). It requires a clean, fully synced Git HEAD, valid infrastructure registry, paper-only source markers, working review retry tests, an idle review, unique trader identity with absolute StockTracker path, and all ten expected project processes observed. It aborts without a stop if any precondition is ambiguous.
 
 The tool polls for the replacement trader, then observes its PID for 65 seconds and compares all other StockTracker and CryptoTracker service PIDs. Its **local ignored** `deploy/state/review_repair_activation.json` receipt records the results without secrets. If the existing supervisor fails to restart the trader, it reports **RESTART_NOT_OBSERVED** and stops; it deliberately does *not* launch a second trader or blindly restart other components. The previous Git trader revision remains available for a separately controlled rollback, but **automatic rollback is not yet implemented**.
 
