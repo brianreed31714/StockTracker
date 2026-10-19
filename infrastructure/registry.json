@@ -252,7 +252,9 @@
       "script_pattern": null,
       "source_files": [
         "infrastructure/activate_review_repair.py",
-        "infrastructure/test_trader_identity.py"
+        "infrastructure/test_trader_identity.py",
+        "infrastructure/diagnose_trader_activation.py",
+        "infrastructure/test_trader_activation_diagnostic.py"
       ],
       "health": {
         "type": "not_applicable"
