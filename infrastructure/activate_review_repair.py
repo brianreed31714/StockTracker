@@ -129,6 +129,51 @@ def _verified_supervisor_launch(proc: dict, launch: dict | None, script_name: st
     return abs((started_utc - launched_utc).total_seconds()) <= 90
 
 
+def relative_process_cwd_evidence(proc: dict, root: Path) -> str:
+    """Independent read-only evidence for an executing *relative* script.
+
+    psutil reads the OS-owned current directory and creation time of the PID.
+    A bare script name is never enough: accept it only if the actual process
+    has the StockTracker working directory AND the Windows CIM start timestamp
+    agrees with the OS process start time. All failure cases fail closed.
+    No paths, argv, or credentials are logged.
+    """
+    pid = int(proc.get("pid") or 0)
+    if pid <= 0:
+        return "INVALID_PID"
+    try:
+        started = parse_timestamp(str(proc.get("started_utc") or ""))
+    except (ValueError, TypeError, OverflowError):
+        return "UNVERIFIED_START_TIME"
+    try:
+        import psutil
+    except ImportError:
+        return "PSUTIL_NOT_INSTALLED"
+    try:
+        process = psutil.Process(pid)
+        with process.oneshot():
+            created = float(process.create_time())
+            actual_directory = process.cwd()
+    except (psutil.NoSuchProcess, psutil.ZombieProcess):
+        return "PROCESS_EXITED"
+    except (psutil.AccessDenied, OSError, ValueError):
+        return "CWD_ACCESS_UNAVAILABLE"
+
+    # Windows CIM and psutil use different clocks/precisions, and process
+    # startup may be rounded; a generous 3s tolerance is still far tighter
+    # than a typical PID reuse interval. Check again immediately before stop.
+    if abs(started.timestamp() - created) > 3:
+        return "PID_CREATION_TIME_MISMATCH"
+    try:
+        expected = os.path.normcase(str(root.resolve()))
+        observed = os.path.normcase(str(Path(actual_directory).resolve()))
+    except (OSError, ValueError, TypeError):
+        return "CWD_ACCESS_UNAVAILABLE"
+    if expected != observed:
+        return "FOREIGN_WORKING_DIRECTORY"
+    return "MATCHED"
+
+
 def matching_traders(processes: list[dict], root: Path, name: str = TRADER_NAME,
                      *, launches: dict[int, dict] | None = None) -> list[dict]:
     """Require exact script path or independently attested supervisor spawn."""
@@ -158,6 +203,18 @@ def matching_traders(processes: list[dict], root: Path, name: str = TRADER_NAME,
             and _verified_supervisor_launch(proc, launches.get(pid), name)
         ):
             matches.append({**proc, "provenance": "supervisor_pid_start_time"})
+            continue
+        # The live Oct 19 Windows trader uses an actual relative script path
+        # but has no matching supervisor launch record. Verify its *OS-owned*
+        # working directory and creation time; no filename-only fallback.
+        if (
+            script
+            and PureWindowsPath(script).name.casefold() == name.casefold()
+            and not PureWindowsPath(script).is_absolute()
+            and not Path(script).is_absolute()
+            and relative_process_cwd_evidence(proc, root) == "MATCHED"
+        ):
+            matches.append({**proc, "provenance": "process_cwd_and_start_time"})
     return matches
 
 
