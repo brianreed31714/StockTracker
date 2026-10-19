@@ -92,13 +92,12 @@ def require_observed_services(snapshot: dict, components: tuple[str, ...]) -> di
 
 
 def _trader_script_argument(command: str) -> str | None:
-    """Only inspect the executed Python script, not arbitrary command text.
+    """Inspect the Python executable's actual script argument, not mentions.
 
-    A Python child running `-m` or `-c` may refer to our trader filename in
-    arguments; its mention is not evidence that it *is* the paper trader.
-    The StockTracker supervisor starts Python with an absolute script path.
+    The supervisor launches Python with an absolute script path. An unrelated
+    -m / -c Python process may mention the filename elsewhere in its command.
     """
-    args = [part.strip('"') for part in re.findall(r'"[^"]*"|\\S+', command)]
+    args = [part.strip('"') for part in re.findall(r'"[^"]*"|\S+', command)]
     if len(args) < 2:
         return None
     executable = PureWindowsPath(args[0]).name.lower()
@@ -113,11 +112,10 @@ def _trader_script_argument(command: str) -> str | None:
 
 
 def _verified_supervisor_launch(proc: dict, launch: dict | None, script_name: str) -> bool:
-    """Correlate PID and process start with this project's supervisor log.
+    """Correlate a StockTrader supervisor launch with PID and process start.
 
-    Windows scheduled/console-launched processes may expose only a relative
-    script name. Those can be accepted ONLY with independent launch evidence,
-    never on basename alone; a reused PID or mismatched script fails closed.
+    Relative script names or hidden command lines have no trustworthy
+    repository path and must not be accepted on basename alone.
     """
     if not launch or PureWindowsPath(str(launch.get("script") or "")).name.lower() != script_name.lower():
         return False
@@ -133,37 +131,35 @@ def _verified_supervisor_launch(proc: dict, launch: dict | None, script_name: st
 
 def matching_traders(processes: list[dict], root: Path, name: str = TRADER_NAME,
                      *, launches: dict[int, dict] | None = None) -> list[dict]:
-    """Identify only an exact repo trader or an attested supervisor child.
-
-    The former substring match rejected unrelated Python processes that merely
-    mentioned the script name. This does NOT accept unknown or foreign PIDs.
-    """
+    """Require exact script path or independently attested supervisor spawn."""
     root = root.resolve()
     if launches is None:
         launches = latest_launches(root / "deploy" / "state" / "supervisor.log")
-    expected = str(root / name).replace("\\\\", "/").casefold()
+    expected = str(root / name).replace("\\", "/").casefold()
     matches = []
     for proc in processes:
         pid = int(proc.get("pid") or 0)
         if pid <= 0:
             continue
-        command = str(proc.get("command") or "")
-        script = _trader_script_argument(command)
+        script = _trader_script_argument(str(proc.get("command") or ""))
         if script:
             if PureWindowsPath(script).name.casefold() != name.casefold():
                 continue
-            normalized = script.replace("\\\\", "/").casefold()
+            normalized = script.replace("\\", "/").casefold()
             if normalized == expected:
                 matches.append({**proc, "provenance": "exact_executable_script_path"})
                 continue
             if PureWindowsPath(script).is_absolute() or Path(script).is_absolute():
-                raise ActivationBlocked("Another Python process executes the same trader script outside StockTracker")
-        # Relative script paths (or hidden command lines) must be corroborated
-        # by this project's supervisor PID + startup timestamp. No guesswork.
-        if (not script or PureWindowsPath(script).name.casefold() == name.casefold()) and \\
-                _verified_supervisor_launch(proc, launches.get(pid), name):
+                raise ActivationBlocked(
+                    "Another Python process executes the same trader script outside StockTracker"
+                )
+        if (
+            (not script or PureWindowsPath(script).name.casefold() == name.casefold())
+            and _verified_supervisor_launch(proc, launches.get(pid), name)
+        ):
             matches.append({**proc, "provenance": "supervisor_pid_start_time"})
     return matches
+
 
 
 def validate_target(snapshot: dict, processes: list[dict], root: Path) -> dict:
