@@ -31,6 +31,13 @@ def sanitized(report: dict) -> dict:
     state = report.get("state")
     if state not in STATES:
         raise ValueError("Invalid attestation state")
+    if (state == "EOD_EXECUTION_VERIFIED") != (report.get("eod_execution_verified") is True):
+        raise ValueError("EOD evidence flag disagrees with state")
+    if report.get("eod_execution_verified") is True and (
+            report.get("processes_stable") is not True or report.get("code_synced") is not True):
+        raise ValueError("EOD evidence lacks positive code/process provenance")
+    if state == "HOST_PROCESSES_STABLE_SOURCE_ONLY" and report.get("processes_stable") is not True:
+        raise ValueError("Stable-process claim lacks evidence")
     head = report.get("git_head")
     if not isinstance(head, str) or not SHA.fullmatch(head):
         # Do not accept missing/partial hashes, even for UNVERIFIED signals.
