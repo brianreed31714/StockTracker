@@ -111,10 +111,27 @@ def review_after_sync(root: Path, first_seen: str, *, clock: datetime | None = N
         return {"state": "NOT_VERIFIED", "reason": "MISSING_REVIEW_FINISH_TIMESTAMP"}
     perf = _read_json(runtime / "analysis" / "performance" / "latest.json")
     manifest = _read_json(runtime / "analysis" / "evidence" / day / "manifest.json")
-    if ((perf.get("metrics") or {}).get("review_date") != day
-            or (perf.get("review") or {}).get("review_date") != day
-            or not manifest):
+    metrics = perf.get("metrics") or {}
+    review = perf.get("review") or {}
+    integrity = manifest.get("integrity_analysis") or {}
+    if (metrics.get("review_date") != day or review.get("review_date") != day
+            or metrics.get("paper_only") is not True or
+            manifest.get("review_date") != day or
+            manifest.get("paper_only") is not True or
+            manifest.get("sanitized") is not True or
+            manifest.get("source_database_present") is not True or
+            integrity.get("status") != "PASS"):
         return {"state": "NOT_VERIFIED", "reason": "REPORT_ARTIFACT_DATE_OR_INTEGRITY_MISSING"}
+    # Merely producing a new COMPLETED flag cannot retroactively validate an
+    # older report, even one from the same day.
+    try:
+        for generated_at in (metrics.get("generated_at"), review.get("generated_at"),
+                             manifest.get("generated_at")):
+            when = parse_timestamp(str(generated_at or ""))
+            if not start <= when <= finished:
+                return {"state": "NOT_VERIFIED", "reason": "ARTIFACT_NOT_FROM_POST_SYNC_REVIEW"}
+    except (ValueError, TypeError):
+        return {"state": "NOT_VERIFIED", "reason": "ARTIFACT_TIMESTAMP_UNVERIFIED"}
     return {"state": "VERIFIED", "review_date": day}
 
 
