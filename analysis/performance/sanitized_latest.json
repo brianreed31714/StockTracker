@@ -1,0 +1,60 @@
+{
+  "coverage": {
+    "dashboard_snapshot_available": true,
+    "database_available": true
+  },
+  "daily": {
+    "buy_orders": 0,
+    "closed_trades": 2,
+    "decision_rows": 440,
+    "losses": 0,
+    "order_rows": 2,
+    "realized_pnl_usd": 98.25,
+    "sell_orders": 2,
+    "win_rate_pct": 100.0,
+    "wins": 2
+  },
+  "one_percent_goal": {
+    "daily_goal_met": null,
+    "daily_portfolio_return_pct": null,
+    "daily_target_pct": 1.0,
+    "since_inception_return_pct": null,
+    "status": "NOT_MEASURABLE_NO_VERIFIED_START_END_EQUITY"
+  },
+  "paper_only": true,
+  "proposal_ids": [
+    {
+      "id": "P-STOCK-20261020-01",
+      "status": "PENDING"
+    },
+    {
+      "id": "P-STOCK-20261020-02",
+      "status": "PENDING"
+    },
+    {
+      "id": "P-STOCK-20261020-03",
+      "status": "PENDING"
+    },
+    {
+      "id": "P-STOCK-20261020-04",
+      "status": "PENDING"
+    },
+    {
+      "id": "P-STOCK-20261020-05",
+      "status": "PENDING"
+    },
+    {
+      "id": "P-STOCK-20261020-06",
+      "status": "PENDING"
+    }
+  ],
+  "quality": "LIMITED",
+  "review_date": "2026-10-20",
+  "review_source": "OPENAI",
+  "schema": "stocktracker_sanitized_summary_v1",
+  "shadow": {
+    "financial_leverage_signal_rows": 0,
+    "zpta_resolved_predictions": 0,
+    "zpta_shadow_trades": 0
+  }
+}
