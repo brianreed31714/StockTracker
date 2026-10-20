@@ -236,7 +236,8 @@ def atomic_write(path: Path, payload: dict) -> None:
 
 def poll(root: Path, *, observation: dict | None = None,
          clock: datetime | None = None, expected_sha: str = "",
-         notify: Callable[[str, str], bool] | None = None) -> dict:
+         notify: Callable[[str, str], bool] | None = None,
+         remote_publish: Callable[[Path, dict], str] | None = None) -> dict:
     """One bounded observation by a Windows-hosted, already running agent.
 
     Optional notification is supplied by agent's Pushover sender; an unverified
@@ -286,6 +287,32 @@ def poll(root: Path, *, observation: dict | None = None,
             if delivered:
                 report["notice_key"] = key
                 report["notification"] = "API_ACCEPTED"
+    # Dedicated non-main Git branch makes this proof independently readable
+    # in GitHub/ChatGPT, without committing into the trading checkout. Never
+    # publish process IDs, account data or raw receipt contents.
+    remote_key = (report["git_head"] + ":" + report["state"] + ":" +
+                  str(report.get("verified_review_date") or ""))
+    if remote_publish is None and os.name == "nt" and observation is None:
+        from infrastructure.host_status_publisher import publish as remote_publish
+    enabled = os.getenv("STOCKTRACKER_ATTESTATION_REMOTE_ENABLED", "1").strip().lower() not in (
+        "0", "false", "no", "off")
+    if report["code_synced"] and remote_publish is not None and enabled:
+        if remote_key == previous.get("remote_key"):
+            report["remote_key"] = remote_key
+            report["remote_publish"] = "PUBLISHED"
+        else:
+            try:
+                remote_publish(root, report)
+                report["remote_key"] = remote_key
+                report["remote_publish"] = "PUBLISHED"
+            except Exception:
+                # Git credentials, branch protection or concurrency may reject
+                # the update; this must never interrupt the trader or EOD.
+                report["remote_key"] = str(previous.get("remote_key") or "")
+                report["remote_publish"] = "UNCONFIRMED"
+    else:
+        report["remote_key"] = str(previous.get("remote_key") or "")
+        report["remote_publish"] = "DISABLED" if not enabled else "UNCONFIRMED"
     atomic_write(state_path, report)
     return report
 
@@ -311,6 +338,7 @@ def main() -> int:
             "processes_stable": receipt["processes_stable"],
             "eod_execution_verified": receipt["eod_execution_verified"],
             "notification": receipt["notification"],
+            "remote_publish": receipt["remote_publish"],
         }, sort_keys=True))
         return 0 if receipt["code_synced"] else 2
     except (OSError, RuntimeError, ValueError):
