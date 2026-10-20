@@ -35,7 +35,17 @@ def main():
     # External reports are intentionally never added to the Git checkout.
     # Publishing is a separate, explicit operation after review.
     if os.getenv("STOCKTRACKER_RUNTIME_ROOT", "").strip():
-        print("Runtime reports stored externally; automatic Git evidence publishing skipped.")
+        # Explicitly approved 2026-10-19: deliver ONLY the allowlisted private
+        # performance summary. Never copy raw external evidence/proposals/logs.
+        from safe_summary_publish import publish
+        try:
+            summary = publish(Path(os.getenv("STOCKTRACKER_RUNTIME_ROOT")), commit=True)
+        except Exception as exc:
+            # Report the failure to the guarded post-close review pipeline.
+            # Never echo Git/provider exceptions, which can contain secrets.
+            print("Sanitized StockTracker GitHub summary FAILED: " + type(exc).__name__)
+            raise SystemExit(1)
+        print("Sanitized StockTracker GitHub summary published: " + summary["review_date"])
         return
 
     bad = dirty_outside_allowed()
