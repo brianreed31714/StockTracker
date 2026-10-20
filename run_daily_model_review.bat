@@ -65,6 +65,9 @@ echo.
 echo ============================================================
 echo StockTracker post-close review complete.
 echo ============================================================
+rem Optional, read-only Windows activation receipt. Never changes review result.
+python -m infrastructure.windows_activation_attestation --notify
+if errorlevel 1 echo StockTracker activation attestation unavailable; review still completed.
 exit /b 0
 
 :auth_blocked

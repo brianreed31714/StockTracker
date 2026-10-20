@@ -154,6 +154,22 @@ def push(title: str, message: str):
         pass
 
 
+def push_attestation(title: str, message: str) -> bool:
+    """Confirm Pushover API acceptance; never report delivery when unavailable."""
+    if not PUSH_TOKEN or not PUSH_USER:
+        return False
+    try:
+        response = requests.post(
+            "https://api.pushover.net/1/messages.json",
+            data={"token": PUSH_TOKEN, "user": PUSH_USER,
+                  "title": title, "message": message[:1024]},
+            timeout=12,
+        )
+        return response.status_code == 200 and response.json().get("status") == 1
+    except (requests.RequestException, ValueError, TypeError, AttributeError):
+        return False
+
+
 def run(*args: str, check=True):
     return subprocess.run(
         list(args), cwd=ROOT, text=True, capture_output=True, check=check
@@ -489,6 +505,17 @@ def scan_once():
                 mark_processed(pid, "VALIDATION_FAILED", commit=req.get("commit"), error=str(exc))
                 push("StockTracker Deployment FAILED", f"{pid}: {exc}")
                 # Continue to evaluate subsequent requests; never kill the active release.
+
+    # A successful Git fast-forward is source sync, not live activation.
+    # Read-only host attestation samples are separated across existing polls.
+    # No restart, extra trader process, scheduled-task mutation, or Git write.
+    if os.name == "nt":
+        try:
+            from infrastructure.windows_activation_attestation import poll
+            poll(ROOT, notify=push_attestation)
+        except Exception:
+            log("Windows activation attestation unavailable; review local ignored receipt.")
+
 
 
 def main():
