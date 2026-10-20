@@ -57,7 +57,7 @@ def shadow_exit(rows, start_time, entry, *, trailing=False):
     """Counterfactual sampled-close exit, capped to 60 minutes within one session."""
     end = start_time + timedelta(minutes=60)
     future = [r for r in rows if start_time < r["_ts"] <= end]
-    if not future or future[-1]["_ts"] < end - timedelta(minutes=2):
+    if not future or future[-1]["_ts"] < end - timedelta(seconds=30):
         return None  # No complete horizon: do not pretend a trade closed.
     peak = entry
     activated = False
