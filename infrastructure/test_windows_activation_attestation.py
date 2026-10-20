@@ -15,7 +15,8 @@ COMMIT = "a" * 40
 
 
 def good_snapshot(pid_base=500, started=None):
-    started = (started or T0 - timedelta(minutes=7)).isoformat()
+    started = started or T0 - timedelta(minutes=7)
+    started = started.isoformat() if isinstance(started, datetime) else str(started)
     components = {}
     for i, component in enumerate(attest.REQUIRED_PROCESSES):
         components[component] = {
