@@ -35,6 +35,9 @@ def main():
     # External reports are intentionally never added to the Git checkout.
     # Publishing is a separate, explicit operation after review.
     if os.getenv("STOCKTRACKER_RUNTIME_ROOT", "").strip():
+        if os.getenv("STOCKTRACKER_SANITIZED_GITHUB_PUBLISH", "1").strip().lower() in {"0", "false", "no", "off"}:
+            print("External reports retained locally; sanitized summary export explicitly disabled.")
+            return
         # Explicitly approved 2026-10-19: deliver ONLY the allowlisted private
         # performance summary. Never copy raw external evidence/proposals/logs.
         from safe_summary_publish import publish
