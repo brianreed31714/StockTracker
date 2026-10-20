@@ -147,3 +147,28 @@ Publication refuses an unexpected Git branch, staged/non-allowlisted working cha
 **A successful GitHub CI check is not host deployment.** Confirm the post-close task's next result, summary JSON date, single-day Git commit, absence of raw files in staged or committed changes, Pushover EOD status, and repeated host review success. Clean checkout, Git author configuration and credential access are required. If the host has recovery stashes or working-tree changes, stop and reconcile outside trading hours; do not force-clean the repository or disable safety checks.
 
 \`python -m research.shadow_opportunity_audit --evidence analysis/evidence/YYYY-MM-DD\` computes per-candidate 5/15/30/60-minute observed-price outcomes and sampled-close fixed versus trailing exit counterfactuals **without broker/network access**. It is currently an optional offline RESEARCH tool, not a live trading configuration or evidence that any threshold should be modified. One-minute decisions cannot reconstruct intrabar fills or true ATR; add OHLC price data, verified order fills, slippage and independent out-of-sample dates before evaluating exit changes. Return-on-portfolio target remains **NOT MEASURABLE** until trustworthy beginning/ending account equity snapshots are recorded.
+
+
+## Automated Windows activation attestation (October 19, 2026)
+
+The approved StockTracker deployment-agent loop can now call the **read-only** \`infrastructure/windows_activation_attestation.py\` probe after its ordinary clean Git fast-forward and request processing. A successfully completed EOD batch also runs one bootstrap probe without changing the EOD result code. This does **not** restart, stop, or launch trading processes. Existing in-memory Python agents do not hot-reload merely because their source file changed.
+
+A local-only, ignored \`deploy/state/activation_attestation.json\` receipt is updated atomically. It distinguishes:
+
+- \`UNVERIFIED\`: no positive Git-sync/source-integrity evidence.
+- \`CODE_SYNCED_RUNTIME_UNVERIFIED\`: correct source bytes are on the Windows disk, but process provenance is missing or inconsistent.
+- \`CODE_SYNCED_PROCESS_OBSERVED\`: one or two observations of expected processes; insufficient to claim sustained stability.
+- \`HOST_PROCESSES_STABLE_SOURCE_ONLY\`: **three** observations, at least 20 seconds apart, of the same positively identified StockTracker supervisor, agent, paper trader, geo feed, and dashboard **including Windows creation time**, plus matched trader/geo/dashboard script filenames. This proves *host process observations*, **not** that Python reloaded a changed source file or that a broker trade succeeded.
+- \`EOD_EXECUTION_VERIFIED\`: additionally, the local post-close guard has completed *after this Git revision was first witnessed*, and same-date model-review and evidence artifacts agree. This validates the EOD review path for that date, **not** strategy profitability, broker fills, restart recovery or an in-memory trading-engine source digest.
+
+The receipt intentionally stays on the host. A private GitHub commit and green CI do not prove the host is synchronized; the assistant must not claim Windows activation before receiving host evidence. The verifier publishes neither account credentials, raw command lines, trade logs nor broker account data.
+
+The agent sends Pushover when a **new commit first synchronizes** and when the state becomes \`EOD_EXECUTION_VERIFIED\`. Notification receipt says \`API_ACCEPTED\` only if Pushover returned HTTP 200 and JSON status 1; device delivery is still not guaranteed. No notification is repeatedly sent while its status key is unchanged. Missing local Pushover credentials leave \`UNCONFIRMED\` and are not described as a successful push.
+
+**Bootstrap limitation:** The already-running agent must be restarted/reloaded once through a separately approved, safely attributed host action to adopt its new polling hook. Do **not** use a broad release request or restart the trader just to enable this observation hook. The new post-close batch additionally performs one read-only attempt automatically at its next actual execution after Git synchronization; full three-cycle automatic attestation requires the updated agent running. If the agent cannot safely be restarted, record status as unverified rather than inventing activation. The one-shot command is:
+
+\`\`\`powershell
+python -m infrastructure.windows_activation_attestation --notify
+\`\`\`
+
+This command is read-only with respect to trading processes, scheduled tasks, git state, and broker orders; it only creates the ignored receipt and optionally sends a Pushover status notice. To pin a specific checkout during diagnosis, add \`--expect <full-current-HEAD-sha>\`. Do not use a report from another PC or an old date as proof. Windows task/host recovery verification remains independent.
