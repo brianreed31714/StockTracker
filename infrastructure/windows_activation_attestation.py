@@ -271,3 +271,35 @@ def poll(root: Path, *, observation: dict | None = None,
                 report["notification"] = "API_ACCEPTED"
     atomic_write(state_path, report)
     return report
+
+def main() -> int:
+    import argparse
+    parser = argparse.ArgumentParser(description="One-shot, read-only Windows activation evidence")
+    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parent.parent)
+    parser.add_argument("--expect", default="", help="Optional exact 40-character expected Git HEAD")
+    parser.add_argument("--notify", action="store_true", help="Send Pushover if host-configured and state changed")
+    args = parser.parse_args()
+    try:
+        if os.name != "nt":
+            raise RuntimeError("Windows required for host attestation")
+        notifier = None
+        if args.notify:
+            from stocktracker_deployment_agent import push_attestation
+            notifier = push_attestation
+        receipt = poll(args.root, expected_sha=args.expect, notify=notifier)
+        # Output intentionally excludes PIDs, task history, user paths, logs and secrets.
+        print(json.dumps({
+            "state": receipt["state"],
+            "git_head": receipt["git_head"],
+            "processes_stable": receipt["processes_stable"],
+            "eod_execution_verified": receipt["eod_execution_verified"],
+            "notification": receipt["notification"],
+        }, sort_keys=True))
+        return 0 if receipt["code_synced"] else 2
+    except (OSError, RuntimeError, ValueError):
+        print('{"state": "UNVERIFIED", "reason": "HOST_ATTESTATION_UNAVAILABLE"}')
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
