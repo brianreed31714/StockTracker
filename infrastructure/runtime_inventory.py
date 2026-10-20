@@ -242,6 +242,7 @@ def associate_process(component: dict, processes: list[dict], launches: dict[int
             matching.append({
                 "pid": pid, "identified_by": "command_line" if direct else "supervisor_log_verified_start",
                 "script": matched_script,
+                "started_utc": started,
             })
     if len(matching) > 1:
         return {"state": "DUPLICATE", "pids": [p["pid"] for p in matching],
@@ -249,6 +250,7 @@ def associate_process(component: dict, processes: list[dict], launches: dict[int
     if matching:
         return {"state": "OBSERVED", "pids": [matching[0]["pid"]],
                 "script": matching[0]["script"],
+                "started_utc": matching[0]["started_utc"],
                 "identification": matching[0]["identified_by"]}
     return {"state": "UNKNOWN", "pids": [],
             "identification": "not_visible_or_missing"}
