@@ -29,6 +29,7 @@ jobs:
       - name: Compile and check isolated writer locations
         env:
           STOCKTRACKER_RUNTIME_ROOT: ${{ runner.temp }}/stocktracker-research
+          STOCKTRACKER_SANITIZED_GITHUB_PUBLISH: "0"
         run: |
           python - <<'PY'
           import importlib.util, pathlib, py_compile, os, tempfile

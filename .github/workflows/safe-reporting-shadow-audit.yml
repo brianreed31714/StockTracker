@@ -1,0 +1,36 @@
+name: Safe reporting and shadow research tests
+on:
+  pull_request:
+    paths:
+      - "safe_summary_publish.py"
+      - "sync_proposals_to_git.py"
+      - "test_safe_summary_publish.py"
+      - "research/**"
+      - ".github/workflows/safe-reporting-shadow-audit.yml"
+  push:
+    branches: [main]
+    paths:
+      - "safe_summary_publish.py"
+      - "sync_proposals_to_git.py"
+      - "test_safe_summary_publish.py"
+      - "research/**"
+      - ".github/workflows/safe-reporting-shadow-audit.yml"
+permissions:
+  contents: read
+jobs:
+  no-network-pure-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate isolated research and summary bridge
+        run: |
+          python -m compileall -q safe_summary_publish.py sync_proposals_to_git.py research
+          python -m unittest discover -v -p "test_safe_summary_publish.py"
+          python -m unittest discover -v -s research -p "test_shadow_opportunity_audit.py"
+      - name: Verify paper-only source still protected
+        run: |
+          python -c "from pathlib import Path; p=Path('momentum_trader_v1_10_runtime_audit.py').read_text(); assert 'PAPER_ONLY = True' in p and 'paper=True' in p"
