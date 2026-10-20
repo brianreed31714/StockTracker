@@ -95,9 +95,16 @@ class AttestationTests(unittest.TestCase):
         manifest = self.root / "analysis/evidence" / day / "manifest.json"
         perf.parent.mkdir(parents=True)
         manifest.parent.mkdir(parents=True)
-        perf.write_text(json.dumps({"metrics": {"review_date": day},
-                                    "review": {"review_date": day}}))
-        manifest.write_text('{"files": []}')
+        perf.write_text(json.dumps({
+            "metrics": {"review_date": day, "paper_only": True,
+                        "generated_at": (T0 + timedelta(seconds=15)).isoformat()},
+            "review": {"review_date": day,
+                       "generated_at": (T0 + timedelta(seconds=30)).isoformat()},
+        }))
+        manifest.write_text(json.dumps({
+            "review_date": day, "paper_only": True, "sanitized": True,
+            "source_database_present": True, "generated_at": (T0 + timedelta(seconds=20)).isoformat(),
+            "integrity_analysis": {"status": "PASS"}}))
         state.write_text(json.dumps({"status": "COMPLETED", "review_date": day,
                          "finished_at": (T0 - timedelta(seconds=1)).isoformat()}))
         earlier = attest.review_after_sync(self.root, T0.isoformat(),
@@ -116,14 +123,50 @@ class AttestationTests(unittest.TestCase):
         manifest = self.root / "analysis/evidence" / day / "manifest.json"
         perf.parent.mkdir(parents=True)
         manifest.parent.mkdir(parents=True)
-        perf.write_text(json.dumps({"metrics": {"review_date": "2026-10-18"},
-                                    "review": {"review_date": "2026-10-18"}}))
-        manifest.write_text('{"files": []}')
+        perf.write_text(json.dumps({
+            "metrics": {"review_date": "2026-10-18", "paper_only": True,
+                        "generated_at": (T0 + timedelta(seconds=15)).isoformat()},
+            "review": {"review_date": "2026-10-18",
+                       "generated_at": (T0 + timedelta(seconds=30)).isoformat()},
+        }))
+        manifest.write_text(json.dumps({
+            "review_date": day, "paper_only": True, "sanitized": True,
+            "source_database_present": True, "generated_at": (T0 + timedelta(seconds=20)).isoformat(),
+            "integrity_analysis": {"status": "PASS"}}))
         state.write_text(json.dumps({"status": "COMPLETED", "review_date": day,
                          "finished_at": (T0 + timedelta(minutes=1)).isoformat()}))
         result = attest.review_after_sync(self.root, T0.isoformat(),
                                           clock=T0+timedelta(minutes=2))
         self.assertEqual(result["state"], "NOT_VERIFIED")
+
+    def test_eod_requires_fresh_matching_artifact_generation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            day = "2026-10-19"
+            perf = root / "analysis/performance/latest.json"
+            manifest = root / "analysis/evidence" / day / "manifest.json"
+            perf.parent.mkdir(parents=True)
+            manifest.parent.mkdir(parents=True)
+            (root / "post_close_review_state.json").write_text(json.dumps({
+                "review_date": day, "status": "COMPLETED",
+                "finished_at": (T0 + timedelta(minutes=1)).isoformat(),
+            }))
+            payload = {
+                "metrics": {"review_date": day, "paper_only": True,
+                            "generated_at": (T0 - timedelta(hours=1)).isoformat()},
+                "review": {"review_date": day,
+                           "generated_at": (T0 + timedelta(seconds=40)).isoformat()},
+            }
+            perf.write_text(json.dumps(payload))
+            manifest.write_text(json.dumps({
+                "review_date": day, "sanitized": True, "paper_only": True,
+                "source_database_present": True,
+                "integrity_analysis": {"status": "PASS"},
+                "generated_at": (T0 + timedelta(seconds=20)).isoformat(),
+            }))
+            outcome = attest.review_after_sync(root, T0.isoformat(),
+                                              clock=T0 + timedelta(minutes=2))
+            self.assertEqual(outcome["reason"], "ARTIFACT_NOT_FROM_POST_SYNC_REVIEW")
 
     def test_notification_only_marks_success_when_api_accepts(self):
         called = []
