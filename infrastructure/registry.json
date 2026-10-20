@@ -64,7 +64,8 @@
       "source_files": [
         "stocktracker_deployment_agent.py",
         "infrastructure/windows_activation_attestation.py",
-        "infrastructure/runtime_inventory.py"
+        "infrastructure/runtime_inventory.py",
+        "infrastructure/host_status_publisher.py"
       ],
       "health": {
         "type": "process"
@@ -166,7 +167,8 @@
         "sync_proposals_to_git.py",
         "safe_summary_publish.py",
         "research/shadow_opportunity_audit.py",
-        "infrastructure/windows_activation_attestation.py"
+        "infrastructure/windows_activation_attestation.py",
+        "infrastructure/host_status_publisher.py"
       ],
       "health": {
         "type": "evidence_only"
@@ -279,7 +281,8 @@
     "Weekday EOD review task is 13:35 America/Los_Angeles on the Windows Pacific host; installer changes do not alter already-installed tasks. Operator uses infrastructure/apply_review_135.ps1 -Apply to update only the existing trigger.",
     "For a relative StockTrader script with no supervisor log, local activation requires independent OS-observed process CWD matching the StockTracker repo and CIM/psutil creation timestamps matching within 3 seconds. psutil is a required local Python dependency; absent/inaccessible CWD fails closed.",
     "When STOCKTRACKER_RUNTIME_ROOT is configured and STOCKTRACKER_SANITIZED_GITHUB_PUBLISH is not disabled, the EOD Git sync sends only validated and allowlisted sanitized paper summary numbers and proposal IDs; no raw runtime logs or private positions. Branch/dirty/fast-forward guards must pass. CI opt-out uses STOCKTRACKER_SANITIZED_GITHUB_PUBLISH=0. Local host publication and sustained health remain unverified until observed.",
-    "Windows activation attestation observes git HEAD/origin-main, code cleanliness, supervisor/agent/trader/geo/dashboard identity and process creation timestamps over at least three spaced samples, plus post-sync successful dated review evidence. It writes only deploy/state/activation_attestation.json, sends Pushover on verified API acceptance if locally configured, and never starts/stops/reloads trader services or pushes raw runtime data. A synchronized Git checkout does not prove in-memory trader activation. Existing deployment agent must independently restart/reload once to adopt new polling code; existing post-close BAT performs one safe bootstrap probe after a successful review."
+    "Windows activation attestation observes git HEAD/origin-main, code cleanliness, supervisor/agent/trader/geo/dashboard identity and process creation timestamps over at least three spaced samples, plus post-sync successful dated review evidence. It writes only deploy/state/activation_attestation.json, sends Pushover on verified API acceptance if locally configured, and never starts/stops/reloads trader services or pushes raw runtime data. A synchronized Git checkout does not prove in-memory trader activation. Existing deployment agent must independently restart/reload once to adopt new polling code; existing post-close BAT performs one safe bootstrap probe after a successful review.",
+    "Private host attestation publishing sends ONLY explicit sanitized status metadata to the dedicated stocktracker-host-status remote Git branch via Git plumbing; Git main, working tree, scheduled tasks, process state, raw logs and broker accounts are never changed by this action. Remote failure is non-disruptive; a stale status branch is NOT proof of current Windows health. May be disabled with STOCKTRACKER_ATTESTATION_REMOTE_ENABLED=0."
   ],
   "external_services": [
     {

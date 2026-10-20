@@ -172,3 +172,14 @@ python -m infrastructure.windows_activation_attestation --notify
 \`\`\`
 
 This command is read-only with respect to trading processes, scheduled tasks, git state, and broker orders; it only creates the ignored receipt and optionally sends a Pushover status notice. To pin a specific checkout during diagnosis, add \`--expect <full-current-HEAD-sha>\`. Do not use a report from another PC or an old date as proof. Windows task/host recovery verification remains independent.
+
+
+### Independently readable host signal (dedicated private branch)
+
+The host attestor additionally publishes *allowlisted status only* to the dedicated private Git branch \`stocktracker-host-status\`, file \`status.json\`. This avoids requiring the user to run local diagnostics or forward Pushover screenshots for every release. It does not publish full process inventories, raw task output, PIDs, positions, order IDs, provider details, or credentials. It cannot attest a stopped/offline Windows PC: the timestamp on the last signal is part of the evidence, and a stale signal must be treated as stale.
+
+Publication is transition-driven (new code HEAD, process-stability change, post-sync EOD evidence) rather than every minute. It uses Git objects on the existing Windows repository without touching the checked-out branch or files, and pushes **only** a non-force update to \`refs/heads/stocktracker-host-status\`. An unrelated or unexpected pre-existing status branch is rejected, not overwritten. Concurrent non-fast-forward changes fail closed; no \`git pull\`, force push, reset, checkout or trader/supervisor restart is performed.
+
+If the host Git remote is read-only, credentials are unavailable, or the repo is not on \`main\`, the Pushover/local receipt mechanisms can continue, but remote status remains \`UNCONFIRMED\`; investigate through established safe host processes. Optional \`STOCKTRACKER_ATTESTATION_REMOTE_ENABLED=0\` disables publishing without disabling local checks. As with the local attestor, the *currently running* agent must load the updated code before unattended transition polling can begin. The next successful post-close batch also invokes a single fresh on-disk probe when synchronized.
+
+To inspect remotely via the connected GitHub repository, read the \`stocktracker-host-status\` branch's \`status.json\` and check that its \`observed_at_utc\`, \`git_head\`, \`state\`, and \`post_sync_eod_verified\` match the intended release and period. Do not confuse this with proof of an in-memory trading-engine code digest, a paper-broker fill, or reboot recovery: the payload marks both separately as **not verified**.
