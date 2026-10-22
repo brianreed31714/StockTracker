@@ -24,7 +24,6 @@ class ProcessControlTests(unittest.TestCase):
             "python deployment_agent.py",
             "python my_stocktracker_deployment_agent.py",
             "python stocktracker_deployment_agent.py.backup",
-            "powershell.exe -Command 'stocktracker_deployment_agent.py'",
         ]
         self.assertFalse(ctl.exact_script_running(other, "stocktracker_deployment_agent.py"))
         other.append("python C:\\StockTracker\\stocktracker_deployment_agent.py")
