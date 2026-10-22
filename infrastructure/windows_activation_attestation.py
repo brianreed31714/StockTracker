@@ -28,6 +28,7 @@ REQUIRED_PROCESSES = ("supervisor", "deployment_agent", "trader", "geo_feed", "d
 REQUIRED_SCRIPT_VERSIONS = ("trader", "geo_feed", "dashboard")
 MIN_SECONDS_BETWEEN_SAMPLES = 20
 REQUIRED_SAMPLES = 3
+REMOTE_HEARTBEAT_SECONDS = 6 * 60 * 60  # A sanitized status refresh, not a service restart.
 SHA = re.compile(r"^[0-9a-f]{40}$")
 
 
@@ -290,28 +291,41 @@ def poll(root: Path, *, observation: dict | None = None,
     # Dedicated non-main Git branch makes this proof independently readable
     # in GitHub/ChatGPT, without committing into the trading checkout. Never
     # publish process IDs, account data or raw receipt contents.
+    # Bump cache format after repairing the legacy Windows mktree CRLF bug.
+    # Independently refresh otherwise unchanged host evidence at most every six
+    # hours, so GitHub can distinguish stale processes from an observed host.
     remote_key = (report["git_head"] + ":" + report["state"] + ":" +
-                  str(report.get("verified_review_date") or ""))
+                  str(report.get("verified_review_date") or "") + ":status-file-v2")
+    previous_publish = str(previous.get("remote_published_at_utc") or "")
+    try:
+        age_seconds = (stamp - parse_timestamp(previous_publish)).total_seconds()
+    except (ValueError, TypeError):
+        age_seconds = -1
+    recent_publish = 0 <= age_seconds < REMOTE_HEARTBEAT_SECONDS
+
     if remote_publish is None and os.name == "nt" and observation is None:
         from infrastructure.host_status_publisher import publish as remote_publish
     enabled = os.getenv("STOCKTRACKER_ATTESTATION_REMOTE_ENABLED", "1").strip().lower() not in (
         "0", "false", "no", "off")
     if report["code_synced"] and remote_publish is not None and enabled:
-        if remote_key == previous.get("remote_key"):
+        if remote_key == previous.get("remote_key") and recent_publish:
             report["remote_key"] = remote_key
+            report["remote_published_at_utc"] = previous_publish
             report["remote_publish"] = "PUBLISHED"
         else:
             try:
                 remote_publish(root, report)
                 report["remote_key"] = remote_key
+                report["remote_published_at_utc"] = stamp.isoformat()
                 report["remote_publish"] = "PUBLISHED"
             except Exception:
-                # Git credentials, branch protection or concurrency may reject
-                # the update; this must never interrupt the trader or EOD.
+                # Fail closed and retry next poll without affecting other services.
                 report["remote_key"] = str(previous.get("remote_key") or "")
+                report["remote_published_at_utc"] = previous_publish
                 report["remote_publish"] = "UNCONFIRMED"
     else:
         report["remote_key"] = str(previous.get("remote_key") or "")
+        report["remote_published_at_utc"] = previous_publish
         report["remote_publish"] = "DISABLED" if not enabled else "UNCONFIRMED"
     atomic_write(state_path, report)
     return report
