@@ -1,6 +1,7 @@
 """No-network tests: GitHub status branch must never touch main or leak local data."""
 from __future__ import annotations
 import json
+import subprocess
 import tempfile
 import unittest
 from datetime import datetime, timezone, timedelta
@@ -103,6 +104,107 @@ class HostSignalTests(unittest.TestCase):
                     publisher.publish(Path(temp), sample())
             self.assertNotIn("push", calls)
             self.assertNotIn("hash-object", calls)
+
+    def test_git_plumbing_stdin_is_raw_bytes_not_windows_crlf(self):
+        result = subprocess.CompletedProcess(
+            args=["git"], returncode=0, stdout=b"abc123\n", stderr=b"")
+        entry = "100644 blob " + "a" * 40 + "\tstatus.json\n"
+        with patch.object(publisher.subprocess, "run", return_value=result) as run:
+            self.assertEqual(publisher._git(Path("test"), ["mktree"], data=entry),
+                             "abc123")
+        kwargs = run.call_args.kwargs
+        self.assertEqual(kwargs["input"], entry.encode("utf-8"))
+        self.assertNotIn("text", kwargs)
+        self.assertTrue(kwargs["input"].endswith(b"status.json\n"))
+        self.assertFalse(kwargs["input"].endswith(b"\r\n"))
+
+    def test_exact_legacy_single_file_tree_migrates_by_fast_forward(self):
+        with tempfile.TemporaryDirectory() as temp:
+            calls = []
+            def fake_git(root, args, data=None):
+                calls.append((args, data))
+                if args[:2] == ["branch", "--show-current"]:
+                    return "main"
+                if args[0] == "ls-remote":
+                    return "a"*40 + "\trefs/heads/stocktracker-host-status"
+                if args[0] == "fetch":
+                    return ""
+                if args[0] == "rev-parse":
+                    return "a"*40
+                if args[0] == "ls-tree":
+                    self.assertIn("-z", args)
+                    return "status.json\r\x00"
+                if args[0] == "hash-object":
+                    return "b"*40
+                if args[0] == "mktree":
+                    return "c"*40
+                if "commit-tree" in args:
+                    return "d"*40
+                if args[0] == "push":
+                    return ""
+                raise AssertionError(f"Unexpected Git operation: {args}")
+            with patch.object(publisher, "_git", side_effect=fake_git):
+                self.assertEqual(publisher.publish(Path(temp), sample()), "d"*40)
+            commit_args = next(args for args, _ in calls if "commit-tree" in args)
+            self.assertIn("a"*40, commit_args)
+            tree_data = next(data for args, data in calls if args[0] == "mktree")
+            self.assertEqual(tree_data, "100644 blob " + "b"*40 + "\tstatus.json\n")
+            self.assertTrue(any(args[0] == "push" for args, _ in calls))
+
+    def test_invalid_legacy_tree_is_not_replaced(self):
+        with tempfile.TemporaryDirectory() as temp:
+            calls = []
+            def fake_git(root, args, data=None):
+                calls.append(args[0])
+                if args[0] == "branch":
+                    return "main"
+                if args[0] == "ls-remote":
+                    return "a"*40 + "\trefs/heads/stocktracker-host-status"
+                if args[0] == "fetch":
+                    return ""
+                if args[0] == "rev-parse":
+                    return "a"*40
+                if args[0] == "ls-tree":
+                    return "status.json\r\x00other-file\x00"
+                raise AssertionError(f"Unsafe Git operation: {args}")
+            with patch.object(publisher, "_git", side_effect=fake_git):
+                with self.assertRaises(RuntimeError):
+                    publisher.publish(Path(temp), sample())
+            self.assertNotIn("push", calls)
+            self.assertNotIn("hash-object", calls)
+
+    def test_sanitized_status_heartbeat_without_notification_spam(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            observations = {
+                cid: {"process": {"state": "OBSERVED", "pids": [100+i],
+                                  "started_utc": (T0-timedelta(minutes=15)).isoformat(),
+                                  "script": cid+".py"},
+                      "script_version": {"state": "MATCHED"}}
+                for i, cid in enumerate(attest.REQUIRED_PROCESSES)
+            }
+            pushed = []
+            notices = []
+            def publish(_root, report):
+                pushed.append(report["observed_at_utc"])
+                return "c" * 40
+            def notify(*args):
+                notices.append(args)
+                return True
+            with patch.object(attest, "git_head", return_value=HEAD), \
+                 patch.object(attest, "_head", return_value=HEAD), \
+                 patch.object(attest, "_code_clean", return_value=True):
+                for minutes in (0, 1, 2, 3, 362, 363):
+                    receipt = attest.poll(
+                        root, observation={"components": observations},
+                        clock=T0+timedelta(minutes=minutes),
+                        remote_publish=publish, notify=notify)
+            # State changes at 2m, and a new sanitized heartbeat at 362m.
+            self.assertEqual(len(pushed), 3)
+            self.assertEqual(len(notices), 1)
+            self.assertEqual(receipt["remote_publish"], "PUBLISHED")
+            self.assertEqual(receipt["remote_published_at_utc"],
+                             (T0+timedelta(minutes=362)).isoformat())
 
     def test_status_published_once_per_transition_without_any_real_network(self):
         with tempfile.TemporaryDirectory() as temp:

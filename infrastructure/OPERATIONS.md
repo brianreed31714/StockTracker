@@ -1,5 +1,20 @@
 # StockTracker infrastructure architecture and operations contract
 
+## Windows host attestation recovery and release verification (October 22, 2026)
+
+The `stocktracker-host-status` branch provides **sanitized, Windows-origin, read-only host evidence** independent of the `main` code branch. It does not authenticate an in-memory trader code digest or Alpaca execution correctness. Treat `main` CI, GitHub deployment requests and source synchronization as separate from Windows activation.
+
+The initial host publication on October 20 used Windows text-mode stdin for `git mktree`, which translated LF to CRLF and inadvertently created a literal `status.json\r` filename. A successful push did **not** make a readable `status.json` at the expected GitHub path. The replacement publisher sends **bytes** to Git, parses NUL-terminated tree entries, allows exactly the single-file legacy branch for a non-force fast-forward repair and rejects any unrelated remote content. Never force-push or delete the attestation branch to repair this.
+
+The attestor invalidates the old publication cache once, then refreshes unchanged healthy/failed observations at most once every six hours while the source is verified synchronized and local Git credentials work. Its report contains only a timestamp, Git SHA, attestation state, stable-process and dated post-sync EOD flags, and explicitly false flags for unverified in-memory/broker details; no PIDs, command lines, balances, symbols, credentials, or raw exception texts. A missing/stale status is **not** proof of a running or stopped Windows service.
+
+The supervisor now enumerates Python processes only and requires bounded exact script names for **StockTrader**, **Geo Feed**, **Dashboard**, and **StockTracker deployment agent**. This avoids confusing other processes, backup filenames, shell commands, and the CryptoTracker agent. Windows process discovery failure must fail closed rather than trigger extra starts/restarts.
+
+**Safe host adoption:** After the PR is merged and all CI checks pass, validate on Windows that the repo is clean and fast-forward synchronized, the active trader/Geo Feed/Dashboard and both projects have preserved identity, and no approved unprocessed request would accidentally run. A running deployment agent must be independently reloaded **agent-only** to import the new attestation publisher. Do **not** create a supervisor broad restart request or touch the paper trader, Geo Feed, dashboard or CryptoTracker. The already-running supervisor also retains its old in-memory matching logic until separately and safely reloaded. Never claim a GitHub merge reloads either process.
+
+Confirm `stocktracker-host-status/status.json` has a normal filename and an observation later than the adoption, `git_head` matches expected main, process samples advance to `HOST_PROCESSES_STABLE_SOURCE_ONLY`, and a successful *post-sync* scheduled daily review subsequently advances to `EOD_EXECUTION_VERIFIED`. For `P-STOCK-*` approval changes, cross-check local `deploy/state/processed_requests.json`, active manifest, exact release file blobs, CI, release preflight, process start times and post-release reports. Preserve **PAPER ONLY** and all existing risk controls; never auto-promote research or infer profitability from process health.
+
+
 This file describes the **repository design**, not a claim that every service is running on the Windows trading PC. The machine-readable authority for code relationships is [registry.json](registry.json). Actual runtime evidence is created by `runtime_inventory.py` on that PC only. The runtime manifest, credentials, databases and logs remain local.
 
 ## Component boundaries

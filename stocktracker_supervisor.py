@@ -11,7 +11,7 @@ from pathlib import Path
 
 import requests
 from dotenv import load_dotenv
-from project_process_control import stop_project_services, project_services
+from project_process_control import stop_project_services, project_services, exact_script_running
 
 ROOT = Path(__file__).resolve().parent
 STATE_DIR = ROOT / "deploy" / "state"
@@ -80,13 +80,21 @@ def active_files():
     return resolved
 
 def command_lines():
-    ps = "Get-CimInstance Win32_Process | Where-Object {$_.CommandLine} | Select-Object -ExpandProperty CommandLine"
-    r = subprocess.run(["powershell","-NoProfile","-Command",ps], text=True, capture_output=True)
-    return [x.strip() for x in r.stdout.splitlines() if x.strip()] if r.returncode == 0 else []
+    # Python-only discovery avoids matching the PowerShell query itself.
+    ps = ("Get-CimInstance Win32_Process | "
+          "Where-Object { $_.Name -in @('python.exe', 'pythonw.exe') -and $_.CommandLine } | "
+          "Select-Object -ExpandProperty CommandLine")
+    r = subprocess.run(["powershell", "-NoProfile", "-Command", ps],
+                       text=True, capture_output=True, timeout=25)
+    if r.returncode != 0:
+        # An inventory failure is not proof that a service is missing.
+        raise RuntimeError("Unable to inspect StockTracker Windows processes")
+    return [x.strip() for x in r.stdout.splitlines() if x.strip()]
+
 
 def running(rel):
-    marker = Path(rel).name.lower()
-    return any(marker in line.lower() for line in command_lines())
+    return exact_script_running(command_lines(), rel)
+
 
 def start(rel, dashboard=False):
     path = (ROOT / rel).resolve()
