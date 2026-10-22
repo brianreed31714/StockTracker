@@ -73,13 +73,16 @@ def sanitized(report: dict) -> dict:
 def _git(root: Path, args: list[str], *, data: str | None = None) -> str:
     cmd = ["git", "-C", str(root), *args]
     try:
-        res = subprocess.run(cmd, input=data, text=True, capture_output=True, timeout=35)
+        # Byte stdin avoids Windows text-mode LF to CRLF translation in git mktree.
+        # A translated newline created a literal status.json\r tree entry.
+        stdin = data.encode("utf-8") if data is not None else None
+        res = subprocess.run(cmd, input=stdin, capture_output=True, timeout=35)
     except (OSError, subprocess.TimeoutExpired) as exc:
         raise RuntimeError("Git host-status publishing unavailable") from None
     if res.returncode != 0:
         # Exception text can contain remote URLs or authorization diagnostics.
         raise RuntimeError("Git host-status command rejected")
-    return res.stdout.strip()
+    return res.stdout.decode("utf-8").strip()
 
 
 def publish(root: Path, report: dict) -> str:
@@ -102,8 +105,11 @@ def publish(root: Path, report: dict) -> str:
         if _git(root, ["rev-parse", "--verify", "FETCH_HEAD"]) != parent:
             raise RuntimeError("Remote status changed before fetch")
         # Never overwrite other files on a preexisting unrelated status branch.
-        content = _git(root, ["ls-tree", "--name-only", "FETCH_HEAD"]).splitlines()
-        if content != [OUTPUT_FILE]:
+        # NUL separation retains carriage returns in the old malformed filename.
+        # Only an exact one-file legacy status.json\r tree is eligible for repair.
+        content = _git(root, ["ls-tree", "-z", "--name-only", "FETCH_HEAD"]).split("\x00")
+        content = [name for name in content if name]
+        if content not in ([OUTPUT_FILE], [OUTPUT_FILE + "\r"]):
             raise RuntimeError("Existing status branch is not a single-file attestation branch")
 
     data = json.dumps(payload, sort_keys=True, indent=2, allow_nan=False) + "\n"
