@@ -22,3 +22,35 @@ jobs:
           python-version: "3.11"
       - name: Offline ZPTA deterministic tests (no broker credentials)
         run: python -m unittest discover -s tests -p "test_zpta_*.py" -v
+
+  candidate-daily-history:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Attempt unverified public daily history retrieval (no secrets)
+        id: fetch
+        continue-on-error: true
+        run: |
+          python analysis/zpta_daily_history_fetch.py --range 2y --min-sessions 130 --output "$RUNNER_TEMP/zpta_daily.csv" --metadata "$RUNNER_TEMP/zpta_meta.json"
+      - name: Analyze candidate data without asserting split verification
+        if: steps.fetch.outcome == 'success'
+        run: |
+          python analysis/zpta_daily_swing_research.py "$RUNNER_TEMP/zpta_daily.csv" --source "Yahoo delayed daily OHLCV; adjustment UNVERIFIED" --output "$RUNNER_TEMP/zpta_report.json"
+          python - <<'PY'
+          import json, os, pathlib
+          root = pathlib.Path(os.environ["RUNNER_TEMP"])
+          meta = json.loads((root / "zpta_meta.json").read_text())
+          report = json.loads((root / "zpta_report.json").read_text())
+          print("CANDIDATE_SOURCE_METADATA:", json.dumps(meta, sort_keys=True))
+          print("RESEARCH_VALIDATION_GATE:", json.dumps(report["validation_gate"], sort_keys=True))
+          print("ELIGIBLE_FOR_MODEL_SELECTION:", report["eligible_for_model_selection"])
+          for name, horizon in report["signal_results"].items():
+              print("SIGNAL:", name, "3d", json.dumps(horizon["3d"], sort_keys=True))
+          PY
+      - name: Explicitly mark provider fetch failure
+        if: steps.fetch.outcome != 'success'
+        run: echo "Candidate data fetch failed; deterministic tests are separate. No verified daily dataset or strategy performance produced."
