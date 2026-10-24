@@ -46,6 +46,13 @@ class DailyRobustnessTests(unittest.TestCase):
         five=r["results"]["all_eligible_sessions"]["5d"]["overlapping_candidates"]
         self.assertGreater(one,five)
 
+    def test_month_liquidity_control_is_observational(self):
+        r = evaluate_holdout(bars())
+        paired = r["results"]["two_down_days_total_5pct"]["3d"]["matched_month_liquidity"]
+        self.assertLessEqual(paired["matched_pairs"],
+                             r["results"]["two_down_days_total_5pct"]["3d"]["independent_events"])
+        self.assertEqual(paired["warning"], "OBSERVATIONAL_MATCHES_NOT_INDEPENDENT_OR_CAUSAL")
+
     def test_bad_cost(self):
         with self.assertRaises(ValueError):
             evaluate_holdout(bars(),one_way_cost=-1)
