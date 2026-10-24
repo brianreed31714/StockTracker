@@ -50,6 +50,35 @@ jobs:
           print("ELIGIBLE_FOR_MODEL_SELECTION:", report["eligible_for_model_selection"])
           for name, horizon in report["signal_results"].items():
               print("SIGNAL:", name, "3d", json.dumps(horizon["3d"], sort_keys=True))
+          from analysis.zpta_intraday_recovery import load_daily
+          from analysis.zpta_daily_robustness import evaluate_holdout
+          bars = load_daily(root / "zpta_daily.csv")
+          independent = evaluate_holdout(bars)
+          for name, horizons in independent["results"].items():
+              for h in ("1d", "3d", "5d"):
+                  print("HOLDOUT_NONOVERLAP:", name, h, json.dumps(horizons[h], sort_keys=True))
+          # A few publicly displayed S&P/Quiver dates are sanity anchors only,
+          # NOT complete independent provider verification.
+          anchors = {
+              "2026-10-23": (.75, 19451),
+              "2026-10-22": (.72, 39626),
+              "2026-10-16": (.67, 798918),
+              "2026-10-08": (.5525, 376404),
+              "2026-08-25": (.8631, 226792),
+          }
+          lookup = {b["date"]: b for b in bars}
+          for day, (expected_close, expected_volume) in anchors.items():
+              b = lookup.get(day)
+              if not b:
+                  print("ANCHOR_MISSING:", day)
+                  continue
+              close_error = abs(b["close"]/expected_close-1)*100
+              volume_error = abs(b["volume"]/expected_volume-1)*100
+              print("CROSS_PROVIDER_ANCHOR:", day,
+                    json.dumps({"yahoo_close": b["close"], "reference_close": expected_close,
+                                "close_difference_pct": round(close_error,3),
+                                "yahoo_volume": b["volume"], "reference_volume": expected_volume,
+                                "volume_difference_pct": round(volume_error,3)}, sort_keys=True))
           PY
       - name: Explicitly mark provider fetch failure
         if: steps.fetch.outcome != 'success'
