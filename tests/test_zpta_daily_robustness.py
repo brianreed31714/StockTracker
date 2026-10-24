@@ -24,6 +24,7 @@ class DailyRobustnessTests(unittest.TestCase):
         b=r["results"]["all_eligible_sessions"]["3d"]
         self.assertLess(b["independent_events"], b["overlapping_candidates"])
         self.assertIsNotNone(b["max_full_allocation_drawdown_pct"])
+        self.assertIn("gross_profit_to_loss_ratio", b)
 
     def test_missing_volume_cannot_generate_events(self):
         b=bars()
