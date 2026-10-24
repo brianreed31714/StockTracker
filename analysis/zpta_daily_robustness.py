@@ -5,7 +5,7 @@ exit t+h CLOSE. No entry at the same-day low, no order-fill guarantee.
 """
 from __future__ import annotations
 
-import random
+import math
 import statistics
 
 from analysis.zpta_daily_swing_research import daily_signals, HORIZONS
@@ -46,6 +46,42 @@ def _summary(events):
     }
 
 
+
+def _matched_month_liquidity_excess(signal_events, eligible_events, horizon):
+    """Observational same-month, similar-turnover controls, never matched on returns.
+
+    Exclude same signal dates and +/- horizon days to reduce shared price paths.
+    Matched controls may still overlap each other; CI is descriptive, not causal.
+    """
+    independent = select_nonoverlapping(signal_events)
+    signal_indices = {e["signal_index"] for e in signal_events}
+    excess = []
+    for e in independent:
+        pool = [
+            c for c in eligible_events
+            if c["month"] == e["month"]
+            and c["signal_index"] not in signal_indices
+            and abs(c["signal_index"] - e["signal_index"]) > horizon
+        ]
+        if not pool:
+            continue
+        # Use only features available by each control's completed signal day.
+        control = min(pool, key=lambda c: (
+            abs(math.log(c["turnover"] / e["turnover"])) +
+            abs(c["range_fraction"] - e["range_fraction"]),
+            abs(c["signal_index"] - e["signal_index"]),
+        ))
+        excess.append(e["net_return_pct"] - control["net_return_pct"])
+    ci = event_bootstrap_ci(excess)
+    return {
+        "matched_pairs": len(excess),
+        "mean_excess_net_pct": ci["mean_pct"],
+        "median_excess_net_pct": ci.get("median_pct"),
+        "bootstrap_excess_ci_pct": ci["ci_pct"],
+        "warning": "OBSERVATIONAL_MATCHES_NOT_INDEPENDENT_OR_CAUSAL",
+    }
+
+
 def evaluate_holdout(bars, one_way_cost=0.01, min_signal_dollar_volume=25000, train_fraction=0.7):
     if not 0 <= one_way_cost < 0.5 or min_signal_dollar_volume < 0 or not 0 < train_fraction < 1:
         raise ValueError("Invalid parameters")
@@ -63,19 +99,29 @@ def evaluate_holdout(bars, one_way_cost=0.01, min_signal_dollar_volume=25000, tr
             exit_price = bars[i+h]["close"]*(1-one_way_cost)
             event = {
                 "signal_index": i, "entry_index": i+1, "exit_index": i+h,
-                "signal_date": signal["date"],
+                "signal_date": signal["date"], "month": signal["date"][:7],
+                "turnover": signal["close"] * signal["volume"],
+                "range_fraction": (signal["high"]-signal["low"])/signal["close"],
                 "net_return_pct": (exit_price/entry-1)*100,
                 "low_excursion_pct": (min(x["low"] for x in bars[i+1:i+h+1])/entry-1)*100,
             }
             for label in flags | {"all_eligible_sessions"}:
                 cohorts[label][h].append(event)
+    summaries = {s: {f"{h}d": _summary(cohorts[s][h]) for h in HORIZONS} for s in COHORTS}
+    for s in COHORTS:
+        if s == "all_eligible_sessions":
+            continue
+        for h in HORIZONS:
+            summaries[s][f"{h}d"]["matched_month_liquidity"] = (
+                _matched_month_liquidity_excess(cohorts[s][h], cohorts["all_eligible_sessions"][h], h)
+            )
     return {
         "total_sessions": len(bars),
         "train_sessions": cut,
         "holdout_sessions": len(bars)-cut,
         "holdout_start": bars[cut]["date"] if len(bars)>cut else None,
         "cost_one_way_pct": one_way_cost*100,
-        "results": {s: {f"{h}d": _summary(cohorts[s][h]) for h in HORIZONS} for s in COHORTS},
+        "results": summaries,
         "limits": [
             "Data source and corporate-action adjustments still require independent verification.",
             "Chronological holdout was not guaranteed untouched before this study; descriptive evaluation only.",
@@ -84,5 +130,6 @@ def evaluate_holdout(bars, one_way_cost=0.01, min_signal_dollar_volume=25000, tr
             "Compounded full-allocation results ignore idle-cash yield, funding constraints and broker fill failures.",
             "One-percent each-side cost is a scenario, not measured OTC spreads.",
             "No same-day-low entry or assumed limit-order fill.",
+            "Same-month turnover-matched controls are observational, may overlap and do not establish causality.",
         ],
     }
