@@ -34,7 +34,7 @@ Compare each strategy with unconditional eligible next-session entries, as well 
 ## Reproducibility
 
 ```shell
-python analysis/zpta_daily_swing_research.py validated_zpta_daily.csv --source "verified-provider-name" --split-adjustment-verified --output analysis/performance/zpta_daily_swing.json
+python -m analysis.zpta_daily_swing_research validated_zpta_daily.csv --source "verified-provider-name" --split-adjustment-verified --output analysis/performance/zpta_daily_swing.json
 python -m unittest tests.test_zpta_daily_swing_research
 ```
 
