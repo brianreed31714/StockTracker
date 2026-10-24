@@ -1,0 +1,24 @@
+name: ZPTA offline research tests
+
+on:
+  pull_request:
+    paths:
+      - "analysis/zpta_*.py"
+      - "tests/test_zpta_*.py"
+      - ".github/workflows/zpta-research-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  zpta-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Offline ZPTA deterministic tests (no broker credentials)
+        run: python -m unittest discover -s tests -p "test_zpta_*.py" -v
