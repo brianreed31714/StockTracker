@@ -26,6 +26,9 @@ def _summary(events):
     chosen = select_nonoverlapping(events)
     returns = [e["net_return_pct"] for e in chosen]
     ci = event_bootstrap_ci(returns)
+    gross_wins = sum(max(0, r) for r in returns)
+    gross_losses = -sum(min(0, r) for r in returns)
+    profit_factor = (gross_wins / gross_losses if gross_losses > 0 else None)
     equity, peak, max_dd = 1.0, 1.0, 0.0
     for r in returns:
         equity *= 1+r/100
@@ -39,6 +42,7 @@ def _summary(events):
         "bootstrap_mean_ci_pct": ci["ci_pct"],
         "bootstrap_warning": ci["warning"],
         "win_fraction": round(sum(r>0 for r in returns)/len(returns), 4) if returns else None,
+        "gross_profit_to_loss_ratio": round(profit_factor, 4) if profit_factor is not None else None,
         "mean_low_excursion_pct": round(statistics.mean(e["low_excursion_pct"] for e in chosen), 4) if chosen else None,
         "worst_trade_net_pct": round(min(returns), 4) if returns else None,
         "compounded_full_allocation_pct": round((equity-1)*100, 4) if chosen else None,
