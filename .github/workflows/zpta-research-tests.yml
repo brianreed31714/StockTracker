@@ -57,6 +57,15 @@ jobs:
           for name, horizons in independent["results"].items():
               for h in ("1d", "3d", "5d"):
                   print("HOLDOUT_NONOVERLAP:", name, h, json.dumps(horizons[h], sort_keys=True))
+          from analysis.zpta_daily_sleeve_risk import loss_budget_stress, simulate_shadow_sleeve
+          print("HISTORICAL_WORST_TRADE_POSITION_SIZING_STRESS:",
+                json.dumps(loss_budget_stress(-49.17), sort_keys=True))
+          for name in ("one_day_decline_5pct", "two_down_days_total_5pct",
+                       "rsi3_at_most_25", "all_eligible_sessions"):
+              risk = simulate_shadow_sleeve(bars, name, horizon=5)
+              print("CANDIDATE_HOLDOUT_5D_SLEEVE_RISK:", name,
+                    json.dumps({k: v for k, v in risk.items() if k != "trades"}, sort_keys=True))
+          # Read-only research; no broker orders or real-money activation.
           # A few publicly displayed S&P/Quiver dates are sanity anchors only,
           # NOT complete independent provider verification.
           anchors = {
