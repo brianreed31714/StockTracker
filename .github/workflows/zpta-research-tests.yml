@@ -92,3 +92,27 @@ jobs:
       - name: Explicitly mark provider fetch failure
         if: steps.fetch.outcome != 'success'
         run: echo "Candidate data fetch failed; deterministic tests are separate. No verified daily dataset or strategy performance produced."
+
+      - name: Audit issuer-documented ZPTA venue regimes (read-only)
+        if: steps.fetch.outcome == 'success'
+        run: |
+          python -m analysis.zpta_market_regime_audit "$RUNNER_TEMP/zpta_daily.csv" --as-of 2026-10-23 --output "$RUNNER_TEMP/zpta_venue_regimes.json"
+          python - <<'PY'
+          import json, os, pathlib
+          p = pathlib.Path(os.environ["RUNNER_TEMP"]) / "zpta_venue_regimes.json"
+          d = json.loads(p.read_text())
+          print("VENUE_REGIME_AUDIT:", json.dumps({
+              "cutoff": d["cutoff"], "last_date": d["last_date"],
+              "last_signal_flags": d["last_signal_flags"],
+              "last_signal_day_liquid": d["last_signal_day_liquid"],
+              "cross_venue_events_excluded": d["cross_venue_events_excluded"],
+              "promotion_allowed": d["promotion_allowed"]}, sort_keys=True))
+          for regime, v in d["regimes"].items():
+              print("VENUE_REGIME:", regime, json.dumps(v["liquidity"], sort_keys=True))
+              for strategy in ("one_day_decline_5pct", "two_down_days_total_5pct",
+                               "rsi3_at_most_25", "all_eligible_sessions"):
+                  for horizon in ("3d", "5d"):
+                      print("REGIME_STRATEGY:", regime, strategy, horizon,
+                            json.dumps(v["strategies"][strategy][horizon], sort_keys=True))
+          print("VENUE_AUDIT_WARNING: source-adjustment, historical broker tradability and fill prices remain unverified")
+          PY
