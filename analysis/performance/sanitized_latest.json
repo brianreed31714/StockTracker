@@ -4,15 +4,15 @@
     "database_available": true
   },
   "daily": {
-    "buy_orders": 3,
-    "closed_trades": 3,
-    "decision_rows": 3300,
-    "losses": 2,
-    "order_rows": 6,
-    "realized_pnl_usd": 4.04,
-    "sell_orders": 3,
-    "win_rate_pct": 33.33,
-    "wins": 1
+    "buy_orders": 5,
+    "closed_trades": 7,
+    "decision_rows": 3580,
+    "losses": 0,
+    "order_rows": 12,
+    "realized_pnl_usd": 369.9,
+    "sell_orders": 7,
+    "win_rate_pct": 100.0,
+    "wins": 7
   },
   "one_percent_goal": {
     "daily_goal_met": null,
@@ -24,37 +24,37 @@
   "paper_only": true,
   "proposal_ids": [
     {
-      "id": "P-STOCK-20261023-01",
+      "id": "P-STOCK-20261026-01",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261023-02",
+      "id": "P-STOCK-20261026-02",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261023-03",
+      "id": "P-STOCK-20261026-03",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261023-04",
+      "id": "P-STOCK-20261026-04",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261023-05",
+      "id": "P-STOCK-20261026-05",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261023-06",
+      "id": "P-STOCK-20261026-06",
       "status": "PENDING"
     }
   ],
   "quality": "LIMITED",
-  "review_date": "2026-10-23",
+  "review_date": "2026-10-26",
   "review_source": "OPENAI",
   "schema": "stocktracker_sanitized_summary_v1",
   "shadow": {
     "financial_leverage_signal_rows": 0,
-    "zpta_resolved_predictions": 0,
+    "zpta_resolved_predictions": 100,
     "zpta_shadow_trades": 0
   }
 }
