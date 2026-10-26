@@ -48,7 +48,7 @@ def simulate_shadow_sleeve(bars, signal_name, horizon=3, starting_cash=1000.0,
                            one_way_cost=0.01,
                            daily_loss_limit_pct=0.03,
                            max_drawdown_pct=0.08,
-                           train_fraction=0.7):
+                           train_fraction=0.7, start_signal_date=None):
     """Fixed-size, non-overlapping next-open/close-to-close paper scenario.
 
     Mark open positions to each session close at a hypothetical net exit
@@ -77,6 +77,10 @@ def simulate_shadow_sleeve(bars, signal_name, horizon=3, starting_cash=1000.0,
         if i < last_exit:
             continue
         signal = bars[i]
+        # Optional issuer-verified current-market regime start; preserves
+        # earlier bars ONLY as indicator lookback, never as trade entries.
+        if start_signal_date is not None and signal["date"] < start_signal_date:
+            continue
         if signal["volume"] <= 0 or signal["close"] * signal["volume"] < min_signal_dollar_volume:
             continue
         if signal_name != "all_eligible_sessions" and signal_name not in daily_signals(bars, i):
@@ -123,6 +127,7 @@ def simulate_shadow_sleeve(bars, signal_name, horizon=3, starting_cash=1000.0,
         "horizon_sessions": horizon,
         "train_cut_index": cut,
         "holdout_sessions": len(bars) - cut,
+        "start_signal_date": start_signal_date,
         "starting_cash": starting_cash,
         "position_cap_dollars": max_position_dollars,
         "position_cap_equity_fraction": max_position_equity_pct,
