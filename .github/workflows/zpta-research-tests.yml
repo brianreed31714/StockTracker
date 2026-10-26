@@ -114,5 +114,14 @@ jobs:
                   for horizon in ("3d", "5d"):
                       print("REGIME_STRATEGY:", regime, strategy, horizon,
                             json.dumps(v["strategies"][strategy][horizon], sort_keys=True))
+          from analysis.zpta_intraday_recovery import load_daily
+          from analysis.zpta_daily_sleeve_risk import simulate_shadow_sleeve
+          daily_bars = load_daily(pathlib.Path(os.environ["RUNNER_TEMP"]) / "zpta_daily.csv")
+          for signal in ("one_day_decline_5pct", "two_down_days_total_5pct",
+                         "rsi3_at_most_25", "all_eligible_sessions"):
+              risk = simulate_shadow_sleeve(
+                  daily_bars, signal, horizon=5, start_signal_date="2026-06-16")
+              print("OTCQB_ONLY_CAPPED_SLEEVE:", signal,
+                    json.dumps({k: v for k, v in risk.items() if k != "trades"}, sort_keys=True))
           print("VENUE_AUDIT_WARNING: source-adjustment, historical broker tradability and fill prices remain unverified")
           PY
