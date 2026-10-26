@@ -83,5 +83,20 @@ class DailySleeveRiskTests(unittest.TestCase):
             simulate_shadow_sleeve(synthetic(), "all_eligible_sessions", horizon=2)
 
 
+    def test_start_signal_date_excludes_earlier_market_regime(self):
+        r = simulate_shadow_sleeve(
+            synthetic(), "all_eligible_sessions", horizon=5,
+            start_signal_date="2025-05-15")
+        self.assertGreater(r["nonoverlapping_trades"], 0)
+        self.assertTrue(all(t["signal_date"] >= "2025-05-15" for t in r["trades"]))
+        self.assertEqual(r["start_signal_date"], "2025-05-15")
+
+    def test_future_market_start_fails_closed_to_no_trades(self):
+        r = simulate_shadow_sleeve(
+            synthetic(), "all_eligible_sessions", horizon=5,
+            start_signal_date="2027-01-01")
+        self.assertEqual(r["nonoverlapping_trades"], 0)
+        self.assertEqual(r["ending_equity"], 1000)
+
 if __name__ == "__main__":
     unittest.main()
