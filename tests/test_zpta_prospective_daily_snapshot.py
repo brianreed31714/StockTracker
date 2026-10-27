@@ -44,8 +44,10 @@ class ProspectiveSnapshotTests(unittest.TestCase):
         self.assertFalse(s["independent_price_volume_reconciliation_verified"])
 
     def test_stale_source_fails_closed(self):
+        bars = sample()[:-1]
+        bars.insert(0, {**bars[0], "date": "2026-10-09"})
         with self.assertRaisesRegex(ValueError, "STALE_OR_FUTURE_SOURCE"):
-            snapshot(sample()[:-1])
+            snapshot(bars)
 
     def test_future_bar_fails_closed(self):
         bars = sample()
