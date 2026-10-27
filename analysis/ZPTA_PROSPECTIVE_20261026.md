@@ -30,6 +30,20 @@ The new `analysis/zpta_prospective_daily_snapshot.py` generates date-fresh, post
 
 Future hypothetical print-price outcomes for the Oct 26 candidate cannot be known until the Oct 27 (1-session), Oct 29 (3-session), and Nov 2 (5-session) closes. One candidate cannot establish predictive accuracy.
 
+## 2A. Relevant OTCQB-only historical test of TODAY'S signal (not the 5%-down rule)
+
+The latest CI now explicitly prints all five predeclared hypotheses by venue. For **`down_day_10pct_below_prior_ten_day_high`**, using June 16–Oct 23 OTCQB-era signals, next-session OPEN entries, 1% hypothetical costs each way and non-overlapping 1/3/5-session exits:
+
+| Exit after | Non-overlapping historical events | Mean net printed-price return | Median net | iid bootstrap 95% interval for mean |
+|---|---:|---:|---:|---:|
+| 1 session | **41** | **-3.49%** | -4.24% | [-5.81%, -1.10%] |
+| 3 sessions | **22** | **-2.43%** | -6.53% | [-8.84%, +5.07%] |
+| 5 sessions | **15** | **-0.10%** | -6.45% | [-9.99%, +13.84%] |
+
+The $1,000 / $150-capped hypothetical 5-session sleeve for **this rule** returned **-0.40%** across 15 positions with **-19.28% close-mark max drawdown**, failing the <=8% target. The previously discussed +4.99% result belongs to a **different** >=5% down-close rule and must not be applied to today's 4%-down-close event. These OTCQB results are still an **already-examined, non-pristine** sample, use assumed friction and printed rather than executable fills, and cannot forecast tomorrow. Nonetheless, they provide no empirical basis for a real-money BUY solely because this rule fired.
+
+CI reference: https://github.com/brianreed31714/StockTracker/actions/runs/40430015181 .
+
 ## 3. MATERIAL NEW DATA-QUALITY FINDING: 75.69% volume disagreement
 
 The Oct 26 GitHub Actions Yahoo daily fetch at **2026-10-27T00:57:22Z** returned **500** rolling 2-year bars, Oct 28 2024–Oct 26 2026 (five zero-volume days, no reported split events). Its last close matched S&P at approximately **$0.72**, but Yahoo's same-day **67,987 shares** differed from S&P's **279,654 shares**:
