@@ -9,7 +9,7 @@ S&P Global Market Intelligence via Stock Analysis (updated Oct 26) displays:
 - Investing.com's Oct 26 history independently displays OPEN **$0.75**, HIGH **$0.75**, LOW **$0.631**, CLOSE **$0.72**, VOLUME **279.65K**.
 - Close vs Friday Oct 23 close $0.75: **-4.00%**.
 - Oct 26 low vs Friday close: approximately **-15.87%** using $0.631.
-- Oct 26 low-to-close recovery: approximately **+14.10%** using $0.631. **This is a SAME-DAY rebound, not a demonstrated 1/3/5-day future recovery, and is not an assumed executable entry.**
+- Oct 26 low-to-close recovery: approximately **+14.10%** using Investing.com's $0.631 low. Yahoo's separately published $0.6346 low implies **+13.46%** instead. **These are SAME-DAY rebounds, not demonstrated 1/3/5-day future recoveries or executable entries.**
 - S&P daily close×volume proxy: **$201,350.88**, not order-book depth.
 - Historical last ten sessions' highest reported high (through Oct 23) **$0.8022**; Oct 26 close is **10.25% below** that high.
 
@@ -42,11 +42,11 @@ The Oct 26 GitHub Actions Yahoo daily fetch at **2026-10-27T00:57:22Z** returned
 
 Both printed turnover proxies exceed the research $25k floor, but this does **not** make the market data verified. Oct 23 Yahoo volume was also revised between initial and later retrievals. The reason for the Oct 26 difference is not established (publication delay, partial volume or venue coverage are hypotheses). Never select the more favorable value or revise a frozen prediction silently.
 
-The first same-day candidate log recorded:
+The frozen same-day candidate log (October 26, GitHub Actions run **40429841587**) recorded:
 - Source hash: `5e46d166963d425c1b60b22be8697e7abcf8b3518cb8052df5bf9c7190a2ad8d`.
 - `snapshot_type=SAME_DAY_POST_CLOSE_CANDIDATE`, `candidate_status=RESEARCH_CANDIDATE_UNVERIFIED`.
 - `future_outcomes={1d:null,3d:null,5d:null}`; `real_money_trading_allowed=false`.
-- GitHub Actions run: https://github.com/brianreed31714/StockTracker/actions/runs/40429621067
+- GitHub Actions run: https://github.com/brianreed31714/StockTracker/actions/runs/40429841587\n- Permanent derived snapshot (no full raw daily history): [analysis/prospective/ZPTA_2026-10-26_snapshot.json](prospective/ZPTA_2026-10-26_snapshot.json), with an explicit **SOURCE_MISMATCH_DO_NOT_PROMOTE** quality flag.
 
 A later revision of the candidate Yahoo source must be flagged as a revision, not silently substituted. The input hash locks what the first research engine saw; it is not proof of source truth.
 
@@ -60,7 +60,7 @@ The current daily dataset still lacks independently certified full historical sp
 
 ## 5. Engineering, CI and next steps
 
-This run adds research-only prospective snapshot, cross-provider discrepancy, forward outcome scoring, deterministic tests, and CI artifact retention to draft PR #6. The initial 68-test CI attempt found one **test fixture** issue (stale-data fixture had fewer than eleven lookback bars), which was corrected without relaxing the stale-data gate. **Final CI checks for the latest head must be independently verified before any merge; do not claim success from a passing candidate-data job alone.**
+This run adds research-only prospective snapshot, cross-provider discrepancy, forward outcome scoring, deterministic tests, and CI artifact retention to draft PR #6. The initial 68-test CI attempt found one **test fixture** issue (stale-data fixture had fewer than eleven lookback bars), which was corrected without relaxing the stale-data gate. **The subsequent corrected code commit ca0cf608 passed 81/81 deterministic tests**, and the candidate-history/reconciliation job, supervisor safety workflow and infrastructure registry contract all completed successfully: https://github.com/brianreed31714/StockTracker/actions/runs/40429841587 . The initial 68-test failure is closed by the corrected stale-source fixture. PR #6 remains draft; the later documentation/snapshot commits are not a merge or host activation.
 
 Next: (a) independently reconcile Oct 26 volume and detect any Yahoo revisions, (b) preserve the dated signal and score its future outcomes without changing the original rule or signal timestamp, (c) continue venue-appropriate OTCQB-only matched baselines, cost and drawdown stress, and (d) confirm corporate-action and broker execution data before any live-readiness promotion. The $8 IBKR subscription is **not** needed just for this daily historical research.
 
