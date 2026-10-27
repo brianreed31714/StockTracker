@@ -110,15 +110,21 @@ jobs:
           for regime, v in d["regimes"].items():
               print("VENUE_REGIME:", regime, json.dumps(v["liquidity"], sort_keys=True))
               for strategy in ("one_day_decline_5pct", "two_down_days_total_5pct",
-                               "rsi3_at_most_25", "all_eligible_sessions"):
-                  for horizon in ("3d", "5d"):
+                               "down_day_10pct_below_prior_ten_day_high",
+                               "rsi3_at_most_25",
+                               "confirmed_recovery_after_5pct_decline",
+                               "all_eligible_sessions"):
+                  for horizon in ("1d", "3d", "5d"):
                       print("REGIME_STRATEGY:", regime, strategy, horizon,
                             json.dumps(v["strategies"][strategy][horizon], sort_keys=True))
           from analysis.zpta_intraday_recovery import load_daily
           from analysis.zpta_daily_sleeve_risk import simulate_shadow_sleeve
           daily_bars = load_daily(pathlib.Path(os.environ["RUNNER_TEMP"]) / "zpta_daily.csv")
           for signal in ("one_day_decline_5pct", "two_down_days_total_5pct",
-                         "rsi3_at_most_25", "all_eligible_sessions"):
+                         "down_day_10pct_below_prior_ten_day_high",
+                         "rsi3_at_most_25",
+                         "confirmed_recovery_after_5pct_decline",
+                         "all_eligible_sessions"):
               risk = simulate_shadow_sleeve(
                   daily_bars, signal, horizon=5, start_signal_date="2026-06-16")
               print("OTCQB_ONLY_CAPPED_SLEEVE:", signal,
