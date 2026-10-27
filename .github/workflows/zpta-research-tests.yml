@@ -145,8 +145,8 @@ jobs:
           d = json.loads(candidates[0].read_text())
           print("FROZEN_PROSPECTIVE_RESEARCH_CANDIDATE:", json.dumps({
               k: d[k] for k in ("as_of", "snapshot_type", "ruleset",
-                "input_ohlcv_sha256", "reference_close", "reference_volume",
-                "dollar_turnover_proxy", "completed_day_signal_flags",
+                "input_ohlcv_sha256", "reference_close", "reference_low", "reference_volume",
+                "dollar_turnover_proxy", "features", "completed_day_signal_flags",
                 "research_candidate", "candidate_status", "future_outcomes",
                 "real_money_trading_allowed")
           }, sort_keys=True))
@@ -156,3 +156,15 @@ jobs:
         run: |
           echo "PROSPECTIVE_SNAPSHOT_NOT_VERIFIED: source missing today's settled daily bar, retrieval before settlement, or invalid data."
           echo "Do not substitute yesterday's bar or label this a forward prediction."
+
+      - name: Check Oct 26 independent S&P anchor when date matches (read-only)
+        if: steps.prospective.outcome == 'success'
+        run: |
+          AS_OF="$(TZ=America/New_York date +%F)"
+          if [ "$AS_OF" = "2026-10-26" ]; then
+            python -m analysis.zpta_cross_provider_anchor "$RUNNER_TEMP/zpta_prospective_${AS_OF}.json" \
+              --anchor-date 2026-10-26 --anchor-close 0.72 --anchor-volume 279654 \
+              --anchor-source "S&P Global Market Intelligence, stockanalysis.com Oct 26 EOD"
+          else
+            echo "NO_DATED_INDEPENDENT_ANCHOR: do not infer full-history reconciliation from candidate Yahoo feed"
+          fi
