@@ -2,7 +2,25 @@
 import unittest
 from analysis.zpta_prospective_daily_snapshot import make_snapshot
 from analysis.zpta_prospective_outcome_score import score_snapshot
-from tests.test_zpta_prospective_daily_snapshot import sample
+from datetime import date, timedelta
+
+
+def sample():
+    start = date(2026, 10, 12)
+    days = []
+    d = start
+    while len(days) < 11:
+        if d.weekday() < 5:
+            days.append(d.isoformat())
+        d += timedelta(days=1)
+    rows = [{"date": day, "open": .75, "high": .8022,
+             "low": .70, "close": .75, "volume": 100000} for day in days]
+    rows[-4]["close"] = .74
+    rows[-3]["close"] = .72
+    rows[-2]["close"] = .75
+    rows[-1].update({"open": .75, "high": .75, "low": .631,
+                     "close": .72, "volume": 279654})
+    return rows
 
 
 def frozen():
