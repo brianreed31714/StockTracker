@@ -151,6 +151,15 @@ jobs:
                 "real_money_trading_allowed")
           }, sort_keys=True))
           PY
+      - name: Preserve derived prospective signal snapshot (no raw bars)
+        if: steps.prospective.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: zpta-prospective-research-candidate
+          path: ${{ runner.temp }}/zpta_prospective_*.json
+          retention-days: 90
+          if-no-files-found: error
+
       - name: Explicitly record missing or stale candidate daily bar
         if: steps.fetch.outcome == 'success' && steps.prospective.outcome != 'success'
         run: |
