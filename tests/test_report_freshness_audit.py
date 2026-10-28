@@ -179,5 +179,35 @@ class ReportFreshnessAuditTests(unittest.TestCase):
         self.assertIsNone(result["published_realized_pnl_usd_observed_only"])
 
 
+    def test_same_trade_id_with_changed_timestamp_fails_closed(self):
+        # A duplicated trade cannot become two realized gains by changing ts.
+        with (self.evidence_dir / "realized.csv").open("a", encoding="utf-8") as file:
+            file.write("1,12.50,XOM,2026-10-13T18:01:00Z\n")
+        result = audit(self.root, "2026-10-13")
+        self.assertEqual(result["status"], "FAIL")
+        self.assertEqual(result["realized_evidence_status"], "INVALID")
+        self.assertIsNone(result["published_realized_pnl_usd_observed_only"])
+        self.assertTrue(any("CONFLICTING_DUPLICATE_REALIZED_ROW" in e for e in result["errors"]))
+
+    def test_equivalent_utc_timestamp_is_deduplicated(self):
+        with (self.evidence_dir / "realized.csv").open("a", encoding="utf-8") as file:
+            file.write("1,12.50,XOM,2026-10-13T18:00:00+00:00\n")
+        result = audit(self.root, "2026-10-13")
+        self.assertEqual(result["published_realized_pnl_usd_observed_only"], "12.50")
+        self.assertEqual(result["published_realized_row_count"], 1)
+        self.assertEqual(result["realized_evidence_status"], "OBSERVED_ONLY")
+
+    def test_session_scoped_trade_ids_can_repeat_across_days(self):
+        prior = self.root / "analysis" / "evidence" / "2026-10-12"
+        prior.mkdir(parents=True)
+        (prior / "realized.csv").write_text(
+            "id,pnl,symbol,ts\\n1,3.00,XOM,2026-10-12T18:00:00Z\n",
+            encoding="utf-8",
+        )
+        result = audit(self.root, "2026-10-13")
+        self.assertEqual(result["published_realized_pnl_usd_observed_only"], "15.50")
+        self.assertEqual(result["published_realized_row_count"], 2)
+
+
 if __name__ == "__main__":
     unittest.main()
