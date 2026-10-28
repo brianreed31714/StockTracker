@@ -10,7 +10,8 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-from datetime import date
+from datetime import date, datetime
+from zoneinfo import ZoneInfo
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
@@ -73,9 +74,17 @@ def audit(root: Path, expected_session: str) -> dict:
         try:
             with csv_path.open(encoding="utf-8", newline="") as stream:
                 for row in csv.DictReader(stream):
-                    key = (csv_path.parent.name, row.get("id"), row.get("ts"))
-                    if not all(isinstance(x, str) and x.strip() for x in key[1:]):
+                    key = (row.get("id"), row.get("ts"))
+                    if not all(isinstance(x, str) and x.strip() for x in key):
                         raise ValueError("missing realized row id or timestamp")
+                    # Folder placement alone does not establish the trade's session.
+                    # UTC midnight may still belong to the prior New York session.
+                    stamp = datetime.fromisoformat(row["ts"].replace("Z", "+00:00"))
+                    if stamp.tzinfo is None or stamp.utcoffset() is None:
+                        raise ValueError("realized timestamp must include a timezone")
+                    trade_session = stamp.astimezone(ZoneInfo("America/New_York")).date().isoformat()
+                    if trade_session != session_date:
+                        raise ValueError("realized trade session mismatch: " + trade_session + " != " + session_date)
                     value = Decimal(str(row["pnl"]))
                     if not value.is_finite():
                         raise InvalidOperation("non-finite realized P/L")
