@@ -511,10 +511,15 @@ def scan_once():
     # No restart, extra trader process, scheduled-task mutation, or Git write.
     if os.name == "nt":
         try:
-            from infrastructure.windows_activation_attestation import poll
-            poll(ROOT, notify=push_attestation)
+            # Importing poll() in a long-running agent caches the old module
+            # after Git sync. The bounded child always loads the new on-disk
+            # attestation without restarting trader/dashboard/feed processes.
+            from infrastructure.fresh_attestation_runner import run_fresh_host_attestation
+            evidence = run_fresh_host_attestation(ROOT)
+            if evidence["status"] != "HOST_CLAIM_ONLY":
+                log("Windows attestation unavailable: " + evidence.get("reason", "UNVERIFIED"))
         except Exception:
-            log("Windows activation attestation unavailable; review local ignored receipt.")
+            log("Windows attestation runner unavailable (details redacted)")
 
 
 
