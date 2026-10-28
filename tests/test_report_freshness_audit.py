@@ -152,7 +152,7 @@ class ReportFreshnessAuditTests(unittest.TestCase):
     def test_future_trade_timestamp_inside_older_folder_fails_closed(self):
         # A file labeled Oct 13 must not contain an Oct 14 New York trade.
         (self.evidence_dir / "realized.csv").write_text(
-            "id,pnl,symbol,ts\\n1,9999.00,XOM,2026-10-14T18:00:00Z\\n",
+            "id,pnl,symbol,ts\n1,9999.00,XOM,2026-10-14T18:00:00Z\n",
             encoding="utf-8",
         )
         result = audit(self.root, "2026-10-13")
@@ -162,7 +162,7 @@ class ReportFreshnessAuditTests(unittest.TestCase):
 
     def test_utc_midnight_belongs_to_prior_new_york_session(self):
         (self.evidence_dir / "realized.csv").write_text(
-            "id,pnl,symbol,ts\\n1,12.50,XOM,2026-10-14T00:15:00Z\\n",
+            "id,pnl,symbol,ts\n1,12.50,XOM,2026-10-14T00:15:00Z\n",
             encoding="utf-8",
         )
         result = audit(self.root, "2026-10-13")
@@ -171,7 +171,7 @@ class ReportFreshnessAuditTests(unittest.TestCase):
 
     def test_timezone_naive_trade_timestamp_is_unverified(self):
         (self.evidence_dir / "realized.csv").write_text(
-            "id,pnl,symbol,ts\\n1,12.50,XOM,2026-10-13T18:00:00\\n",
+            "id,pnl,symbol,ts\n1,12.50,XOM,2026-10-13T18:00:00\n",
             encoding="utf-8",
         )
         result = audit(self.root, "2026-10-13")
