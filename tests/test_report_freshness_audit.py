@@ -65,6 +65,14 @@ class ReportFreshnessAuditTests(unittest.TestCase):
         self.assertEqual(result["status"], "FAIL")
         self.assertTrue(any("STALE_REPORT" in x for x in result["errors"]))
 
+    def test_absent_realized_evidence_is_missing_not_zero(self):
+        (self.evidence_dir / "realized.csv").unlink()
+        result = audit(self.root, "2026-10-13")
+        self.assertIsNone(result["published_realized_pnl_usd_observed_only"])
+        self.assertEqual(result["realized_evidence_status"], "MISSING")
+        self.assertIn("MISSING_REALIZED_EVIDENCE_NOT_ZERO_PNL", result["warnings"])
+        self.assertEqual(result["published_realized_row_count"], 0)
+
     def test_missing_report_is_failure(self):
         (self.report_dir / "latest.json").unlink()
         result = audit(self.root, "2026-10-13")
