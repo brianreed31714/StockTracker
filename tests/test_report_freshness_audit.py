@@ -201,7 +201,7 @@ class ReportFreshnessAuditTests(unittest.TestCase):
         prior = self.root / "analysis" / "evidence" / "2026-10-12"
         prior.mkdir(parents=True)
         (prior / "realized.csv").write_text(
-            "id,pnl,symbol,ts\\n1,3.00,XOM,2026-10-12T18:00:00Z\n",
+            "id,pnl,symbol,ts\n1,3.00,XOM,2026-10-12T18:00:00Z\n",
             encoding="utf-8",
         )
         result = audit(self.root, "2026-10-13")
