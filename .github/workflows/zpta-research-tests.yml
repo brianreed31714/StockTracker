@@ -93,6 +93,28 @@ jobs:
         if: steps.fetch.outcome != 'success'
         run: echo "Candidate data fetch failed; deterministic tests are separate. No verified daily dataset or strategy performance produced."
 
+      - name: Audit precommitted next-session dip limits without hindsight fills
+        if: steps.fetch.outcome == 'success'
+        run: |
+          python - <<'PY'
+          import json, os, pathlib
+          from analysis.zpta_intraday_recovery import load_daily
+          from analysis.zpta_next_session_limit_audit import audit
+          bars = load_daily(pathlib.Path(os.environ["RUNNER_TEMP"]) / "zpta_daily.csv")
+          for name in ("one_day_decline_5pct", "two_down_days_total_5pct",
+                       "down_day_10pct_below_prior_ten_day_high",
+                       "rsi3_at_most_25", "confirmed_recovery_after_5pct_decline"):
+              r = audit(bars, signal_name=name)
+              print("ZPTA_UNVERIFIED_NEXT_SESSION_LIMIT_AUDIT:", json.dumps({
+                  "signal": name, "candidates": r["candidate_count"],
+                  "limit_status_counts": r["limit_status_counts"],
+                  "nonoverlapping_summary": r["nonoverlapping_summary"],
+                  "real_money_trading_allowed": r["real_money_trading_allowed"],
+              }, sort_keys=True))
+          print("ZPTA_LIMIT_AUDIT_WARNING: printed next opens are not verified fills;")
+          print("ZPTA_LIMIT_AUDIT_WARNING: source corporate actions and OTC quotes remain unverified")
+          PY
+
       - name: Audit issuer-documented ZPTA venue regimes (read-only)
         if: steps.fetch.outcome == 'success'
         run: |
