@@ -65,7 +65,9 @@
         "stocktracker_deployment_agent.py",
         "infrastructure/windows_activation_attestation.py",
         "infrastructure/runtime_inventory.py",
-        "infrastructure/host_status_publisher.py"
+        "infrastructure/host_status_publisher.py",
+        "infrastructure/host_evidence_collector.py",
+        "test_host_evidence_collector.py"
       ],
       "health": {
         "type": "process"
