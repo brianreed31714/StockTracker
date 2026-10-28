@@ -33,6 +33,8 @@ A new GitHub Actions research fetch (run **40612642610**, Oct 27 session, 2026-1
 
 Source: https://stockanalysis.com/quote/otc/ZPTA/history/ (S&P Global Market Intelligence, updated October 27). GitHub Actions: https://github.com/brianreed31714/StockTracker/actions/runs/40612642610 . Publication timing or venue coverage could explain some differences; no cause has been established. Do not silently replace the frozen Yahoo observation with S&P or select whichever makes the trade look more favorable.
 
+**Why the one-cent disagreement matters:** Using S&P's published October 27 opening print of $0.72, a hypothetical purchase at that open and sale at S&P's $0.73 close would return **-0.62%** after 1% assumed friction each way. If one *assumed* the same opening print but substituted Yahoo's $0.74 close, the hypothetical result would instead be **+0.74%**. The latter is only a sensitivity illustration (Yahoo's actual open is not established here), **not** a valid scored outcome. One cent can reverse the sign of a penny-stock backtest; neither calculation proves an executable fill. Because the frozen October 26 bar itself has unresolved volume revisions, the prospective scorer must remain fail-closed.
+
 **CI evidence:** The new next-session limit tests were included in the 91 offline ZPTA deterministic tests that passed on code SHA `9661cacf38ffa8152d943fcdfe88cffca65f1221`; the data-research job on that SHA also passed. This validates the tests and scripted research mechanics, **not** historical price truth, broker fills, or Windows activation. Required checks on the final documentation head must be verified separately before merge.
 
 ## Validation and next steps
