@@ -76,12 +76,17 @@ def audit(root: Path, expected_session: str) -> dict:
         except (OSError, KeyError, InvalidOperation, ValueError) as exc:
             errors.append("INVALID_REALIZED_CSV: " + str(csv_path) + ": " + str(exc))
 
+    if not sessions:
+        warnings.append("MISSING_REALIZED_EVIDENCE_NOT_ZERO_PNL")
     warnings.append("ACCOUNT_EQUITY_RETURN_AND_DRAWDOWN_NOT_VERIFIABLE_FROM_PUBLISHED_EVIDENCE")
     return {
         "status": "FAIL" if errors else "WARN" if warnings else "PASS",
         "expected_session": expected_session,
         "published_session": published,
-        "published_realized_pnl_usd_observed_only": str(pnl.quantize(Decimal("0.01"))),
+        "published_realized_pnl_usd_observed_only": (
+            str(pnl.quantize(Decimal("0.01"))) if sessions else None
+        ),
+        "realized_evidence_status": "OBSERVED_ONLY" if sessions else "MISSING",
         "published_realized_row_count": row_count,
         "published_sessions_with_realized_file": sessions,
         "account_equity_return_available": False,
