@@ -27,6 +27,8 @@ def audit(root: Path, expected_session: str) -> dict:
         report = json.loads(report_path.read_text(encoding="utf-8"))
         metrics = report["metrics"]
         published = str(metrics["review_date"])
+        if date.fromisoformat(published).isoformat() != published:
+            raise ValueError("noncanonical review_date")
     except (ValueError, KeyError, TypeError) as exc:
         return {"status": "FAIL", "expected_session": expected_session,
                 "errors": ["INVALID_LATEST_REPORT: " + str(exc)], "warnings": []}
@@ -60,7 +62,7 @@ def audit(root: Path, expected_session: str) -> dict:
     # only realized rows from published, dated evidence are observable here.
     evidence_root = root / "analysis/evidence"
     pnl, row_count, sessions = Decimal("0"), 0, []
-    seen = set()
+    seen = {}
     invalid_realized_evidence = False
     for csv_path in sorted(evidence_root.glob("????-??-??/realized.csv")):
         session_date = csv_path.parent.name
@@ -72,13 +74,20 @@ def audit(root: Path, expected_session: str) -> dict:
             with csv_path.open(encoding="utf-8", newline="") as stream:
                 for row in csv.DictReader(stream):
                     key = (csv_path.parent.name, row.get("id"), row.get("ts"))
-                    if key in seen:
-                        warnings.append("DUPLICATE_REALIZED_ROW: " + str(key))
-                        continue
-                    seen.add(key)
+                    if not all(isinstance(x, str) and x.strip() for x in key[1:]):
+                        raise ValueError("missing realized row id or timestamp")
                     value = Decimal(str(row["pnl"]))
                     if not value.is_finite():
                         raise InvalidOperation("non-finite realized P/L")
+                    fingerprint = (value, row.get("symbol"))
+                    if key in seen:
+                        if seen[key] != fingerprint:
+                            invalid_realized_evidence = True
+                            errors.append("CONFLICTING_DUPLICATE_REALIZED_ROW: " + str(key))
+                        else:
+                            warnings.append("DUPLICATE_REALIZED_ROW: " + str(key))
+                        continue
+                    seen[key] = fingerprint
                     pnl += value
                     row_count += 1
             sessions.append(csv_path.parent.name)
