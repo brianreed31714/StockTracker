@@ -176,7 +176,8 @@
         "safe_summary_publish.py",
         "research/shadow_opportunity_audit.py",
         "infrastructure/windows_activation_attestation.py",
-        "infrastructure/host_status_publisher.py"
+        "infrastructure/host_status_publisher.py",
+        "infrastructure/test_task_registration.py"
       ],
       "health": {
         "type": "evidence_only"

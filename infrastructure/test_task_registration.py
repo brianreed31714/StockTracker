@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import unittest
+from pathlib import Path
 
 from infrastructure.runtime_inventory import evaluate_task_registration
 
@@ -81,6 +82,23 @@ class TaskRegistrationTests(unittest.TestCase):
         data["name"] = "StockTracker Daily Review"
         result = evaluate_task_registration(data, REVIEW)
         self.assertFalse(result["registration_consistent"])
+
+
+    def test_daily_review_cannot_catch_up_on_next_morning(self):
+        # Installer source contract; this test never registers or starts a task.
+        installer = (Path(__file__).resolve().parents[1] /
+                     "install_stocktracker_tasks.ps1").read_text(encoding="utf-8")
+        lines = installer.splitlines()
+        supervisor_settings = next(line for line in lines if line.startswith("$SupervisorSettings = "))
+        review_settings = next(line for line in lines if line.startswith("$ReviewSettings = "))
+        supervisor_registration = next(line for line in lines if line.startswith("Register-ScheduledTask -TaskName $SupervisorTask "))
+        review_registration = next(line for line in lines if line.startswith("Register-ScheduledTask -TaskName $ReviewTask "))
+        self.assertIn("-StartWhenAvailable", supervisor_settings)
+        self.assertNotIn("-StartWhenAvailable", review_settings)
+        self.assertNotIn("-RestartCount", review_settings)
+        self.assertIn("-Settings $SupervisorSettings", supervisor_registration)
+        self.assertIn("-Settings $ReviewSettings", review_registration)
+        self.assertIn("Monday,Tuesday,Wednesday,Thursday,Friday -At 1:35PM", installer)
 
 
 if __name__ == "__main__":
