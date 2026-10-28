@@ -149,5 +149,35 @@ class ReportFreshnessAuditTests(unittest.TestCase):
         self.assertTrue(any("INVALID_REALIZED_CSV" in error for error in result["errors"]))
 
 
+    def test_future_trade_timestamp_inside_older_folder_fails_closed(self):
+        # A file labeled Oct 13 must not contain an Oct 14 New York trade.
+        (self.evidence_dir / "realized.csv").write_text(
+            "id,pnl,symbol,ts\\n1,9999.00,XOM,2026-10-14T18:00:00Z\\n",
+            encoding="utf-8",
+        )
+        result = audit(self.root, "2026-10-13")
+        self.assertEqual(result["realized_evidence_status"], "INVALID")
+        self.assertIsNone(result["published_realized_pnl_usd_observed_only"])
+        self.assertTrue(any("realized trade session mismatch" in x for x in result["errors"]))
+
+    def test_utc_midnight_belongs_to_prior_new_york_session(self):
+        (self.evidence_dir / "realized.csv").write_text(
+            "id,pnl,symbol,ts\\n1,12.50,XOM,2026-10-14T00:15:00Z\\n",
+            encoding="utf-8",
+        )
+        result = audit(self.root, "2026-10-13")
+        self.assertEqual(result["realized_evidence_status"], "OBSERVED_ONLY")
+        self.assertEqual(result["published_realized_pnl_usd_observed_only"], "12.50")
+
+    def test_timezone_naive_trade_timestamp_is_unverified(self):
+        (self.evidence_dir / "realized.csv").write_text(
+            "id,pnl,symbol,ts\\n1,12.50,XOM,2026-10-13T18:00:00\\n",
+            encoding="utf-8",
+        )
+        result = audit(self.root, "2026-10-13")
+        self.assertEqual(result["realized_evidence_status"], "INVALID")
+        self.assertIsNone(result["published_realized_pnl_usd_observed_only"])
+
+
 if __name__ == "__main__":
     unittest.main()
