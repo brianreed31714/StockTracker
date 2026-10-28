@@ -263,6 +263,19 @@ def poll(root: Path, *, observation: dict | None = None,
     except (ValueError, TypeError, OSError, RuntimeError):
         report = advance(root, previous, {}, head="", upstream="", clean=False, clock=stamp)
         report["reasons"] = ["HOST_INVENTORY_UNAVAILABLE"]
+    # Collect sanitized disk evidence from the same Windows observation.
+    # These hashes are explicitly NOT in-memory process attestation.
+    try:
+        from infrastructure.host_evidence_collector import collect_host_evidence
+        from infrastructure.registry_contract import validate_registry
+        registry = validate_registry(root, check_local_safety=True)
+        dep_files = ("paper_research_lab_v11_10.py", "publish_daily_evidence.py") if registry["project"] == "CryptoTracker" else ("daily_model_review.py",)
+        disk = collect_host_evidence(root, snapshot, dependencies=dep_files)
+    except (OSError, RuntimeError, ValueError, KeyError, UnboundLocalError):
+        disk = {"disk_code_sha256": None, "disk_dependencies_sha256": None,
+                "process_identity_observed": False, "loaded_code_verified": False,
+                "loaded_dependencies_verified": False}
+    report["disk_evidence"] = disk
     # Every distinct commit gets a CODE_SYNCED notice after positive source
     # integrity; a later EOD verification gets a second distinct notice.
     # Do not send repeated notices for each 60-second polling interval.
@@ -295,7 +308,8 @@ def poll(root: Path, *, observation: dict | None = None,
     # Independently refresh otherwise unchanged host evidence at most every six
     # hours, so GitHub can distinguish stale processes from an observed host.
     remote_key = (report["git_head"] + ":" + report["state"] + ":" +
-                  str(report.get("verified_review_date") or "") + ":status-file-v2")
+                  str(report.get("verified_review_date") or "") + ":" +
+                  str((report.get("disk_evidence") or {}).get("disk_code_sha256") or "") + ":status-file-v3")
     previous_publish = str(previous.get("remote_published_at_utc") or "")
     try:
         age_seconds = (stamp - parse_timestamp(previous_publish)).total_seconds()
