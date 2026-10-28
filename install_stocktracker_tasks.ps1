@@ -27,17 +27,21 @@ foreach ($Name in @($SupervisorTask, $ReviewTask)) {
 }
 
 $Principal = New-ScheduledTaskPrincipal -UserId $CurrentUser -LogonType Interactive -RunLevel Highest
-$Settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -RestartCount 10 -RestartInterval (New-TimeSpan -Minutes 1) -ExecutionTimeLimit ([TimeSpan]::Zero) -MultipleInstances IgnoreNew
+$SupervisorSettings = New-ScheduledTaskSettingsSet -StartWhenAvailable -RestartCount 10 -RestartInterval (New-TimeSpan -Minutes 1) -ExecutionTimeLimit ([TimeSpan]::Zero) -MultipleInstances IgnoreNew
+# A missed post-close task must NOT run on the next morning with today's date.
+# The batch defaults to the current date, which would publish partial-session evidence.
+# Review retries are controlled by post_close_review_guard.py, not Task Scheduler.
+$ReviewSettings = New-ScheduledTaskSettingsSet -ExecutionTimeLimit (New-TimeSpan -Hours 2) -MultipleInstances IgnoreNew
 
 $SupervisorAction = New-ScheduledTaskAction -Execute $Python -Argument ("`"" + $Supervisor + "`"") -WorkingDirectory $Repo
 $SupervisorTrigger = New-ScheduledTaskTrigger -AtLogOn -User $CurrentUser
 $SupervisorTrigger.Delay = "PT30S"
-Register-ScheduledTask -TaskName $SupervisorTask -Action $SupervisorAction -Trigger $SupervisorTrigger -Principal $Principal -Settings $Settings -Force | Out-Null
+Register-ScheduledTask -TaskName $SupervisorTask -Action $SupervisorAction -Trigger $SupervisorTrigger -Principal $Principal -Settings $SupervisorSettings -Force | Out-Null
 
 # Weekdays at 1:35 PM local Pacific time (4:35 PM Eastern; daylight saving aware).
 $ReviewAction = New-ScheduledTaskAction -Execute "cmd.exe" -Argument ("/c `"" + $ReviewBat + "`"") -WorkingDirectory $Repo
 $ReviewTrigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday,Tuesday,Wednesday,Thursday,Friday -At 1:35PM
-Register-ScheduledTask -TaskName $ReviewTask -Action $ReviewAction -Trigger $ReviewTrigger -Principal $Principal -Settings $Settings -Force | Out-Null
+Register-ScheduledTask -TaskName $ReviewTask -Action $ReviewAction -Trigger $ReviewTrigger -Principal $Principal -Settings $ReviewSettings -Force | Out-Null
 
 Write-Host "Created scheduled task: $SupervisorTask"
 Write-Host "  At logon for $CurrentUser, 30 second delay"
