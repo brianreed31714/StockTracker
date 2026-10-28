@@ -72,6 +72,29 @@ def sanitized(report: dict) -> dict:
         payload["disk_dependencies_sha256"] = dep_digest
     payload["process_identity_observed"] = disk.get("process_identity_observed") is True
     payload["loaded_dependencies_verified"] = False
+    # Named task and its last result are host observations, never report or
+    # provider/device delivery evidence. Do not publish paths, user IDs or logs.
+    payload["daily_review_task_status"] = "UNVERIFIED"
+    task = report.get("daily_review_task_observation") or {}
+    if isinstance(task, dict) and task.get("status") == "TASK_NAME_OBSERVED":
+        state = task.get("scheduler_state")
+        result = task.get("last_task_result")
+        raw = task.get("last_run_utc")
+        if state in {"Ready", "Running", "Disabled", "Queued", "Unknown"} and type(result) is int and -2**31 <= result < 2**32:
+            last = None
+            if isinstance(raw, str):
+                try:
+                    last = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+                    if last.tzinfo is None or last.year < 2001 or last > stamp:
+                        last = None
+                except ValueError:
+                    last = None
+            if raw is None or last is not None:
+                payload["daily_review_task_status"] = "TASK_NAME_OBSERVED"
+                payload["daily_review_task_state"] = state
+                payload["daily_review_last_task_result"] = result
+                if last is not None:
+                    payload["daily_review_last_run_utc"] = last.astimezone(timezone.utc).isoformat()
     if payload["post_sync_eod_verified"]:
         day = report.get("verified_review_date")
         if not isinstance(day, str) or not DATE.fullmatch(day) or datetime.fromisoformat(day).date().isoformat() != day:
