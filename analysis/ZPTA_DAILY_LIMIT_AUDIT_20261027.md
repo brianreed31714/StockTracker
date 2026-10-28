@@ -37,6 +37,22 @@ Source: https://stockanalysis.com/quote/otc/ZPTA/history/ (S&P Global Market Int
 
 **CI evidence:** The new next-session limit tests were included in the 91 offline ZPTA deterministic tests that passed on code SHA `9661cacf38ffa8152d943fcdfe88cffca65f1221`; the data-research job on that SHA also passed. This validates the tests and scripted research mechanics, **not** historical price truth, broker fills, or Windows activation. Required checks on the final documentation head must be verified separately before merge.
 
+## New five-hypothesis next-session limit audit (CI run 40612814655)
+
+The updated research workflow successfully ran all five preregistered daily hypotheses on **501 Yahoo candidate daily sessions** (Oct 28, 2024–Oct 27, 2026), using only completed signal-day bars to set a hypothetical limit at the lower of the last five completed-session lows and 3% below the signal close. It assumes 1% friction **each way**, a next-session opening-print eligibility rule, and exits at 1/3/5 completed sessions. This is an **unverified, already-examined historical sample**, not a new holdout or broker fill record.
+
+| Frozen signal | Eligible candidate days | Next-open-print eligible (unverified) | Intraday touch only (not filled) | Non-overlapping 5-session scenarios | Mean hypothetical 5-session net |
+|---|---:|---:|---:|---:|---:|
+| One-day close decline >=5% | 65 | 7 | 11 | 6 | **-6.40%** |
+| Two consecutive down closes, >=5% total | 43 | 5 | 7 | 4 | **-5.81%** |
+| Down close >=10% below prior ten-session high | 105 | 8 | 23 | 6 | **-11.58%** |
+| RSI(3) <=25 | 71 | 6 | 20 | 5 | **-12.18%** |
+| Confirmed reversal after >=5% decline | 20 | 0 | 0 | 0 | **not measurable** |
+
+All mean 5-session returns above are negative in these conservative printed-price limit scenarios. For the 5%-decline cohort, the 6 non-overlapping eligible scenarios had **-6.40%** mean hypothetical net return versus **+0.08%** for next-open-print baselines on the **same selected dates**. This does not establish the true relative strategy edge: conditioning on a lower open and using the limit price instead of the potentially better open print is intentionally conservative. Samples are tiny, with most qualifying scenarios in the training period; **only one** 5%-decline five-day scenario falls in the already-examined holdout. No confidence or drawdown inference is warranted from these tiny selected cohorts. The full audit prints counts, same-date baselines, embargo and non-overlap for all 1/3/5 horizons.
+
+The workflow's offline research tests and candidate-data job **passed** at code SHA `4fb93a596e54d47f304a039bd4e0f55ea9aba36e`; the final report head still needs independent required-check verification. No live or shadow trading behavior changed.
+
 ## Validation and next steps
 
 - New tests cover signal-day no-lookahead, no touch-only fills, pending forward outcomes, fees, duplicate dates, invalid settings, volume gating and explicit paper-only limitations.
