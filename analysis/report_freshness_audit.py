@@ -61,7 +61,13 @@ def audit(root: Path, expected_session: str) -> dict:
     evidence_root = root / "analysis/evidence"
     pnl, row_count, sessions = Decimal("0"), 0, []
     seen = set()
+    invalid_realized_evidence = False
     for csv_path in sorted(evidence_root.glob("????-??-??/realized.csv")):
+        session_date = csv_path.parent.name
+        # Never let later session files leak into an earlier published EOD report.
+        if session_date > published or session_date > expected_session:
+            warnings.append("FUTURE_REALIZED_EVIDENCE_EXCLUDED: " + session_date)
+            continue
         try:
             with csv_path.open(encoding="utf-8", newline="") as stream:
                 for row in csv.DictReader(stream):
@@ -70,10 +76,14 @@ def audit(root: Path, expected_session: str) -> dict:
                         warnings.append("DUPLICATE_REALIZED_ROW: " + str(key))
                         continue
                     seen.add(key)
-                    pnl += Decimal(str(row["pnl"]))
+                    value = Decimal(str(row["pnl"]))
+                    if not value.is_finite():
+                        raise InvalidOperation("non-finite realized P/L")
+                    pnl += value
                     row_count += 1
             sessions.append(csv_path.parent.name)
         except (OSError, KeyError, InvalidOperation, ValueError) as exc:
+            invalid_realized_evidence = True
             errors.append("INVALID_REALIZED_CSV: " + str(csv_path) + ": " + str(exc))
 
     if not sessions:
@@ -84,9 +94,11 @@ def audit(root: Path, expected_session: str) -> dict:
         "expected_session": expected_session,
         "published_session": published,
         "published_realized_pnl_usd_observed_only": (
-            str(pnl.quantize(Decimal("0.01"))) if sessions else None
+            str(pnl.quantize(Decimal("0.01"))) if sessions and not invalid_realized_evidence else None
         ),
-        "realized_evidence_status": "OBSERVED_ONLY" if sessions else "MISSING",
+        "realized_evidence_status": (
+            "INVALID" if invalid_realized_evidence else "OBSERVED_ONLY" if sessions else "MISSING"
+        ),
         "published_realized_row_count": row_count,
         "published_sessions_with_realized_file": sessions,
         "account_equity_return_available": False,
