@@ -104,6 +104,28 @@ class ReportFreshnessAuditTests(unittest.TestCase):
         self.assertTrue(any("DUPLICATE_REALIZED_ROW" in x for x in result["warnings"]))
 
 
+    def test_conflicting_duplicate_realized_rows_fail_closed(self):
+        with (self.evidence_dir / "realized.csv").open("a", encoding="utf-8") as file:
+            file.write("1,999.00,XOM,2026-10-13T18:00:00Z\\n")
+        result = audit(self.root, "2026-10-13")
+        self.assertEqual(result["status"], "FAIL")
+        self.assertEqual(result["realized_evidence_status"], "INVALID")
+        self.assertIsNone(result["published_realized_pnl_usd_observed_only"])
+        self.assertTrue(any("CONFLICTING_DUPLICATE_REALIZED_ROW" in e for e in result["errors"]))
+
+    def test_missing_realized_identity_fails_closed(self):
+        with (self.evidence_dir / "realized.csv").open("a", encoding="utf-8") as file:
+            file.write(",9.00,XOM,2026-10-13T19:00:00Z\\n")
+        result = audit(self.root, "2026-10-13")
+        self.assertEqual(result["realized_evidence_status"], "INVALID")
+        self.assertIsNone(result["published_realized_pnl_usd_observed_only"])
+
+    def test_noncanonical_report_date_is_rejected(self):
+        self.write_report(date="../2026-10-13")
+        result = audit(self.root, "2026-10-13")
+        self.assertEqual(result["status"], "FAIL")
+        self.assertTrue(any("INVALID_LATEST_REPORT" in e for e in result["errors"]))
+
     def test_future_session_realized_file_is_excluded(self):
         future_dir = self.root / "analysis" / "evidence" / "2026-10-14"
         future_dir.mkdir(parents=True)
