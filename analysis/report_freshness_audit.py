@@ -74,7 +74,10 @@ def audit(root: Path, expected_session: str) -> dict:
         try:
             with csv_path.open(encoding="utf-8", newline="") as stream:
                 for row in csv.DictReader(stream):
-                    key = (row.get("id"), row.get("ts"))
+                    # A stable realized-trade ID must identify one trade within a session.
+                    # Keying by (id, timestamp) would double-count a repeated ID
+                    # whose timestamp was revised or corrupted.
+                    key = (session_date, row.get("id"))
                     if not all(isinstance(x, str) and x.strip() for x in key):
                         raise ValueError("missing realized row id or timestamp")
                     # Folder placement alone does not establish the trade's session.
@@ -88,7 +91,7 @@ def audit(root: Path, expected_session: str) -> dict:
                     value = Decimal(str(row["pnl"]))
                     if not value.is_finite():
                         raise InvalidOperation("non-finite realized P/L")
-                    fingerprint = (value, row.get("symbol"))
+                    fingerprint = (stamp.astimezone(ZoneInfo("UTC")).isoformat(), value, row.get("symbol"))
                     if key in seen:
                         if seen[key] != fingerprint:
                             invalid_realized_evidence = True
