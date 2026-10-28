@@ -67,7 +67,9 @@
         "infrastructure/runtime_inventory.py",
         "infrastructure/host_status_publisher.py",
         "infrastructure/host_evidence_collector.py",
-        "test_host_evidence_collector.py"
+        "test_host_evidence_collector.py",
+        "infrastructure/host_confirmation_reader.py",
+        "test_host_confirmation_reader.py"
       ],
       "health": {
         "type": "process"
