@@ -54,6 +54,36 @@ class HostSignalTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             publisher.sanitized(data)
 
+    def test_task_success_is_not_eod_or_broker_proof(self):
+        data = sample()
+        data["daily_review_task_observation"] = {
+            "status": "TASK_NAME_OBSERVED", "scheduler_state": "Ready",
+            "last_run_utc": "2026-10-19T20:00:00+00:00",
+            "last_task_result": 0, "eod_delivery_verified": True,
+            "local_path": r"C:\\SECRET\\review.bat",
+        }
+        published = publisher.sanitized(data)
+        self.assertEqual(published["daily_review_task_status"], "TASK_NAME_OBSERVED")
+        self.assertEqual(published["daily_review_last_task_result"], 0)
+        self.assertFalse(published["post_sync_eod_verified"])
+        self.assertFalse(published["broker_trade_health_verified"])
+        self.assertNotIn("SECRET", json.dumps(published))
+
+    def test_task_invalid_provenance_fails_closed(self):
+        for observation in (
+            {"status": "TASK_NAME_OBSERVED", "scheduler_state": "Ready",
+             "last_run_utc": "2026-10-20T20:00:00+00:00", "last_task_result": 0},
+            {"status": "TASK_NAME_OBSERVED", "scheduler_state": "Ready",
+             "last_run_utc": None, "last_task_result": True},
+            {"status": "TASK_NAME_OBSERVED", "scheduler_state": "FAKE_SUCCESS",
+             "last_run_utc": None, "last_task_result": 0},
+        ):
+            data = sample()
+            data["daily_review_task_observation"] = observation
+            published = publisher.sanitized(data)
+            self.assertEqual(published["daily_review_task_status"], "UNVERIFIED")
+            self.assertNotIn("daily_review_last_task_result", published)
+
     def test_new_branch_uses_git_plumbing_never_checkout_or_main_push(self):
         with tempfile.TemporaryDirectory() as temp:
             called = []

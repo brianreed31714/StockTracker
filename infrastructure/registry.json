@@ -71,7 +71,9 @@
         "infrastructure/host_confirmation_reader.py",
         "test_host_confirmation_reader.py",
         "infrastructure/fresh_attestation_runner.py",
-        "test_fresh_attestation_runner.py"
+        "test_fresh_attestation_runner.py",
+        "infrastructure/daily_review_task_probe.py",
+        "infrastructure/test_daily_review_task_probe.py"
       ],
       "health": {
         "type": "process"

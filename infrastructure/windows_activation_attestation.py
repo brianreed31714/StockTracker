@@ -276,6 +276,12 @@ def poll(root: Path, *, observation: dict | None = None,
                 "process_identity_observed": False, "loaded_code_verified": False,
                 "loaded_dependencies_verified": False}
     report["disk_evidence"] = disk
+    # Read-only Task Scheduler evidence; exit 0 never establishes EOD delivery.
+    try:
+        from infrastructure.daily_review_task_probe import inspect_daily_review_task
+        report["daily_review_task_observation"] = inspect_daily_review_task(clock=stamp)
+    except (OSError, RuntimeError, ValueError, TypeError):
+        report["daily_review_task_observation"] = {"status": "UNVERIFIED"}
     # Every distinct commit gets a CODE_SYNCED notice after positive source
     # integrity; a later EOD verification gets a second distinct notice.
     # Do not send repeated notices for each 60-second polling interval.
@@ -309,7 +315,10 @@ def poll(root: Path, *, observation: dict | None = None,
     # hours, so GitHub can distinguish stale processes from an observed host.
     remote_key = (report["git_head"] + ":" + report["state"] + ":" +
                   str(report.get("verified_review_date") or "") + ":" +
-                  str((report.get("disk_evidence") or {}).get("disk_code_sha256") or "") + ":status-file-v3")
+                  str((report.get("disk_evidence") or {}).get("disk_code_sha256") or "") + ":" +
+                  str((report.get("daily_review_task_observation") or {}).get("status") or "") + ":" +
+                  str((report.get("daily_review_task_observation") or {}).get("last_run_utc") or "") + ":" +
+                  str((report.get("daily_review_task_observation") or {}).get("last_task_result") or "") + ":status-file-v4")
     previous_publish = str(previous.get("remote_published_at_utc") or "")
     try:
         age_seconds = (stamp - parse_timestamp(previous_publish)).total_seconds()
