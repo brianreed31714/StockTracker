@@ -62,6 +62,16 @@ def sanitized(report: dict) -> dict:
         "in_memory_trader_digest_verified": False,
         "broker_trade_health_verified": False,
     }
+    # Disk hashes are useful diagnostics, never proof of loaded process memory.
+    disk = report.get("disk_evidence") or {}
+    digest = disk.get("disk_code_sha256")
+    dep_digest = disk.get("disk_dependencies_sha256")
+    if isinstance(digest, str) and re.fullmatch(r"[0-9a-f]{64}", digest):
+        payload["disk_code_sha256"] = digest
+    if isinstance(dep_digest, str) and re.fullmatch(r"[0-9a-f]{64}", dep_digest):
+        payload["disk_dependencies_sha256"] = dep_digest
+    payload["process_identity_observed"] = disk.get("process_identity_observed") is True
+    payload["loaded_dependencies_verified"] = False
     if payload["post_sync_eod_verified"]:
         day = report.get("verified_review_date")
         if not isinstance(day, str) or not DATE.fullmatch(day) or datetime.fromisoformat(day).date().isoformat() != day:
