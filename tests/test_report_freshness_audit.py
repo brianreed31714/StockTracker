@@ -106,7 +106,7 @@ class ReportFreshnessAuditTests(unittest.TestCase):
 
     def test_conflicting_duplicate_realized_rows_fail_closed(self):
         with (self.evidence_dir / "realized.csv").open("a", encoding="utf-8") as file:
-            file.write("1,999.00,XOM,2026-10-13T18:00:00Z\\n")
+            file.write("1,999.00,XOM,2026-10-13T18:00:00Z\n")
         result = audit(self.root, "2026-10-13")
         self.assertEqual(result["status"], "FAIL")
         self.assertEqual(result["realized_evidence_status"], "INVALID")
@@ -115,7 +115,7 @@ class ReportFreshnessAuditTests(unittest.TestCase):
 
     def test_missing_realized_identity_fails_closed(self):
         with (self.evidence_dir / "realized.csv").open("a", encoding="utf-8") as file:
-            file.write(",9.00,XOM,2026-10-13T19:00:00Z\\n")
+            file.write(",9.00,XOM,2026-10-13T19:00:00Z\n")
         result = audit(self.root, "2026-10-13")
         self.assertEqual(result["realized_evidence_status"], "INVALID")
         self.assertIsNone(result["published_realized_pnl_usd_observed_only"])
