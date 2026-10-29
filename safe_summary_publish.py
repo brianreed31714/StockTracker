@@ -94,6 +94,36 @@ def summary_from(report, current=None):
     observed_change = _number(portfolio.get("observed_window_account_change_pct")) if account_eligible else None
     observed_drawdown = _number(portfolio.get("observed_window_max_drawdown_pct")) if account_eligible else None
     observed_sessions = _count(portfolio.get("observed_session_count")) if account_eligible else None
+    # Two different percentages:
+    # (1) realized closed-lot return on sold cost basis, from a reconciled
+    #     but locally observed-only PAPER fills ledger;
+    # (2) MODELED total PAPER account P/L divided by *peak capital deployed*
+    #     at recorded cost, only after broker account/positions/orders/equity
+    #     history and zero reported cashflows cross-reconcile.
+    # No unverified positions, order IDs or broker account ID are published.
+    invested = metrics.get("invested_capital") or {}
+    if not isinstance(invested, dict):
+        raise ValueError("Unexpected invested-capital metric")
+    local_ok = (
+        invested.get("review_date") == day
+        and invested.get("source") == "LOCAL_PAPER_FILLED_ORDERS_MOVING_AVERAGE"
+        and invested.get("status") == "LOCAL_CLOSED_FILLS_RECONCILED_NOT_BROKER_ATTESTED"
+    )
+    broker_ok = (
+        local_ok and account_eligible
+        and invested.get("broker_reconciled") is True
+        and invested.get("cash_flows_reconciled") is True
+        and invested.get("daily_invested_capital_return_status")
+            == "MODELED_PAPER_RETURN_ON_PEAK_DEPLOYED_COST"
+    )
+    closed_pct = _number(invested.get("daily_closed_invested_capital_return_pct")) if local_ok else None
+    observed_pct = _number(invested.get("observed_fills_closed_invested_return_pct")) if local_ok else None
+    daily_capital_roi = _number(invested.get("daily_invested_capital_return_pct")) if broker_ok else None
+    account_portfolio_pct = account_day_pct if broker_ok else None
+    broker_ok = broker_ok and daily_capital_roi is not None and account_portfolio_pct is not None
+    if not broker_ok:
+        daily_capital_roi = None
+        account_portfolio_pct = None
     # Never label a gross account-equity change as an invested-capital return.
     return {
         "schema": "stocktracker_sanitized_summary_v1",
@@ -132,12 +162,42 @@ def summary_from(report, current=None):
             "inception_portfolio_return_pct": None,
             "source": "ALPACA_PAPER_ACCOUNT" if account_eligible else "UNVERIFIED",
         },
+        "invested_capital": {
+            "status": (
+                "MODELED_PAPER_BROKER_AND_LEDGER_RECONCILED" if broker_ok
+                else "MODELED_LOCAL_CLOSED_LOTS_ONLY" if local_ok else "MISSING"
+            ),
+            "daily_closed_lot_realized_return_pct": closed_pct,
+            "daily_closed_lot_cost_basis_usd": (
+                _number(invested.get("daily_closed_cost_basis_usd")) if local_ok else None
+            ),
+            "since_first_observed_fill_closed_lot_return_pct": observed_pct,
+            "first_observed_fill_date": (
+                invested.get("first_observed_fill_date") if local_ok and
+                isinstance(invested.get("first_observed_fill_date"), str) and
+                DATE_RE.fullmatch(invested["first_observed_fill_date"]) else None
+            ),
+            "daily_peak_deployed_cost_basis_usd": (
+                _number(invested.get("peak_session_deployed_cost_usd")) if broker_ok else None
+            ),
+            "daily_portfolio_return_on_peak_deployed_capital_pct": daily_capital_roi,
+            "daily_one_percent_invested_goal_met": (
+                daily_capital_roi >= 1.0 if broker_ok else None
+            ),
+            "since_inception_invested_return_pct": None,
+            "since_inception_invested_drawdown_pct": None,
+            "calculation": "DAILY_NET_ACCOUNT_PNL_DIVIDED_BY_PEAK_FILLED_COST_BASIS"
+                           if broker_ok else "CLOSED_LOT_PNL_DIVIDED_BY_CLOSED_LOT_COST"
+                           if local_ok else "MISSING",
+            "classification": "MODELED_PAPER" if broker_ok or local_ok else "MISSING",
+        },
         "one_percent_goal": {
             "daily_target_pct": 1.0,
-            "daily_portfolio_return_pct": None,
+            "daily_portfolio_return_pct": account_portfolio_pct,
             "since_inception_return_pct": None,
-            "daily_goal_met": None,
-            "status": "NOT_MEASURABLE_NO_VERIFIED_START_END_EQUITY",
+            "daily_goal_met": account_portfolio_pct >= 1.0 if broker_ok else None,
+            "status": "MODELED_PAPER_BROKER_CASHFLOW_ZERO_RECONCILED"
+                      if broker_ok else "NOT_MEASURABLE_NO_VERIFIED_PORTFOLIO_EQUITY",
         },
         "proposal_ids": proposals,
     }

@@ -180,7 +180,10 @@
         "infrastructure/test_task_registration.py",
         "infrastructure/paper_equity_capture.py",
         "test_paper_equity_capture.py",
-        "test_paper_equity_bridge.py"
+        "test_paper_equity_bridge.py",
+        "infrastructure/invested_capital_audit.py",
+        "test_invested_capital_audit.py",
+        "test_invested_capital_bridge.py"
       ],
       "health": {
         "type": "evidence_only"
