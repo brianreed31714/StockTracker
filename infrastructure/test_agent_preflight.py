@@ -72,6 +72,29 @@ class AgentRegistryHookTests(unittest.TestCase):
                 agent.scan_once()
                 deploy.assert_called_once()
 
+    def test_disabled_deployment_preserves_read_only_host_observation(self):
+        with patch.object(agent, "AUTO_DEPLOY", False), \
+             patch.object(agent, "_observe_host_read_only") as observe, \
+             patch.object(agent, "pull_repo") as pull, \
+             patch.object(agent, "deploy") as deploy, \
+             patch.object(agent, "mark_processed") as mark:
+            agent.scan_once()
+        observe.assert_called_once_with()
+        pull.assert_not_called()
+        deploy.assert_not_called()
+        mark.assert_not_called()
+
+    def test_host_observation_is_windows_only_and_uses_fresh_child(self):
+        with patch.object(agent.os, "name", "posix"), \
+             patch("infrastructure.fresh_attestation_runner.run_fresh_host_attestation") as child:
+            agent._observe_host_read_only()
+            child.assert_not_called()
+        with patch.object(agent.os, "name", "nt"), \
+             patch("infrastructure.fresh_attestation_runner.run_fresh_host_attestation",
+                   return_value={"status": "HOST_CLAIM_ONLY"}) as child:
+            agent._observe_host_read_only()
+            child.assert_called_once_with(agent.ROOT)
+
     def test_invalid_release_does_not_stop_anything(self):
         with patch.object(agent, "stop_active") as stop, \
              patch.object(agent, "load_manifest", return_value={}):
