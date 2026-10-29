@@ -9,6 +9,7 @@ on:
       - "test_paper_equity_bridge.py"
       - "test_invested_capital_audit.py"
       - "test_invested_capital_bridge.py"
+      - "test_invested_capital_history.py"
       - "infrastructure/invested_capital_audit.py"
       - "infrastructure/paper_equity_capture.py"
       - "build_daily_review_bundle.py"
@@ -25,6 +26,7 @@ on:
       - "test_paper_equity_bridge.py"
       - "test_invested_capital_audit.py"
       - "test_invested_capital_bridge.py"
+      - "test_invested_capital_history.py"
       - "infrastructure/invested_capital_audit.py"
       - "infrastructure/paper_equity_capture.py"
       - "build_daily_review_bundle.py"
@@ -45,7 +47,7 @@ jobs:
       - name: Validate isolated research and summary bridge
         run: |
           python -m compileall -q safe_summary_publish.py sync_proposals_to_git.py research infrastructure/paper_equity_capture.py infrastructure/invested_capital_audit.py build_daily_review_bundle.py daily_model_review.py
-          python -m unittest -v test_safe_summary_publish test_paper_equity_capture test_paper_equity_bridge test_invested_capital_audit test_invested_capital_bridge
+          python -m unittest -v test_safe_summary_publish test_paper_equity_capture test_paper_equity_bridge test_invested_capital_audit test_invested_capital_bridge test_invested_capital_history
           python -m unittest discover -v -s research -p "test_shadow_opportunity_audit.py"
       - name: Verify paper-only source still protected
         run: |

@@ -450,6 +450,7 @@ def build(date_text: str):
     # Public artifacts carry only status, aggregate modeled returns and counts.
     invested_capital.pop("ledger_end_quantities", None)
     invested_capital.pop("local_session_order_ids", None)
+    invested_capital.pop("all_local_order_ids", None)
 
     metrics = {
         "invested_capital": invested_capital,

@@ -183,7 +183,8 @@
         "test_paper_equity_bridge.py",
         "infrastructure/invested_capital_audit.py",
         "test_invested_capital_audit.py",
-        "test_invested_capital_bridge.py"
+        "test_invested_capital_bridge.py",
+        "test_invested_capital_history.py"
       ],
       "health": {
         "type": "evidence_only"

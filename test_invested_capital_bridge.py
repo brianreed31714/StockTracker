@@ -81,6 +81,37 @@ class InvestedBridgeTests(unittest.TestCase):
         self.assertEqual(result["invested_capital"]["status"], "MODELED_LOCAL_CLOSED_LOTS_ONLY")
         self.assertIsNone(result["invested_capital"]["daily_portfolio_return_on_peak_deployed_capital_pct"])
 
+    def test_observed_since_first_fill_not_inception_without_explicit_date(self):
+        report = fixture()
+        capital = report["metrics"]["invested_capital"]
+        capital.update({
+            "since_first_recorded_fill_portfolio_return_pct": 3.57142857,
+            "since_first_recorded_fill_portfolio_drawdown_pct": 2.380952,
+            "since_first_recorded_fill_sessions": 2,
+            "inception_basis_status": "OBSERVED_FIRST_FILL_ONLY",
+        })
+        out = summary_from(report)["invested_capital"]
+        self.assertEqual(out["since_first_observed_fill_portfolio_return_pct"], 3.5714)
+        self.assertEqual(out["since_first_observed_fill_portfolio_drawdown_pct"], 2.381)
+        self.assertIsNone(out["since_inception_invested_return_pct"])
+        self.assertEqual(out["inception_evidence_status"], "OBSERVED_FIRST_FILL_NOT_PROVEN_INCEPTION")
+
+    def test_true_inception_label_needs_confirmed_broker_history_and_start(self):
+        report = fixture()
+        capital = report["metrics"]["invested_capital"]
+        capital.update({
+            "since_first_recorded_fill_portfolio_return_pct": 3.57142857,
+            "since_first_recorded_fill_portfolio_drawdown_pct": 0.0,
+            "since_first_recorded_fill_sessions": 2,
+            "inception_basis_status": "CONFIGURED_START_EQUALS_FIRST_FILL_WITH_BROKER_COVERAGE",
+        })
+        out = summary_from(report)["invested_capital"]
+        self.assertEqual(out["since_inception_invested_return_pct"], 3.5714)
+        self.assertEqual(out["since_inception_invested_drawdown_pct"], 0.0)
+        capital["broker_reconciled"] = False
+        out = summary_from(report)["invested_capital"]
+        self.assertIsNone(out["since_inception_invested_return_pct"])
+
     def test_realized_dollars_cannot_become_percent(self):
         report = fixture()
         report["metrics"]["invested_capital"] = {}

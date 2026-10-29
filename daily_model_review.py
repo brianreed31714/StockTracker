@@ -200,8 +200,33 @@ def performance_markdown(metrics, review):
             else "- Daily CLOSED-LOT invested return: **MISSING** "
                  "(complete cost basis or realized reconciliation unavailable)"
         ),
-        "- True since-inception invested portfolio return and drawdown: **MISSING** "
-        "(requires independently proven inception baseline and continuous valuation)",
+        (
+            f"- Since FIRST RECORDED PAPER FILL: "
+            f"**{capital['since_first_recorded_fill_portfolio_return_pct']:+.4f}%**, "
+            f"modeled invested-capital curve drawdown "
+            f"**{capital['since_first_recorded_fill_portfolio_drawdown_pct']:.4f}%** "
+            "(broker historical order, session, equity and zero-flow gates; "
+            "not necessarily actual project inception)"
+            if capital.get("inception_basis_status") in {
+                "OBSERVED_FIRST_FILL_ONLY",
+                "CONFIGURED_START_EQUALS_FIRST_FILL_WITH_BROKER_COVERAGE"
+            }
+            and isinstance(capital.get("since_first_recorded_fill_portfolio_return_pct"), (int, float))
+            and isinstance(capital.get("since_first_recorded_fill_portfolio_drawdown_pct"), (int, float))
+            else "- Since-first-recorded-fill modeled return/drawdown: **MISSING**"
+        ),
+        (
+            f"- Qualified since-inception invested portfolio return: "
+            f"**{capital['since_inception_invested_return_pct']:+.4f}%**, "
+            f"drawdown **{capital['since_inception_invested_drawdown_pct']:.4f}%** "
+            "(MODELED paper; start date explicitly matched)"
+            if capital.get("inception_basis_status")
+                == "CONFIGURED_START_EQUALS_FIRST_FILL_WITH_BROKER_COVERAGE"
+            and isinstance(capital.get("since_inception_invested_return_pct"), (int, float))
+            and isinstance(capital.get("since_inception_invested_drawdown_pct"), (int, float))
+            else "- True since-inception invested portfolio return and drawdown: "
+                 "**MISSING** (independently proven inception baseline unavailable)"
+        ),
         f"- Win/loss: **{r.get('wins', 0)}/{r.get('losses', 0)}**",
         f"- Win rate: **{r.get('win_rate_pct') if r.get('win_rate_pct') is not None else 'n/a'}%**",
         "",
@@ -277,7 +302,17 @@ def send_push(date_text, review, metrics=None):
         )
     else:
         lines.append("PAPER invested-capital return: MISSING (reconciliation)")
-    lines.append("Portfolio inception ROI/drawdown: MISSING unless independently evidenced")
+    if (capital.get("inception_basis_status")
+            == "CONFIGURED_START_EQUALS_FIRST_FILL_WITH_BROKER_COVERAGE"
+            and isinstance(capital.get("since_inception_invested_return_pct"), (int, float))
+            and isinstance(capital.get("since_inception_invested_drawdown_pct"), (int, float))):
+        lines.append(
+            f"PAPER invested inception return: "
+            f"{capital['since_inception_invested_return_pct']:+.4f}%, "
+            f"drawdown {capital['since_inception_invested_drawdown_pct']:.4f}% (MODELED)"
+        )
+    else:
+        lines.append("Portfolio inception ROI/drawdown: MISSING (start unverified)")
     lines.append(f"Proposals: {len(proposals)}")
     if proposals:
         lines.append("ChatGPT: Review today's StockTracker proposals")

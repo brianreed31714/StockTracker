@@ -54,6 +54,14 @@ def unavailable(day, reason):
         "observed_daily_sell_count": 0,
         "ledger_end_quantities": {},
         "local_session_order_ids": [],
+        "all_local_order_ids": [],
+        "historical_peak_deployed_cost_basis_usd": None,
+        "since_first_recorded_fill_portfolio_return_pct": None,
+        "since_first_recorded_fill_portfolio_drawdown_pct": None,
+        "since_first_recorded_fill_sessions": None,
+        "since_inception_invested_return_pct": None,
+        "since_inception_invested_drawdown_pct": None,
+        "inception_basis_status": "UNVERIFIED",
         "broker_reconciled": False,
         "full_portfolio_daily_roi_pct": None,
         "full_portfolio_inception_return_pct": None,
@@ -113,6 +121,7 @@ def audit_rows(fills, realized_rows, day, *, session_open, session_close):
 
         inventory = {}
         max_cost = 0.0
+        historical_peak_cost = 0.0
         day_basis = day_pnl = total_basis = total_pnl = 0.0
         day_sells = 0
         first = entries[0][0].astimezone(EASTERN).date().isoformat()
@@ -137,8 +146,10 @@ def audit_rows(fills, realized_rows, day, *, session_open, session_close):
                     day_basis += sold_cost
                     day_pnl += pnl
                     day_sells += 1
+            total_open_cost = sum(v[1] for v in inventory.values())
+            historical_peak_cost = max(historical_peak_cost, total_open_cost)
             if session_open <= when <= session_close:
-                max_cost = max(max_cost, sum(v[1] for v in inventory.values()))
+                max_cost = max(max_cost, total_open_cost)
 
         # Carry-in positions count even if there are no new buys today.
         carried = {}
@@ -182,6 +193,8 @@ def audit_rows(fills, realized_rows, day, *, session_open, session_close):
             "observed_fills_closed_cost_basis_usd": round(total_basis, 4),
             "observed_fills_realized_pnl_usd": round(total_pnl, 4),
             "peak_session_deployed_cost_usd": round(max_cost, 4) if max_cost > 0 else None,
+            "historical_peak_deployed_cost_basis_usd": round(historical_peak_cost, 4)
+            if historical_peak_cost > 0 else None,
             "first_observed_fill_date": first,
             "fill_records_observed": len(entries),
             "observed_daily_sell_count": day_sells,
@@ -192,6 +205,7 @@ def audit_rows(fills, realized_rows, day, *, session_open, session_close):
             "local_session_order_ids": sorted(
                 order_id for when, order_id, *_ in entries if session_open <= when <= session_close
             ),
+            "all_local_order_ids": sorted(order_id for _, order_id, *_ in entries),
         })
         return result
     except (ValueError, TypeError, OverflowError, KeyError):
@@ -216,7 +230,8 @@ def audit_database(db_path, day, *, session_open, session_close):
 
 
 def broker_reconcile_today(audit, day, *, history_path, session_open, session_close, now=None, client_factory=None,
-                           orders_request_factory=None, history_request_factory=None):
+                           orders_request_factory=None, history_request_factory=None,
+                           calendar_request_factory=None):
     """Optional read-only cross-check with PAPER Alpaca, never changes orders.
 
     A daily account P/L / peak deployed *cost* basis percentage is eligible
@@ -371,9 +386,149 @@ def broker_reconcile_today(audit, day, *, history_path, session_open, session_cl
         result["daily_invested_capital_return_pct"] = round(100.0 * pnl / base, 6)
         result["daily_invested_capital_return_status"] = "MODELED_PAPER_RETURN_ON_PEAK_DEPLOYED_COST"
         result["broker_account_pnl_usd"] = round(pnl, 4)
+        # An independently distinct historical completeness gate. A failed
+        # inception audit never invalidates an otherwise valid daily return.
+        result.update(observed_history_curve(
+            audit, day=day, now=now, client=client,
+            orders_request_factory=orders_request_factory,
+            history_request_factory=history_request_factory,
+            calendar_request_factory=calendar_request_factory,
+        ))
         return result
     except (OSError, RuntimeError, TypeError, ValueError, AttributeError, ImportError, OverflowError, IndexError):
         # Never log or publish broker exception text, account IDs, order IDs,
         # raw equity, position inventory or API credentials.
         result["daily_invested_capital_return_status"] = "BROKER_EVIDENCE_INCOMPLETE_OR_UNRECONCILED"
         return result
+
+
+def observed_history_curve(audit, *, day, now, client, orders_request_factory,
+                           history_request_factory, calendar_request_factory=None):
+    """Optional since-first-recorded-trade PAPER return and modeled drawdown.
+
+    Never call it 'since inception' without independently supplied project
+    start date matching the first recorded fill. Requires all historical PAPER
+    filled orders, complete dated 1D equity, exchange sessions and no reported
+    external cash movements. Missing history means MISSING, not zero.
+    """
+    result = {
+        "since_first_recorded_fill_portfolio_return_pct": None,
+        "since_first_recorded_fill_portfolio_drawdown_pct": None,
+        "since_first_recorded_fill_sessions": None,
+        "since_inception_invested_return_pct": None,
+        "since_inception_invested_drawdown_pct": None,
+        "inception_basis_status": "UNVERIFIED",
+    }
+    try:
+        import os
+        from datetime import time, timedelta
+        first_day = _date(audit.get("first_observed_fill_date"))
+        final_day = _date(day)
+        basis = number(audit.get("historical_peak_deployed_cost_basis_usd"), positive=True)
+        if basis is None or first_day > final_day or now.astimezone(EASTERN).date() != final_day:
+            return result
+        all_ids = audit.get("all_local_order_ids") or []
+        if not isinstance(all_ids, list) or not all_ids or len(set(all_ids)) != len(all_ids):
+            return result
+        inception_start = datetime.combine(first_day, time.min, tzinfo=EASTERN)
+        orders = client.get_orders(filter=orders_request_factory(
+            after=inception_start - timedelta(days=1),
+            until=now, limit=500,
+        ))
+        if not isinstance(orders, list) or len(orders) >= 500:
+            return result
+        broker_ids = set()
+        for order in orders:
+            filled_at = getattr(order, "filled_at", None)
+            qty = number(getattr(order, "filled_qty", None))
+            if not isinstance(filled_at, datetime) or filled_at.tzinfo is None or qty is None or qty <= 0:
+                continue
+            if inception_start <= filled_at < now:
+                key = str(getattr(order, "id", "") or "")
+                if not key or key in broker_ids:
+                    return result
+                broker_ids.add(key)
+        if broker_ids != set(all_ids):
+            return result
+
+        broker_history = client.get_portfolio_history(history_request_factory(
+            start=inception_start - timedelta(days=12), end=now,
+            timeframe="1D", cashflow_types="ALL",
+        ))
+        timestamps = getattr(broker_history, "timestamp", None)
+        values = getattr(broker_history, "equity", None)
+        cashflow = getattr(broker_history, "cashflow", None)
+        if (not isinstance(timestamps, list) or not isinstance(values, list)
+                or len(timestamps) != len(values) or not isinstance(cashflow, dict)):
+            return result
+        points = []
+        for i, timestamp in enumerate(timestamps):
+            if isinstance(timestamp, bool):
+                return result
+            stamp = datetime.fromtimestamp(int(timestamp), timezone.utc).astimezone(EASTERN)
+            equity = number(values[i], positive=True)
+            if equity is None:
+                return result
+            points.append((stamp.date(), equity, i))
+        if points != sorted(points, key=lambda x: x[0]) or len(set(p[0] for p in points)) != len(points):
+            return result
+        baseline = [p for p in points if p[0] < first_day]
+        observed = [p for p in points if first_day <= p[0] <= final_day]
+        if not baseline or not observed or observed[-1][0] != final_day:
+            return result
+
+        if calendar_request_factory is None:
+            from alpaca.trading.requests import GetCalendarRequest
+            calendar_request_factory = lambda **kwargs: GetCalendarRequest(**kwargs)
+        sessions = client.get_calendar(calendar_request_factory(start=first_day, end=final_day))
+        expected_dates = set()
+        for session in sessions:
+            session_day = session.date
+            if isinstance(session_day, datetime):
+                session_day = session_day.date()
+            if isinstance(session_day, str):
+                session_day = _date(session_day)
+            if not isinstance(session_day, date):
+                return result
+            expected_dates.add(session_day)
+        if not expected_dates or expected_dates != set(p[0] for p in observed):
+            return result
+
+        for array in cashflow.values():
+            if not isinstance(array, (list, tuple)) or len(array) != len(points):
+                return result
+            for _, _, i in observed:
+                amount = array[i]
+                if isinstance(amount, bool):
+                    return result
+                amount = float(amount)
+                if not math.isfinite(amount) or abs(amount) > 0.005:
+                    return result
+
+        initial = baseline[-1][1]
+        peak_index = basis
+        drawdown = 0.0
+        for _, equity, _ in observed:
+            invested_index = basis + equity - initial
+            if invested_index <= 0:
+                return result
+            peak_index = max(peak_index, invested_index)
+            drawdown = max(drawdown, (peak_index - invested_index) / peak_index * 100.0)
+        period_return = percent(observed[-1][1] - initial, basis)
+        result.update({
+            "since_first_recorded_fill_portfolio_return_pct": period_return,
+            "since_first_recorded_fill_portfolio_drawdown_pct": round(drawdown, 6),
+            "since_first_recorded_fill_sessions": len(observed),
+            "inception_basis_status": "OBSERVED_FIRST_FILL_ONLY",
+        })
+        # Date is independently selected outside the broker/history pipeline;
+        # never infer that a first captured fill == true strategy inception.
+        configured_start = os.getenv("STOCKTRACKER_STRATEGY_INCEPTION_DATE", "").strip()
+        if configured_start and _date(configured_start) == first_day:
+            result["since_inception_invested_return_pct"] = period_return
+            result["since_inception_invested_drawdown_pct"] = round(drawdown, 6)
+            result["inception_basis_status"] = "CONFIGURED_START_EQUALS_FIRST_FILL_WITH_BROKER_COVERAGE"
+    except (OSError, RuntimeError, TypeError, ValueError, AttributeError,
+            ImportError, OverflowError, IndexError):
+        return result
+    return result
