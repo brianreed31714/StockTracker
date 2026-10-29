@@ -135,11 +135,12 @@ def summary_from(report, current=None):
     closed_pct = _number(invested.get("daily_closed_invested_capital_return_pct")) if local_ok else None
     observed_pct = _number(invested.get("observed_fills_closed_invested_return_pct")) if local_ok else None
     daily_capital_roi = _number(invested.get("daily_invested_capital_return_pct")) if broker_ok else None
-    account_portfolio_pct = account_day_pct if broker_ok else None
-    broker_ok = broker_ok and daily_capital_roi is not None and account_portfolio_pct is not None
+    # Account equity day change and invested-capital ROI have different
+    # denominators. Never use the former to grade the user's 1%-on-invested
+    # goal. True cash-flow-adjusted portfolio ROI remains unverified.
+    broker_ok = broker_ok and daily_capital_roi is not None and account_day_pct is not None
     if not broker_ok:
         daily_capital_roi = None
-        account_portfolio_pct = None
     # Historical paper-account curve uses the broker's fully dated daily
     # history, independent full filled-order set and exchange-session coverage.
     # "Since first recorded fill" is NOT the same as proven project inception.
@@ -264,11 +265,16 @@ def summary_from(report, current=None):
         },
         "one_percent_goal": {
             "daily_target_pct": 1.0,
-            "daily_portfolio_return_pct": account_portfolio_pct,
+            # No true cash-flow-adjusted whole-account portfolio return here.
+            "daily_portfolio_return_pct": None,
+            # Explicit denominator for the requested deployed-capital goal.
+            "daily_invested_capital_return_pct": daily_capital_roi,
+            "return_basis": "MODELED_PAPER_PEAK_DEPLOYED_FILLED_COST"
+                            if broker_ok else "MISSING",
             "since_inception_return_pct": None,
-            "daily_goal_met": account_portfolio_pct >= 1.0 if broker_ok else None,
+            "daily_goal_met": daily_capital_roi >= 1.0 if broker_ok else None,
             "status": "MODELED_PAPER_BROKER_CASHFLOW_ZERO_RECONCILED"
-                      if broker_ok else "NOT_MEASURABLE_NO_VERIFIED_PORTFOLIO_EQUITY",
+                      if broker_ok else "NOT_MEASURABLE_NO_VERIFIED_INVESTED_CAPITAL_RETURN",
         },
         "proposal_ids": proposals,
     }

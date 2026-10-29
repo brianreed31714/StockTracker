@@ -49,7 +49,11 @@ class InvestedBridgeTests(unittest.TestCase):
         measured = result["invested_capital"]
         self.assertEqual(measured["daily_portfolio_return_on_peak_deployed_capital_pct"], 3.5714)
         self.assertEqual(measured["daily_closed_lot_realized_return_pct"], 14.2857)
-        self.assertEqual(result["one_percent_goal"]["daily_portfolio_return_pct"], 7.5)
+        self.assertIsNone(result["one_percent_goal"]["daily_portfolio_return_pct"])
+        self.assertEqual(result["one_percent_goal"]["daily_invested_capital_return_pct"], 3.5714)
+        self.assertEqual(result["one_percent_goal"]["return_basis"], "MODELED_PAPER_PEAK_DEPLOYED_FILLED_COST")
+        self.assertTrue(result["one_percent_goal"]["daily_goal_met"])
+        self.assertEqual(result["paper_account_observation"]["daily_account_change_pct"], 7.5)
         self.assertEqual(measured["classification"], "MODELED_PAPER")
         self.assertTrue(measured["daily_one_percent_invested_goal_met"])
         self.assertIsNone(measured["since_inception_invested_return_pct"])
@@ -57,6 +61,17 @@ class InvestedBridgeTests(unittest.TestCase):
         rendered = str(result)
         for private in ("SECRET-123", "NVDA", "SHOULD_NOT_APPEAR"):
             self.assertNotIn(private, rendered)
+
+    def test_account_gain_does_not_pass_invested_capital_goal(self):
+        report = fixture()
+        # Unadjusted paper-account change is +7.5%, but the reconciled
+        # deployed-cost ROI is only +0.2%. Goal must be NOT MET.
+        report["metrics"]["invested_capital"]["daily_invested_capital_return_pct"] = 0.2
+        result = summary_from(report)
+        self.assertEqual(result["paper_account_observation"]["daily_account_change_pct"], 7.5)
+        self.assertEqual(result["one_percent_goal"]["daily_invested_capital_return_pct"], 0.2)
+        self.assertFalse(result["one_percent_goal"]["daily_goal_met"])
+        self.assertIsNone(result["one_percent_goal"]["daily_portfolio_return_pct"])
 
     def test_cashflow_or_broker_evidence_missing_disallows_portfolio_roi(self):
         for item in (
@@ -72,6 +87,8 @@ class InvestedBridgeTests(unittest.TestCase):
                 outcome = summary_from(report)
                 self.assertIsNone(outcome["invested_capital"]["daily_portfolio_return_on_peak_deployed_capital_pct"])
                 self.assertIsNone(outcome["one_percent_goal"]["daily_portfolio_return_pct"])
+                self.assertIsNone(outcome["one_percent_goal"]["daily_invested_capital_return_pct"])
+                self.assertIsNone(outcome["one_percent_goal"]["daily_goal_met"])
 
     def test_closed_lot_return_survives_broker_failure_but_is_not_portfolio(self):
         report = fixture()
