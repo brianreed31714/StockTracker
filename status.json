@@ -1,12 +1,12 @@
 {
   "broker_trade_health_verified": false,
-  "git_head": "8a78b2635c43cdc685668907fa45534ba970f6f3",
+  "git_head": "db0c4277098149129a1f34ddc6873e1dbd1b54f0",
   "in_memory_trader_digest_verified": false,
-  "observed_at_utc": "2026-10-29T05:23:00.604006+00:00",
+  "observed_at_utc": "2026-10-29T05:34:07.356328+00:00",
   "post_sync_eod_verified": false,
-  "processes_stable": true,
+  "processes_stable": false,
   "project": "StockTracker",
   "schema": "stocktracker_windows_attestation_v1",
   "source_code_synced": true,
-  "state": "HOST_PROCESSES_STABLE_SOURCE_ONLY"
+  "state": "CODE_SYNCED_PROCESS_OBSERVED"
 }
