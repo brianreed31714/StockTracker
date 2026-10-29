@@ -210,10 +210,12 @@ class AttestationTests(unittest.TestCase):
         import inspect
         import stocktracker_deployment_agent as agent
         source = inspect.getsource(agent.scan_once)
-        self.assertIn('if os.name == "nt":', source)
-        self.assertIn("run_fresh_host_attestation(ROOT)", source)
-        self.assertNotIn("poll(ROOT, notify=push_attestation)", source)
-        self.assertNotIn("stop_active(", source)
+        observer = inspect.getsource(agent._observe_host_read_only)
+        self.assertIn("_observe_host_read_only()", source)
+        self.assertIn('if os.name == "nt":', observer)
+        self.assertIn("run_fresh_host_attestation(ROOT)", observer)
+        self.assertNotIn("poll(ROOT, notify=push_attestation)", source + observer)
+        self.assertNotIn("stop_active(", source + observer)
 
 
 if __name__ == "__main__":

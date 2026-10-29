@@ -460,8 +460,24 @@ def deploy(req_path: Path, req: dict):
         return False
 
 
+def _observe_host_read_only():
+    """Sample bounded Windows host evidence independently of deployment permission."""
+    if os.name == "nt":
+        try:
+            # Importing poll() in a long-running agent caches the old module
+            # after Git sync. The bounded child always loads the new on-disk
+            # attestation without restarting trader/dashboard/feed processes.
+            from infrastructure.fresh_attestation_runner import run_fresh_host_attestation
+            evidence = run_fresh_host_attestation(ROOT)
+            if evidence["status"] != "HOST_CLAIM_ONLY":
+                log("Windows attestation unavailable: " + evidence.get("reason", "UNVERIFIED"))
+        except Exception:
+            log("Windows attestation runner unavailable (details redacted)")
+
+
 def scan_once():
     if not AUTO_DEPLOY:
+        _observe_host_read_only()
         return
     REQUEST_DIR.mkdir(parents=True, exist_ok=True)
     pull_repo()
@@ -506,21 +522,8 @@ def scan_once():
                 push("StockTracker Deployment FAILED", f"{pid}: {exc}")
                 # Continue to evaluate subsequent requests; never kill the active release.
 
-    # A successful Git fast-forward is source sync, not live activation.
-    # Read-only host attestation samples are separated across existing polls.
-    # No restart, extra trader process, scheduled-task mutation, or Git write.
-    if os.name == "nt":
-        try:
-            # Importing poll() in a long-running agent caches the old module
-            # after Git sync. The bounded child always loads the new on-disk
-            # attestation without restarting trader/dashboard/feed processes.
-            from infrastructure.fresh_attestation_runner import run_fresh_host_attestation
-            evidence = run_fresh_host_attestation(ROOT)
-            if evidence["status"] != "HOST_CLAIM_ONLY":
-                log("Windows attestation unavailable: " + evidence.get("reason", "UNVERIFIED"))
-        except Exception:
-            log("Windows attestation runner unavailable (details redacted)")
-
+    # Observe host state without altering trader, dashboard, or geo-feed processes.
+    _observe_host_read_only()
 
 
 def main():
