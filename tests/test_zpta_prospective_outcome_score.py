@@ -96,6 +96,14 @@ class ForwardOutcomeTests(unittest.TestCase):
         self.assertFalse(result["real_money_trading_allowed"])
         self.assertIsNotNone(result["future_outcomes"]["1d"])
 
+    def test_prior_day_revision_sensitive_snapshot_blocks_scoring(self):
+        rows = sample() + [future("2026-10-27", .73)]
+        f = frozen()
+        f["prior_source_revision_status"] = "REVISION_CHANGED_SIGNAL_DO_NOT_PROMOTE"
+        f["research_promotion_blocked"] = True
+        with self.assertRaisesRegex(ValueError, "PRIOR_SOURCE_REVISION_DO_NOT_SCORE"):
+            score_snapshot(f, rows)
+
     def test_higher_cost_reduces_net(self):
         rows = sample() + [future("2026-10-27", .75)]
         a = score_snapshot(frozen(), rows, 0)["future_outcomes"]["1d"]["hypothetical_net_pct"]
