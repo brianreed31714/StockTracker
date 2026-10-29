@@ -77,13 +77,19 @@ def main():
     p.add_argument("--frozen-previous-date", required=True)
     p.add_argument("--frozen-previous-close", type=float, required=True)
     p.add_argument("--frozen-previous-volume", type=int, required=True)
+    p.add_argument("--output", type=Path)
     args = p.parse_args()
     result = audit_previous_revision(
         load_daily(args.daily_csv), signal_date=args.signal_date,
         frozen_previous_date=args.frozen_previous_date,
         frozen_previous_close=args.frozen_previous_close,
         frozen_previous_volume=args.frozen_previous_volume)
-    print(json.dumps(result, sort_keys=True))
+    payload = json.dumps(result, sort_keys=True) + "\n"
+    if args.output:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        with args.output.open("x", encoding="utf-8") as handle:
+            handle.write(payload)
+    print(payload, end="")
 
 
 if __name__ == "__main__":
