@@ -23,6 +23,11 @@ def score_snapshot(snapshot, bars, one_way_cost=.01):
     # Do not turn a mismatched signal into a validated forward return.
     if snapshot.get("independent_source_quality_status") == "SOURCE_MISMATCH_DO_NOT_PROMOTE":
         raise ValueError("SOURCE_MISMATCH_DO_NOT_SCORE: reconcile frozen signal source")
+    if (snapshot.get("research_promotion_blocked") is True or
+            snapshot.get("prior_source_revision_status") in (
+                "REVISION_CHANGED_SIGNAL_DO_NOT_PROMOTE",
+                "PREVIOUS_BAR_REVISION_REQUIRES_RECONCILIATION")):
+        raise ValueError("PRIOR_SOURCE_REVISION_DO_NOT_SCORE: reconcile source first")
     if not 0 <= one_way_cost < .5:
         raise ValueError("Invalid cost")
     dates = [b["date"] for b in bars]
