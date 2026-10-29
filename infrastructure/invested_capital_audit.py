@@ -230,7 +230,8 @@ def audit_database(db_path, day, *, session_open, session_close):
 
 
 def broker_reconcile_today(audit, day, *, history_path, session_open, session_close, now=None, client_factory=None,
-                           orders_request_factory=None, history_request_factory=None):
+                           orders_request_factory=None, history_request_factory=None,
+                           calendar_request_factory=None):
     """Optional read-only cross-check with PAPER Alpaca, never changes orders.
 
     A daily account P/L / peak deployed *cost* basis percentage is eligible
@@ -385,6 +386,14 @@ def broker_reconcile_today(audit, day, *, history_path, session_open, session_cl
         result["daily_invested_capital_return_pct"] = round(100.0 * pnl / base, 6)
         result["daily_invested_capital_return_status"] = "MODELED_PAPER_RETURN_ON_PEAK_DEPLOYED_COST"
         result["broker_account_pnl_usd"] = round(pnl, 4)
+        # An independently distinct historical completeness gate. A failed
+        # inception audit never invalidates an otherwise valid daily return.
+        result.update(observed_history_curve(
+            audit, day=day, now=now, client=client,
+            orders_request_factory=orders_request_factory,
+            history_request_factory=history_request_factory,
+            calendar_request_factory=calendar_request_factory,
+        ))
         return result
     except (OSError, RuntimeError, TypeError, ValueError, AttributeError, ImportError, OverflowError, IndexError):
         # Never log or publish broker exception text, account IDs, order IDs,
