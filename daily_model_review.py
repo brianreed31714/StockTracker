@@ -155,6 +155,7 @@ def performance_markdown(metrics, review):
     o = metrics.get("orders") or {}
     d = metrics.get("decisions") or {}
     account = metrics.get("portfolio_performance") or {}
+    capital = metrics.get("invested_capital") or {}
     day_change = account.get("daily_account_change_pct") if (
         account.get("status") == "PAPER_ACCOUNT_CHANGE_UNADJUSTED_CASH_FLOWS"
         and account.get("review_date") == metrics.get("review_date")
@@ -180,8 +181,27 @@ def performance_markdown(metrics, review):
         f"- Completed paper trades: **{r.get('rows', 0)}**",
         f"- Realized paper P/L: **${float(r.get('realized_pnl') or 0):+,.2f}**",
         account_line,
-        "- Daily return on invested capital: **MISSING** (requires reconciled capital-at-risk basis)",
-        "- Inception portfolio return: **MISSING** (requires inception equity and cash-flow reconciliation)",
+        (
+            f"- Daily PAPER return on **peak deployed cost basis**: "
+            f"**{capital['daily_invested_capital_return_pct']:+.4f}%** "
+            "(MODELED; account/positions/fills/zero reported cash flows cross-checked)"
+            if capital.get("daily_invested_capital_return_status")
+               == "MODELED_PAPER_RETURN_ON_PEAK_DEPLOYED_COST"
+            and isinstance(capital.get("daily_invested_capital_return_pct"), (int, float))
+            else "- Daily PAPER return on peak deployed cost basis: **MISSING** "
+                 "(broker reconciliation not completed)"
+        ),
+        (
+            f"- Daily CLOSED-LOT invested return: "
+            f"**{capital['daily_closed_invested_capital_return_pct']:+.4f}%** "
+            "(MODELED from recorded fills; excludes open-position P/L)"
+            if capital.get("status") == "LOCAL_CLOSED_FILLS_RECONCILED_NOT_BROKER_ATTESTED"
+            and isinstance(capital.get("daily_closed_invested_capital_return_pct"), (int, float))
+            else "- Daily CLOSED-LOT invested return: **MISSING** "
+                 "(complete cost basis or realized reconciliation unavailable)"
+        ),
+        "- True since-inception invested portfolio return and drawdown: **MISSING** "
+        "(requires independently proven inception baseline and continuous valuation)",
         f"- Win/loss: **{r.get('wins', 0)}/{r.get('losses', 0)}**",
         f"- Win rate: **{r.get('win_rate_pct') if r.get('win_rate_pct') is not None else 'n/a'}%**",
         "",
@@ -218,7 +238,7 @@ def performance_markdown(metrics, review):
     ]
     return "\n".join(lines)
 
-def send_push(date_text, review):
+def send_push(date_text, review, metrics=None):
     if not PUSH_ENABLED:
         return
     token = (os.getenv("PUSHOVER_STOCK_AGENTIC_TOKEN") or os.getenv("PUSHOVER_API_TOKEN") or "").strip()
@@ -240,6 +260,24 @@ def send_push(date_text, review):
         lines.append("Key findings:")
         for item in findings[:2]:
             lines.append(f"- {item[:220]}")
+    capital = (metrics or {}).get("invested_capital") or {}
+    if (capital.get("daily_invested_capital_return_status")
+            == "MODELED_PAPER_RETURN_ON_PEAK_DEPLOYED_COST"
+            and isinstance(capital.get("daily_invested_capital_return_pct"), (int, float))):
+        lines.append(
+            f"PAPER peak-deployed-cost day ROI: "
+            f"{capital['daily_invested_capital_return_pct']:+.4f}% (MODELED)"
+        )
+    elif (capital.get("status") == "LOCAL_CLOSED_FILLS_RECONCILED_NOT_BROKER_ATTESTED"
+            and isinstance(capital.get("daily_closed_invested_capital_return_pct"), (int, float))):
+        lines.append(
+            f"PAPER closed-lot ROI: "
+            f"{capital['daily_closed_invested_capital_return_pct']:+.4f}% "
+            "(MODELED; not portfolio ROI)"
+        )
+    else:
+        lines.append("PAPER invested-capital return: MISSING (reconciliation)")
+    lines.append("Portfolio inception ROI/drawdown: MISSING unless independently evidenced")
     lines.append(f"Proposals: {len(proposals)}")
     if proposals:
         lines.append("ChatGPT: Review today's StockTracker proposals")
@@ -328,7 +366,7 @@ def main():
     (PERF_DIR / "latest.json").write_text(json.dumps(perf, indent=2), encoding="utf-8")
     (PERF_DIR / "latest.md").write_text(performance_markdown(metrics, review), encoding="utf-8")
 
-    send_push(args.date, review)
+    send_push(args.date, review, metrics)
     print(f"StockTracker daily review complete: {len(review.get('proposals') or [])} proposal(s)")
 
 if __name__ == "__main__":
