@@ -154,6 +154,17 @@ def performance_markdown(metrics, review):
     r = metrics.get("realized") or {}
     o = metrics.get("orders") or {}
     d = metrics.get("decisions") or {}
+    account = metrics.get("portfolio_performance") or {}
+    day_change = account.get("daily_account_change_pct") if (
+        account.get("status") == "PAPER_ACCOUNT_CHANGE_UNADJUSTED_CASH_FLOWS"
+        and account.get("review_date") == metrics.get("review_date")
+    ) else None
+    account_line = (
+        f"- Paper-account day change: **{float(day_change):+.4f}%** "
+        "(Alpaca equity vs prior close; cash flows unverified; NOT invested-capital ROI)"
+        if isinstance(day_change, (int, float)) and not isinstance(day_change, bool)
+        else "- Paper-account day change: **MISSING** (no dated broker equity)"
+    )
     supporting = metrics.get("supporting_logs") or {}
     integrity = metrics.get("supporting_log_analysis") or {}
     lines = [
@@ -168,6 +179,9 @@ def performance_markdown(metrics, review):
         f"- Orders: **{o.get('rows', 0)}** (buys {o.get('buys', 0)} / sells {o.get('sells', 0)})",
         f"- Completed paper trades: **{r.get('rows', 0)}**",
         f"- Realized paper P/L: **${float(r.get('realized_pnl') or 0):+,.2f}**",
+        account_line,
+        "- Daily return on invested capital: **MISSING** (requires reconciled capital-at-risk basis)",
+        "- Inception portfolio return: **MISSING** (requires inception equity and cash-flow reconciliation)",
         f"- Win/loss: **{r.get('wins', 0)}/{r.get('losses', 0)}**",
         f"- Win rate: **{r.get('win_rate_pct') if r.get('win_rate_pct') is not None else 'n/a'}%**",
         "",

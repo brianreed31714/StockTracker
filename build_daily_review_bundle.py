@@ -409,7 +409,17 @@ def build(date_text: str):
         "zpta_max_position_dollars": fnum(os.getenv("ZPTA_MAX_POSITION_DOLLARS", "150")),
     }
 
+    # Read-only PAPER broker observation; never backfill a past session from
+    # the account's current equity. History is private and Git-ignored.
+    # A failure here must NOT suppress the existing P/L evidence pipeline.
+    from infrastructure.paper_equity_capture import collect_for_review
+    portfolio_performance = collect_for_review(
+        date_text,
+        history_path=ROOT / "deploy" / "state" / "portfolio_account_equity_history.json",
+    )
+
     metrics = {
+        "portfolio_performance": portfolio_performance,
         "review_date": date_text,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "paper_only": True,

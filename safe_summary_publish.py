@@ -77,8 +77,24 @@ def summary_from(report, current=None):
                 status = "UNKNOWN"
             proposals.append({"id": proposal_id, "status": status})
 
-    # Historical reports lack daily starting/ending equity. Realized P/L is
-    # not portfolio return, and should never be converted using exposure.
+    # Only a dated read-only PAPER account observation is eligible for the
+    # separate account-change metric. This is not return on deployed capital
+    # and is not cash-flow-adjusted portfolio ROI.
+    portfolio = metrics.get("portfolio_performance") or {}
+    if not isinstance(portfolio, dict):
+        raise ValueError("Invalid paper account metrics")
+    account_eligible = (
+        portfolio.get("review_date") == day
+        and portfolio.get("source") == "ALPACA_PAPER_ACCOUNT"
+        and portfolio.get("status") == "PAPER_ACCOUNT_CHANGE_UNADJUSTED_CASH_FLOWS"
+        and portfolio.get("cash_flows_reconciled") is False
+        and portfolio.get("full_portfolio_return_verified") is False
+    )
+    account_day_pct = _number(portfolio.get("daily_account_change_pct")) if account_eligible else None
+    observed_change = _number(portfolio.get("observed_window_account_change_pct")) if account_eligible else None
+    observed_drawdown = _number(portfolio.get("observed_window_max_drawdown_pct")) if account_eligible else None
+    observed_sessions = _count(portfolio.get("observed_session_count")) if account_eligible else None
+    # Never label a gross account-equity change as an invested-capital return.
     return {
         "schema": "stocktracker_sanitized_summary_v1",
         "review_date": day,
@@ -104,6 +120,17 @@ def summary_from(report, current=None):
             "zpta_resolved_predictions": _count(zpta.get("resolved_predictions")),
             "zpta_shadow_trades": _count(zpta.get("shadow_trades")),
             "financial_leverage_signal_rows": _count(fin.get("signal_rows")),
+        },
+        "paper_account_observation": {
+            "status": "PAPER_ACCOUNT_CHANGE_UNADJUSTED_CASH_FLOWS" if account_eligible else "MISSING",
+            "daily_account_change_pct": account_day_pct,
+            "observed_window_account_change_pct": observed_change,
+            "observed_window_max_drawdown_pct": observed_drawdown,
+            "observed_session_count": observed_sessions,
+            "cash_flows_reconciled": False,
+            "invested_capital_daily_return_pct": None,
+            "inception_portfolio_return_pct": None,
+            "source": "ALPACA_PAPER_ACCOUNT" if account_eligible else "UNVERIFIED",
         },
         "one_percent_goal": {
             "daily_target_pct": 1.0,
