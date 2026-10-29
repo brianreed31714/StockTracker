@@ -121,7 +121,7 @@ class BridgeTests(unittest.TestCase):
         self.assertTrue(bridge.pushover_api_accepted(Response(200, {"status": 1})))
         for code, payload in [
             (400, {"status": 1}), (200, {"status": 0}),
-            (200, {"status": "1"}), (200, []),
+            (200, {"status": "1"}), (200, {"status": True}), (200, []),
             (200, ValueError("invalid response")),
         ]:
             self.assertFalse(bridge.pushover_api_accepted(Response(code, payload)))
