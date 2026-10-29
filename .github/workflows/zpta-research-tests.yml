@@ -154,6 +154,21 @@ jobs:
           print("VENUE_AUDIT_WARNING: source-adjustment, historical broker tradability and fill prices remain unverified")
           PY
 
+      - name: Audit Oct 28 RSI signal against Oct 27 originally frozen source
+        if: steps.fetch.outcome == 'success'
+        run: |
+          # The Oct 27 original source candidate was frozen at $0.74 / 14,491
+          # shares (Oct 28 01:03Z run). The independent published anchor was
+          # $0.73 / 35,982. This is a research replay, not a new buy signal.
+          LAST="$(python -c 'import json,os,pathlib; print(json.loads((pathlib.Path(os.environ["RUNNER_TEMP"])/"zpta_meta.json").read_text())["last_date"])')"
+          if [ "$LAST" = "2026-10-28" ]; then
+            python -m analysis.zpta_signal_revision_sensitivity "$RUNNER_TEMP/zpta_daily.csv" \
+              --signal-date 2026-10-28 --frozen-previous-date 2026-10-27 \
+              --frozen-previous-close 0.74 --frozen-previous-volume 14491
+          else
+            echo "REVISION_SENSITIVITY_NOT_APPLICABLE: candidate latest day is $LAST, not Oct 28"
+          fi
+
       - name: Attempt same-day frozen research signal snapshot (no trading)
         id: prospective
         if: steps.fetch.outcome == 'success'
