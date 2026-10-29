@@ -215,7 +215,8 @@ def audit_database(db_path, day, *, session_open, session_close):
         return unavailable(day, "LOCAL_PAPER_FILL_DATABASE_UNREADABLE")
 
 
-def broker_reconcile_today(audit, day, *, history_path, session_open, session_close, now=None, client_factory=None):
+def broker_reconcile_today(audit, day, *, history_path, session_open, session_close, now=None, client_factory=None,
+                           orders_request_factory=None, history_request_factory=None):
     """Optional read-only cross-check with PAPER Alpaca, never changes orders.
 
     A daily account P/L / peak deployed *cost* basis percentage is eligible
@@ -247,16 +248,22 @@ def broker_reconcile_today(audit, day, *, history_path, session_open, session_cl
         from datetime import timedelta
         import json
         import os
-        from alpaca.trading.client import TradingClient
-        from alpaca.trading.requests import GetOrdersRequest, GetPortfolioHistoryRequest
-        from alpaca.trading.enums import QueryOrderStatus
-
         key = os.getenv("ALPACA_API_KEY", "").strip()
         secret = os.getenv("ALPACA_SECRET_KEY", "").strip()
         if client_factory is None:
             if not key or not secret:
                 raise ValueError("PAPER_BROKER_CREDENTIALS_MISSING")
+            from alpaca.trading.client import TradingClient
             client_factory = lambda: TradingClient(key, secret, paper=True)
+        if orders_request_factory is None:
+            from alpaca.trading.requests import GetOrdersRequest
+            from alpaca.trading.enums import QueryOrderStatus
+            orders_request_factory = lambda **options: GetOrdersRequest(
+                status=QueryOrderStatus.CLOSED, **options
+            )
+        if history_request_factory is None:
+            from alpaca.trading.requests import GetPortfolioHistoryRequest
+            history_request_factory = lambda **options: GetPortfolioHistoryRequest(**options)
         client = client_factory()
         account = client.get_account()
         prior = number(getattr(account, "last_equity", None), positive=True)
@@ -294,8 +301,7 @@ def broker_reconcile_today(audit, day, *, history_path, session_open, session_cl
         # The Alpaca request filters by submission time rather than fill time.
         # Fetch a broad enough window; if the single response reaches the
         # pagination limit, refuse to treat the coverage as complete.
-        request = GetOrdersRequest(
-            status=QueryOrderStatus.CLOSED,
+        request = orders_request_factory(
             after=session_open - timedelta(days=14),
             until=now,
             limit=500,
@@ -322,7 +328,7 @@ def broker_reconcile_today(audit, day, *, history_path, session_open, session_cl
         # Check the dated 1D account-history point. Request ALL cashflow types;
         # absent history, invalid arrays, or any nonzero reported cash movement
         # fail closed rather than deducting an unverified transfer.
-        history = client.get_portfolio_history(GetPortfolioHistoryRequest(
+        history = client.get_portfolio_history(history_request_factory(
             start=session_open - timedelta(days=14), end=now,
             timeframe="1D", cashflow_types="ALL",
         ))
