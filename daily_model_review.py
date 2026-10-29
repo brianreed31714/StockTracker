@@ -11,6 +11,7 @@ from zoneinfo import ZoneInfo
 import requests
 from dotenv import load_dotenv
 from openai import OpenAI
+from safe_summary_publish import pushover_api_accepted
 
 ROOT = Path(__file__).resolve().parent
 load_dotenv(ROOT / ".env.config")
@@ -265,11 +266,11 @@ def performance_markdown(metrics, review):
 
 def send_push(date_text, review, metrics=None):
     if not PUSH_ENABLED:
-        return
+        return "DISABLED"
     token = (os.getenv("PUSHOVER_STOCK_AGENTIC_TOKEN") or os.getenv("PUSHOVER_API_TOKEN") or "").strip()
     user = (os.getenv("PUSHOVER_STOCK_AGENTIC_GROUP_KEY") or os.getenv("PUSHOVER_USER_KEY") or "").strip()
     if not token or not user:
-        return
+        return "CONFIG_MISSING"
 
     summary = str(review.get("summary") or "").strip()
     findings = [str(x).strip() for x in (review.get("findings") or []) if str(x).strip()]
@@ -318,7 +319,7 @@ def send_push(date_text, review, metrics=None):
         lines.append("ChatGPT: Review today's StockTracker proposals")
 
     try:
-        requests.post(
+        response = requests.post(
             "https://api.pushover.net/1/messages.json",
             data={
                 "token": token,
@@ -327,9 +328,11 @@ def send_push(date_text, review, metrics=None):
                 "message": "\n".join(lines)[:1024],
             },
             timeout=15,
-        ).raise_for_status()
+        )
+        return "API_ACCEPTED" if pushover_api_accepted(response) else "API_NOT_ACCEPTED"
     except Exception:
-        pass
+        # Never expose provider errors, request contents, tokens, or user IDs.
+        return "UNCONFIRMED"
 
 def main():
     ap = argparse.ArgumentParser()
@@ -398,10 +401,17 @@ def main():
 
     PERF_DIR.mkdir(parents=True, exist_ok=True)
     perf = {"metrics": metrics, "review": review}
-    (PERF_DIR / "latest.json").write_text(json.dumps(perf, indent=2), encoding="utf-8")
     (PERF_DIR / "latest.md").write_text(performance_markdown(metrics, review), encoding="utf-8")
 
-    send_push(args.date, review, metrics)
+    # Persist only a date-scoped provider acceptance classification, never the
+    # Pushover response or secrets. Publishing follows this step in the EOD bat.
+    push_status = send_push(args.date, review, metrics)
+    metrics["eod_notification"] = {
+        "review_date": args.date,
+        "provider_status": push_status,
+        "device_delivery_verified": False,
+    }
+    (PERF_DIR / "latest.json").write_text(json.dumps(perf, indent=2), encoding="utf-8")
     print(f"StockTracker daily review complete: {len(review.get('proposals') or [])} proposal(s)")
 
 if __name__ == "__main__":

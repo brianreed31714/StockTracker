@@ -23,6 +23,22 @@ SUMMARY_REL = Path("analysis/performance/sanitized_latest.json")
 DAILY_REL = Path("analysis/performance/sanitized_daily")
 
 
+def pushover_api_accepted(response):
+    """True only for an observed HTTP 200 and Pushover JSON status=1.
+
+    Provider acceptance is not device delivery. Never persist response bodies,
+    message IDs, tokens, or provider exception text.
+    """
+    if getattr(response, "status_code", None) != 200:
+        return False
+    try:
+        body = response.json()
+    except (ValueError, TypeError):
+        return False
+    return isinstance(body, dict) and type(body.get("status")) is int and body["status"] == 1
+
+
+
 def _number(value):
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         return None
@@ -150,6 +166,15 @@ def summary_from(report, current=None):
         and invested.get("inception_basis_status")
             == "CONFIGURED_START_EQUALS_FIRST_FILL_WITH_BROKER_COVERAGE"
     )
+    # The Pushover HTTP+JSON acknowledgement is a separate, dated host fact.
+    # A completed EOD review does not imply a notification was accepted.
+    notification = metrics.get("eod_notification") or {}
+    if not isinstance(notification, dict):
+        raise ValueError("Unexpected EOD notification metadata")
+    notice = notification.get("provider_status") if notification.get("review_date") == day else None
+    if notice not in {"API_ACCEPTED", "API_NOT_ACCEPTED", "UNCONFIRMED",
+                      "DISABLED", "CONFIG_MISSING"}:
+        notice = "UNVERIFIED"
     # Never label a gross account-equity change as an invested-capital return.
     return {
         "schema": "stocktracker_sanitized_summary_v1",
@@ -176,6 +201,11 @@ def summary_from(report, current=None):
             "zpta_resolved_predictions": _count(zpta.get("resolved_predictions")),
             "zpta_shadow_trades": _count(zpta.get("shadow_trades")),
             "financial_leverage_signal_rows": _count(fin.get("signal_rows")),
+        },
+        "eod_notification": {
+            "provider_status": notice,
+            "provider_accepted": notice == "API_ACCEPTED",
+            "device_delivery_verified": False,
         },
         "paper_account_observation": {
             "status": "PAPER_ACCOUNT_CHANGE_UNADJUSTED_CASH_FLOWS" if account_eligible else "MISSING",

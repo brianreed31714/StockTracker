@@ -107,5 +107,45 @@ class BridgeTests(unittest.TestCase):
                 bridge.validate_git_safe("2026-10-19")
 
 
+    def test_pushover_acceptance_requires_http_200_and_status_one(self):
+        class Response:
+            def __init__(self, code, payload):
+                self.status_code = code
+                self.payload = payload
+
+            def json(self):
+                if isinstance(self.payload, Exception):
+                    raise self.payload
+                return self.payload
+
+        self.assertTrue(bridge.pushover_api_accepted(Response(200, {"status": 1})))
+        for code, payload in [
+            (400, {"status": 1}), (200, {"status": 0}),
+            (200, {"status": "1"}), (200, {"status": True}), (200, []),
+            (200, ValueError("invalid response")),
+        ]:
+            self.assertFalse(bridge.pushover_api_accepted(Response(code, payload)))
+
+    def test_eod_pushover_receipt_is_dated_and_sanitized(self):
+        report = fixture()
+        report["metrics"]["eod_notification"] = {
+            "review_date": "2026-10-19", "provider_status": "API_ACCEPTED",
+            "device_delivery_verified": True,
+            "token": "PRIVATE_PUSHOVER_TOKEN", "message_id": "PRIVATE_PUSH_ID",
+        }
+        result = bridge.summary_from(report)
+        self.assertEqual(result["eod_notification"], {
+            "provider_status": "API_ACCEPTED", "provider_accepted": True,
+            "device_delivery_verified": False,
+        })
+        self.assertNotIn("PRIVATE_PUSHOVER_TOKEN", json.dumps(result))
+        self.assertNotIn("PRIVATE_PUSH_ID", json.dumps(result))
+        report["metrics"]["eod_notification"]["review_date"] = "2026-10-18"
+        self.assertEqual(bridge.summary_from(report)["eod_notification"]["provider_status"], "UNVERIFIED")
+        report["metrics"]["eod_notification"]["review_date"] = "2026-10-19"
+        report["metrics"]["eod_notification"]["provider_status"] = "UNCONFIRMED"
+        self.assertFalse(bridge.summary_from(report)["eod_notification"]["provider_accepted"])
+
+
 if __name__ == "__main__":
     unittest.main()
