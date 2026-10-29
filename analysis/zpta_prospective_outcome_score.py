@@ -18,6 +18,11 @@ def score_snapshot(snapshot, bars, one_way_cost=.01):
         raise ValueError("Wrong symbol")
     if snapshot.get("snapshot_type") != "SAME_DAY_POST_CLOSE_CANDIDATE":
         raise ValueError("Not a contemporaneously frozen snapshot")
+    # A dated source mismatch is a hard research-quality block, even if a
+    # subsequent fetch happens to reproduce the original unverified bar.
+    # Do not turn a mismatched signal into a validated forward return.
+    if snapshot.get("independent_source_quality_status") == "SOURCE_MISMATCH_DO_NOT_PROMOTE":
+        raise ValueError("SOURCE_MISMATCH_DO_NOT_SCORE: reconcile frozen signal source")
     if not 0 <= one_way_cost < .5:
         raise ValueError("Invalid cost")
     dates = [b["date"] for b in bars]
