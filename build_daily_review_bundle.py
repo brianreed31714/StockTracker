@@ -413,12 +413,46 @@ def build(date_text: str):
     # the account's current equity. History is private and Git-ignored.
     # A failure here must NOT suppress the existing P/L evidence pipeline.
     from infrastructure.paper_equity_capture import collect_for_review
+    account_history_path = ROOT / "deploy" / "state" / "portfolio_account_equity_history.json"
     portfolio_performance = collect_for_review(
         date_text,
-        history_path=ROOT / "deploy" / "state" / "portfolio_account_equity_history.json",
+        history_path=account_history_path,
     )
 
+    # Evaluate capital actually tied up in filled PAPER positions. The private
+    # complete ledger/order IDs never leave the host; GitHub only receives
+    # explicitly allowlisted aggregate returns and audit status. Refuse an
+    # assumed 4 PM close on exchange early-close days.
+    from infrastructure.invested_capital_audit import (
+        audit_database, unavailable as capital_missing, broker_reconcile_today
+    )
+    from infrastructure.paper_equity_capture import _read_history
+    from datetime import datetime as _dt
+    history_entry = (_read_history(account_history_path).get("days") or {}).get(date_text) or {}
+    closing_text = history_entry.get("market_close_at_utc")
+    try:
+        session_close = _dt.fromisoformat(str(closing_text).replace("Z", "+00:00"))
+        if session_close.tzinfo is None or session_close.astimezone(MARKET_TZ).date().isoformat() != date_text:
+            raise ValueError("No dated market close evidence")
+        session_open = _dt.combine(_dt.fromisoformat(date_text).date(), dtime(9, 30), tzinfo=MARKET_TZ)
+        if session_close <= session_open:
+            raise ValueError("Incorrect exchange session")
+        invested_capital = audit_database(
+            DB_PATH, date_text, session_open=session_open, session_close=session_close
+        )
+        invested_capital = broker_reconcile_today(
+            invested_capital, date_text, history_path=account_history_path,
+            session_open=session_open, session_close=session_close,
+        )
+    except (ValueError, TypeError, OverflowError, OSError):
+        invested_capital = capital_missing(date_text, "EXCHANGE_SESSION_OR_EQUITY_EVIDENCE_MISSING")
+    # Intentionally remove sensitive per-symbol quantities and raw order IDs.
+    # Public artifacts carry only status, aggregate modeled returns and counts.
+    invested_capital.pop("ledger_end_quantities", None)
+    invested_capital.pop("local_session_order_ids", None)
+
     metrics = {
+        "invested_capital": invested_capital,
         "portfolio_performance": portfolio_performance,
         "review_date": date_text,
         "generated_at": datetime.now(timezone.utc).isoformat(),
