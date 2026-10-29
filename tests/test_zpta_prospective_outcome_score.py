@@ -79,6 +79,23 @@ class ForwardOutcomeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "contemporaneously"):
             score_snapshot(f, sample())
 
+    def test_frozen_independent_source_mismatch_blocks_forward_scoring(self):
+        rows = sample() + [future("2026-10-27", .73)]
+        f = frozen()
+        f["independent_source_quality_status"] = "SOURCE_MISMATCH_DO_NOT_PROMOTE"
+        with self.assertRaisesRegex(ValueError, "SOURCE_MISMATCH_DO_NOT_SCORE"):
+            score_snapshot(f, rows)
+
+    def test_independent_single_date_match_still_unverified(self):
+        rows = sample() + [future("2026-10-27", .73)]
+        f = frozen()
+        f["independent_source_quality_status"] = (
+            "SINGLE_DATE_ANCHOR_WITHIN_TOLERANCE_NOT_FULLY_VERIFIED")
+        result = score_snapshot(f, rows)
+        self.assertFalse(result["independent_split_adjustment_verified"])
+        self.assertFalse(result["real_money_trading_allowed"])
+        self.assertIsNotNone(result["future_outcomes"]["1d"])
+
     def test_higher_cost_reduces_net(self):
         rows = sample() + [future("2026-10-27", .75)]
         a = score_snapshot(frozen(), rows, 0)["future_outcomes"]["1d"]["hypothetical_net_pct"]
