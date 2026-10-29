@@ -164,7 +164,8 @@ jobs:
           if [ "$LAST" = "2026-10-28" ]; then
             python -m analysis.zpta_signal_revision_sensitivity "$RUNNER_TEMP/zpta_daily.csv" \
               --signal-date 2026-10-28 --frozen-previous-date 2026-10-27 \
-              --frozen-previous-close 0.74 --frozen-previous-volume 14491
+              --frozen-previous-close 0.74 --frozen-previous-volume 14491 \
+              --output "$RUNNER_TEMP/zpta_prior_revision.json"
           else
             echo "REVISION_SENSITIVITY_NOT_APPLICABLE: candidate latest day is $LAST, not Oct 28"
           fi
@@ -176,9 +177,13 @@ jobs:
         run: |
           AS_OF="$(TZ=America/New_York date +%F)"
           echo "RESEARCH_AS_OF=$AS_OF"
+          EXTRA_ARGS=()
+          if [ -f "$RUNNER_TEMP/zpta_prior_revision.json" ]; then
+            EXTRA_ARGS=(--prior-revision-audit "$RUNNER_TEMP/zpta_prior_revision.json")
+          fi
           python -m analysis.zpta_prospective_daily_snapshot "$RUNNER_TEMP/zpta_daily.csv" \
             --metadata "$RUNNER_TEMP/zpta_meta.json" --as-of "$AS_OF" \
-            --output "$RUNNER_TEMP/zpta_prospective_${AS_OF}.json"
+            --output "$RUNNER_TEMP/zpta_prospective_${AS_OF}.json" "${EXTRA_ARGS[@]}"
           python - <<'PY'
           import json, os, pathlib
           root = pathlib.Path(os.environ["RUNNER_TEMP"])
@@ -190,7 +195,8 @@ jobs:
               k: d[k] for k in ("as_of", "snapshot_type", "ruleset",
                 "input_ohlcv_sha256", "reference_close", "reference_low", "reference_volume",
                 "dollar_turnover_proxy", "features", "completed_day_signal_flags",
-                "research_candidate", "candidate_status", "future_outcomes",
+                "research_candidate", "candidate_status", "prior_source_revision_status",
+                "research_promotion_blocked", "future_outcomes",
                 "real_money_trading_allowed")
           }, sort_keys=True))
           PY
