@@ -62,6 +62,17 @@ class InvestedBridgeTests(unittest.TestCase):
         for private in ("SECRET-123", "NVDA", "SHOULD_NOT_APPEAR"):
             self.assertNotIn(private, rendered)
 
+    def test_account_gain_does_not_pass_invested_capital_goal(self):
+        report = fixture()
+        # Unadjusted paper-account change is +7.5%, but the reconciled
+        # deployed-cost ROI is only +0.2%. Goal must be NOT MET.
+        report["metrics"]["invested_capital"]["daily_invested_capital_return_pct"] = 0.2
+        result = summary_from(report)
+        self.assertEqual(result["paper_account_observation"]["daily_account_change_pct"], 7.5)
+        self.assertEqual(result["one_percent_goal"]["daily_invested_capital_return_pct"], 0.2)
+        self.assertFalse(result["one_percent_goal"]["daily_goal_met"])
+        self.assertIsNone(result["one_percent_goal"]["daily_portfolio_return_pct"])
+
     def test_cashflow_or_broker_evidence_missing_disallows_portfolio_roi(self):
         for item in (
             {"broker_reconciled": False},
