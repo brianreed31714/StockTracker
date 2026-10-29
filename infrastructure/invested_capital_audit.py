@@ -53,6 +53,7 @@ def unavailable(day, reason):
         "fill_records_observed": 0,
         "observed_daily_sell_count": 0,
         "ledger_end_quantities": {},
+        "local_session_order_ids": [],
         "broker_reconciled": False,
         "full_portfolio_daily_roi_pct": None,
         "full_portfolio_inception_return_pct": None,
@@ -188,6 +189,9 @@ def audit_rows(fills, realized_rows, day, *, session_open, session_close):
                 symbol: round(values[0], 7) for symbol, values in sorted(inventory.items())
                 if values[0] > 1e-7
             },
+            "local_session_order_ids": sorted(
+                order_id for when, order_id, *_ in entries if session_open <= when <= session_close
+            ),
         })
         return result
     except (ValueError, TypeError, OverflowError, KeyError):
