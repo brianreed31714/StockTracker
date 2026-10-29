@@ -23,7 +23,8 @@ HORIZONS = (1, 3, 5)
 
 
 def make_snapshot(bars, *, as_of, retrieved_utc, source,
-                  min_turnover=25000.0, provider_last_date=None):
+                  min_turnover=25000.0, provider_last_date=None,
+                  prior_revision_audit=None):
     """Build a timestamped, no-future-bar snapshot, not an executable signal."""
     target = date.fromisoformat(as_of)
     retrieved = datetime.fromisoformat(retrieved_utc.replace("Z", "+00:00"))
@@ -56,6 +57,21 @@ def make_snapshot(bars, *, as_of, retrieved_utc, source,
     prior = bars[-2]
     ten_high = max(x["high"] for x in bars[-11:-1])
     flags = daily_signals(bars, len(bars)-1)
+    revision_status = None
+    if prior_revision_audit is not None:
+        audit = prior_revision_audit
+        if audit.get("symbol") != "ZPTA" or audit.get("signal_date") != as_of:
+            raise ValueError("Prior revision audit must match symbol and signal date")
+        if audit.get("frozen_previous_date") != prior["date"]:
+            raise ValueError("Prior revision audit must match preceding completed session")
+        revision_status = audit.get("source_quality_status")
+        if revision_status not in (
+                "REVISION_CHANGED_SIGNAL_DO_NOT_PROMOTE",
+                "PREVIOUS_BAR_REVISION_REQUIRES_RECONCILIATION",
+                "NO_PREVIOUS_BAR_REVISION_DETECTED_NOT_FULLY_VERIFIED"):
+            raise ValueError("Unknown prior revision audit status")
+        if audit.get("real_money_trading_allowed") is not False:
+            raise ValueError("Revision audit cannot authorize trading")
     turnover = b["close"] * b["volume"]
     liquid = b["volume"] > 0 and turnover >= min_turnover
     changes = {
@@ -86,6 +102,10 @@ def make_snapshot(bars, *, as_of, retrieved_utc, source,
         "features": changes,
         "completed_day_signal_flags": flags,
         "research_candidate": bool(flags and liquid),
+        "prior_source_revision_status": revision_status,
+        "research_promotion_blocked": revision_status in (
+            "REVISION_CHANGED_SIGNAL_DO_NOT_PROMOTE",
+            "PREVIOUS_BAR_REVISION_REQUIRES_RECONCILIATION"),
         "candidate_status": ("RESEARCH_CANDIDATE_UNVERIFIED"
                              if flags and liquid else "NO_QUALIFYING_RESEARCH_ENTRY"),
         "next_session_entry": "NOT_OBSERVED",
@@ -110,6 +130,7 @@ def main():
     p.add_argument("daily_csv", type=Path)
     p.add_argument("--metadata", type=Path, required=True)
     p.add_argument("--as-of", required=True)
+    p.add_argument("--prior-revision-audit", type=Path)
     p.add_argument("--output", type=Path)
     args = p.parse_args()
     meta = json.loads(args.metadata.read_text(encoding="utf-8"))
@@ -120,7 +141,9 @@ def main():
     result = make_snapshot(
         load_daily(args.daily_csv), as_of=args.as_of,
         retrieved_utc=meta["retrieved_utc"],
-        source=meta["source"], provider_last_date=meta.get("last_date"))
+        source=meta["source"], provider_last_date=meta.get("last_date"),
+        prior_revision_audit=(json.loads(args.prior_revision_audit.read_text(encoding="utf-8"))
+                              if args.prior_revision_audit else None))
     payload = json.dumps(result, indent=2) + "\n"
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
