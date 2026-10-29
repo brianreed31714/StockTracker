@@ -35,7 +35,7 @@ def pushover_api_accepted(response):
         body = response.json()
     except (ValueError, TypeError):
         return False
-    return isinstance(body, dict) and body.get("status") == 1
+    return isinstance(body, dict) and type(body.get("status")) is int and body["status"] == 1
 
 
 
