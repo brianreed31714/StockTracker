@@ -107,10 +107,10 @@ class CapitalAuditTests(unittest.TestCase):
         result = audit_rows(ledger(), pnl(), DAY, session_open=OPEN,
                             session_close=datetime(2026, 10, 28, 10, 45, tzinfo=ET))
         self.assertEqual(result["status"], "LOCAL_REALIZED_AND_FILLS_RECONCILIATION_FAILED")
-        # A fill after the exchange close that reaches the ledger is explicitly
-        # not represented in the verified regular-session snapshot.
-        late = ledger() + [row(DAY, "16:05", "buy", 1, 100, "late")]
-        r = audit_rows(late, pnl(), DAY, session_open=OPEN, session_close=AFTER)
+        # Unexpected premarket fills cannot be silently included in a
+        # regular-session denominator or EOD account reconciliation.
+        premarket = ledger() + [row(DAY, "08:45", "buy", 1, 100, "early")]
+        r = audit_rows(premarket, pnl(), DAY, session_open=OPEN, session_close=CLOSE)
         self.assertEqual(r["status"], "INVALID_OR_INCOMPLETE_LOCAL_FILL_LEDGER")
 
     def test_readonly_sqlite_and_corrupt_table(self):
