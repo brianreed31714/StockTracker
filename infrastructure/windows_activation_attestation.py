@@ -28,7 +28,7 @@ REQUIRED_PROCESSES = ("supervisor", "deployment_agent", "trader", "geo_feed", "d
 REQUIRED_SCRIPT_VERSIONS = ("trader", "geo_feed", "dashboard")
 MIN_SECONDS_BETWEEN_SAMPLES = 20
 REQUIRED_SAMPLES = 3
-REMOTE_HEARTBEAT_SECONDS = 6 * 60 * 60  # A sanitized status refresh, not a service restart.
+REMOTE_HEARTBEAT_SECONDS = 60 * 60  # Hourly sanitized heartbeat; never a service restart.
 SHA = re.compile(r"^[0-9a-f]{40}$")
 
 
