@@ -124,6 +124,32 @@ def summary_from(report, current=None):
     if not broker_ok:
         daily_capital_roi = None
         account_portfolio_pct = None
+    # Historical paper-account curve uses the broker's fully dated daily
+    # history, independent full filled-order set and exchange-session coverage.
+    # "Since first recorded fill" is NOT the same as proven project inception.
+    observed_history = (
+        broker_ok
+        and invested.get("inception_basis_status") in {
+            "OBSERVED_FIRST_FILL_ONLY",
+            "CONFIGURED_START_EQUALS_FIRST_FILL_WITH_BROKER_COVERAGE",
+        }
+        and _count(invested.get("since_first_recorded_fill_sessions")) is not None
+        and _count(invested.get("since_first_recorded_fill_sessions")) > 0
+    )
+    observed_history_return = (
+        _number(invested.get("since_first_recorded_fill_portfolio_return_pct"))
+        if observed_history else None
+    )
+    observed_history_drawdown = (
+        _number(invested.get("since_first_recorded_fill_portfolio_drawdown_pct"))
+        if observed_history else None
+    )
+    inception_eligible = (
+        observed_history and observed_history_return is not None
+        and observed_history_drawdown is not None
+        and invested.get("inception_basis_status")
+            == "CONFIGURED_START_EQUALS_FIRST_FILL_WITH_BROKER_COVERAGE"
+    )
     # Never label a gross account-equity change as an invested-capital return.
     return {
         "schema": "stocktracker_sanitized_summary_v1",
@@ -184,8 +210,23 @@ def summary_from(report, current=None):
             "daily_one_percent_invested_goal_met": (
                 daily_capital_roi >= 1.0 if broker_ok else None
             ),
-            "since_inception_invested_return_pct": None,
-            "since_inception_invested_drawdown_pct": None,
+            "since_first_observed_fill_portfolio_return_pct": observed_history_return,
+            "since_first_observed_fill_portfolio_drawdown_pct": observed_history_drawdown,
+            "since_first_observed_fill_sessions": (
+                _count(invested.get("since_first_recorded_fill_sessions"))
+                if observed_history else None
+            ),
+            "since_inception_invested_return_pct": (
+                observed_history_return if inception_eligible else None
+            ),
+            "since_inception_invested_drawdown_pct": (
+                observed_history_drawdown if inception_eligible else None
+            ),
+            "inception_evidence_status": (
+                "INCEPTION_DATE_CONFIRMED_MODELED_PAPER" if inception_eligible
+                else "OBSERVED_FIRST_FILL_NOT_PROVEN_INCEPTION" if observed_history
+                else "MISSING"
+            ),
             "calculation": "DAILY_NET_ACCOUNT_PNL_DIVIDED_BY_PEAK_FILLED_COST_BASIS"
                            if broker_ok else "CLOSED_LOT_PNL_DIVIDED_BY_CLOSED_LOT_COST"
                            if local_ok else "MISSING",
