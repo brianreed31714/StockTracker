@@ -43,6 +43,25 @@ class ProspectiveSnapshotTests(unittest.TestCase):
         self.assertFalse(s["real_money_trading_allowed"])
         self.assertFalse(s["independent_price_volume_reconciliation_verified"])
 
+    def test_dated_revision_audit_attached_without_promoting_signal(self):
+        audit = {"symbol": "ZPTA", "signal_date": "2026-10-26",
+                 "frozen_previous_date": "2026-10-23",
+                 "source_quality_status": "REVISION_CHANGED_SIGNAL_DO_NOT_PROMOTE",
+                 "real_money_trading_allowed": False}
+        s = snapshot(prior_revision_audit=audit)
+        self.assertTrue(s["research_promotion_blocked"])
+        self.assertEqual(s["prior_source_revision_status"],
+                         "REVISION_CHANGED_SIGNAL_DO_NOT_PROMOTE")
+        self.assertFalse(s["real_money_trading_allowed"])
+
+    def test_revision_audit_wrong_date_rejected(self):
+        audit = {"symbol": "ZPTA", "signal_date": "2026-10-27",
+                 "frozen_previous_date": "2026-10-23",
+                 "source_quality_status": "REVISION_CHANGED_SIGNAL_DO_NOT_PROMOTE",
+                 "real_money_trading_allowed": False}
+        with self.assertRaisesRegex(ValueError, "match symbol and signal date"):
+            snapshot(prior_revision_audit=audit)
+
     def test_stale_source_fails_closed(self):
         bars = sample()[:-1]
         bars.insert(0, {**bars[0], "date": "2026-10-09"})
