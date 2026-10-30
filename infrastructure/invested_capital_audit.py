@@ -17,6 +17,33 @@ from zoneinfo import ZoneInfo
 EASTERN = ZoneInfo("America/New_York")
 SOURCE = "LOCAL_PAPER_FILLED_ORDERS_MOVING_AVERAGE"
 
+# Only these fixed, non-sensitive diagnostics may be exported. Never publish
+# exception text, account IDs, positions, orders, or provider responses.
+SAFE_BROKER_BLOCKER_CODES = frozenset({
+    "PAPER_BROKER_CREDENTIALS_MISSING",
+    "BROKER_EQUITY_MISSING",
+    "ACCOUNT_SCOPE_MISMATCH",
+    "DATED_EQUITY_SNAPSHOT_MISMATCH",
+    "BROKER_POSITION_INVALID",
+    "BROKER_POSITIONS_NOT_RECONCILED",
+    "BROKER_ORDER_HISTORY_TRUNCATED",
+    "BROKER_FILLS_NOT_OBSERVED",
+    "BROKER_AND_LOCAL_FILL_IDS_MISMATCH",
+    "BROKER_PORTFOLIO_HISTORY_MISSING",
+    "BROKER_CASHFLOW_COVERAGE_MISSING",
+    "BROKER_HISTORY_TIMESTAMP_INVALID",
+    "BROKER_HISTORY_DAY_NOT_UNIQUE",
+    "BROKER_HISTORY_CLOSE_MISMATCH",
+    "BROKER_CASHFLOW_SHAPE_INVALID",
+    "BROKER_CASHFLOW_VALUE_INVALID",
+    "BROKER_CASHFLOW_NOT_ZERO",
+    "LOCAL_LEDGER_NOT_RECONCILED",
+    "ZERO_OR_UNVERIFIED_DEPLOYED_CAPITAL",
+    "DATE_NOT_CURRENT",
+    "SESSION_NOT_CLOSED",
+    "BROKER_EVIDENCE_INCOMPLETE_OR_UNRECONCILED",
+})
+
 
 def number(value, *, positive=False):
     if isinstance(value, bool):
@@ -245,19 +272,24 @@ def broker_reconcile_today(audit, day, *, history_path, session_open, session_cl
     result["daily_invested_capital_return_pct"] = None
     result["daily_invested_capital_return_status"] = "BROKER_RECONCILIATION_MISSING"
     result["cash_flows_reconciled"] = False
+    result["broker_reconciliation_blocker"] = "LOCAL_LEDGER_NOT_RECONCILED"
     if audit.get("status") != "LOCAL_CLOSED_FILLS_RECONCILED_NOT_BROKER_ATTESTED":
         return result
+    result["broker_reconciliation_blocker"] = "BROKER_EVIDENCE_INCOMPLETE_OR_UNRECONCILED"
     base = number(audit.get("peak_session_deployed_cost_usd"), positive=True)
     if base is None:
         result["daily_invested_capital_return_status"] = "ZERO_OR_UNVERIFIED_DEPLOYED_CAPITAL"
+        result["broker_reconciliation_blocker"] = "ZERO_OR_UNVERIFIED_DEPLOYED_CAPITAL"
         return result
     if now is None:
         now = datetime.now(timezone.utc)
     if now.tzinfo is None or now.astimezone(EASTERN).date().isoformat() != day:
         result["daily_invested_capital_return_status"] = "DATE_NOT_CURRENT"
+        result["broker_reconciliation_blocker"] = "DATE_NOT_CURRENT"
         return result
     if now < session_close:
         result["daily_invested_capital_return_status"] = "SESSION_NOT_CLOSED"
+        result["broker_reconciliation_blocker"] = "SESSION_NOT_CLOSED"
         return result
     try:
         from datetime import timedelta
@@ -383,6 +415,7 @@ def broker_reconcile_today(audit, day, *, history_path, session_open, session_cl
         pnl = current - prior
         result["broker_reconciled"] = True
         result["cash_flows_reconciled"] = True
+        result["broker_reconciliation_blocker"] = "NONE"
         result["daily_invested_capital_return_pct"] = round(100.0 * pnl / base, 6)
         result["daily_invested_capital_return_status"] = "MODELED_PAPER_RETURN_ON_PEAK_DEPLOYED_COST"
         result["broker_account_pnl_usd"] = round(pnl, 4)
@@ -395,9 +428,15 @@ def broker_reconcile_today(audit, day, *, history_path, session_open, session_cl
             calendar_request_factory=calendar_request_factory,
         ))
         return result
-    except (OSError, RuntimeError, TypeError, ValueError, AttributeError, ImportError, OverflowError, IndexError):
-        # Never log or publish broker exception text, account IDs, order IDs,
-        # raw equity, position inventory or API credentials.
+    except (OSError, RuntimeError, TypeError, ValueError, AttributeError, ImportError, OverflowError, IndexError) as exc:
+        # Only locally defined ValueError sentinels can pass the allowlist.
+        # Provider exceptions, arbitrary messages, IDs, positions and credentials
+        # are never echoed into the report.
+        code = str(exc) if type(exc) is ValueError else ""
+        result["broker_reconciliation_blocker"] = (
+            code if code in SAFE_BROKER_BLOCKER_CODES
+            else "BROKER_EVIDENCE_INCOMPLETE_OR_UNRECONCILED"
+        )
         result["daily_invested_capital_return_status"] = "BROKER_EVIDENCE_INCOMPLETE_OR_UNRECONCILED"
         return result
 
