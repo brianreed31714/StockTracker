@@ -44,3 +44,14 @@ The existing ZPTA research workflow discovers test_zpta_*.py and triggers on the
 4. **Forward results:** continue immutable prospective snapshots and score only after source-quality gates pass. No parameter revisions after viewing outcomes.
 
 **Safety:** PAPER_ONLY / ZPTA SHADOW_ONLY. No execution settings, risk limits, Windows services or broker orders changed. November 2 remains conditional NO-GO unless all evidence gates and acceptable net/drawdown results are independently demonstrated.
+
+
+## Post-commit GitHub Actions evidence (October 29 ~18:02 Pacific)
+
+On the preceding code/test commit, GitHub Actions **ZPTA offline research tests** run 40983360909 completed successfully, including **113 deterministic tests** (the 10 new full-field reconciliation tests included); its candidate-daily-history job also completed. Supervisor restart safety run 40983361104 succeeded; infrastructure contract run 40983360744 was still in progress at the check. These CI checks do NOT verify source truth, Windows runtime, corporate actions or executable OTC quotes.
+
+The actual October 29 Yahoo candidate retrieved at **2026-10-30T01:01:59.696391+00:00** contained 501 bars from 2024-10-30 to 2026-10-29, five zero-volume days, no reported split events, and candidate CSV SHA256 **6416961ca8bd5da17a69a339ebe57c2d02867e00fd999092e87f2a573f314c99**. The frozen Oct 29 research candidate reported close **$0.7350000143**, volume **11,555**, dollar-turnover proxy **$8,492.93**, **no qualifying signal**, and no forward outcomes. It remains an unverified candidate.
+
+**New material source conflict:** S&P/Stock Analysis displayed **45,468** Oct 29 shares in its dated historical table, versus Yahoo's **11,555** at ~18:02 Pacific, a **74.59% difference relative to S&P**. With the $0.735 precision quote, that implies approximately **$33,419** versus **$8,493** in close-times-volume turnover, straddling the existing $25,000 research liquidity threshold. This may reflect partial publication, venue coverage or revision; it is not an executable liquidity measurement. The Oct 29 signal snapshot must not be promoted based on the smaller candidate or retroactively rewritten using the larger volume. The new audit module must eventually ingest two full precision-priced provider series to reconcile this difference.
+
+Sources: GitHub Actions https://github.com/brianreed31714/StockTracker/actions/runs/40983360909 and https://stockanalysis.com/quote/otc/ZPTA/history/ . No real-money or Windows activation verified.
