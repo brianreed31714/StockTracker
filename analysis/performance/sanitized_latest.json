@@ -4,15 +4,15 @@
     "database_available": true
   },
   "daily": {
-    "buy_orders": 2,
-    "closed_trades": 3,
+    "buy_orders": 3,
+    "closed_trades": 5,
     "decision_rows": 3250,
-    "losses": 2,
-    "order_rows": 5,
-    "realized_pnl_usd": -96.6,
-    "sell_orders": 3,
-    "win_rate_pct": 33.33,
-    "wins": 1
+    "losses": 5,
+    "order_rows": 8,
+    "realized_pnl_usd": -339.77,
+    "sell_orders": 5,
+    "win_rate_pct": 0.0,
+    "wins": 0
   },
   "eod_notification": {
     "device_delivery_verified": false,
@@ -22,14 +22,14 @@
   "invested_capital": {
     "calculation": "CLOSED_LOT_PNL_DIVIDED_BY_CLOSED_LOT_COST",
     "classification": "MODELED_PAPER",
-    "daily_closed_lot_cost_basis_usd": 7499.97,
-    "daily_closed_lot_realized_return_pct": -1.288,
+    "daily_closed_lot_cost_basis_usd": 12473.86,
+    "daily_closed_lot_realized_return_pct": -2.7239,
     "daily_one_percent_invested_goal_met": null,
     "daily_peak_deployed_cost_basis_usd": null,
     "daily_portfolio_return_on_peak_deployed_capital_pct": null,
     "first_observed_fill_date": "2026-05-06",
     "inception_evidence_status": "MISSING",
-    "since_first_observed_fill_closed_lot_return_pct": 0.7606,
+    "since_first_observed_fill_closed_lot_return_pct": 0.4498,
     "since_first_observed_fill_portfolio_drawdown_pct": null,
     "since_first_observed_fill_portfolio_return_pct": null,
     "since_first_observed_fill_sessions": null,
@@ -48,49 +48,49 @@
   },
   "paper_account_observation": {
     "cash_flows_reconciled": false,
-    "daily_account_change_pct": -0.2577,
+    "daily_account_change_pct": -0.2686,
     "inception_portfolio_return_pct": null,
     "invested_capital_daily_return_pct": null,
-    "observed_session_count": 1,
-    "observed_window_account_change_pct": null,
-    "observed_window_max_drawdown_pct": null,
+    "observed_session_count": 2,
+    "observed_window_account_change_pct": -0.1635,
+    "observed_window_max_drawdown_pct": 0.1635,
     "source": "ALPACA_PAPER_ACCOUNT",
     "status": "PAPER_ACCOUNT_CHANGE_UNADJUSTED_CASH_FLOWS"
   },
   "paper_only": true,
   "proposal_ids": [
     {
-      "id": "P-STOCK-20261029-01",
+      "id": "P-STOCK-20261030-01",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261029-02",
+      "id": "P-STOCK-20261030-02",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261029-03",
+      "id": "P-STOCK-20261030-03",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261029-04",
+      "id": "P-STOCK-20261030-04",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261029-05",
+      "id": "P-STOCK-20261030-05",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261029-06",
+      "id": "P-STOCK-20261030-06",
       "status": "PENDING"
     }
   ],
   "quality": "LIMITED",
-  "review_date": "2026-10-29",
+  "review_date": "2026-10-30",
   "review_source": "OPENAI",
   "schema": "stocktracker_sanitized_summary_v1",
   "shadow": {
-    "financial_leverage_signal_rows": 0,
-    "zpta_resolved_predictions": 0,
+    "financial_leverage_signal_rows": 2,
+    "zpta_resolved_predictions": 88,
     "zpta_shadow_trades": 0
   }
 }
