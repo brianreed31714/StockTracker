@@ -1,0 +1,35 @@
+name: EOD review delivery regression
+on:
+  pull_request:
+    paths:
+      - daily_model_review.py
+      - review_delivery.py
+      - run_daily_model_review.bat
+      - test_review_delivery.py
+      - .github/workflows/review-delivery.yml
+  push:
+    branches: [main]
+    paths:
+      - daily_model_review.py
+      - review_delivery.py
+      - run_daily_model_review.bat
+      - test_review_delivery.py
+      - .github/workflows/review-delivery.yml
+permissions:
+  contents: read
+jobs:
+  delivery-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install tzdata
+      - run: python -m unittest -v test_review_delivery
+      - run: python -m py_compile daily_model_review.py review_delivery.py

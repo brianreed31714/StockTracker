@@ -9,9 +9,9 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import requests
+from review_delivery import deliver_once, record_publication, provider_status
 from dotenv import load_dotenv
 from openai import OpenAI
-from safe_summary_publish import pushover_api_accepted
 
 ROOT = Path(__file__).resolve().parent
 load_dotenv(ROOT / ".env.config")
@@ -329,15 +329,52 @@ def send_push(date_text, review, metrics=None):
             },
             timeout=15,
         )
-        return "API_ACCEPTED" if pushover_api_accepted(response) else "API_NOT_ACCEPTED"
+        return provider_status(response)
     except Exception:
         # Never expose provider errors, request contents, tokens, or user IDs.
         return "UNCONFIRMED"
 
+
+def handle_notification_phase(args, day):
+    if not (args.record_publication or args.notify_only):
+        return False
+    path = DAILY_DIR / day / "daily_model_review.json"
+    state = RUNTIME_ROOT / "deploy" / "state" / "eod_review_delivery"
+    if args.record_publication:
+        record_publication(ROOT, state, "StockTracker", day, path)
+        print("Publication verified for " + day)
+    else:
+        review = json.loads(path.read_text(encoding="utf-8"))
+        metrics = read_json(DAILY_DIR / day / "performance_input.json")
+        if not isinstance(metrics, dict) or metrics.get("review_date") != day:
+            raise SystemExit("Dated performance input required")
+        status = deliver_once(state, "StockTracker", day, path,
+                              lambda saved_review: send_push(day, saved_review, metrics))
+        # Never overwrite another day's latest report or republish to Git.
+        latest = PERF_DIR / "latest.json"
+        perf = read_json(latest)
+        if isinstance(perf, dict) and perf.get("review", {}).get("review_date") == day:
+            perf["metrics"]["eod_notification"] = {
+                "review_date": day, "provider_status": status,
+                "device_delivery_verified": False,
+            }
+            latest.write_text(json.dumps(perf, indent=2), encoding="utf-8")
+        print("Model-review provider status: " + status)
+        if status != "API_ACCEPTED":
+            raise SystemExit(4)
+    return True
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--date", default=datetime.now(MARKET_TZ).date().isoformat())
+    phase = ap.add_mutually_exclusive_group()
+    phase.add_argument("--defer-notification", action="store_true")
+    phase.add_argument("--record-publication", action="store_true")
+    phase.add_argument("--notify-only", action="store_true")
     args = ap.parse_args()
+    if handle_notification_phase(args, args.date):
+        return
 
     bundle = DAILY_DIR / args.date / "performance_input.json"
     metrics = read_json(bundle)
@@ -403,9 +440,9 @@ def main():
     perf = {"metrics": metrics, "review": review}
     (PERF_DIR / "latest.md").write_text(performance_markdown(metrics, review), encoding="utf-8")
 
-    # Persist only a date-scoped provider acceptance classification, never the
-    # Pushover response or secrets. Publishing follows this step in the EOD bat.
-    push_status = send_push(args.date, review, metrics)
+    # Publication precedes notification. Keep pending status explicit; no API
+    # acceptance exists yet. The dated local delivery receipt is authoritative.
+    push_status = "UNVERIFIED"  # Await publication; authoritative receipt is local.
     metrics["eod_notification"] = {
         "review_date": args.date,
         "provider_status": push_status,
