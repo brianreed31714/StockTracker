@@ -44,6 +44,7 @@ class AgentRegistryHookTests(unittest.TestCase):
             with patch.object(agent, "AUTO_DEPLOY", True), \
                  patch.object(agent, "REQUEST_DIR", folder), \
                  patch.object(agent, "pull_repo"), \
+                 patch.object(agent, "_observe_host_read_only"), \
                  patch.object(agent, "processed_requests", return_value={}), \
                  patch.object(agent, "load_manifest", return_value={}), \
                  patch.object(agent, "deploy", side_effect=RegistryError("blocked")), \
@@ -63,6 +64,7 @@ class AgentRegistryHookTests(unittest.TestCase):
             with patch.object(agent, "AUTO_DEPLOY", True), \
                  patch.object(agent, "REQUEST_DIR", folder), \
                  patch.object(agent, "pull_repo"), \
+                 patch.object(agent, "_observe_host_read_only"), \
                  patch.object(agent, "processed_requests", return_value=done), \
                  patch.object(agent, "deploy") as deploy:
                 agent.scan_once()
@@ -116,6 +118,34 @@ class AgentRegistryHookTests(unittest.TestCase):
             with self.assertRaisesRegex(RegistryError, "safety gate"):
                 agent.deploy(ROOT / "nonexistent-request.json", self.request())
             stop.assert_not_called()
+
+    def test_sync_failure_still_observes_once_and_propagates(self):
+        with patch.object(agent, "AUTO_DEPLOY", True), \
+             patch.object(agent, "pull_repo", side_effect=RuntimeError("sync failed")), \
+             patch.object(agent, "_observe_host_read_only") as observe, \
+             patch.object(agent, "deploy") as deploy:
+            with self.assertRaisesRegex(RuntimeError, "sync failed"):
+                agent.scan_once()
+        observe.assert_called_once_with()
+        deploy.assert_not_called()
+
+    def test_successful_empty_scan_observes_once(self):
+        with TemporaryDirectory() as folder:
+            with patch.object(agent, "AUTO_DEPLOY", True), \
+                 patch.object(agent, "REQUEST_DIR", Path(folder)), \
+                 patch.object(agent, "pull_repo"), \
+                 patch.object(agent, "_observe_host_read_only") as observe:
+                agent.scan_once()
+        observe.assert_called_once_with()
+
+    def test_request_scan_failure_still_observes_once(self):
+        with patch.object(agent, "AUTO_DEPLOY", True), \
+             patch.object(agent, "_scan_deployment_requests", side_effect=OSError("request unavailable")), \
+             patch.object(agent, "_observe_host_read_only") as observe:
+            with self.assertRaisesRegex(OSError, "request unavailable"):
+                agent.scan_once()
+        observe.assert_called_once_with()
+
 
 
 if __name__ == "__main__":

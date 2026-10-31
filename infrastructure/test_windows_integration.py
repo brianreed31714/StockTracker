@@ -40,7 +40,7 @@ class WindowsDiscoveryIntegration(unittest.TestCase):
                 component = {
                     "role": "service", "script_pattern": "infrastructure_dummy_worker.py"
                 }
-                matched = associate_process(component, [observed], {})
+                matched = associate_process(component, [observed], {}, root=Path(temp))
                 if observed.get("command"):
                     self.assertEqual(matched["state"], "OBSERVED")
                     self.assertEqual(matched["pids"], [proc.pid])
