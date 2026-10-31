@@ -184,7 +184,10 @@
         "infrastructure/invested_capital_audit.py",
         "test_invested_capital_audit.py",
         "test_invested_capital_bridge.py",
-        "test_invested_capital_history.py"
+        "test_invested_capital_history.py",
+        "review_delivery.py",
+        "test_review_delivery.py",
+        ".github/workflows/review-delivery.yml"
       ],
       "health": {
         "type": "evidence_only"
