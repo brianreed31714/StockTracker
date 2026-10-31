@@ -38,7 +38,7 @@ if errorlevel 1 goto :fail
 echo.
 echo [3/6] Running GPT model review over full-log summaries and integrity checks...
 set FAILSTAGE=model_review
-python daily_model_review.py --date %REVIEWDATE%
+python daily_model_review.py --date %REVIEWDATE% --defer-notification
 if errorlevel 3 goto :fail
 if errorlevel 2 goto :auth_failure
 if errorlevel 1 goto :fail
@@ -65,6 +65,11 @@ echo.
 echo ============================================================
 echo StockTracker post-close review complete.
 echo ============================================================
+rem Review/publication is complete; notification is a separate, dated phase.
+python daily_model_review.py --date %REVIEWDATE% --record-publication
+if errorlevel 1 goto :notification_failed
+python daily_model_review.py --date %REVIEWDATE% --notify-only
+if errorlevel 1 goto :notification_failed
 rem Optional, read-only Windows activation receipt. Never changes review result.
 python -m infrastructure.windows_activation_attestation --notify
 if errorlevel 1 echo StockTracker activation attestation unavailable; review still completed.
@@ -105,3 +110,8 @@ echo ============================================================
 echo StockTracker post-close daily review could not start.
 echo ============================================================
 exit /b 1
+
+:notification_failed
+echo Review artifacts completed; publication verification or notification needs attention.
+echo Do not rerun the model to resend. Inspect the dated local receipt first.
+exit /b 4
