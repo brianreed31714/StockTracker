@@ -1,0 +1,52 @@
+{
+  "symbol": "ZPTA",
+  "as_of": "2026-10-26",
+  "retrieved_utc": "2026-10-27T00:59:33.519904+00:00",
+  "source": "Yahoo Finance chart public delayed research endpoint",
+  "snapshot_type": "SAME_DAY_POST_CLOSE_CANDIDATE",
+  "ruleset": "ZPTA_DAILY_V1_FROZEN_2026_10_22",
+  "input_ohlcv_sha256": "5e46d166963d425c1b60b22be8697e7abcf8b3518cb8052df5bf9c7190a2ad8d",
+  "history_sessions": 500,
+  "reference_close": 0.7200000286102295,
+  "reference_low": 0.6345999836921692,
+  "reference_volume": 67987,
+  "dollar_turnover_proxy": 48950.64,
+  "min_turnover_proxy": 25000,
+  "research_liquidity_gate_pass": true,
+  "features": {
+    "close_change_pct": -4,
+    "low_from_previous_close_pct": -15.3867,
+    "low_to_close_recovery_pct": 13.4573,
+    "close_below_prior_ten_day_high_pct": -10.2468,
+    "rsi3": 37.5
+  },
+  "completed_day_signal_flags": [
+    "down_day_10pct_below_prior_ten_day_high"
+  ],
+  "research_candidate": true,
+  "candidate_status": "RESEARCH_CANDIDATE_UNVERIFIED",
+  "next_session_entry": "NOT_OBSERVED",
+  "future_outcomes": {
+    "1d": null,
+    "3d": null,
+    "5d": null
+  },
+  "independent_price_volume_reconciliation_verified": false,
+  "historical_corporate_action_adjustment_verified": false,
+  "broker_otc_quote_tradability_verified": false,
+  "real_money_trading_allowed": false,
+  "limitations": [
+    "The low-to-close rebound is hindsight description, NOT a buy at the low.",
+    "No prediction of a future low or profitable rebound is established.",
+    "Printed daily prices and close-times do not prove executable bid/ask fills.",
+    "The $25k turnover floor is a proxy, not order-book liquidity.",
+    "Historical holdout was examined; new observations must be scored prospectively.",
+    "No live orders, risk-rule changes, broker access, or model promotion."
+  ],
+  "independent_source_quality_status": "SOURCE_MISMATCH_DO_NOT_PROMOTE",
+  "independent_anchor_source": "S&P Global Market Intelligence via Stock Analysis, 2026-10-26",
+  "independent_anchor_close": 0.72,
+  "independent_anchor_volume": 279654,
+  "independent_volume_discrepancy_pct": 75.6889,
+  "frozen_from_github_actions_run": "https://github.com/brianreed31714/StockTracker/actions/runs/40429841587"
+}

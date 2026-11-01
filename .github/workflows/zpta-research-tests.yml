@@ -1,0 +1,228 @@
+name: ZPTA offline research tests
+
+on:
+  pull_request:
+    paths:
+      - "analysis/zpta_*.py"
+      - "tests/test_zpta_*.py"
+      - ".github/workflows/zpta-research-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  zpta-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Offline ZPTA deterministic tests (no broker credentials)
+        run: python -m unittest discover -s tests -p "test_zpta_*.py" -v
+
+  candidate-daily-history:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Attempt unverified public daily history retrieval (no secrets)
+        id: fetch
+        continue-on-error: true
+        run: |
+          python analysis/zpta_daily_history_fetch.py --range 2y --min-sessions 130 --output "$RUNNER_TEMP/zpta_daily.csv" --metadata "$RUNNER_TEMP/zpta_meta.json"
+      - name: Analyze candidate data without asserting split verification
+        if: steps.fetch.outcome == 'success'
+        run: |
+          python -m analysis.zpta_daily_swing_research "$RUNNER_TEMP/zpta_daily.csv" --source "Yahoo delayed daily OHLCV; adjustment UNVERIFIED" --output "$RUNNER_TEMP/zpta_report.json"
+          python - <<'PY'
+          import json, os, pathlib
+          root = pathlib.Path(os.environ["RUNNER_TEMP"])
+          meta = json.loads((root / "zpta_meta.json").read_text())
+          report = json.loads((root / "zpta_report.json").read_text())
+          print("CANDIDATE_SOURCE_METADATA:", json.dumps(meta, sort_keys=True))
+          print("RESEARCH_VALIDATION_GATE:", json.dumps(report["validation_gate"], sort_keys=True))
+          print("ELIGIBLE_FOR_MODEL_SELECTION:", report["eligible_for_model_selection"])
+          for name, horizon in report["signal_results"].items():
+              print("SIGNAL:", name, "3d", json.dumps(horizon["3d"], sort_keys=True))
+          from analysis.zpta_intraday_recovery import load_daily
+          from analysis.zpta_daily_robustness import evaluate_holdout
+          bars = load_daily(root / "zpta_daily.csv")
+          independent = evaluate_holdout(bars)
+          for name, horizons in independent["results"].items():
+              for h in ("1d", "3d", "5d"):
+                  print("HOLDOUT_NONOVERLAP:", name, h, json.dumps(horizons[h], sort_keys=True))
+          from analysis.zpta_daily_sleeve_risk import loss_budget_stress, simulate_shadow_sleeve
+          print("HISTORICAL_WORST_TRADE_POSITION_SIZING_STRESS:",
+                json.dumps(loss_budget_stress(-49.17), sort_keys=True))
+          for name in ("one_day_decline_5pct", "two_down_days_total_5pct",
+                       "rsi3_at_most_25", "all_eligible_sessions"):
+              risk = simulate_shadow_sleeve(bars, name, horizon=5)
+              print("CANDIDATE_HOLDOUT_5D_SLEEVE_RISK:", name,
+                    json.dumps({k: v for k, v in risk.items() if k != "trades"}, sort_keys=True))
+          # Read-only research; no broker orders or real-money activation.
+          # A few publicly displayed S&P/Quiver dates are sanity anchors only,
+          # NOT complete independent provider verification.
+          anchors = {
+              "2026-10-23": (.75, 19451),
+              "2026-10-22": (.72, 39626),
+              "2026-10-16": (.67, 798918),
+              "2026-10-08": (.5525, 376404),
+              "2026-08-25": (.8631, 226792),
+          }
+          lookup = {b["date"]: b for b in bars}
+          for day, (expected_close, expected_volume) in anchors.items():
+              b = lookup.get(day)
+              if not b:
+                  print("ANCHOR_MISSING:", day)
+                  continue
+              close_error = abs(b["close"]/expected_close-1)*100
+              volume_error = abs(b["volume"]/expected_volume-1)*100
+              print("CROSS_PROVIDER_ANCHOR:", day,
+                    json.dumps({"yahoo_close": b["close"], "reference_close": expected_close,
+                                "close_difference_pct": round(close_error,3),
+                                "yahoo_volume": b["volume"], "reference_volume": expected_volume,
+                                "volume_difference_pct": round(volume_error,3)}, sort_keys=True))
+          PY
+      - name: Explicitly mark provider fetch failure
+        if: steps.fetch.outcome != 'success'
+        run: echo "Candidate data fetch failed; deterministic tests are separate. No verified daily dataset or strategy performance produced."
+
+      - name: Audit precommitted next-session dip limits without hindsight fills
+        if: steps.fetch.outcome == 'success'
+        run: |
+          python - <<'PY'
+          import json, os, pathlib
+          from analysis.zpta_intraday_recovery import load_daily
+          from analysis.zpta_next_session_limit_audit import audit
+          bars = load_daily(pathlib.Path(os.environ["RUNNER_TEMP"]) / "zpta_daily.csv")
+          for name in ("one_day_decline_5pct", "two_down_days_total_5pct",
+                       "down_day_10pct_below_prior_ten_day_high",
+                       "rsi3_at_most_25", "confirmed_recovery_after_5pct_decline"):
+              r = audit(bars, signal_name=name)
+              print("ZPTA_UNVERIFIED_NEXT_SESSION_LIMIT_AUDIT:", json.dumps({
+                  "signal": name, "candidates": r["candidate_count"],
+                  "limit_status_counts": r["limit_status_counts"],
+                  "nonoverlapping_summary": r["nonoverlapping_summary"],
+                  "real_money_trading_allowed": r["real_money_trading_allowed"],
+              }, sort_keys=True))
+          print("ZPTA_LIMIT_AUDIT_WARNING: printed next opens are not verified fills;")
+          print("ZPTA_LIMIT_AUDIT_WARNING: source corporate actions and OTC quotes remain unverified")
+          PY
+
+      - name: Audit issuer-documented ZPTA venue regimes (read-only)
+        if: steps.fetch.outcome == 'success'
+        run: |
+          python -m analysis.zpta_market_regime_audit "$RUNNER_TEMP/zpta_daily.csv" --as-of "$(TZ=America/New_York date +%F)" --output "$RUNNER_TEMP/zpta_venue_regimes.json"
+          python - <<'PY'
+          import json, os, pathlib
+          p = pathlib.Path(os.environ["RUNNER_TEMP"]) / "zpta_venue_regimes.json"
+          d = json.loads(p.read_text())
+          print("VENUE_REGIME_AUDIT:", json.dumps({
+              "cutoff": d["cutoff"], "last_date": d["last_date"],
+              "last_signal_flags": d["last_signal_flags"],
+              "last_signal_day_liquid": d["last_signal_day_liquid"],
+              "cross_venue_events_excluded": d["cross_venue_events_excluded"],
+              "promotion_allowed": d["promotion_allowed"]}, sort_keys=True))
+          for regime, v in d["regimes"].items():
+              print("VENUE_REGIME:", regime, json.dumps(v["liquidity"], sort_keys=True))
+              for strategy in ("one_day_decline_5pct", "two_down_days_total_5pct",
+                               "down_day_10pct_below_prior_ten_day_high",
+                               "rsi3_at_most_25",
+                               "confirmed_recovery_after_5pct_decline",
+                               "all_eligible_sessions"):
+                  for horizon in ("1d", "3d", "5d"):
+                      print("REGIME_STRATEGY:", regime, strategy, horizon,
+                            json.dumps(v["strategies"][strategy][horizon], sort_keys=True))
+          from analysis.zpta_intraday_recovery import load_daily
+          from analysis.zpta_daily_sleeve_risk import simulate_shadow_sleeve
+          daily_bars = load_daily(pathlib.Path(os.environ["RUNNER_TEMP"]) / "zpta_daily.csv")
+          for signal in ("one_day_decline_5pct", "two_down_days_total_5pct",
+                         "down_day_10pct_below_prior_ten_day_high",
+                         "rsi3_at_most_25",
+                         "confirmed_recovery_after_5pct_decline",
+                         "all_eligible_sessions"):
+              risk = simulate_shadow_sleeve(
+                  daily_bars, signal, horizon=5, start_signal_date="2026-06-16")
+              print("OTCQB_ONLY_CAPPED_SLEEVE:", signal,
+                    json.dumps({k: v for k, v in risk.items() if k != "trades"}, sort_keys=True))
+          print("VENUE_AUDIT_WARNING: source-adjustment, historical broker tradability and fill prices remain unverified")
+          PY
+
+      - name: Audit Oct 28 RSI signal against Oct 27 originally frozen source
+        if: steps.fetch.outcome == 'success'
+        run: |
+          # The Oct 27 original source candidate was frozen at $0.74 / 14,491
+          # shares (Oct 28 01:03Z run). The independent published anchor was
+          # $0.73 / 35,982. This is a research replay, not a new buy signal.
+          LAST="$(python -c 'import json,os,pathlib; print(json.loads((pathlib.Path(os.environ["RUNNER_TEMP"])/"zpta_meta.json").read_text())["last_date"])')"
+          if [ "$LAST" = "2026-10-28" ]; then
+            python -m analysis.zpta_signal_revision_sensitivity "$RUNNER_TEMP/zpta_daily.csv" \
+              --signal-date 2026-10-28 --frozen-previous-date 2026-10-27 \
+              --frozen-previous-close 0.74 --frozen-previous-volume 14491 \
+              --output "$RUNNER_TEMP/zpta_prior_revision.json"
+          else
+            echo "REVISION_SENSITIVITY_NOT_APPLICABLE: candidate latest day is $LAST, not Oct 28"
+          fi
+
+      - name: Attempt same-day frozen research signal snapshot (no trading)
+        id: prospective
+        if: steps.fetch.outcome == 'success'
+        continue-on-error: true
+        run: |
+          AS_OF="$(TZ=America/New_York date +%F)"
+          echo "RESEARCH_AS_OF=$AS_OF"
+          EXTRA_ARGS=()
+          if [ -f "$RUNNER_TEMP/zpta_prior_revision.json" ]; then
+            EXTRA_ARGS=(--prior-revision-audit "$RUNNER_TEMP/zpta_prior_revision.json")
+          fi
+          python -m analysis.zpta_prospective_daily_snapshot "$RUNNER_TEMP/zpta_daily.csv" \
+            --metadata "$RUNNER_TEMP/zpta_meta.json" --as-of "$AS_OF" \
+            --output "$RUNNER_TEMP/zpta_prospective_${AS_OF}.json" "${EXTRA_ARGS[@]}"
+          python - <<'PY'
+          import json, os, pathlib
+          root = pathlib.Path(os.environ["RUNNER_TEMP"])
+          candidates = sorted(root.glob("zpta_prospective_*.json"))
+          if len(candidates) != 1:
+              raise RuntimeError("Expected exactly one dated research snapshot")
+          d = json.loads(candidates[0].read_text())
+          print("FROZEN_PROSPECTIVE_RESEARCH_CANDIDATE:", json.dumps({
+              k: d[k] for k in ("as_of", "snapshot_type", "ruleset",
+                "input_ohlcv_sha256", "reference_close", "reference_low", "reference_volume",
+                "dollar_turnover_proxy", "features", "completed_day_signal_flags",
+                "research_candidate", "candidate_status", "prior_source_revision_status",
+                "research_promotion_blocked", "future_outcomes",
+                "real_money_trading_allowed")
+          }, sort_keys=True))
+          PY
+      - name: Preserve derived prospective signal snapshot (no raw bars)
+        if: steps.prospective.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: zpta-prospective-research-candidate
+          path: ${{ runner.temp }}/zpta_prospective_*.json
+          retention-days: 90
+          if-no-files-found: error
+
+      - name: Explicitly record missing or stale candidate daily bar
+        if: steps.fetch.outcome == 'success' && steps.prospective.outcome != 'success'
+        run: |
+          echo "PROSPECTIVE_SNAPSHOT_NOT_VERIFIED: source missing today's settled daily bar, retrieval before settlement, or invalid data."
+          echo "Do not substitute yesterday's bar or label this a forward prediction."
+
+      - name: Check Oct 26 independent S&P anchor when date matches (read-only)
+        if: steps.prospective.outcome == 'success'
+        run: |
+          AS_OF="$(TZ=America/New_York date +%F)"
+          if [ "$AS_OF" = "2026-10-26" ]; then
+            python -m analysis.zpta_cross_provider_anchor "$RUNNER_TEMP/zpta_prospective_${AS_OF}.json" \
+              --anchor-date 2026-10-26 --anchor-close 0.72 --anchor-volume 279654 \
+              --anchor-source "S&P Global Market Intelligence, stockanalysis.com Oct 26 EOD"
+          else
+            echo "NO_DATED_INDEPENDENT_ANCHOR: do not infer full-history reconciliation from candidate Yahoo feed"
+          fi
