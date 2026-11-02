@@ -202,58 +202,63 @@ def latest_launches(log_file: Path) -> dict[int, dict]:
 
 
 def associate_process(component: dict, processes: list[dict], launches: dict[int, dict],
-                      *, max_launch_skew_seconds: int = 90) -> dict:
-    """Only trust hidden-command PIDs with matching supervisor log + start time."""
+                      *, root: Path | None = None, max_launch_skew_seconds: int = 90) -> dict:
+    """Identify the actual script argument in this checkout, never an argument's basename.
+
+    Relative scripts and legacy supervisor logs do not prove the process working
+    directory. Keep them UNKNOWN rather than attributing another checkout's PID.
+    This establishes observed launch identity, not loaded-code provenance.
+    """
+    import shlex
+
     pattern = component.get("script_pattern")
     if not pattern or component.get("role") in {"library", "scheduled_job"}:
         return {"state": "NOT_PROCESS", "pids": [], "identification": "not_applicable"}
+    root = (root or Path(__file__).resolve().parents[1]).resolve()
+    relative_parent = PurePosixPath(str(component.get("entrypoint") or pattern).replace("\\", "/")).parent
+    expected_parent = (root / relative_parent).resolve()
+    if not expected_parent.is_relative_to(root):
+        return {"state": "UNKNOWN", "pids": [], "identification": "invalid_component_root"}
 
     matching = []
     for proc in processes:
-        pid = int(proc.get("pid") or 0)
         command = str(proc.get("command") or "")
-        started = str(proc.get("started_utc") or "")
-        matched_script = ""
-        # Match whole Python script basename tokens, not backup files.
-        if command:
-            names = re.findall(r"(?i)(?<![\w.])([\w.-]+\.py)(?![\w.])", command)
-            candidates = sorted({name for name in names if fnmatch.fnmatch(name.lower(), pattern.lower())})
-            if len(candidates) == 1:
-                matched_script = candidates[0]
-            elif len(candidates) > 1:
-                return {"state": "AMBIGUOUS", "pids": [pid], "identification": "multiple_scripts"}
-        direct = bool(matched_script)
-        inferred = False
-        if not command and pid in launches and started:
-            launch = launches[pid]
-            expected = PurePosixPath(launch["script"]).name
-            if fnmatch.fnmatch(expected.lower(), pattern.lower()):
-                try:
-                    # Supervisor.log contains local system time without a timezone.
-                    # Runtime probe runs on that same host, so local tz is correct.
-                    log_time = datetime.fromisoformat(launch["time"]).astimezone(timezone.utc)
-                    started_dt = parse_timestamp(started)
-                    inferred = abs((started_dt - log_time).total_seconds()) <= max_launch_skew_seconds
-                    if inferred:
-                        matched_script = expected
-                except (ValueError, OverflowError):
-                    inferred = False
-        if direct or inferred:
-            matching.append({
-                "pid": pid, "identified_by": "command_line" if direct else "supervisor_log_verified_start",
-                "script": matched_script,
-                "started_utc": started,
-            })
+        try:
+            # Windows process commands quote paths using double quotes. Reject
+            # unsupported/ambiguous quoting rather than extracting a basename.
+            args = shlex.split(command, posix=False)
+            args = [arg[1:-1] if arg.startswith('"') and arg.endswith('"') else arg for arg in args]
+        except ValueError:
+            continue
+        if not args or Path(args[0]).name.lower() not in {"python", "python.exe", "pythonw", "pythonw.exe"}:
+            continue
+        rest = args[1:]
+        while rest and rest[0] in {"-u", "-B", "-E", "-I", "-s", "-S", "-O", "-OO"}:
+            rest = rest[1:]
+        if len(rest) >= 3 and rest[:3] == ["-m", "streamlit", "run"]:
+            rest = rest[3:]
+        if not rest or rest[0].startswith("-"):
+            continue
+        script = Path(rest[0])
+        if not script.is_absolute() or script.suffix.lower() != ".py":
+            continue
+        script = script.resolve()
+        if script.parent != expected_parent or not fnmatch.fnmatch(script.name.lower(), pattern.lower()):
+            continue
+        pid = proc.get("pid")
+        if type(pid) is not int or pid <= 0:
+            continue
+        matching.append({"pid": pid, "script": script.name,
+                         "started_utc": str(proc.get("started_utc") or "")})
     if len(matching) > 1:
         return {"state": "DUPLICATE", "pids": [p["pid"] for p in matching],
                 "scripts": sorted({p["script"] for p in matching}), "identification": "multiple"}
     if matching:
         return {"state": "OBSERVED", "pids": [matching[0]["pid"]],
-                "script": matching[0]["script"],
-                "started_utc": matching[0]["started_utc"],
-                "identification": matching[0]["identified_by"]}
-    return {"state": "UNKNOWN", "pids": [],
-            "identification": "not_visible_or_missing"}
+                "script": matching[0]["script"], "started_utc": matching[0]["started_utc"],
+                "identification": "absolute_script_in_checkout"}
+    return {"state": "UNKNOWN", "pids": [], "identification": "checkout_identity_unverified"}
+
 
 
 def compare_expected_script(component: dict, process: dict,
@@ -372,7 +377,7 @@ def collect(root: Path) -> dict:
     observed = {}
     for component in registry["components"]:
         cid = component["id"]
-        process = associate_process(component, processes, launchlog)
+        process = associate_process(component, processes, launchlog, root=root)
         observed[cid] = {
             "process": process,
             "script_version": compare_expected_script(component, process, manifest, tracked_settings),

@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import unittest
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[1]
 
 from infrastructure.runtime_inventory import compare_expected_script, associate_process
 
@@ -51,16 +53,16 @@ class ScriptVersionTests(unittest.TestCase):
 
     def test_direct_process_match_exposes_specific_script_without_full_command(self):
         component = {"role": "service", "script_pattern": "momentum_trader_*.py"}
-        process = {"pid": 34140, "command": r"python.exe C:\Work\StockTracker\momentum_trader_v1_10_runtime_audit.py --token=secret", "started_utc": ""}
+        process = {"pid": 34140, "command": f'python.exe "{ROOT / "momentum_trader_v1_10_runtime_audit.py"}" --token=secret' , "started_utc": ""}
         result = associate_process(component, [process], {})
         self.assertEqual(result["state"], "OBSERVED")
         self.assertEqual(result["script"], "momentum_trader_v1_10_runtime_audit.py")
         self.assertNotIn("secret", str(result))
 
-    def test_duplicate_versions_in_one_command_is_ambiguous(self):
+    def test_script_argument_is_not_another_launched_script(self):
         component = {"role": "service", "script_pattern": "momentum_trader_*.py"}
-        process = {"pid": 75, "command": "python momentum_trader_v1_9_zpta_shadow.py momentum_trader_v1_10_runtime_audit.py"}
-        self.assertEqual(associate_process(component, [process], {})["state"], "AMBIGUOUS")
+        process = {"pid": 75, "command": f'python "{ROOT / "momentum_trader_v1_9_zpta_shadow.py"}" "{ROOT / "momentum_trader_v1_10_runtime_audit.py"}"' }
+        self.assertEqual(associate_process(component, [process], {})["state"], "OBSERVED")
 
 
 if __name__ == "__main__":
