@@ -27,6 +27,31 @@ DATE = "2026-10-16"
 BASE = datetime(2026, 10, 16, 22, 0, tzinfo=timezone.utc)
 
 
+class ExchangeSessionGateTests(unittest.TestCase):
+    def test_dst_and_early_close_use_exchange_calendar_not_scheduler_hour(self):
+        # Nov 3 is standard time; Nov 27 is an early close.
+        for day, closing in (("2026-11-03", "2026-11-03T21:00:00+00:00"),
+                             ("2026-11-27", "2026-11-27T18:00:00+00:00")):
+            close = datetime.fromisoformat(closing)
+            with patch("infrastructure.paper_equity_capture._calendar_close", return_value=close):
+                self.assertFalse(guard.session_ready(day, now=close-timedelta(minutes=25), client_factory=lambda: object()))
+                self.assertFalse(guard.session_ready(day, now=close+timedelta(minutes=4), client_factory=lambda: object()))
+                self.assertTrue(guard.session_ready(day, now=close+timedelta(minutes=5), client_factory=lambda: object()))
+
+    def test_holiday_or_calendar_failure_cannot_start_review(self):
+        for options in ({"return_value": None}, {"side_effect": RuntimeError("private provider error")}):
+            with patch("infrastructure.paper_equity_capture._calendar_close", **options):
+                self.assertFalse(guard.session_ready(DATE, now=BASE, client_factory=lambda: object()))
+
+    def test_early_invocation_leaves_retry_state_untouched(self):
+        with patch.object(guard, "session_ready", return_value=False), \
+             patch.object(guard, "exclusive_state") as lock, \
+             patch.object(guard, "write_state") as write:
+            self.assertEqual(guard.begin(DATE, require_closed_session=True), 24)
+        lock.assert_not_called()
+        write.assert_not_called()
+
+
 class RetryPolicyTests(unittest.TestCase):
     def test_new_session_has_fresh_budget(self):
         s = {"review_date": "2026-10-15", "status": "FAILED", "attempts": 93}

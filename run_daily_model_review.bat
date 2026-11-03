@@ -17,6 +17,7 @@ echo.
 echo [0/6] Deployment agent owns Git synchronization; review reads local scripts only.
 
 python post_close_review_guard.py begin --date %REVIEWDATE%
+if errorlevel 24 goto :session_not_closed
 if errorlevel 23 goto :auth_blocked
 if errorlevel 22 goto :retry_cooldown
 if errorlevel 21 goto :retry_exhausted
@@ -74,6 +75,10 @@ rem Optional, read-only Windows activation receipt. Never changes review result.
 python -m infrastructure.windows_activation_attestation --notify
 if errorlevel 1 echo StockTracker activation attestation unavailable; review still completed.
 exit /b 0
+
+:session_not_closed
+echo StockTracker review deferred without consuming retry budget; exchange close unverified or too early.
+exit /b 24
 
 :auth_blocked
 echo StockTracker post-close review stopped: previous OpenAI authorization failure.
