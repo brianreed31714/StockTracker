@@ -96,7 +96,8 @@ class BridgeTests(unittest.TestCase):
 
     def test_refuse_unrelated_worktree_changes(self):
         with patch.object(bridge, "git", side_effect=[
-            "main", "", " M momentum_trader_v1_10_runtime_audit.py"
+            "main", "a" * 40, "a" * 40 + "\trefs/heads/main",
+            "", " M momentum_trader_v1_10_runtime_audit.py"
         ]):
             with self.assertRaises(RuntimeError):
                 bridge.validate_git_safe("2026-10-19")
@@ -105,6 +106,20 @@ class BridgeTests(unittest.TestCase):
         with patch.object(bridge, "git", return_value="feature"):
             with self.assertRaises(RuntimeError):
                 bridge.validate_git_safe("2026-10-19")
+
+    def test_diverged_remote_refuses_before_writing_or_committing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            place = Path(tmp)
+            runtime, repo = place / "runtime", place / "source"
+            (runtime / "analysis/performance").mkdir(parents=True)
+            (runtime / "analysis/performance/latest.json").write_text(json.dumps(fixture()))
+            with patch.object(bridge, "ROOT", repo), patch.object(bridge, "git", side_effect=[
+                "main", "a" * 40, "b" * 40 + "\trefs/heads/main"
+            ]) as git:
+                with self.assertRaisesRegex(RuntimeError, "reconcile via PR"):
+                    bridge.publish(runtime)
+            self.assertFalse(repo.exists())
+            self.assertEqual(git.call_count, 3)
 
 
     def test_pushover_acceptance_requires_http_200_and_status_one(self):

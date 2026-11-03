@@ -311,8 +311,8 @@ def poll(root: Path, *, observation: dict | None = None,
     # in GitHub/ChatGPT, without committing into the trading checkout. Never
     # publish process IDs, account data or raw receipt contents.
     # Bump cache format after repairing the legacy Windows mktree CRLF bug.
-    # Independently refresh otherwise unchanged host evidence at most every six
-    # hours, so GitHub can distinguish stale processes from an observed host.
+    # Refresh truthful negative observations too: a source mismatch must not
+    # leave yesterday's healthy status as the latest remotely visible evidence.
     remote_key = (report["git_head"] + ":" + report["state"] + ":" +
                   str(report.get("verified_review_date") or "") + ":" +
                   str((report.get("disk_evidence") or {}).get("disk_code_sha256") or "") + ":" +
@@ -330,7 +330,7 @@ def poll(root: Path, *, observation: dict | None = None,
         from infrastructure.host_status_publisher import publish as remote_publish
     enabled = os.getenv("STOCKTRACKER_ATTESTATION_REMOTE_ENABLED", "1").strip().lower() not in (
         "0", "false", "no", "off")
-    if report["code_synced"] and remote_publish is not None and enabled:
+    if SHA.fullmatch(str(report.get("git_head") or "")) and remote_publish is not None and enabled:
         if remote_key == previous.get("remote_key") and recent_publish:
             report["remote_key"] = remote_key
             report["remote_published_at_utc"] = previous_publish

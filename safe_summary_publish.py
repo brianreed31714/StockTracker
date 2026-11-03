@@ -305,6 +305,13 @@ def git(*args):
 def validate_git_safe(day):
     if git("branch", "--show-current") != "main":
         raise RuntimeError("Summary publication requires main")
+    # Refuse BEFORE creating files/commits when the checkout has diverged.
+    # A failed push must not accumulate unpublished summaries on each retry.
+    # Resolve divergence through a reviewed PR; never pull/rebase/reset here.
+    head = git("rev-parse", "HEAD")
+    remote = git("ls-remote", "--exit-code", "origin", "refs/heads/main").split()
+    if len(remote) != 2 or remote != [head, "refs/heads/main"]:
+        raise RuntimeError("Summary publication requires matching origin/main; reconcile via PR")
     if git("diff", "--cached", "--name-only"):
         raise RuntimeError("Preexisting staged changes; refusing summary publication")
     allowed = {SUMMARY_REL.as_posix(), (DAILY_REL / (day + ".json")).as_posix()}
