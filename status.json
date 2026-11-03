@@ -9,12 +9,12 @@
   "git_head": "756b0c0de7142bdba3643b3438e9370dd05fd9e7",
   "in_memory_trader_digest_verified": false,
   "loaded_dependencies_verified": false,
-  "observed_at_utc": "2026-11-03T19:41:18.336590+00:00",
+  "observed_at_utc": "2026-11-03T19:42:03.367472+00:00",
   "post_sync_eod_verified": false,
   "process_identity_observed": true,
   "processes_stable": false,
   "project": "StockTracker",
   "schema": "stocktracker_windows_attestation_v1",
   "source_code_synced": true,
-  "state": "CODE_SYNCED_PROCESS_OBSERVED"
+  "state": "CODE_SYNCED_RUNTIME_UNVERIFIED"
 }
