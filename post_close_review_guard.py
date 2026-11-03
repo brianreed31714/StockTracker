@@ -79,7 +79,35 @@ def parse_ts(value: object) -> datetime | None:
         return None
 
 
-def begin(date_text: str) -> int:
+def session_ready(date_text: str, *, now=None, client_factory=None) -> bool:
+    """Require a dated exchange close plus five minutes before any EOD work.
+
+    A mistaken/DST-shifted scheduler trigger must not publish a partial day
+    or consume the session's retry budget. Calendar failure fails closed.
+    """
+    now = now or datetime.now(timezone.utc)
+    try:
+        if now.tzinfo is None or datetime.fromisoformat(date_text).date().isoformat() != date_text:
+            return False
+        if client_factory is None:
+            key = os.getenv("ALPACA_API_KEY", "").strip()
+            secret = os.getenv("ALPACA_SECRET_KEY", "").strip()
+            if not key or not secret:
+                return False
+            from alpaca.trading.client import TradingClient
+            client_factory = lambda: TradingClient(key, secret, paper=True)
+        from infrastructure.paper_equity_capture import _calendar_close
+        close = _calendar_close(client_factory(), date_text)
+        return close is not None and now >= close + timedelta(minutes=5)
+    except Exception:
+        # Calendar/provider diagnostics may contain credentials. No state write.
+        return False
+
+
+def begin(date_text: str, *, require_closed_session=False) -> int:
+    if require_closed_session and not session_ready(date_text):
+        print("Post-close review deferred: exchange session not verified closed plus five minutes.")
+        return 24
     # Both the trader's +5m path and the scheduled 1:30pm task use this
     # same budget. Do not allow two simultaneous processes to increment it.
     with exclusive_state():
@@ -149,7 +177,7 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.action == "begin":
-        raise SystemExit(begin(args.date))
+        raise SystemExit(begin(args.date, require_closed_session=True))
     if args.action == "complete":
         raise SystemExit(finish(args.date, "COMPLETED"))
     raise SystemExit(finish(args.date, "FAILED", args.error or "pipeline failed",
