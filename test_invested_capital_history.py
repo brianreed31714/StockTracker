@@ -72,6 +72,18 @@ class CurveTests(unittest.TestCase):
             calendar_request_factory=lambda **kwargs: kwargs,
         )
 
+    def test_historical_fee_expense_preserves_net_equity_return(self):
+        broker = HistoricalBroker(interim_value=950)
+        original = broker.get_portfolio_history
+        def history(request):
+            result = original(request)
+            result.cashflow = {"FEE": [0, -1.25, -0.50]}
+            return result
+        broker.get_portfolio_history = history
+        result = self.calculate(broker)
+        self.assertAlmostEqual(result["since_first_recorded_fill_portfolio_return_pct"], 3.571429, 5)
+        self.assertAlmostEqual(result["since_first_recorded_fill_portfolio_drawdown_pct"], 2.380952, 5)
+
     def test_return_and_drawdown_from_broker_complete_first_fill_window(self):
         x = self.calculate(HistoricalBroker(interim_value=950))
         self.assertAlmostEqual(x["since_first_recorded_fill_portfolio_return_pct"], 3.571429, 5)
