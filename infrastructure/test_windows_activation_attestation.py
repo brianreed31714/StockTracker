@@ -206,6 +206,28 @@ class AttestationTests(unittest.TestCase):
         self.assertEqual(second["notification"], "API_ACCEPTED")
         self.assertEqual(len(attempts), 2)
 
+    def test_unsynced_host_publishes_negative_observation_without_success_notice(self):
+        from infrastructure.host_status_publisher import sanitized
+        published = []
+        def publish(root, report):
+            published.append(sanitized(report))
+        with patch.object(attest, "git_head", return_value=COMMIT), \
+             patch.object(attest, "_head", return_value="b" * 40), \
+             patch.object(attest, "_code_clean", return_value=True), \
+             patch("infrastructure.daily_review_task_probe.inspect_daily_review_task", return_value={
+                 "status": "TASK_NAME_OBSERVED", "scheduler_state": "Ready",
+                 "last_task_result": 1, "last_run_utc": T0.isoformat(),
+             }), patch.dict("os.environ", {"STOCKTRACKER_ATTESTATION_REMOTE_ENABLED": "1"}):
+            notify = unittest.mock.Mock()
+            result = attest.poll(self.root, observation=good_snapshot(), clock=T0,
+                                 remote_publish=publish, notify=notify)
+        self.assertEqual(result["remote_publish"], "PUBLISHED")
+        self.assertEqual(published[0]["state"], "UNVERIFIED")
+        self.assertFalse(published[0]["source_code_synced"])
+        self.assertFalse(published[0]["in_memory_trader_digest_verified"])
+        self.assertEqual(published[0]["daily_review_last_task_result"], 1)
+        notify.assert_not_called()
+
     def test_agent_hook_is_windows_only_and_read_only(self):
         import inspect
         import stocktracker_deployment_agent as agent

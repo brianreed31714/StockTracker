@@ -121,6 +121,7 @@ class CapitalAuditTests(unittest.TestCase):
             path = Path(tmp) / "test.sqlite"
             with sqlite3.connect(path) as db:
                 db.execute("CREATE TABLE realized (ts TEXT, pnl REAL)")
+            db.close()
             report = audit_database(path, DAY, session_open=OPEN, session_close=CLOSE)
             self.assertEqual(report["status"], "LOCAL_PAPER_FILL_DATABASE_UNREADABLE")
 

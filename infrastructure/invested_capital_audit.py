@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import math
 import sqlite3
+from contextlib import closing
 from datetime import date, datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -245,7 +246,7 @@ def audit_database(db_path, day, *, session_open, session_close):
     if not path.is_file():
         return unavailable(day, "LOCAL_PAPER_FILL_DATABASE_MISSING")
     try:
-        with sqlite3.connect(path.resolve().as_uri() + "?mode=ro", uri=True, timeout=6) as db:
+        with closing(sqlite3.connect(path.resolve().as_uri() + "?mode=ro", uri=True, timeout=6)) as db:
             db.row_factory = sqlite3.Row
             fills = [dict(row) for row in db.execute(
                 "SELECT ts, symbol, side, qty, price, alpaca_order_id FROM fills ORDER BY ts, alpaca_order_id"

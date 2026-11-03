@@ -20,6 +20,7 @@
     "provider_status": "UNVERIFIED"
   },
   "invested_capital": {
+    "broker_reconciliation_blocker": "UNVERIFIED",
     "calculation": "CLOSED_LOT_PNL_DIVIDED_BY_CLOSED_LOT_COST",
     "classification": "MODELED_PAPER",
     "daily_closed_lot_cost_basis_usd": 17484.25,
