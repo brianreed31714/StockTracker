@@ -264,7 +264,7 @@ def broker_reconcile_today(audit, day, *, history_path, session_open, session_cl
 
     A daily account P/L / peak deployed *cost* basis percentage is eligible
     only if historical prices/equity, paper position quantities, ALL paper
-    closed filled orders and explicit zero cashflow agree with the local
+    closed filled orders and no non-fee cash movements agree with the local
     complete fill ledger. Any absent, truncated or mismatched broker source
     blocks that metric, but preserves the separate closed-trade ROI.
     """
@@ -374,7 +374,7 @@ def broker_reconcile_today(audit, day, *, history_path, session_open, session_cl
             raise ValueError("BROKER_AND_LOCAL_FILL_IDS_MISMATCH")
 
         # Check the dated 1D account-history point. Request ALL cashflow types;
-        # absent history, invalid arrays, or any nonzero reported cash movement
+        # absent history, invalid arrays, or any nonzero non-fee cash movement
         # fail closed rather than deducting an unverified transfer.
         history = client.get_portfolio_history(history_request_factory(
             start=session_open - timedelta(days=14), end=now,
@@ -400,7 +400,7 @@ def broker_reconcile_today(audit, day, *, history_path, session_open, session_cl
         historical_equity = number(values[index], positive=True)
         if historical_equity is None or abs(historical_equity - current) > 1.01:
             raise ValueError("BROKER_HISTORY_CLOSE_MISMATCH")
-        for array in flows.values():
+        for activity, array in flows.items():
             if not isinstance(array, (list, tuple)) or len(array) != len(stamps):
                 raise ValueError("BROKER_CASHFLOW_SHAPE_INVALID")
             amount = array[index]
@@ -410,7 +410,12 @@ def broker_reconcile_today(audit, day, *, history_path, session_open, session_cl
                 amount = float(amount)
             except (TypeError, ValueError, OverflowError):
                 raise ValueError("BROKER_CASHFLOW_VALUE_INVALID")
-            if not math.isfinite(amount) or abs(amount) > 0.005:
+            # FEE is investment expense already included in account equity.
+            # Do not subtract it again or mistake it for external funding.
+            # All other nonzero activities still fail closed pending a
+            # separately reviewed classification (including unknown types).
+            if not math.isfinite(amount) or (
+                    abs(amount) > 0.005 and getattr(activity, "value", activity) != "FEE"):
                 raise ValueError("BROKER_CASHFLOW_NOT_ZERO")
 
         pnl = current - prior
@@ -449,7 +454,8 @@ def observed_history_curve(audit, *, day, now, client, orders_request_factory,
     Never call it 'since inception' without independently supplied project
     start date matching the first recorded fill. Requires all historical PAPER
     filled orders, complete dated 1D equity, exchange sessions and no reported
-    external cash movements. Missing history means MISSING, not zero.
+    non-fee cash movements. Fees remain included once in net account equity.
+    Missing history means MISSING, not zero.
     """
     result = {
         "since_first_recorded_fill_portfolio_return_pct": None,
@@ -534,7 +540,7 @@ def observed_history_curve(audit, *, day, now, client, orders_request_factory,
         if not expected_dates or expected_dates != set(p[0] for p in observed):
             return result
 
-        for array in cashflow.values():
+        for activity, array in cashflow.items():
             if not isinstance(array, (list, tuple)) or len(array) != len(points):
                 return result
             for _, _, i in observed:
@@ -542,7 +548,8 @@ def observed_history_curve(audit, *, day, now, client, orders_request_factory,
                 if isinstance(amount, bool):
                     return result
                 amount = float(amount)
-                if not math.isfinite(amount) or abs(amount) > 0.005:
+                if not math.isfinite(amount) or (
+                        abs(amount) > 0.005 and getattr(activity, "value", activity) != "FEE"):
                     return result
 
         initial = baseline[-1][1]

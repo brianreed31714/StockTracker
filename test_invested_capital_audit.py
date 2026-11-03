@@ -151,6 +151,26 @@ class CapitalAuditTests(unittest.TestCase):
         self.assertTrue(result["broker_reconciled"])
         self.assertTrue(result["cash_flows_reconciled"])
 
+    def test_fee_is_included_once_in_net_equity_roi_but_unknown_flows_block(self):
+        from enum import Enum
+        class Activity(Enum):
+            FEE = "FEE"
+        for activity in ("FEE", Activity.FEE, "CSD", "CSW", "UNKNOWN"):
+            broker = FakeBroker()
+            original = broker.get_portfolio_history
+            def history(request):
+                result = original(request)
+                result.cashflow = {activity: [0.0, -1.25]}
+                return result
+            broker.get_portfolio_history = history
+            result = self._broker(broker)
+            if activity in ("FEE", Activity.FEE):
+                self.assertTrue(result["broker_reconciled"])
+                self.assertAlmostEqual(result["daily_invested_capital_return_pct"], 100 * 75 / 2100, 5)
+            else:
+                self.assertFalse(result["broker_reconciled"])
+                self.assertIsNone(result["daily_invested_capital_return_pct"])
+
     def test_cashflow_orders_positions_or_history_mismatches_block_portfolio_roi(self):
         for settings in (
             {"flow": 500}, {"orders": False}, {"positions": False},
