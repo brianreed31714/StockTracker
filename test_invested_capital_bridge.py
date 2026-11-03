@@ -129,6 +129,24 @@ class InvestedBridgeTests(unittest.TestCase):
         out = summary_from(report)["invested_capital"]
         self.assertIsNone(out["since_inception_invested_return_pct"])
 
+    def test_sanitized_broker_blocker_is_strictly_allowlisted(self):
+        report = fixture()
+        capital = report["metrics"]["invested_capital"]
+        capital["broker_reconciled"] = False
+        capital["broker_reconciliation_blocker"] = "BROKER_CASHFLOW_NOT_ZERO"
+        out = summary_from(report)["invested_capital"]
+        self.assertEqual(out["broker_reconciliation_blocker"], "BROKER_CASHFLOW_NOT_ZERO")
+        self.assertIsNone(out["daily_portfolio_return_on_peak_deployed_capital_pct"])
+
+        capital["broker_reconciliation_blocker"] = "PRIVATE_BROKER_TOKEN_ABC"
+        out = summary_from(report)["invested_capital"]
+        self.assertEqual(out["broker_reconciliation_blocker"], "UNVERIFIED")
+        self.assertNotIn("PRIVATE_BROKER_TOKEN", str(out))
+
+        capital["broker_reconciled"] = True
+        capital["broker_reconciliation_blocker"] = "BROKER_CASHFLOW_NOT_ZERO"
+        self.assertEqual(summary_from(report)["invested_capital"]["broker_reconciliation_blocker"], "NONE")
+
     def test_realized_dollars_cannot_become_percent(self):
         report = fixture()
         report["metrics"]["invested_capital"] = {}

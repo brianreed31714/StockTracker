@@ -161,6 +161,29 @@ class CapitalAuditTests(unittest.TestCase):
                 self.assertFalse(report["broker_reconciled"])
                 self.assertIsNotNone(report["daily_closed_invested_capital_return_pct"])
 
+    def test_allowlisted_broker_failure_codes_never_leak_provider_errors(self):
+        for settings, expected in (
+            ({"positions": False}, "BROKER_POSITIONS_NOT_RECONCILED"),
+            ({"orders": False}, "BROKER_FILLS_NOT_OBSERVED"),
+            ({"flow": 500}, "BROKER_CASHFLOW_NOT_ZERO"),
+            ({"history": False}, "BROKER_HISTORY_DAY_NOT_UNIQUE"),
+        ):
+            with self.subTest(settings=settings):
+                result = self._broker(FakeBroker(**settings))
+                self.assertEqual(result["broker_reconciliation_blocker"], expected)
+                self.assertIsNone(result["daily_invested_capital_return_pct"])
+                self.assertFalse(result["broker_reconciled"])
+
+        class UnsafeBroker(FakeBroker):
+            def get_account(self):
+                raise ValueError("PRIVATE_BROKER_ERROR_WITH_TOKEN_ABC")
+
+        result = self._broker(UnsafeBroker())
+        self.assertEqual(result["broker_reconciliation_blocker"],
+                         "BROKER_EVIDENCE_INCOMPLETE_OR_UNRECONCILED")
+        self.assertNotIn("PRIVATE_BROKER_ERROR", json.dumps(result))
+        self.assertEqual(self._broker(FakeBroker())["broker_reconciliation_blocker"], "NONE")
+
     def test_no_broker_backdate(self):
         audited = audit_rows(ledger(), pnl(), DAY, session_open=OPEN, session_close=CLOSE)
         result = broker_reconcile_today(

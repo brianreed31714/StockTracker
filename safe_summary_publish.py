@@ -17,6 +17,8 @@ import subprocess
 from datetime import date
 from pathlib import Path
 
+from infrastructure.invested_capital_audit import SAFE_BROKER_BLOCKER_CODES
+
 ROOT = Path(__file__).resolve().parent
 DATE_RE = re.compile(r"^20\d{2}-\d{2}-\d{2}$")
 SUMMARY_REL = Path("analysis/performance/sanitized_latest.json")
@@ -223,6 +225,12 @@ def summary_from(report, current=None):
             "status": (
                 "MODELED_PAPER_BROKER_AND_LEDGER_RECONCILED" if broker_ok
                 else "MODELED_LOCAL_CLOSED_LOTS_ONLY" if local_ok else "MISSING"
+            ),
+            "broker_reconciliation_blocker": (
+                "NONE" if broker_ok
+                else invested.get("broker_reconciliation_blocker")
+                if local_ok and invested.get("broker_reconciliation_blocker") in SAFE_BROKER_BLOCKER_CODES
+                else "UNVERIFIED"
             ),
             "daily_closed_lot_realized_return_pct": closed_pct,
             "daily_closed_lot_cost_basis_usd": (
