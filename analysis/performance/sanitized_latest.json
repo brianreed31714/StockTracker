@@ -4,13 +4,13 @@
     "database_available": true
   },
   "daily": {
-    "buy_orders": 1,
-    "closed_trades": 1,
-    "decision_rows": 3020,
-    "losses": 1,
-    "order_rows": 2,
-    "realized_pnl_usd": -1.66,
-    "sell_orders": 1,
+    "buy_orders": 6,
+    "closed_trades": 5,
+    "decision_rows": 3250,
+    "losses": 5,
+    "order_rows": 11,
+    "realized_pnl_usd": -185.03,
+    "sell_orders": 5,
     "win_rate_pct": 0.0,
     "wins": 0
   },
@@ -23,14 +23,14 @@
     "broker_reconciliation_blocker": "BROKER_HISTORY_DAY_NOT_UNIQUE",
     "calculation": "CLOSED_LOT_PNL_DIVIDED_BY_CLOSED_LOT_COST",
     "classification": "MODELED_PAPER",
-    "daily_closed_lot_cost_basis_usd": 2499.99,
-    "daily_closed_lot_realized_return_pct": -0.0664,
+    "daily_closed_lot_cost_basis_usd": 12492.14,
+    "daily_closed_lot_realized_return_pct": -1.4812,
     "daily_one_percent_invested_goal_met": null,
     "daily_peak_deployed_cost_basis_usd": null,
     "daily_portfolio_return_on_peak_deployed_capital_pct": null,
     "first_observed_fill_date": "2026-05-06",
     "inception_evidence_status": "MISSING",
-    "since_first_observed_fill_closed_lot_return_pct": 0.341,
+    "since_first_observed_fill_closed_lot_return_pct": 0.2089,
     "since_first_observed_fill_portfolio_drawdown_pct": null,
     "since_first_observed_fill_portfolio_return_pct": null,
     "since_first_observed_fill_sessions": null,
@@ -49,44 +49,44 @@
   },
   "paper_account_observation": {
     "cash_flows_reconciled": false,
-    "daily_account_change_pct": -0.0017,
+    "daily_account_change_pct": -0.1673,
     "inception_portfolio_return_pct": null,
     "invested_capital_daily_return_pct": null,
-    "observed_session_count": 4,
-    "observed_window_account_change_pct": -0.3068,
-    "observed_window_max_drawdown_pct": 0.3068,
+    "observed_session_count": 5,
+    "observed_window_account_change_pct": -0.4737,
+    "observed_window_max_drawdown_pct": 0.4737,
     "source": "ALPACA_PAPER_ACCOUNT",
     "status": "PAPER_ACCOUNT_CHANGE_UNADJUSTED_CASH_FLOWS"
   },
   "paper_only": true,
   "proposal_ids": [
     {
-      "id": "P-STOCK-20261103-01",
+      "id": "P-STOCK-20261104-01",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261103-02",
+      "id": "P-STOCK-20261104-02",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261103-03",
+      "id": "P-STOCK-20261104-03",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261103-04",
+      "id": "P-STOCK-20261104-04",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261103-05",
+      "id": "P-STOCK-20261104-05",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261103-06",
+      "id": "P-STOCK-20261104-06",
       "status": "PENDING"
     }
   ],
   "quality": "LIMITED",
-  "review_date": "2026-11-03",
+  "review_date": "2026-11-04",
   "review_source": "OPENAI",
   "schema": "stocktracker_sanitized_summary_v1",
   "shadow": {
