@@ -12,6 +12,7 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 from project_process_control import stop_project_services, project_services, exact_script_running
+from infrastructure.legacy_agent_policy import supervise_legacy_deployment_agent
 
 ROOT = Path(__file__).resolve().parent
 STATE_DIR = ROOT / "deploy" / "state"
@@ -139,7 +140,7 @@ def handle_restart_request():
 def cycle(notify=False):
     files = active_files()
     status = {}
-    status["Deployment Agent"] = ensure("Deployment Agent", AGENT)
+    status["Deployment Agent"] = (ensure("Deployment Agent", AGENT) if supervise_legacy_deployment_agent(os.getenv("LEGACY_DEPLOYMENT_AGENT_SUPERVISION_ENABLED")) else "SUPERVISION_DISABLED")
     status["Trader"] = ensure("Trader", files["trader"])
     status["Geo Feed"] = ensure("Geo Feed", files["geo_feed"])
     status["Dashboard"] = ensure("Dashboard", files["dashboard"], True)
