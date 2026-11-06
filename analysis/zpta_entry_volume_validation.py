@@ -17,12 +17,22 @@ def parse_price(value):
     return float(str(value).replace(",", "").strip())
 
 
+def parse_date(value):
+    value = value.strip()
+    for fmt in ("%Y-%m-%d", "%b %d, %Y"):
+        try:
+            return datetime.strptime(value, fmt).date().isoformat()
+        except ValueError:
+            continue
+    raise ValueError(f"Unsupported trading date: {value!r}")
+
+
 def read_daily(path):
     records = []
     with Path(path).open(newline="", encoding="utf-8-sig") as f:
         for row in csv.DictReader(f):
             records.append({
-                "date": datetime.strptime(row["Date"].strip(), "%b %d, %Y").date().isoformat(),
+                "date": parse_date(row["Date"]),
                 "open": parse_price(row["Open"]),
                 "close": parse_price(row["Close"]),
                 "volume": int(parse_price(row["Volume"])),
@@ -88,7 +98,7 @@ def bootstrap_rate_diff(events, seed=20261104, iterations=2000):
         iso = datetime.fromisoformat(e["date"]).isocalendar()
         weeks.setdefault((iso.year, iso.week), []).append(e)
     blocks = list(weeks.values())
-    if len(blocks) < 5:
+    if len(blocks) < 5 or not any(e["streak"] == 2 for e in events):
         return None
     rng = random.Random(seed)
     diffs = []
