@@ -6,15 +6,15 @@
   "daily_review_task_status": "TASK_NAME_OBSERVED",
   "disk_code_sha256": "0416b76c5fa2e300a18053088423bd5d4b561e45f1660f36b43e7a229d68f1e1",
   "disk_dependencies_sha256": "bde3974e9065e26881b3f01d4b721ae2cf7e550456390e1fc066eac61019f81f",
-  "git_head": "cca7a379bbb06c090ba5529a6cba1a99affa5c64",
+  "git_head": "8d7babbdbc752e7c4a909cef05325eaf3f678c92",
   "in_memory_trader_digest_verified": false,
   "loaded_dependencies_verified": false,
-  "observed_at_utc": "2026-11-09T21:35:58.319123+00:00",
+  "observed_at_utc": "2026-11-09T21:36:44.822496+00:00",
   "post_sync_eod_verified": false,
   "process_identity_observed": true,
-  "processes_stable": true,
+  "processes_stable": false,
   "project": "StockTracker",
   "schema": "stocktracker_windows_attestation_v1",
   "source_code_synced": true,
-  "state": "HOST_PROCESSES_STABLE_SOURCE_ONLY"
+  "state": "CODE_SYNCED_PROCESS_OBSERVED"
 }
