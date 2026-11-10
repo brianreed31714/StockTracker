@@ -10,10 +10,12 @@ import unittest
 from infrastructure.runtime_inventory import associate_process, latest_launches, report_health
 
 
+ROOT = Path(__file__).resolve().parents[1]
 BASE = datetime(2026, 10, 18, 18, 0, tzinfo=timezone.utc)
 SMART = {
     "id": "smart_money",
     "role": "observer",
+    "entrypoint": "SmartMoneyMonitor/smart_money_monitor_v2_3_feed_health_audit.py",
     "script_pattern": "smart_money_monitor_*.py",
     "health": {
         "type": "json_heartbeat",
@@ -64,7 +66,7 @@ class RuntimeInventoryTests(unittest.TestCase):
         self.make_health(successful_wallet_checks=3, failed_wallet_checks=1)
         self.assertEqual(report_health(self.root, SMART, now=BASE)["state"], "INCONSISTENT")
 
-    def test_invisible_command_line_verified_via_log_and_start(self):
+    def test_legacy_log_cannot_prove_hidden_process_checkout(self):
         # Use local wall-clock timestamp because supervisor.log writes local time.
         wall = datetime(2026, 10, 18, 10, 50, 24)
         start = wall.astimezone(timezone.utc).isoformat()
@@ -72,8 +74,8 @@ class RuntimeInventoryTests(unittest.TestCase):
         log = {3096: {"time": wall.isoformat(),
                       "script": "SmartMoneyMonitor/smart_money_monitor_v2_3_feed_health_audit.py"}}
         result = associate_process(SMART, [proc], log)
-        self.assertEqual(result["state"], "OBSERVED")
-        self.assertEqual(result["identification"], "supervisor_log_verified_start")
+        self.assertEqual(result["state"], "UNKNOWN")
+        self.assertEqual(result["identification"], "checkout_identity_unverified")
         self.assertNotIn("command", result)
 
     def test_pid_reuse_not_misattributed(self):
@@ -94,15 +96,15 @@ class RuntimeInventoryTests(unittest.TestCase):
         self.assertEqual(associate_process(SMART, [proc], {})["state"], "UNKNOWN")
 
     def test_command_line_identified_without_leaking_command(self):
-        proc = {"pid": 31, "command": r"C:\Python313\python.exe C:\Private\SmartMoneyMonitor\smart_money_monitor_v2_3_feed_health_audit.py --secret=x",
+        proc = {"pid": 31, "command": f'python.exe "{ROOT / SMART["entrypoint"]}" --secret=x' ,
                 "started_utc": BASE.isoformat()}
         result = associate_process(SMART, [proc], {})
         self.assertEqual(result["state"], "OBSERVED")
-        self.assertEqual(result["identification"], "command_line")
+        self.assertEqual(result["identification"], "absolute_script_in_checkout")
         self.assertNotIn("secret", json.dumps(result))
 
     def test_duplicate_processes_are_detected(self):
-        procs = [{"pid": n, "command": "python smart_money_monitor_v2_3_feed_health_audit.py",
+        procs = [{"pid": n, "command": f'python "{ROOT / SMART["entrypoint"]}"' ,
                   "started_utc": BASE.isoformat()} for n in (11, 12)]
         self.assertEqual(associate_process(SMART, procs, {})["state"], "DUPLICATE")
 
@@ -118,6 +120,35 @@ class RuntimeInventoryTests(unittest.TestCase):
         launches = latest_launches(path)
         self.assertEqual(launches[3096]["script"], "SmartMoneyMonitor/smart_money_monitor_v2_3_feed_health_audit.py")
         self.assertNotIn(43708, launches)
+
+    def test_another_checkout_with_same_script_is_excluded(self):
+        process = {"pid": 900, "command": f'python "{self.root / SMART["entrypoint"]}"'}
+        self.assertEqual(associate_process(SMART, [process], {}, root=ROOT)["state"], "UNKNOWN")
+
+    def test_relative_script_without_working_directory_proof_is_excluded(self):
+        process = {"pid": 901, "command": 'python SmartMoneyMonitor/smart_money_monitor_v2_3_feed_health_audit.py'}
+        self.assertEqual(associate_process(SMART, [process], {}, root=ROOT)["state"], "UNKNOWN")
+
+    def test_script_in_unrelated_argument_is_not_identity(self):
+        process = {"pid": 902, "command": f'python "{ROOT / "unrelated.py"}" --config "{ROOT / SMART["entrypoint"]}"'}
+        self.assertEqual(associate_process(SMART, [process], {}, root=ROOT)["state"], "UNKNOWN")
+
+    def test_same_filename_in_backup_directory_is_excluded(self):
+        path = ROOT / "backup" / SMART["entrypoint"]
+        process = {"pid": 903, "command": f'python "{path}"'}
+        self.assertEqual(associate_process(SMART, [process], {}, root=ROOT)["state"], "UNKNOWN")
+
+    def test_streamlit_launch_with_quoted_absolute_path_is_observed(self):
+        component = {"script_pattern": "dashboard.py", "entrypoint": "dashboard.py"}
+        process = {"pid": 904, "command": f'python -u -m streamlit run "{self.root / "dashboard.py"}" --server.port 8000'}
+        result = associate_process(component, [process], {}, root=self.root)
+        self.assertEqual(result["state"], "OBSERVED")
+        self.assertNotIn(str(self.root), json.dumps(result))
+
+    def test_python_code_argument_cannot_masquerade_as_script(self):
+        process = {"pid": 905, "command": f'python -c "{ROOT / SMART["entrypoint"]}"'}
+        self.assertEqual(associate_process(SMART, [process], {}, root=ROOT)["state"], "UNKNOWN")
+
 
 
 if __name__ == "__main__":
