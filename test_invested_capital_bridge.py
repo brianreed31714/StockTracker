@@ -147,6 +147,30 @@ class InvestedBridgeTests(unittest.TestCase):
         capital["broker_reconciliation_blocker"] = "BROKER_CASHFLOW_NOT_ZERO"
         self.assertEqual(summary_from(report)["invested_capital"]["broker_reconciliation_blocker"], "NONE")
 
+    def test_sanitized_review_day_diagnostics_are_allowlisted_and_fail_closed(self):
+        for code in (
+            "BROKER_HISTORY_DAY_NOT_UNIQUE",
+            "BROKER_HISTORY_EMPTY",
+            "BROKER_HISTORY_REVIEW_DAY_MISSING",
+            "BROKER_HISTORY_REVIEW_DAY_UTC_ONLY",
+            "BROKER_HISTORY_REVIEW_DAY_DUPLICATE_TIMESTAMP",
+            "BROKER_HISTORY_REVIEW_DAY_MULTIPLE_TIMESTAMPS",
+        ):
+            with self.subTest(code=code):
+                report = fixture()
+                capital = report["metrics"]["invested_capital"]
+                capital.update({
+                    "broker_reconciled": False,
+                    "cash_flows_reconciled": False,
+                    "broker_reconciliation_blocker": code,
+                    "raw_provider_timestamp": "PRIVATE_TIMESTAMP",
+                })
+                out = summary_from(report)
+                self.assertEqual(out["invested_capital"]["broker_reconciliation_blocker"], code)
+                self.assertIsNone(out["invested_capital"]["daily_portfolio_return_on_peak_deployed_capital_pct"])
+                self.assertIsNone(out["one_percent_goal"]["daily_invested_capital_return_pct"])
+                self.assertNotIn("PRIVATE_TIMESTAMP", str(out))
+
     def test_realized_dollars_cannot_become_percent(self):
         report = fixture()
         report["metrics"]["invested_capital"] = {}
