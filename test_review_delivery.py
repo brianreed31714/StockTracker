@@ -137,6 +137,65 @@ class DeliveryTests(unittest.TestCase):
             delivery.require_completed_crypto_day(allowed,now)
             with self.assertRaises(ValueError):delivery.require_completed_crypto_day(blocked,now)
 
+    def test_observe_stocktracker_receipt_binds_date_digest_and_committed_summary(self):
+        state = self.root / "deploy" / "state" / "eod_review_delivery"
+        state.mkdir(parents=True)
+        review = self.root / "analysis" / "daily" / self.day / "daily_model_review.json"
+        review.parent.mkdir(parents=True)
+        review.write_bytes(self.review.read_bytes())
+        digest = hashlib.sha256(review.read_bytes()).hexdigest()
+        commit, blob = "a" * 40, "b" * 40
+        proof = {"schema": "review_publication_v1", "project": PROJECT,
+                 "review_date": self.day, "review_sha256": digest,
+                 "source_commit": commit, "observed_at_utc": "2026-10-30T21:35:00+00:00"}
+        receipt = {"schema": "review_notification_v1", "project": PROJECT,
+                   "report_type": "MODEL_REVIEW", "review_date": self.day,
+                   "review_sha256": digest, "provider_status": "API_ACCEPTED",
+                   "attempted_at_utc": "2026-10-30T21:36:00+00:00",
+                   "observed_at_utc": "2026-10-30T21:36:01+00:00",
+                   "device_delivery_verified": False, "private": "DO_NOT_EXPORT"}
+        proof_path = state / (self.day + ".publication.json")
+        receipt_path = state / (self.day + ".notification.json")
+        delivery.write_object(proof_path, proof)
+        delivery.write_object(receipt_path, receipt)
+        now = datetime.fromisoformat("2026-10-30T22:00:00+00:00")
+        summary = {"schema": "stocktracker_sanitized_summary_v1",
+                   "review_date": self.day, "paper_only": True}
+        def git(root, *args):
+            if args == ("merge-base", "--is-ancestor", commit, "HEAD"):
+                return ""
+            if args == ("show", f"{commit}:analysis/performance/sanitized_daily/{self.day}.json"):
+                return json.dumps(summary)
+            if args == ("rev-parse", "--verify", f"{commit}:analysis/performance/sanitized_daily/{self.day}.json"):
+                return blob
+            raise AssertionError(args)
+        with patch.object(delivery, "git", side_effect=git):
+            observe = lambda: delivery.observe_stocktracker_delivery(self.root, self.root, self.day, now=now)
+            result = observe()
+            self.assertEqual(result["provider_status"], "API_ACCEPTED")
+            self.assertEqual(result["source_commit"], commit)
+            self.assertEqual(result["summary_blob_sha"], blob)
+            self.assertEqual(result["review_sha256"], digest)
+            self.assertFalse(result["device_delivery_verified"])
+            self.assertNotIn("DO_NOT_EXPORT", str(result))
+            for changes in (
+                {"review_sha256": "c" * 64},
+                {"review_date": "2026-10-29"},
+                {"provider_status": "DISPATCHING"},
+                {"observed_at_utc": "2026-10-31T00:00:00+00:00"},
+                {"device_delivery_verified": True},
+            ):
+                with self.subTest(changes=changes):
+                    delivery.write_object(receipt_path, {**receipt, **changes})
+                    self.assertIsNone(observe())
+            delivery.write_object(receipt_path, {**receipt, "provider_status": "API_NOT_ACCEPTED"})
+            self.assertEqual(observe()["provider_status"], "API_NOT_ACCEPTED")
+            summary["paper_only"] = False
+            self.assertIsNone(observe())
+            summary["paper_only"] = True
+            review.write_text('{"review_date":"2026-10-30","changed":true}', encoding="utf-8")
+            self.assertIsNone(observe())
+
     def test_publication_no_change_is_not_remote_success(self):
         def git(root,*args):
             return {'rev-parse':'a'*40,'branch':'main','ls-remote':'b'*40+' refs/heads/main'}[args[0]]
