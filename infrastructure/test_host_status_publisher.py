@@ -84,6 +84,63 @@ class HostSignalTests(unittest.TestCase):
             self.assertEqual(published["daily_review_task_status"], "UNVERIFIED")
             self.assertNotIn("daily_review_last_task_result", published)
 
+    def test_eod_receipt_is_separate_from_task_and_runtime_proof(self):
+        data = sample()
+        receipt = {
+            "review_date": "2026-10-19", "provider_status": "API_ACCEPTED",
+            "source_commit": "a" * 40, "summary_blob_sha": "b" * 40,
+            "review_sha256": "c" * 64,
+            "observed_at_utc": (T0 - timedelta(minutes=1)).isoformat(),
+            "device_delivery_verified": False, "provider_response": "PRIVATE_TOKEN",
+        }
+        data["eod_notification_receipt"] = receipt
+        published = publisher.sanitized(data)
+        out = published["eod_notification_receipt"]
+        self.assertTrue(out["provider_accepted"])
+        self.assertEqual(out["summary_blob_sha"], "b" * 40)
+        self.assertFalse(out["device_delivery_verified"])
+        self.assertFalse(published["post_sync_eod_verified"])
+        self.assertFalse(published["in_memory_trader_digest_verified"])
+        self.assertNotIn("PRIVATE_TOKEN", json.dumps(published))
+        for changes in (
+            {"provider_status": "DISPATCHING"},
+            {"source_commit": "short"},
+            {"review_date": "2026-02-30"},
+            {"observed_at_utc": (T0 + timedelta(minutes=1)).isoformat()},
+            {"device_delivery_verified": True},
+        ):
+            data["eod_notification_receipt"] = {**receipt, **changes}
+            out = publisher.sanitized(data)["eod_notification_receipt"]
+            self.assertEqual(out["provider_status"], "UNVERIFIED")
+            self.assertFalse(out["provider_accepted"])
+            self.assertNotIn("summary_blob_sha", out)
+
+    def test_poll_observes_completed_review_receipt_without_resending(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "post_close_review_state.json").write_text(json.dumps({
+                "review_date": "2026-10-19", "status": "COMPLETED"
+            }), encoding="utf-8")
+            receipt = {
+                "review_date": "2026-10-19", "provider_status": "API_ACCEPTED",
+                "source_commit": "a" * 40, "summary_blob_sha": "b" * 40,
+                "review_sha256": "c" * 64, "observed_at_utc": T0.isoformat(),
+                "device_delivery_verified": False,
+            }
+            observations = {"components": {}}
+            published = []
+            with patch.object(attest, "git_head", return_value=HEAD), \
+                 patch.object(attest, "_head", return_value=HEAD), \
+                 patch.object(attest, "_code_clean", return_value=True), \
+                 patch.object(attest, "_external_runtime", return_value=root), \
+                 patch("review_delivery.observe_stocktracker_delivery", return_value=receipt) as observe:
+                attest.poll(root, observation=observations, clock=T0,
+                            remote_publish=lambda _, report: published.append(publisher.sanitized(report)))
+            observe.assert_called_once_with(root.resolve(), root, "2026-10-19", now=T0)
+            self.assertEqual(len(published), 1)
+            self.assertTrue(published[0]["eod_notification_receipt"]["provider_accepted"])
+            self.assertFalse(published[0]["post_sync_eod_verified"])
+
     def test_new_branch_uses_git_plumbing_never_checkout_or_main_push(self):
         with tempfile.TemporaryDirectory() as temp:
             called = []

@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 from contextlib import contextmanager
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -141,6 +142,75 @@ def record_publication(root, state_dir, project, day, review_path):
             "review_date": day, "review_sha256": hashlib.sha256(review_bytes).hexdigest(),
             "source_commit": commit, "observed_at_utc": datetime.now(timezone.utc).isoformat(),
         })
+
+
+def observe_stocktracker_delivery(root, runtime, day, *, now=None):
+    """Read only the dated, digest-bound receipt; never send or rerun a review.
+
+    The sanitized summary was committed before notification. Its historical
+    UNVERIFIED flag is not evidence of rejection. Link the independently
+    observed local provider result to the exact published summary blob.
+    """
+    try:
+        canonical_day(day)
+        now = now or datetime.now(timezone.utc)
+        if now.tzinfo is None:
+            return None
+        runtime = Path(runtime)
+        state = runtime / "deploy" / "state" / "eod_review_delivery"
+        review = (runtime / "analysis" / "daily" / day / "daily_model_review.json").read_bytes()
+        if json.loads(review).get("review_date") != day:
+            return None
+        digest = hashlib.sha256(review).hexdigest()
+        proof = read_object(state / (day + ".publication.json"))
+        receipt = read_object(state / (day + ".notification.json"))
+        if (proof.get("schema") != "review_publication_v1"
+                or receipt.get("schema") != "review_notification_v1"
+                or receipt.get("report_type") != "MODEL_REVIEW"
+                or any(item.get("project") != "StockTracker"
+                       or item.get("review_date") != day
+                       or item.get("review_sha256") != digest
+                       for item in (proof, receipt))
+                or receipt.get("device_delivery_verified") is not False):
+            return None
+        status = receipt.get("provider_status")
+        if status not in {"API_ACCEPTED", "API_NOT_ACCEPTED", "UNCONFIRMED",
+                          "DISABLED", "CONFIG_MISSING"}:
+            return None
+        def timestamp(item, key):
+            value = datetime.fromisoformat(item[key].replace("Z", "+00:00"))
+            if value.tzinfo is None:
+                raise ValueError("Missing timestamp timezone")
+            return value.astimezone(timezone.utc)
+        published = timestamp(proof, "observed_at_utc")
+        attempted = timestamp(receipt, "attempted_at_utc")
+        observed = timestamp(receipt, "observed_at_utc")
+        if not published <= attempted <= observed <= now:
+            return None
+        commit = proof.get("source_commit")
+        if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{40}", commit):
+            return None
+        # The publication receipt already observed origin/main. Independently
+        # check its commit remains in this checkout's history and its exact
+        # dated paper summary exists. No network or worktree changes.
+        git(root, "merge-base", "--is-ancestor", commit, "HEAD")
+        path = f"analysis/performance/sanitized_daily/{day}.json"
+        summary = json.loads(git(root, "show", f"{commit}:{path}"))
+        if (summary.get("schema") != "stocktracker_sanitized_summary_v1"
+                or summary.get("review_date") != day or summary.get("paper_only") is not True):
+            return None
+        blob = git(root, "rev-parse", "--verify", f"{commit}:{path}")
+        if not re.fullmatch(r"[0-9a-f]{40}", blob):
+            return None
+        return {
+            "review_date": day, "provider_status": status,
+            "source_commit": commit, "summary_blob_sha": blob,
+            "review_sha256": digest, "observed_at_utc": observed.isoformat(),
+            "device_delivery_verified": False,
+        }
+    except (OSError, ValueError, TypeError, AttributeError, KeyError, RuntimeError,
+            subprocess.TimeoutExpired):
+        return None
 
 
 def deliver_once(state_dir, project, day, review_path, send):
