@@ -34,6 +34,11 @@ SAFE_BROKER_BLOCKER_CODES = frozenset({
     "BROKER_CASHFLOW_COVERAGE_MISSING",
     "BROKER_HISTORY_TIMESTAMP_INVALID",
     "BROKER_HISTORY_DAY_NOT_UNIQUE",
+    "BROKER_HISTORY_EMPTY",
+    "BROKER_HISTORY_REVIEW_DAY_MISSING",
+    "BROKER_HISTORY_REVIEW_DAY_UTC_ONLY",
+    "BROKER_HISTORY_REVIEW_DAY_DUPLICATE_TIMESTAMP",
+    "BROKER_HISTORY_REVIEW_DAY_MULTIPLE_TIMESTAMPS",
     "BROKER_HISTORY_CLOSE_MISMATCH",
     "BROKER_CASHFLOW_SHAPE_INVALID",
     "BROKER_CASHFLOW_VALUE_INVALID",
@@ -387,15 +392,30 @@ def broker_reconcile_today(audit, day, *, history_path, session_open, session_cl
             raise ValueError("BROKER_PORTFOLIO_HISTORY_MISSING")
         if not isinstance(flows, dict):
             raise ValueError("BROKER_CASHFLOW_COVERAGE_MISSING")
+        # Distinguish absence from ambiguity without exporting raw timestamps,
+        # account values, or provider payloads. The eligibility gate remains
+        # exactly one Eastern-market-date point; no guessed date conversion,
+        # deduplication, or latest-point selection is allowed.
+        if not stamps:
+            raise ValueError("BROKER_HISTORY_EMPTY")
         dated = []
+        dated_instants = set()
+        utc_day_seen = False
         for index, stamp in enumerate(stamps):
             if isinstance(stamp, bool):
                 raise ValueError("BROKER_HISTORY_TIMESTAMP_INVALID")
-            when = datetime.fromtimestamp(int(stamp), timezone.utc).astimezone(EASTERN)
-            if when.date().isoformat() == day:
+            when_utc = datetime.fromtimestamp(int(stamp), timezone.utc)
+            utc_day_seen = utc_day_seen or when_utc.date().isoformat() == day
+            if when_utc.astimezone(EASTERN).date().isoformat() == day:
                 dated.append(index)
+                dated_instants.add(when_utc)
+        if not dated:
+            raise ValueError("BROKER_HISTORY_REVIEW_DAY_UTC_ONLY" if utc_day_seen
+                             else "BROKER_HISTORY_REVIEW_DAY_MISSING")
         if len(dated) != 1:
-            raise ValueError("BROKER_HISTORY_DAY_NOT_UNIQUE")
+            raise ValueError("BROKER_HISTORY_REVIEW_DAY_DUPLICATE_TIMESTAMP"
+                             if len(dated_instants) < len(dated)
+                             else "BROKER_HISTORY_REVIEW_DAY_MULTIPLE_TIMESTAMPS")
         index = dated[0]
         historical_equity = number(values[index], positive=True)
         if historical_equity is None or abs(historical_equity - current) > 1.01:

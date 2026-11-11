@@ -187,7 +187,7 @@ class CapitalAuditTests(unittest.TestCase):
             ({"positions": False}, "BROKER_POSITIONS_NOT_RECONCILED"),
             ({"orders": False}, "BROKER_FILLS_NOT_OBSERVED"),
             ({"flow": 500}, "BROKER_CASHFLOW_NOT_ZERO"),
-            ({"history": False}, "BROKER_HISTORY_DAY_NOT_UNIQUE"),
+            ({"history": False}, "BROKER_HISTORY_EMPTY"),
         ):
             with self.subTest(settings=settings):
                 result = self._broker(FakeBroker(**settings))
@@ -204,6 +204,31 @@ class CapitalAuditTests(unittest.TestCase):
                          "BROKER_EVIDENCE_INCOMPLETE_OR_UNRECONCILED")
         self.assertNotIn("PRIVATE_BROKER_ERROR", json.dumps(result))
         self.assertEqual(self._broker(FakeBroker())["broker_reconciliation_blocker"], "NONE")
+
+    def test_review_day_diagnostics_do_not_relax_portfolio_gate(self):
+        previous = datetime(2026, 10, 27, 16, tzinfo=ET)
+        utc_midnight = datetime(2026, 10, 28, 0, tzinfo=ZoneInfo("UTC"))
+        intraday = datetime(2026, 10, 28, 15, tzinfo=ET)
+        for points, expected in (
+            ([], "BROKER_HISTORY_EMPTY"),
+            ([previous], "BROKER_HISTORY_REVIEW_DAY_MISSING"),
+            ([previous, utc_midnight], "BROKER_HISTORY_REVIEW_DAY_UTC_ONLY"),
+            ([previous, CLOSE, CLOSE], "BROKER_HISTORY_REVIEW_DAY_DUPLICATE_TIMESTAMP"),
+            ([previous, intraday, CLOSE], "BROKER_HISTORY_REVIEW_DAY_MULTIPLE_TIMESTAMPS"),
+        ):
+            with self.subTest(expected=expected):
+                broker = FakeBroker()
+                broker.get_portfolio_history = lambda request: SimpleNamespace(
+                    timestamp=[int(point.timestamp()) for point in points],
+                    equity=[1075] * len(points),
+                    cashflow={"CSD": [0] * len(points)},
+                )
+                result = self._broker(broker)
+                self.assertEqual(result["broker_reconciliation_blocker"], expected)
+                self.assertFalse(result["broker_reconciled"])
+                self.assertFalse(result["cash_flows_reconciled"])
+                self.assertIsNone(result["daily_invested_capital_return_pct"])
+                self.assertIsNotNone(result["daily_closed_invested_capital_return_pct"])
 
     def test_no_broker_backdate(self):
         audited = audit_rows(ledger(), pnl(), DAY, session_open=OPEN, session_close=CLOSE)
