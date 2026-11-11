@@ -95,6 +95,40 @@ def sanitized(report: dict) -> dict:
                 payload["daily_review_last_task_result"] = result
                 if last is not None:
                     payload["daily_review_last_run_utc"] = last.astimezone(timezone.utc).isoformat()
+    # Separate model-review provider receipt, not the deployment notification.
+    # Only fixed statuses, validated dates and hashes may leave the host.
+    delivery = report.get("eod_notification_receipt")
+    payload["eod_notification_receipt"] = {
+        "provider_status": "UNVERIFIED", "provider_accepted": False,
+        "device_delivery_verified": False,
+    }
+    if isinstance(delivery, dict):
+        try:
+            day = delivery["review_date"]
+            status = delivery["provider_status"]
+            source = delivery["source_commit"]
+            blob = delivery["summary_blob_sha"]
+            review_digest = delivery["review_sha256"]
+            observed = datetime.fromisoformat(delivery["observed_at_utc"].replace("Z", "+00:00"))
+            if (isinstance(day, str) and DATE.fullmatch(day)
+                    and datetime.fromisoformat(day).date().isoformat() == day
+                    and status in {"API_ACCEPTED", "API_NOT_ACCEPTED", "UNCONFIRMED",
+                                   "DISABLED", "CONFIG_MISSING"}
+                    and isinstance(source, str) and SHA.fullmatch(source)
+                    and isinstance(blob, str) and SHA.fullmatch(blob)
+                    and isinstance(review_digest, str) and re.fullmatch(r"[0-9a-f]{64}", review_digest)
+                    and observed.tzinfo is not None and observed <= stamp
+                    and delivery.get("device_delivery_verified") is False):
+                payload["eod_notification_receipt"] = {
+                    "review_date": day, "provider_status": status,
+                    "provider_accepted": status == "API_ACCEPTED",
+                    "source_commit": source, "summary_blob_sha": blob,
+                    "review_sha256": review_digest,
+                    "observed_at_utc": observed.astimezone(timezone.utc).isoformat(),
+                    "device_delivery_verified": False,
+                }
+        except (KeyError, ValueError, TypeError, AttributeError):
+            pass
     if payload["post_sync_eod_verified"]:
         day = report.get("verified_review_date")
         if not isinstance(day, str) or not DATE.fullmatch(day) or datetime.fromisoformat(day).date().isoformat() != day:
