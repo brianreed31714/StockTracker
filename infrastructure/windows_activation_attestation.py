@@ -282,6 +282,21 @@ def poll(root: Path, *, observation: dict | None = None,
         report["daily_review_task_observation"] = inspect_daily_review_task(clock=stamp)
     except (OSError, RuntimeError, ValueError, TypeError):
         report["daily_review_task_observation"] = {"status": "UNVERIFIED"}
+    # Model-review delivery is distinct from deployment notices and task exit.
+    # The authoritative receipt is local; export only a dated, digest-bound
+    # observation of the already completed notification, never send it again.
+    try:
+        from review_delivery import observe_stocktracker_delivery
+        runtime = _external_runtime(root)
+        review_state = _read_json(runtime / "post_close_review_state.json")
+        day = review_state.get("review_date")
+        report["eod_notification_receipt"] = (
+            observe_stocktracker_delivery(root, runtime, day, now=stamp)
+            if review_state.get("status") == "COMPLETED" and isinstance(day, str)
+            else None
+        )
+    except (OSError, RuntimeError, ValueError, TypeError, ImportError):
+        report["eod_notification_receipt"] = None
     # Every distinct commit gets a CODE_SYNCED notice after positive source
     # integrity; a later EOD verification gets a second distinct notice.
     # Do not send repeated notices for each 60-second polling interval.
@@ -318,7 +333,11 @@ def poll(root: Path, *, observation: dict | None = None,
                   str((report.get("disk_evidence") or {}).get("disk_code_sha256") or "") + ":" +
                   str((report.get("daily_review_task_observation") or {}).get("status") or "") + ":" +
                   str((report.get("daily_review_task_observation") or {}).get("last_run_utc") or "") + ":" +
-                  str((report.get("daily_review_task_observation") or {}).get("last_task_result") or "") + ":status-file-v4")
+                  str((report.get("daily_review_task_observation") or {}).get("last_task_result") or "") + ":" +
+                  str((report.get("eod_notification_receipt") or {}).get("review_date") or "") + ":" +
+                  str((report.get("eod_notification_receipt") or {}).get("provider_status") or "") + ":" +
+                  str((report.get("eod_notification_receipt") or {}).get("summary_blob_sha") or "") + ":" +
+                  str((report.get("eod_notification_receipt") or {}).get("observed_at_utc") or "") + ":status-file-v5")
     previous_publish = str(previous.get("remote_published_at_utc") or "")
     try:
         age_seconds = (stamp - parse_timestamp(previous_publish)).total_seconds()
