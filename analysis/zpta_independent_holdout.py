@@ -9,14 +9,14 @@ import math
 import statistics
 
 
-def select_nonoverlapping(events, *, split_index=None, segment="all"):
+def select_nonoverlapping(events, *, split_index=None, segment="all", embargo_sessions=0):
     """Select events chronologically; a position occupies entry..exit inclusive.
 
     A training event cannot exit on/after split_index; a holdout event must
     have its signal at/after split_index. Selection is per signal and horizon,
-    not a portfolio optimizer. Ties are ordered deterministically.
+    not a portfolio optimizer. Ties are ordered deterministically.\n    embargo_sessions excludes events near the train/holdout boundary on both\n    sides; this is a conservative research restriction, not a CI guarantee.
     """
-    if segment not in {"all", "training", "holdout"}:
+    if not isinstance(embargo_sessions, int) or embargo_sessions < 0:\n        raise ValueError("embargo_sessions must be a nonnegative integer")\n    if segment not in {"all", "training", "holdout"}:
         raise ValueError("invalid segment")
     if segment != "all" and (split_index is None or split_index < 0):
         raise ValueError("split_index required")
@@ -26,9 +26,9 @@ def select_nonoverlapping(events, *, split_index=None, segment="all"):
         entry = signal + 1
         if exit_ < entry:
             raise ValueError("exit must not precede entry")
-        if segment == "training" and exit_ >= split_index:
+        if segment == "training" and exit_ >= split_index - embargo_sessions:
             continue
-        if segment == "holdout" and signal < split_index:
+        if segment == "holdout" and signal < split_index + embargo_sessions:
             continue
         if entry <= occupied_until:
             continue
