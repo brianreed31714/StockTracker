@@ -27,6 +27,12 @@ class IndependentHoldoutTests(unittest.TestCase):
         self.assertAlmostEqual(result["compounded_trade_return_pct"], -1)
         self.assertAlmostEqual(result["max_trade_sequence_drawdown_pct"], 10)
 
+    def test_drawdown_uses_chronological_order(self):
+        # Caller order must not alter the historical sequence equity curve.
+        chronological = [event(0, 1, -10), event(2, 3, 20)]
+        reversed_input = list(reversed(chronological))
+        self.assertEqual(evaluate(chronological), evaluate(reversed_input))
+
     def test_bad_event_rejected(self):
         with self.assertRaises(ValueError):
             select_nonoverlapping([event(5, 5)])
