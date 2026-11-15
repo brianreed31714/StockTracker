@@ -43,7 +43,9 @@ def select_nonoverlapping(events, *, split_index=None, segment="all", embargo_se
 
 def evaluate(events):
     """Descriptive independent-event statistics; not portfolio ROI or proof of edge."""
-    returns = [float(e["net_return_pct"]) for e in events]
+    # Sequence drawdown requires chronological trades, not caller input order.
+    ordered = sorted(events, key=lambda e: (e["signal_index"], e["exit_index"]))
+    returns = [float(e["net_return_pct"]) for e in ordered]
     if not returns:
         return {"n": 0, "mean_net_pct": None, "win_fraction": None,
                 "mean_ci95_pct": None, "compounded_trade_return_pct": None,
