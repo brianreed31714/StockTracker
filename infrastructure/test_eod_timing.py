@@ -89,11 +89,12 @@ class TraderEodTimingTests(unittest.TestCase):
 
 
 class HostSchedulingContractTests(unittest.TestCase):
-    def test_source_configuration_matches_135_pacific(self):
+    def test_performance_delivery_is_owned_by_central_4pm_reporter(self):
         cfg = (ROOT / ".env.config").read_text(encoding="utf-8")
         self.assertIn("POST_CLOSE_REVIEW_DELAY_MINUTES=35", cfg)
-        self.assertIn("PUSHOVER_STOCK_EOD_HOUR=16", cfg)
-        self.assertIn("PUSHOVER_STOCK_EOD_MINUTE=35", cfg)
+        self.assertIn("PUSHOVER_STOCK_EOD_ENABLED=0", cfg)
+        self.assertIn("PUSHOVER_STOCK_EOD_HOUR=19", cfg)
+        self.assertIn("PUSHOVER_STOCK_EOD_MINUTE=00", cfg)
 
     def test_future_installer_uses_135_local(self):
         text = (ROOT / "install_stocktracker_tasks.ps1").read_text(encoding="utf-8")

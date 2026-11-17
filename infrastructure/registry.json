@@ -9,8 +9,8 @@
   "runtime_manifest": "deploy/state/active_release.json",
   "inventory_output": "deploy/state/infrastructure_inventory.json",
   "safety": {
-    "tracked_settings": {},
-    "effective_settings_must_not_enable": [],
+    "tracked_settings": {"PUSHOVER_STOCK_EOD_ENABLED": "0"},
+    "effective_settings_must_not_enable": ["PUSHOVER_STOCK_EOD_ENABLED"],
     "trader_source_markers": [
       "PAPER_ONLY = True",
       "paper=True"

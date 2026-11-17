@@ -1,5 +1,11 @@
 # StockTracker
 
+Daily performance delivery is owned by the report-only Windows task
+`TradingOps Daily Paper EOD` at 4 PM Pacific, including weekends. It combines
+StockTracker, CryptoTracker and the ZPTA sleeve using a single dated receipt.
+The legacy in-engine performance push is disabled to prevent an overlapping
+notification. Research/model-review generation remains independent.
+
 Paper-only multi-asset momentum research system, geo/oil feed, shadow
 research models, review pipeline, supervisor and read-only dashboard.
 
