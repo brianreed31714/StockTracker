@@ -1,0 +1,13 @@
+{
+  "proposal_id": "P-STOCK-20261116-01",
+  "status": "READY_TO_DEPLOY",
+  "commit": "ca8e0a56c66792c496eee2bae3b555395dad6d7d",
+  "components": ["trader", "geo_feed", "dashboard"],
+  "files": {
+    "trader": "momentum_trader_v1_10_runtime_audit.py",
+    "geo_feed": "xom_geo_feed_v1_1_agentic.py",
+    "dashboard": "momentum_dashboard_v1_3_agentic.py"
+  },
+  "approval": "User requested all EOD performance reports at 4 PM Pacific daily. PR #45 passed exact-head Windows/Linux CI. The report-only task is installed and tested with no duplicate send.",
+  "purpose": "Adopt central 4 PM performance delivery while retaining the existing active paper trader, current risk limits, ZPTA shadow-only behavior and local runtime history."
+}
