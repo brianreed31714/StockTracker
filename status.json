@@ -4,22 +4,22 @@
   "daily_review_last_task_result": 1,
   "daily_review_task_state": "Ready",
   "daily_review_task_status": "TASK_NAME_OBSERVED",
-  "disk_code_sha256": "0416b76c5fa2e300a18053088423bd5d4b561e45f1660f36b43e7a229d68f1e1",
+  "disk_code_sha256": "acd74929e852ecdd40b1496a22eca826c9d2feca86f973d64ea25658b00c7cf2",
   "disk_dependencies_sha256": "bde3974e9065e26881b3f01d4b721ae2cf7e550456390e1fc066eac61019f81f",
   "eod_notification_receipt": {
     "device_delivery_verified": false,
     "provider_accepted": false,
     "provider_status": "UNVERIFIED"
   },
-  "git_head": "b7d37446efb2a5dd32ad9c73bb2e2afb92f851e5",
+  "git_head": "538670a96eeb22c9f0812433fe0600d50648f006",
   "in_memory_trader_digest_verified": false,
   "loaded_dependencies_verified": false,
-  "observed_at_utc": "2026-11-17T03:59:35.401681+00:00",
+  "observed_at_utc": "2026-11-17T04:11:35.830514+00:00",
   "post_sync_eod_verified": false,
   "process_identity_observed": true,
-  "processes_stable": true,
+  "processes_stable": false,
   "project": "StockTracker",
   "schema": "stocktracker_windows_attestation_v1",
   "source_code_synced": true,
-  "state": "HOST_PROCESSES_STABLE_SOURCE_ONLY"
+  "state": "CODE_SYNCED_PROCESS_OBSERVED"
 }
