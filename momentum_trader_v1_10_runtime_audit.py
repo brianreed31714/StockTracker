@@ -28,7 +28,7 @@ from zoneinfo import ZoneInfo
 import requests
 import zpta_specialist_v0_1 as zpta_specialist
 from post_close_review_policy import review_retry_decision
-from dotenv import load_dotenv
+from dotenv import load_dotenv, dotenv_values
 from alpaca.common.exceptions import APIError
 from alpaca.data.historical.stock import StockHistoricalDataClient
 from alpaca.data.requests import StockBarsRequest
@@ -45,6 +45,18 @@ SECRETS_FILE = BASE_DIR / ".env"
 # Split configuration: committed non-secret settings first, local secrets override.
 load_dotenv(CONFIG_FILE)
 load_dotenv(SECRETS_FILE, override=True)
+
+
+def apply_repository_eod_policy():
+    """An inherited supervisor environment cannot reactivate legacy EOD pushes."""
+    policy = dotenv_values(CONFIG_FILE)
+    os.environ["PUSHOVER_STOCK_EOD_ENABLED"] = str(policy.get("PUSHOVER_STOCK_EOD_ENABLED") or "0")
+    for key in ("PUSHOVER_STOCK_EOD_HOUR", "PUSHOVER_STOCK_EOD_MINUTE"):
+        if policy.get(key) is not None:
+            os.environ[key] = str(policy[key])
+
+
+apply_repository_eod_policy()
 
 # ---------------- Configuration ----------------
 PAPER_ONLY = True

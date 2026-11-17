@@ -121,6 +121,7 @@
       "source_files": [
         "momentum_trader_v1_9_zpta_shadow.py",
         "momentum_trader_v1_10_runtime_audit.py",
+        "test_eod_report_policy.py",
         "post_close_review_policy.py"
       ],
       "health": {
