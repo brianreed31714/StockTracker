@@ -11,15 +11,15 @@
     "provider_accepted": false,
     "provider_status": "UNVERIFIED"
   },
-  "git_head": "832f344b3eeb6e0ddff509210e029cb9ebeb0a30",
+  "git_head": "b7d37446efb2a5dd32ad9c73bb2e2afb92f851e5",
   "in_memory_trader_digest_verified": false,
   "loaded_dependencies_verified": false,
-  "observed_at_utc": "2026-11-17T03:38:50.616285+00:00",
+  "observed_at_utc": "2026-11-17T03:56:52.731484+00:00",
   "post_sync_eod_verified": false,
   "process_identity_observed": true,
   "processes_stable": false,
   "project": "StockTracker",
   "schema": "stocktracker_windows_attestation_v1",
-  "source_code_synced": false,
-  "state": "UNVERIFIED"
+  "source_code_synced": true,
+  "state": "CODE_SYNCED_PROCESS_OBSERVED"
 }
