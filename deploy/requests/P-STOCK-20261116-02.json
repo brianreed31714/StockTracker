@@ -1,0 +1,13 @@
+{
+  "proposal_id": "P-STOCK-20261116-02",
+  "status": "READY_TO_DEPLOY",
+  "commit": "538670a96eeb22c9f0812433fe0600d50648f006",
+  "components": ["trader", "geo_feed", "dashboard"],
+  "files": {
+    "trader": "momentum_trader_v1_10_runtime_audit.py",
+    "geo_feed": "xom_geo_feed_v1_1_agentic.py",
+    "dashboard": "momentum_dashboard_v1_3_agentic.py"
+  },
+  "approval": "User requested all EOD performance reports at 4 PM Pacific daily. PR #46 passed Windows/Linux exact-head CI and protects that schedule from inherited supervisor variables.",
+  "purpose": "Complete central 4 PM performance ownership with repository-authoritative reporting flags; same paper trader, order logic, risk limits, and ZPTA shadow mode."
+}
