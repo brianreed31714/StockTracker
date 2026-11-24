@@ -8,13 +8,18 @@
   "disk_dependencies_sha256": "bde3974e9065e26881b3f01d4b721ae2cf7e550456390e1fc066eac61019f81f",
   "eod_notification_receipt": {
     "device_delivery_verified": false,
-    "provider_accepted": false,
-    "provider_status": "UNVERIFIED"
+    "observed_at_utc": "2026-11-24T21:36:27.404693+00:00",
+    "provider_accepted": true,
+    "provider_status": "API_ACCEPTED",
+    "review_date": "2026-11-24",
+    "review_sha256": "089b78ff6ceba739e60b97325d92181397ef21d3530ce78f2df54792918bd86d",
+    "source_commit": "e002edcc5c97c5db7066d0a2039cbffb5c911a00",
+    "summary_blob_sha": "ca16983153d56a50175a44d89d95f51450f41ea7"
   },
   "git_head": "e002edcc5c97c5db7066d0a2039cbffb5c911a00",
   "in_memory_trader_digest_verified": false,
   "loaded_dependencies_verified": false,
-  "observed_at_utc": "2026-11-24T21:36:20.949101+00:00",
+  "observed_at_utc": "2026-11-24T21:36:28.162485+00:00",
   "post_sync_eod_verified": false,
   "process_identity_observed": true,
   "processes_stable": false,
