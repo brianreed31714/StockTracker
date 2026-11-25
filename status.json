@@ -16,15 +16,15 @@
     "source_commit": "e002edcc5c97c5db7066d0a2039cbffb5c911a00",
     "summary_blob_sha": "ca16983153d56a50175a44d89d95f51450f41ea7"
   },
-  "git_head": "1ffa1c5b80bdb7cee4f02380d8c9b092672f5e0e",
+  "git_head": "ec653171499cb08838548c73244aa4d6edc7e896",
   "in_memory_trader_digest_verified": false,
   "loaded_dependencies_verified": false,
-  "observed_at_utc": "2026-11-25T03:31:08.994294+00:00",
+  "observed_at_utc": "2026-11-25T03:54:01.817064+00:00",
   "post_sync_eod_verified": false,
   "process_identity_observed": true,
-  "processes_stable": true,
+  "processes_stable": false,
   "project": "StockTracker",
   "schema": "stocktracker_windows_attestation_v1",
   "source_code_synced": true,
-  "state": "HOST_PROCESSES_STABLE_SOURCE_ONLY"
+  "state": "CODE_SYNCED_PROCESS_OBSERVED"
 }
