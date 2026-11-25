@@ -8,18 +8,23 @@
   "disk_dependencies_sha256": "bde3974e9065e26881b3f01d4b721ae2cf7e550456390e1fc066eac61019f81f",
   "eod_notification_receipt": {
     "device_delivery_verified": false,
-    "provider_accepted": false,
-    "provider_status": "UNVERIFIED"
+    "observed_at_utc": "2026-11-25T21:36:29.980886+00:00",
+    "provider_accepted": true,
+    "provider_status": "API_ACCEPTED",
+    "review_date": "2026-11-25",
+    "review_sha256": "9aeded2777f12ecf61afec4117547a3889e9f135a64e5ad49796dc5a078dad19",
+    "source_commit": "c83bd3e59a88303030b2833dc86bf046c06b4655",
+    "summary_blob_sha": "a6be9311b5990da85ae3f4c1ffceb511d6e334d5"
   },
-  "git_head": "ec653171499cb08838548c73244aa4d6edc7e896",
+  "git_head": "c83bd3e59a88303030b2833dc86bf046c06b4655",
   "in_memory_trader_digest_verified": false,
   "loaded_dependencies_verified": false,
-  "observed_at_utc": "2026-11-25T21:35:20.730740+00:00",
+  "observed_at_utc": "2026-11-25T21:36:30.670243+00:00",
   "post_sync_eod_verified": false,
   "process_identity_observed": true,
-  "processes_stable": true,
+  "processes_stable": false,
   "project": "StockTracker",
   "schema": "stocktracker_windows_attestation_v1",
   "source_code_synced": true,
-  "state": "HOST_PROCESSES_STABLE_SOURCE_ONLY"
+  "state": "CODE_SYNCED_PROCESS_OBSERVED"
 }
