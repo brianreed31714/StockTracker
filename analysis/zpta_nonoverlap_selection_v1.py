@@ -20,7 +20,9 @@ def select_nonoverlapping(events):
         signal, exit_ = event["signal_index"], event["exit_index"]
         if not isinstance(signal, int) or not isinstance(exit_, int) or signal >= exit_:
             raise ValueError("Event requires integer signal_index < exit_index")
-        if signal <= last_exit:
+        # A completed-close signal enters at the NEXT open. Match the single
+        # canonical entry..exit rule used by PR #6 and independent_holdout.
+        if signal + 1 <= last_exit:
             continue
         chosen.append(dict(event))
         last_exit = exit_

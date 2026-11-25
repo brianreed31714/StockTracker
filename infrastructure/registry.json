@@ -238,7 +238,9 @@
       "deployment_component": null,
       "script_pattern": null,
       "source_files": [
-        "zpta_specialist_v0_1.py"
+        "zpta_specialist_v0_1.py",
+        "zpta_research_runtime.py",
+        "research/zpta_opportunity_audit.py"
       ],
       "health": {
         "type": "not_applicable"

@@ -7,6 +7,7 @@ import argparse
 import csv
 import json
 import math
+import hashlib
 import urllib.request
 from datetime import datetime
 from pathlib import Path
@@ -17,6 +18,8 @@ BASE = "https://query1.finance.yahoo.com/v8/finance/chart/ZPTA"
 
 
 def fetch(interval):
+    if interval not in {"1d", "60m"}:
+        raise ValueError("Unsupported study interval")
     url = BASE + "?range=6mo&interval=" + interval + "&events=splits"
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     with urllib.request.urlopen(req, timeout=30) as response:
@@ -24,18 +27,32 @@ def fetch(interval):
     if payload.get("chart", {}).get("error"):
         raise RuntimeError(str(payload["chart"]["error"]))
     result = payload["chart"]["result"][0]
+    if str(result.get("meta", {}).get("symbol", "")).upper() != "ZPTA":
+        raise ValueError("Wrong symbol returned by provider")
     quotes = result["indicators"]["quote"][0]
     bars = []
-    for i, stamp in enumerate(result.get("timestamp", [])):
+    timestamps = result.get("timestamp", [])
+    if any(len(quotes.get(k, [])) != len(timestamps) for k in ("open", "high", "low", "close", "volume")):
+        raise ValueError("OHLCV lengths differ")
+    for i, stamp in enumerate(timestamps):
         bar = {k: quotes[k][i] for k in ("open", "high", "low", "close", "volume")}
-        if bar["close"] is None:
+        if any(v is None for v in bar.values()):
             continue
+        if (not all(math.isfinite(float(v)) for v in bar.values()) or min(bar[k] for k in ("open","high","low","close")) <= 0
+                or bar["volume"] < 0 or bar["high"] < max(bar["open"],bar["low"],bar["close"])
+                or bar["low"] > min(bar["open"],bar["close"])):
+            raise ValueError("Invalid OHLCV")
         bar["time"] = datetime.fromtimestamp(stamp, NY)
         bars.append(bar)
     return bars, result.get("events", {}).get("splits", {})
 
 
 def build_rows(daily, hourly):
+    for group in (daily, hourly):
+        if any(b["time"].tzinfo is None for b in group):
+            raise ValueError("Bar timezone required")
+        if len({b["time"] for b in group}) != len(group):
+            raise ValueError("Duplicate source timestamp")
     noon = {}
     for b in hourly:
         t = b["time"]
@@ -115,6 +132,7 @@ def main():
               "as_of_utc": datetime.now(ZoneInfo("UTC")).isoformat(),
               "daily_bars": len(daily), "hourly_bars": len(hourly),
               "paired_sessions": len(rows), "noon_observed": sum(r["next_noon_price"] is not None for r in rows),
+              "normalized_source_sha256": hashlib.sha256(json.dumps([daily,hourly], default=str, sort_keys=True).encode()).hexdigest(),
               "split_events_daily": daily_splits, "split_events_hourly": hourly_splits,
               "summary": analyze(rows),
               "cautions": [

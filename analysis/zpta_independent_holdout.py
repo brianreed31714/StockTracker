@@ -27,6 +27,8 @@ def select_nonoverlapping(events, *, split_index=None, segment="all", embargo_se
     chosen, occupied_until = [], -1
     for ev in sorted(events, key=lambda e: (e["signal_index"], e["exit_index"])):
         signal, exit_ = ev["signal_index"], ev["exit_index"]
+        if type(signal) is not int or type(exit_) is not int or signal < 0:
+            raise ValueError("nonnegative integer indices required")
         entry = signal + 1
         if exit_ < entry:
             raise ValueError("exit must not precede entry")
@@ -36,7 +38,7 @@ def select_nonoverlapping(events, *, split_index=None, segment="all", embargo_se
             continue
         if entry <= occupied_until:
             continue
-        chosen.append(ev)
+        chosen.append(dict(ev))
         occupied_until = exit_
     return chosen
 

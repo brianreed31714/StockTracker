@@ -11,7 +11,7 @@ class SelectionTests(unittest.TestCase):
     def test_overlap_and_same_day_conflict(self):
         source = [event(4, 9), event(1, 5), event(6, 7), event(5, 6), event(8, 10)]
         self.assertEqual([(e["signal_index"], e["exit_index"]) for e in select_nonoverlapping(source)],
-                         [(1, 5), (6, 7), (8, 10)])
+                         [(1, 5), (5, 6), (6, 7), (8, 10)])
 
     def test_order_independence_and_no_mutation(self):
         source = [event(4, 6), event(1, 3), event(2, 5)]

@@ -43,6 +43,8 @@ def read_daily(path):
     if any(not math.isfinite(r["open"]) or not math.isfinite(r["close"]) or
            r["open"] <= 0 or r["close"] <= 0 or r["volume"] < 0 for r in records):
         raise ValueError("Invalid OHLCV")
+    if not records:
+        raise ValueError("No daily records")
     return records
 
 
@@ -56,7 +58,7 @@ def evaluate(bars):
             streak += 1
             j -= 1
         volume_reference = [b["volume"] for b in bars[max(0, i-20):i]]
-        baseline_volume = statistics.median(volume_reference) if len(volume_reference) >= 5 else None
+        baseline_volume = statistics.median(volume_reference) if len(volume_reference) == 20 else None
         rel_volume = today["volume"] / baseline_volume if baseline_volume else None
         events.append({
             "date": today["date"], "close": today["close"],

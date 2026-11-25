@@ -9,7 +9,8 @@ def event(s, x, r=1):
 class IndependentHoldoutTests(unittest.TestCase):
     def test_no_overlapping_positions(self):
         result = select_nonoverlapping([event(3, 6), event(2, 5), event(5, 7), event(6, 9)])
-        self.assertEqual([e["signal_index"] for e in result], [2, 6])
+        # Signal 5 enters at open 6, strictly after the first exit at close 5.
+        self.assertEqual([e["signal_index"] for e in result], [2, 5])
 
     def test_embargo_training_and_holdout(self):
         events = [event(6, 9), event(8, 11), event(10, 12)]
