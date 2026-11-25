@@ -14,6 +14,7 @@ This is experimental research software, not a validated profitable strategy.
 from __future__ import annotations
 
 import argparse
+from contextlib import closing
 import csv
 import json
 import logging
@@ -23,6 +24,7 @@ import sqlite3
 import statistics
 import time
 import uuid
+import sys
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -31,6 +33,7 @@ from zoneinfo import ZoneInfo
 
 import requests
 from dotenv import load_dotenv
+import zpta_research_runtime
 
 SYMBOL = "ZPTA"
 SHADOW_ONLY = True
@@ -272,7 +275,7 @@ def fetch_bars() -> tuple[list[Bar], str]:
 
 def init_db() -> None:
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with sqlite3.connect(DB_PATH) as conn:
+    with closing(sqlite3.connect(DB_PATH)) as conn, conn:
         conn.executescript(
             """
             CREATE TABLE IF NOT EXISTS zpta_observations(
@@ -329,7 +332,7 @@ def append_csv(path: Path, row: dict[str, Any]) -> None:
 
 def add_event(level: str, event: str, details: dict[str, Any]) -> None:
     row = (str(uuid.uuid4()), utc_now().isoformat(), level, event, json.dumps(details, sort_keys=True))
-    with sqlite3.connect(DB_PATH) as conn:
+    with closing(sqlite3.connect(DB_PATH)) as conn, conn:
         conn.execute("INSERT INTO zpta_events VALUES(?,?,?,?,?)", row)
 
 
@@ -449,7 +452,7 @@ def ensemble_score(signals: list[Signal]) -> float:
 
 
 def record_observation(bar: Bar, provider: str, features: dict[str, float], regime: str) -> None:
-    with sqlite3.connect(DB_PATH) as conn:
+    with closing(sqlite3.connect(DB_PATH)) as conn, conn:
         conn.execute(
             "INSERT OR IGNORE INTO zpta_observations VALUES(?,?,?,?,?,?)",
             (bar.ts.isoformat(), provider, bar.close, bar.volume, json.dumps(features, sort_keys=True), regime),
@@ -461,17 +464,19 @@ def record_observation(bar: Bar, provider: str, features: dict[str, float], regi
 
 def record_predictions(bar: Bar, signals: list[Signal]) -> None:
     rows = []
+    created = utc_now()
     for signal in signals:
         for horizon in (5, 15, 60):
             row = {
-                "id": str(uuid.uuid4()), "created_ts": utc_now().isoformat(), "bar_ts": bar.ts.isoformat(),
+                "id": str(uuid.uuid4()), "created_ts": created.isoformat(), "bar_ts": bar.ts.isoformat(),
                 "model": signal.model, "direction": signal.direction, "score": round(signal.score, 4),
                 "entry_price": bar.close, "horizon_minutes": horizon,
-                "due_ts": (bar.ts + timedelta(minutes=horizon)).isoformat(), "resolved_ts": None,
-                "exit_price": None, "forward_return": None, "correct": None, "reason": signal.reason,
+                "due_ts": (created + timedelta(minutes=horizon)).isoformat(), "resolved_ts": None,
+                "exit_price": None, "forward_return": None, "correct": None,
+                "reason": "RECEIPT_ANCHORED_PRINT_REFERENCE_NOT_FILL: " + signal.reason,
             }
             rows.append(row)
-    with sqlite3.connect(DB_PATH) as conn:
+    with closing(sqlite3.connect(DB_PATH)) as conn, conn:
         conn.executemany(
             "INSERT INTO zpta_predictions VALUES(:id,:created_ts,:bar_ts,:model,:direction,:score,:entry_price,:horizon_minutes,:due_ts,:resolved_ts,:exit_price,:forward_return,:correct,:reason)",
             rows,
@@ -485,7 +490,7 @@ def resolve_predictions(bars: list[Bar]) -> int:
         return 0
     resolved = 0
     latest_ts = bars[-1].ts
-    with sqlite3.connect(DB_PATH) as conn:
+    with closing(sqlite3.connect(DB_PATH)) as conn, conn:
         conn.row_factory = sqlite3.Row
         pending = conn.execute(
             "SELECT * FROM zpta_predictions WHERE resolved_ts IS NULL AND due_ts <= ? ORDER BY due_ts LIMIT 500",
@@ -493,7 +498,12 @@ def resolve_predictions(bars: list[Bar]) -> int:
         ).fetchall()
         for row in pending:
             due = datetime.fromisoformat(row["due_ts"])
-            candidates = [b for b in bars if b.ts >= due]
+            created = datetime.fromisoformat(row["created_ts"])
+            if created >= due:
+                continue  # Historical after-due predictions never become valid forecasts.
+            candidates = [b for b in bars if due <= b.ts + timedelta(minutes=1) <= due + timedelta(seconds=60)
+                          and b.ts + timedelta(minutes=1) <= utc_now()
+                          and b.ts.astimezone(MARKET_TZ).date() == created.astimezone(MARKET_TZ).date()]
             if not candidates:
                 continue
             exit_bar = candidates[0]
@@ -509,13 +519,13 @@ def resolve_predictions(bars: list[Bar]) -> int:
 
 def trades_today() -> int:
     day = market_now().date().isoformat()
-    with sqlite3.connect(DB_PATH) as conn:
+    with closing(sqlite3.connect(DB_PATH)) as conn, conn:
         return int(conn.execute("SELECT COUNT(*) FROM zpta_shadow_trades WHERE substr(entry_ts,1,10)=?", (day,)).fetchone()[0])
 
 
 def realized_today() -> float:
     day = market_now().date().isoformat()
-    with sqlite3.connect(DB_PATH) as conn:
+    with closing(sqlite3.connect(DB_PATH)) as conn, conn:
         value = conn.execute("SELECT COALESCE(SUM(pnl),0) FROM zpta_shadow_trades WHERE substr(exit_ts,1,10)=?", (day,)).fetchone()[0]
     return float(value or 0.0)
 
@@ -563,7 +573,7 @@ def maybe_trade(bar: Bar, features: dict[str, float], regime: str, score: float,
                 "pnl_pct": pct(fill, entry), "entry_score": position["entry_score"],
                 "exit_reason": exit_reason, "status": "CLOSED",
             }
-            with sqlite3.connect(DB_PATH) as conn:
+            with closing(sqlite3.connect(DB_PATH)) as conn, conn:
                 conn.execute("UPDATE zpta_shadow_trades SET exit_ts=?,exit_price=?,pnl=?,pnl_pct=?,exit_reason=?,status='CLOSED' WHERE id=?",
                              (row["exit_ts"], fill, pnl, row["pnl_pct"], exit_reason, position["id"]))
             append_csv(daily_paths()["trades"], row)
@@ -591,7 +601,7 @@ def maybe_trade(bar: Bar, features: dict[str, float], regime: str, score: float,
     entry_ts = market_now().isoformat()
     state["cash"] = float(state["cash"]) - cost
     state["position"] = {"id": trade_id, "entry_ts": entry_ts, "entry_price": fill, "qty": qty, "high_water": fill, "entry_score": score}
-    with sqlite3.connect(DB_PATH) as conn:
+    with closing(sqlite3.connect(DB_PATH)) as conn, conn:
         conn.execute("INSERT INTO zpta_shadow_trades VALUES(?,?,?,?,?,?,?,?,?,?,?)",
                      (trade_id, entry_ts, None, fill, None, qty, None, None, score, None, "OPEN"))
     append_csv(daily_paths()["trades"], {
@@ -606,7 +616,7 @@ def write_daily_summary(provider: str, state: dict[str, Any], mark: float) -> No
     market_date = market_now().date().isoformat()
     position = state.get("position")
     equity = float(state["cash"]) + (float(position["qty"]) * mark if position else 0.0)
-    with sqlite3.connect(DB_PATH) as conn:
+    with closing(sqlite3.connect(DB_PATH)) as conn, conn:
         conn.row_factory = sqlite3.Row
         model_rows = conn.execute(
             "SELECT model,horizon_minutes,COUNT(*) n,AVG(correct) accuracy,AVG(forward_return) avg_return "
@@ -627,16 +637,26 @@ def run_once() -> dict[str, Any]:
         return {"status": "DISABLED", "shadow_only": True}
     init_db()
     bars, provider = fetch_bars()
+    # One-minute OHLCV is only knowable after the minute completes.
+    bars = sorted((b for b in bars if b.ts + timedelta(minutes=1) <= utc_now()), key=lambda b: b.ts)
     current = session_bars(bars)
     latest = current[-1]
     state = get_state()
-    if state.get("last_bar_ts") == latest.ts.isoformat():
-        resolve_predictions(bars)
-        return {"status": "NO_NEW_BAR", "provider": provider, "bar_ts": latest.ts.isoformat()}
     features = build_features(bars)
     regime = classify_regime(features)
     signals = score_models(features, regime)
     score = ensemble_score(signals)
+    try:
+        research = zpta_research_runtime.observe(sys.modules[__name__], bars, provider, features, regime, signals, score, state)
+    except Exception:
+        log.exception("ZPTA research audit failed; no new shadow entry evaluated")
+        if not state.get("position"):
+            return {"status": "RESEARCH_AUDIT_ERROR", "shadow_only": True, "provider": provider}
+        # Audit availability must never suppress existing-position risk exits.
+        research = {"status": "RESEARCH_AUDIT_ERROR", "new_entries_blocked": True}
+    if state.get("last_bar_ts") == latest.ts.isoformat():
+        resolve_predictions(bars)
+        return {"status": "NO_NEW_BAR", "provider": provider, "bar_ts": latest.ts.isoformat(), "research": research}
     record_observation(latest, provider, features, regime)
     record_predictions(latest, signals)
     resolved = resolve_predictions(bars)
@@ -652,6 +672,7 @@ def run_once() -> dict[str, Any]:
         "price": latest.close, "regime": regime, "ensemble_score": round(score, 2), "action": action,
         "resolved_predictions": resolved, "equity": round(equity, 2),
         "signals": [asdict(s) for s in signals], "asset_preflight": cached_asset_preflight(),
+        "research": research,
     }
     log.info(json.dumps(output, sort_keys=True))
     return output
