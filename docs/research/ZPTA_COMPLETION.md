@@ -46,6 +46,12 @@ CI runs deterministic tests on Windows and Linux without broker credentials.
 The optional public-history job explicitly distinguishes fetch failure from test
 success. No green check certifies market data or Windows activation.
 
+The first integration CI reproduced the historical stale READY conflict for
+P-STOCK-20261116-01. It is explicitly recorded SUPERSEDED by the existing -02
+request (introduced in main 2a2dbd0 / PR #46), with original approval and SHA
+unchanged. Existing local processing/active-release receipts support that sequence
+but remain UNVERIFIED for runtime. No gate is weakened or new deployment requested.
+
 The November 24 local research run obtained 501 daily bars, and 128 daily/717
 hourly bars for the six-month study. No exact-noon bar was available. The preserved
 October replay contains 16 sparse delayed-feed observations. Corporate actions,

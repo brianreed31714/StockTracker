@@ -1,6 +1,14 @@
 {
   "proposal_id": "P-STOCK-20261116-01",
-  "status": "READY_TO_DEPLOY",
+  "status": "SUPERSEDED",
+  "superseded_by": "P-STOCK-20261116-02",
+  "supersession": {
+    "recorded_at_utc": "2026-11-25T03:12:00Z",
+    "reason": "PR #46 replaced this central-reporting release with the inherited-environment safeguard. Preserve the original approval and commit; this request must not remain an actionable older release.",
+    "source_evidence": "main commit 2a2dbd0189f93f5b438ec735e6fa6d20dfc790f2 introduced P-STOCK-20261116-02 at approved commit 538670a96eeb22c9f0812433fe0600d50648f006",
+    "local_receipt_observation": "Existing Windows processed_requests records both requests processed; active_release identifies P-STOCK-20261116-02. These local receipts remain UNVERIFIED for loaded runtime.",
+    "runtime_activation_verified": false
+  },
   "commit": "ca8e0a56c66792c496eee2bae3b555395dad6d7d",
   "components": ["trader", "geo_feed", "dashboard"],
   "files": {
