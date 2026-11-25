@@ -22,6 +22,23 @@ except (OSError, subprocess.SubprocessError):
     IDENTITY["startup_source_sha"] = None
 
 
+def initialize(module):
+    """Prove the loaded observer initialized even while the market is closed.
+
+    This is a local module self-report, not a market observation, price, fill
+    or independent memory attestation. Do not create an opportunity here.
+    """
+    output = {"status": "PAPER_MODULE_INITIALIZED", "paper_only": True,
+              "initialized_at": module.utc_now().isoformat(), "runtime_identity": IDENTITY,
+              "market_observation_created": False, "verified_fills": 0}
+    module.LOG_ROOT.mkdir(parents=True, exist_ok=True)
+    target = module.LOG_ROOT / "research_startup.json"
+    temp = target.with_suffix(".tmp")
+    temp.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    temp.replace(target)
+    return output
+
+
 def observe(module, bars, provider, features, regime, signals, score, state):
     now = module.utc_now()
     path = module.LOG_ROOT / "research.sqlite3"

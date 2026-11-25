@@ -294,6 +294,10 @@ def init_db() -> None:
               id TEXT PRIMARY KEY, ts TEXT, level TEXT, event TEXT, details_json TEXT);
             """
         )
+    try:
+        zpta_research_runtime.initialize(sys.modules[__name__])
+    except OSError:
+        log.exception("ZPTA research startup receipt unavailable")
 
 
 def get_state() -> dict[str, Any]:

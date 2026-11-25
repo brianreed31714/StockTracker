@@ -65,6 +65,9 @@ Only the existing supervised StockTracker paper trader imports the passive obser
 No competing ZPTA process or new scheduled sender is installed. Local artifacts:
 `ZPTA_LOG_ROOT/research.sqlite3` and `research_latest.json`; default location
 `momentum_logs/zpta/`, ignored by Git. Preserve all preexisting SQLite/state files.
+`research_startup.json` records module initialization/source hashes/PID even when
+the parent is correctly waiting for the next market open. It creates no artificial
+opportunity, quote, position or return and is not independent memory attestation.
 
 Before adoption: exact-head CI and source review; verify remote main, clean local
 source, paper-only source/config, current process identity/CWD, outside market/review
