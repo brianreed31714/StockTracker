@@ -48,6 +48,14 @@ class RuntimeCaptureTests(unittest.TestCase):
                          {"zpta_specialist_v0_1.py", "zpta_research_runtime.py", "research/zpta_opportunity_audit.py"})
         self.assertTrue(data["blocked_reasons"]["LIQUIDITY_DANGER"])
 
+    def test_after_hours_initialization_does_not_manufacture_opportunities(self):
+        specialist.init_db()
+        data = json.loads((specialist.LOG_ROOT / "research_startup.json").read_text())
+        self.assertEqual(data["status"], "PAPER_MODULE_INITIALIZED")
+        self.assertFalse(data["market_observation_created"])
+        self.assertFalse((specialist.LOG_ROOT / "research.sqlite3").exists())
+        self.assertFalse(specialist.STATE_PATH.exists())
+
     def test_observer_failure_prevents_unlogged_new_entry(self):
         with patch.object(specialist.zpta_research_runtime, "observe", side_effect=OSError("disk full")), \
                 patch.object(specialist, "maybe_trade") as trade:
