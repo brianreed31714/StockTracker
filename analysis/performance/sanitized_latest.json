@@ -4,15 +4,15 @@
     "database_available": true
   },
   "daily": {
-    "buy_orders": 7,
-    "closed_trades": 3,
-    "decision_rows": 1800,
-    "losses": 2,
-    "order_rows": 10,
-    "realized_pnl_usd": 45.37,
-    "sell_orders": 3,
-    "win_rate_pct": 33.33,
-    "wins": 1
+    "buy_orders": 0,
+    "closed_trades": 0,
+    "decision_rows": 0,
+    "losses": 0,
+    "order_rows": 0,
+    "realized_pnl_usd": 0.0,
+    "sell_orders": 0,
+    "win_rate_pct": null,
+    "wins": 0
   },
   "eod_notification": {
     "device_delivery_verified": false,
@@ -20,11 +20,11 @@
     "provider_status": "UNVERIFIED"
   },
   "invested_capital": {
-    "broker_reconciliation_blocker": "DATED_EQUITY_SNAPSHOT_MISMATCH",
+    "broker_reconciliation_blocker": "BROKER_HISTORY_REVIEW_DAY_MISSING",
     "calculation": "CLOSED_LOT_PNL_DIVIDED_BY_CLOSED_LOT_COST",
     "classification": "MODELED_PAPER",
-    "daily_closed_lot_cost_basis_usd": 7499.97,
-    "daily_closed_lot_realized_return_pct": 0.6049,
+    "daily_closed_lot_cost_basis_usd": 0.0,
+    "daily_closed_lot_realized_return_pct": null,
     "daily_one_percent_invested_goal_met": null,
     "daily_peak_deployed_cost_basis_usd": null,
     "daily_portfolio_return_on_peak_deployed_capital_pct": null,
@@ -49,11 +49,11 @@
   },
   "paper_account_observation": {
     "cash_flows_reconciled": false,
-    "daily_account_change_pct": 0.0429,
+    "daily_account_change_pct": 0.1482,
     "inception_portfolio_return_pct": null,
     "invested_capital_daily_return_pct": null,
-    "observed_session_count": 18,
-    "observed_window_account_change_pct": -1.8914,
+    "observed_session_count": 19,
+    "observed_window_account_change_pct": -1.7412,
     "observed_window_max_drawdown_pct": 1.9333,
     "source": "ALPACA_PAPER_ACCOUNT",
     "status": "PAPER_ACCOUNT_CHANGE_UNADJUSTED_CASH_FLOWS"
@@ -61,37 +61,29 @@
   "paper_only": true,
   "proposal_ids": [
     {
-      "id": "P-STOCK-20261125-01",
+      "id": "P-STOCK-20261127-01",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261125-02",
+      "id": "P-STOCK-20261127-02",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261125-03",
+      "id": "P-STOCK-20261127-03",
       "status": "PENDING"
     },
     {
-      "id": "P-STOCK-20261125-04",
-      "status": "PENDING"
-    },
-    {
-      "id": "P-STOCK-20261125-05",
-      "status": "PENDING"
-    },
-    {
-      "id": "P-STOCK-20261125-06",
+      "id": "P-STOCK-20261127-04",
       "status": "PENDING"
     }
   ],
-  "quality": "LIMITED",
-  "review_date": "2026-11-25",
+  "quality": "INSUFFICIENT",
+  "review_date": "2026-11-27",
   "review_source": "OPENAI",
   "schema": "stocktracker_sanitized_summary_v1",
   "shadow": {
     "financial_leverage_signal_rows": 0,
-    "zpta_resolved_predictions": 44,
+    "zpta_resolved_predictions": 0,
     "zpta_shadow_trades": 0
   }
 }
